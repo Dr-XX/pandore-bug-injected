@@ -362,7 +362,7 @@ typedef PNG_CONST png_uint_16p FAR * png_const_uint_16pp;
 #  ifdef _WINDOWS_
 #    define PNG_ABORT() ExitProcess(0)
 #  else
-#    define PNG_ABORT() abort()
+#    define PNG_ABORT() exit(-1)
 #  endif
 #endif
 

@@ -1,0 +1,102 @@
+<html>
+<head>
+<title>PANDORE OPERATORS</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>psig</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Builds the Sphere of Influence Graph.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!0---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>psig</b> [<i>-m mask</i>] [<i>gr_in</i>|-] [<i>gr_out</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p><b>psig</b> builds the Sphere of Influence Graph.
+Edges of the input graph <i>gr_in</i> are cut when the related
+nodes are not in the same sphere of influence.
+Spheres of influence are circle centered on the nodes and the radius
+is the distance between two nodes.
+If the circles of two neighbor nodes intersect, then the edge
+between the two nodes is kept otherwise it is cut.
+
+<p>The values of each node is set to 1.</p>
+
+<p>The distance between two nodes uses the euclidean distance
+of their related coordinates.</p>
+
+<!---------------------------------- -->
+<h3>Inputs</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>gr_in</i>: a graph.
+</ul>
+
+<!---------------------------------- -->
+<h3>Outputs</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>gr_out</i>: a graph.
+</ul>
+
+<!---------------------------------- -->
+<h3>Result</h3>
+<!---------------------------------- -->
+<p>Returns SUCCESS or FAILURE.</p>
+
+<!---------------------------------- -->
+<h3>Examples</h3>
+<!---------------------------------- -->
+<p></p>
+<pre>
+   psig g1.pan g2.pan
+</pre>
+
+<!---------------------------------- -->
+<h3>See also</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#graph">Graph</a>
+
+<!---------------------------------- -->
+<h3>C++ prototype</h3>
+<!---------------------------------- -->
+<tt>
+Errc PSig( const Graph &amp;gr_in, Graph &amp;gr_out );
+</tt>
+
+<!---------------------------------- -->
+<h3>Version fran&ccedil;aise</h3>
+<!---------------------------------- -->
+<p>Construction de la sph&egrave;re d'influence d'un graphe.</p>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Author: Fran&ccedil;ois Angot
+</address>
+<!---------------------------------- -->
+</body>
+</html>

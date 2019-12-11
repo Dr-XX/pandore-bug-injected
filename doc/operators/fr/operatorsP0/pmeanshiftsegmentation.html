@@ -1,0 +1,130 @@
+<html>
+<head>
+<title>PANDORE OPERATORS</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>pmeanshiftsegmentation</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Classification des pixels d'une image par l'algorithme Mean-Shift. 
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>pmeanshiftsegmentation</b> <i>spatial-bandwidth</i> <i>range-bandwidth</i> <i>minimum-region-area</i> <i>speed-up-level</i> [<i>-m mask</i>] [<i>im_in</i>|-] [<i>rg_out</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p>L'op&eacute;rateur <b>pmeanshiftsegmentation</b> construit une carte de r&eacute;gions
+en classifiant les pixels selon leur homog&eacute;n&eacute;it&eacute; en couleur et leur
+proximit&eacute; spatiale.
+C'est une proc&eacute;dure pour localiser les maxima d'une fonction densit&eacute;
+donn&eacute;e &agrave; partir de donn&eacute;es discr&egrave;tes. 
+L'algorithme est bas&eacute; sur la d&eacute;tection des modes dans la
+fonction densit&eacute; donn&eacute;e.</p>
+<p>Les param&egrave;tres permettent de contr&ocirc;ler
+le processus de classification. Ainsi, <i>spatial-bandwidth</i> contr&ocirc;le
+la taille de la fen&ecirc;tre spatiale de recherche
+ et <i>range-bandwidth</i> contr&ocirc;le la largeur de la bande
+de la fen&ecirc;tre de recherche spectrale. Plus les fen&ecirc;tres
+sont grandes, moins il y aura de r&eacute;gions en sortie.</p>
+
+<p>Le r&eacute;sultat est une carte de r&eacute;gions <i>rg_out</i>.</p>
+
+<!---------------------------------- -->
+<h3>Param&egrave;tres</h3>
+<!---------------------------------- -->
+<ul>
+ <li><i>spatial-bandwidth</i> sp&eacute;cifie la taille de la fen&ecirc;tre
+de recherche des modes: (2r+1)*(2r+1), o&ugrave; <i>r</i> est la valeur
+de <i>spatial-bandwidth</i>. C'est un entier avec une valeur
+strictement sup&eacute;rieure &agrave; 0, mais qui ne doit pas &ecirc;tre trop
+grande pour ne pas ralentir le temps de traitement (g&eacute;n&eacute;ralement &lt;10).
+										<li><i>range-bandwidth</i> sp&eacute;cifie la largeur de bande pour la recherche. 
+C'est une valeur r&eacute;elle sup&eacute;rieure &agrave; zero.
+
+<li><i>minimum-region-area</i> sp&eacute;cifie la surface minimale
+acceptable pour une r&eacute;gion du r&eacute;sultat.
+C'est un entier sup&eacute;rieur &agrave; 0 donn&eacute; en pixels.
+
+<li><i>speedup-level</i> d&eacute;termine le niveau de rapidit&eacute; de calcul.
+C'est une valeur enti&egrave;re dans [0..2], o&ugrave; 2 est la valeur maximale.
+Cependant, la pr&eacute;cision des r&eacute;sultats; se fait au d&eacute;triment 
+de la vitessse&nbsp;: 0 donne donc les meilleurs r&eacute;sultats.
+Il faut noter que la taille du param&egrave;tre <i>spatial-bandwidth</i>
+influe aussi sur la vitesse.
+</ul>
+
+<!---------------------------------- -->
+<h3>Entr&eacute;es</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_out</i>: une image 2D.
+</ul>
+
+<!---------------------------------- -->
+<h3>Sorties</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_out</i>: une carte de r&eacute;gions.
+</ul>
+
+<!---------------------------------- -->
+<h3>R&eacute;sultat</h3>
+<!---------------------------------- -->
+<p>Retourne le nombre de r&eacute;gions form&eacute;es ou FAILURE.</p>
+
+<!---------------------------------- -->
+<h3>Exemples</h3>
+<!---------------------------------- -->
+<p>Segmente les pi&egrave;ces de tangram:</p>
+<pre>
+  pmeanshiftsegmentation 7 6.5 100 0 examples/tangram.pan a.pan
+</pre>
+
+<!---------------------------------- -->
+<h3>Voir aussi</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#segmentation">Segmentation</a>
+
+<!---------------------------------- -->
+<h3>Prototype C++</h3>
+<!---------------------------------- -->
+<tt>
+Errc PMeanShiftSegmentation( const Imc2duc &ims, Reg2d &rgd, int spatialBandwidth, float rangeBandwidth, int minimumRegionArea, int speedup );
+int halfsize );
+</tt>
+
+<!---------------------------------- -->
+<h3>R&eacute;f&eacute;rence</h3>
+<!---------------------------------- -->
+D. Comanicu, P. Meer: "Mean shift: A robust approach toward feature space analysis." IEEE Trans. Pattern Anal. Machine Intell., 24, 603-619, May 2002
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Auteur: R&eacute;gis Clouard
+</address>
+<!---------------------------------- -->
+</body>
+</html>

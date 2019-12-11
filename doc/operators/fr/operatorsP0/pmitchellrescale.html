@@ -1,0 +1,139 @@
+<html>
+<head>
+<title>OPERATEURS PANDORE</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>pmitchellrescale</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Retaille d'une image par l'algorithme de Mitchell.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>pmitchellrescale</b> <i>rescalex</i> <i>rescaley</i> <i>rescaleyz</i> [<i>im_in</i>|-] [<i>im_out</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p>L'op&eacute;rateur <b>pmitchellrescale</b> 
+utilise un noyau de convolution pour interpoler
+les valeurs des pixels de l'image d'entr&eacute;e <i>im_in</i>
+afin de calculer les valeurs des pixels de l'image
+de sortie <i>im_out</i>.
+L'interpolation consiste &agrave; pond&eacute;rer l'influence
+des pixels d'entr&eacute;e. Les poids sont d&eacute;pendants
+de la position du pixel de sortie et sont donn&eacute;s
+par l'algorithme de Mitchell:</p>
+<pre>
+Soit tt=sqr(x), B=1/3, C=1/3
+
+       | (((12-9*B-6*C)*(x*tt)) + ((-18+12*B+6*C)*tt) + (6-2*B)) / 6 si -1&lt;x&lt;1
+M(x) = | (((-1*B-6*C) * (x*tt)) + ((6*B+30*C) *tt) + ((-12*B-48*C)*x) + (8*B+24*C)) / 6 si -2&lt;x&lt;2
+       | 0 sinon
+</pre>
+
+<p>Par exemple, si l'image est zoom&eacute;e par 3, alors chaque
+pixel de sortie est donn&eacute; par:</p>
+<pre>
+for i in [-2, 2]
+  for j in [-2, 2]
+      im_out[p.y][p.x] += M(i*scalex)*M(j*scaley)*im_in[p.y*scaley+j][p.x*scalex+i]
+</pre>
+
+<p>Pour zoomer une carte de r&eacute;gions ou un graphe, il faut
+utiliser l'operateur 
+<a href="./prescale.html">prescale</a>.</p>
+
+<!---------------------------------- -->
+<h3>Param&egrave;tres</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>rescalex</i>, <i>rescaley</i>, <i>rescalez</i>
+sont des r&eacute;els positifs correspondant aux facteurs de retaille.<br>
+Si les rescales sont &gt; 1 alors il s'agit 
+d'un agrandissement, s'ils sont &lt; 1 alors il s'agit
+d'une r&eacute;duction.<br>
+<i>rescalez</i> est ignor&eacute; pour le cas des images 2D mais doit &ecirc;tre donn&eacute;.<p>
+</ul>
+
+<!---------------------------------- -->
+<h3>Entr&eacute;es</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_in</i>: une image.
+</ul>
+
+<!---------------------------------- -->
+<h3>Sorties</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_out</i>: une image de m&ecirc;me type que l'image d'entr&eacute;e.
+</ul>
+
+<!---------------------------------- -->
+<h3>R&eacute;sultat</h3>
+<!---------------------------------- -->
+<p>Retourne SUCCESS ou FAILURE.</p>
+
+<!---------------------------------- -->
+<h3>Exemples</h3>
+<!---------------------------------- -->
+<ul>
+<p>Agrandissement de l'image d'un facteur 2 :</p>
+<pre>
+   pmitchellrescale 2 2 0 tangram.pan a.pan
+</pre>
+<p>R&eacute;duction de l'image d'un facteur 2 :</p>
+<pre>
+   pmitchellrescale 0.5 0.5 0 tangram.pan a.pan
+</pre>
+</ul>
+
+<!---------------------------------- -->
+<h3>Voir aussi</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#transformation">Transformation</a>,
+<a href="./plinearrescale.html">plinearrescale</a>,
+<a href="./pbicubicrescale.html">pbicubicrescale</a>,
+<a href="./pbellrescale.html">pbellrescale</a>,
+<a href="./phermiterescale.html">phermiterescale</a>,
+<a href="./planczosrescale.html">planczosrescale</a>,
+<a href="./pquadraticbsplinerescale.html">pquadraticbsplinerescale</a>,
+<a href="./prescale.html">prescale</a>
+
+<!---------------------------------- -->
+<h3>Prototype C++</h3>
+<!---------------------------------- -->
+<tt>
+Errc PMitchellRescale( const Img2duc &amp;im_in, Img2duc &amp;im_out, float rescaley, float rescalex );
+</tt>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Auteur: R&eacute;gis Clouard
+</address>
+<!---------------------------------- -->
+
+</body>
+</html>

@@ -1,0 +1,117 @@
+<html>
+<head>
+<title>OPERATEURS PANDORE</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>psusan</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+D&eacute;tection de points d'int&eacute;r&ecirc;t selon l'algorithme SUSAN.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>psusan</b> <i>threshold</i> [<i>-m mask</i>] [<i>im_in</i>|-] [<i>im_out</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p>L'op&eacute;rateur <b>psusan</b> permet de d&eacute;tecter les points d'int&eacute;r&ecirc;t
+dans l'image d'entr&eacute;e <i>im_in</i>.
+Les points d'int&eacute;r&ecirc;t sont soit des coins en L, des jonctions
+en T, des jonctions en Y ou des points de forte variation de texture.
+Ils correspondent &agrave; des doubles discontinuit&eacute;s  de la fonction d'intensit&eacute;
+provoqu&eacute;es par des discontinuit&eacute;s de la fonction r&eacute;flectance ou de
+profondeur.</p>
+
+<p>Le principe de l'algorithme consiste en:</p>
+<ol>
+<li>Placer un masque circulaire de rayon 3 autour de chaque pixel.
+<li>Calculer le nombre de pixels du masque ayant la m&ecirc;me intensit&eacute;
+que le centre.
+<li>Seuiller pour produire l'image de force de r&eacute;ponse du pixel.
+<li>Suppression des non-maxima pour ne garder que les coins.
+</ol>
+
+<p>L'image de sortie <i>im_out</i> est une image d'entiers Long qui
+code pour chaque pixel la force de la r&eacute;ponse.</p>
+
+<!---------------------------------- -->
+<h3>Param&egrave;tres</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>threshold</i> d&eacute;termine la diff&eacute;rence maximale de
+niveaux de gris entre 2 pixels pour consid&eacute;rer qu'ils sont dans la m&ecirc;me r&eacute;gion.
+Plus <i>threshold</i> est grand, moins il y aura de coins.
+Une valeur typique est 20.
+</ul>
+
+<!---------------------------------- -->
+<h3>Entr&eacute;es</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_in</i>: une image d'intensit&eacute; 2D de Uchar.
+</ul>
+
+<!---------------------------------- -->
+<h3>Sorties</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_dest</i>: une image de Long.
+</ul>
+
+<!---------------------------------- -->
+<h3>R&eacute;sultat</h3>
+<!---------------------------------- -->
+<p>Retourne SUCCESS ou FAILURE.</p>
+
+<!---------------------------------- -->
+<h3>Exemples</h3>
+<!---------------------------------- -->
+<p>Extrait les coins dans l'image tangram.pan et superimpose
+le r&eacute;sultats sur l'image initiale :</p>
+<pre>
+   psusan 20 tangram.pan a.pan
+   pbinarization 1000 1e30 a.pan b.pan
+   padd b.pan tangram.pan out.pan
+</pre>
+
+<!---------------------------------- -->
+<h3>Voir aussi</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#pointsofinterest">Points d'int&eacute;r&ecirc;t</a>
+
+<!---------------------------------- -->
+<h3>Prototype C++</h3>
+<!---------------------------------- -->
+<tt>
+Errc PSusan( const Img2duc &amp;im_in, Img2dsl &amp;im_out, int threshold );
+</tt>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Auteur: R&eacute;gis Clouard
+</address>
+<!---------------------------------- -->
+</body>
+</html>

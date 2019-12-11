@@ -1,0 +1,143 @@
+/* -*- c-basic-offset: 3; mode: c++ -*-
+ *
+ * Copyright (c), GREYC.
+ * All rights reserved
+ *
+ * You may use this file under the terms of the BSD license as follows:
+ *
+ * "Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are
+ * met:
+ *   * Redistributions of source code must retain the above copyright
+ *     notice, this list of conditions and the following disclaimer.
+ *   * Redistributions in binary form must reproduce the above copyright
+ *     notice, this list of conditions and the following disclaimer in
+ *     the documentation and/or other materials provided with the
+ *     distribution.
+ *   * Neither the name of the GREYC, nor the name of its
+ *     contributors may be used to endorse or promote products
+ *     derived from this software without specific prior written
+ *     permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, 
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, 
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
+ *
+ * 
+ * For more information, refer to:
+ * https://clouard.users.greyc.fr/Pandore
+ */
+
+/**
+ * @author François Angot - 2000-07-04
+ * @author Régis Clouard - 2001-04-27 (version 3.00)
+ */
+
+#include <pandore.h>
+using namespace pandore;
+
+/**
+ * @file ppixelvalue.cpp
+ * Gets the pixel value at the specified coordinate.
+ */
+template <typename T>
+Float PPixelValue( const Imx2d<T> &ims, Collection &col_out, Long y, Long x ) {
+   if (y>=ims.Height() || x>=ims.Width() || y< 0 || x <0) {
+      return FAILURE;
+   }
+   Float *t = new Float[ims.Bands()];
+   for ( int b=0; b<ims.Bands(); b++ ) {
+      t[b] = (Float)ims[b][y][x];
+   }
+   col_out.SETARRAY("internal_array", Float, t, ims.Bands());
+
+   return t[0];
+}
+
+##begin PPixelValueIG2 < TIN >
+## append loadcases
+   if (objs[0]->Type()==Po_$TIN) {
+      TIN* const ims=(TIN*)objs[0];
+      objd[0]=new Collection;
+      Collection* const cold=(Collection*)objd[0];
+
+      result=PPixelValue(*ims, *cold, (Long)atoi(parv[1]), (Long)atoi(parv[0]));
+      goto end;
+   }
+## end
+##end
+
+template <typename T>
+Float PPixelValue( const Imx3d<T> &ims, Collection &col_out, Long z, Long y, Long x ) {
+   if (z >= ims.Depth() || y>=ims.Height() || x>=ims.Width() || y<0 || x<0 || z<0) {
+      return FAILURE;
+   }
+
+   Float *t = new Float[ims.Bands()];
+   for ( int b=0; b<ims.Bands(); b++ ) {
+      t[b] = (Float)ims[b][z][y][x];
+   }
+   col_out.SETARRAY("internal_array", Float, t, ims.Bands());
+   return t[0];
+}
+
+##begin PPixelValueIG3 < TIN >
+## append loadcases
+   if (objs[0]->Type()==Po_$TIN) {
+      TIN* const ims=(TIN*)objs[0];
+      objd[0]=new Collection;
+      Collection* const cold=(Collection*)objd[0];
+      
+      result=PPixelValue(*ims, *cold, (Long)atoi(parv[2]), (Long)atoi(parv[1]), (Long)atoi(parv[0]));
+      goto end;
+   }
+## end
+##end
+
+##begin PPixelValueG < TIN >
+Float PPixelValue( const TIN &grs, Collection & col_out, Long i ) {
+   if (i<0 || i>grs.Size()) {
+      return FAILURE;
+   }
+   Float *t = new Float[1];
+   t[0] = Float(grs[i]->value);
+   col_out.SETARRAY("internal_array", Float, t, 1);
+   
+   return t[0];
+}
+
+## append loadcases
+   if (objs[0]->Type()==Po_$TIN) {
+      TIN* const ims=(TIN*)objs[0];
+      objd[0]=new Collection;
+      Collection* const cold=(Collection*)objd[0];
+      
+      result=PPixelValue(*ims, *cold, (Long)atoi(parv[0]));
+      goto end;
+   }
+## end
+##end
+
+##forall(PPixelValueIG2, /Im.2/)
+##forall(PPixelValueIG2, /Reg2/)
+##forall(PPixelValueIG3, /Im.3/)
+##forall(PPixelValueIG3, /Reg3/)
+##forall(PPixelValueG, /Graph/)
+
+#ifdef MAIN
+#define	USAGE	"usage: %s x y z [-m mask] [im_in|-] [col_out|-]"
+#define	PARC	3
+#define	FINC	1
+#define	FOUTC	1
+#define	MASK	1
+
+##main(PARC, FINC, FOUTC, MASK, USAGE)
+#endif

@@ -1,0 +1,104 @@
+<html>
+<head>
+<title>PANDORE OPERATORS</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>pmalikperonafiltering</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Lissage d'une image par diffusion non lin&eacute;aire selon l'algorithme de Malik-Peronna.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>pmalikperonafiltering</b> <i>iterations</i> <i>hauteur</i> [<i>-m mask</i>] [<i>im_in</i>|-] [<i>im_out</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p>L'op&eacute;rateur <b>pmalikperonafiltering</b> permet de lisser par diffusion
+non lin&eacute;aire. L'algorithme utilis&eacute; est celui de Malik et Perona.
+Les d&eacute;riv&eacute;es sont calcul&eacute;es par des diff&eacute;rences finies d'ordre 1.</p>
+
+<p>Ce lissage permet de lisser les r&eacute;gions homog&egrave;nes,
+tout en pr&eacute;servant les contours.</p>
+
+<!---------------------------------- -->
+<h3>Param&egrave;tres</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>iterations</i> donne le nombre d'it&eacute;ration &agrave; op&eacute;rer.
+Plus ce nombre est grand, plus le lissage est fort.
+Une valeur par d&eacute;faut peut &ecirc;tre 3.
+
+<li><i>hauteur</i> donne la hauteur de gradient des contours &agrave; pr&eacute;server.
+Une valeur par d&eacute;faut peut &ecirc;tre 10.
+</ul>
+
+<!---------------------------------- -->
+<h3>Entr&eacute;es</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_in</i>: une image de niveaux de gris.
+</ul>
+
+<!---------------------------------- -->
+<h3>Sorties</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_out</i>: une image du m&ecirc;me type que l'image d'entr&eacute;e.
+</ul>
+
+<!---------------------------------- -->
+<h3>R&eacute;sultat</h3>
+<!---------------------------------- -->
+<p>Retourne SUCCESS ou FAILURE.</p>
+
+<!---------------------------------- -->
+<h3>Exemples</h3>
+<!---------------------------------- -->
+<p>Applique un filtrage de Malik-Perona &agrave; l'image tangram.pan. Il pr&eacute;serve
+les contours d'amplitude > 10 et effectue 40 it&eacute;rations :</p>
+<pre>
+   pmalikperonafiltering 40 10 tangram.pan out.pan
+</pre>
+
+<!---------------------------------- -->
+<h3>Voir aussi</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#filtering">Filtrage spatial</a>
+
+<!---------------------------------- -->
+<h3>Prototype C++</h3>
+<!---------------------------------- -->
+<tt>
+Errc PMalikPeronaFiltering( const Img2duc &amp;im_in, Img2duc &amp;im_out, int iterations, int hauteur );
+</tt>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Auteur: Sophie Sch&uuml;pp
+</address>
+<!---------------------------------- -->
+</body>
+</html>

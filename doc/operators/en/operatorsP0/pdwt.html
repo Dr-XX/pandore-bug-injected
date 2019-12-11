@@ -1,0 +1,131 @@
+<head>
+<title>PANDORE OPERATORS</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>pdwt</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Performs Direct Wavelet Transform.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>pdwt</b> <i>scale</i> [<i>im_in</i>|-] [<i>col_in</i>|-] [<i>im_out</i>| -]
+</tt> 
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p><b>pdwt</b> calculates the wavelet coefficients of the input
+image <i>im_in1</i> according to the pyramidal algorithm.
+For example, with <i>scale</i>=1, there are 4 subimages:</p>
+<pre>
+    [1][2]
+    [3][4]
+</pre>
+
+<p>where [1] is the approximation image with undersampling factor of 2.
+and [2], [3], [4] correspond to the signal detail along
+each privileged direction (resp. horizontal, vertical, diagonal) 
+undersampled with a factor 2.</p>
+
+<p>The filter coefficients are stored from the input collection
+<i>col_in</i> and can be generated from the operator
+<a href="./pqmf.html">pqmf</a>.
+
+<p><b>Important</b>: The operator works with any image size. However,
+the algorithm needs image with a size power of 2. Therefore,
+the input image is magnified so as the size is closest to power 2. So output
+image has necessarily a size power of 2.</p>
+
+<!---------------------------------- -->
+<h3>Parameters</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>scale</i> specifies the number of levels to be
+used for the decomposition of the input image.
+</ul>
+
+<!---------------------------------- -->
+<h3>Inputs</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_in</i>: a 2D float image.
+<li><i>col_in</i>: a collection that contains the filter coefficients.
+</ul>
+
+<!---------------------------------- -->
+<h3>Outputs</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_out</i>: a 2D float image.
+</ul>
+
+<!---------------------------------- -->
+<h3>Result</h3>
+<!---------------------------------- -->
+<p>Returns SUCCESS or FAILURE.</p>
+
+<!---------------------------------- -->
+<h3>Examples</h3>
+<!---------------------------------- -->
+<p>Builds a synthetic image (a square) to illustrate the Gibbs phenomenon
+in wavelets analysis.</p>
+<pre>
+   pshapedesign 256 256 0 2 150 150 a.pan
+   pqmf daubechies 4 b.pan
+   pdwt 1 a.pan b.pan c.pan
+   psplitimage c.pan d1.pan d2.pan d3.pan d4.pan
+   pthresholding 20 400 d2.pan e2.pan
+   pthresholding 20 400 d3.pan e3.pan
+   pthresholding 20 400 d4.pan e4.pan
+   pmergeimages d1.pan e2.pan e3.pan e4.pan f.pan
+   pidwt 1 f.pan b.pan out.pan
+</pre>
+
+<!---------------------------------- -->
+<h3>See also</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#frequency">Frequency</a>,
+<a href="./pidwt.html">pidwt</a>,
+<a href="./pqmf.html">pqmf</a>
+
+<!---------------------------------- -->
+<h3>C++ prototype</h3>
+<!---------------------------------- -->
+<tt>
+Errc PDwt( const Img2duc &amp;im_in, const Collection &amp;col_in, Img2dsf &amp;im_out, int scale );
+</tt> 
+
+<!---------------------------------- -->
+<h3>Version fran&ccedil;aise</h3>
+<!---------------------------------- -->
+<p>Calcul de la transform&eacute;e en ondelettes dyadiques biorthogonales d'une image.</p>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Author: Ludovic Soltys 
+</address>
+<!---------------------------------- -->
+
+</body>
+</html>

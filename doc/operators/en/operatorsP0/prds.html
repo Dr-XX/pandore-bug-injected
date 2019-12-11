@@ -1,0 +1,121 @@
+<html>
+<head>
+<title>PANDORE OPERATORS</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>prds</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Builds Random Dot Stereogram image.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>prds</b> [<i>im_in</i>|-] [<i>im_out</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p><b>prds</b> builds a Random Dot Stereogram image
+from the depth image <i>im_in</i>. A stereogram is an image
+in which stereoscopic information are encoded.
+To look at a stereogram, one has to consider that the
+focal plane is behind the image.</p>
+<pre>
+            object           <-- PERCEIVED IMAGE (3D) { focal plane}
+              |                   
+             / \
+            /   \
+           /     \
+        Object   Object      <-- ACTUAL PICTURE (Flat, 2D)
+         /         \
+        /           \        <-- LINES OF SIGHT FROM EACH EYE
+       /             \
+      (*)             (*)     <-- EYES
+</pre>
+
+<p>The depth image is a gray level image where each pixel
+value is set with the depth of the related point in the scene. Values
+belongs to [0..255] where 0 is the minimum distance
+and 255 the maximum distance. The depth image can be built
+from the projection of a 3D image to 2D image.</p>
+
+<p>The result image is apparently a noise image
+but the 3D scene is hidden inside the image.</p>
+
+<!---------------------------------- -->
+<h3>Inputs</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_in</i>: a 2D image of bytes (Img2duc). Each pixel
+encodes the distance from the observer of the related
+point in the scene.
+</ul>
+
+<!---------------------------------- -->
+<h3>Outputs</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_out</i>: a 2D image of bytes (Img2duc).
+</ul>
+
+<!---------------------------------- -->
+<h3>Result</h3>
+<!---------------------------------- -->
+<p>Returns SUCCESS or FAILURE in case of bad input.</p>
+
+<!---------------------------------- -->
+<h3>Example</h3>
+<!---------------------------------- -->
+<p>Builds a Random Dot Stereogram from the 3D image cyto3d.pan:</p>
+<pre>
+   pdepth2graylevel 50 cyto3d.pan i0.pan
+   pmultcst 10 i0.pan i1.pan
+   prds i1.pan rds_out.pan
+</pre>
+
+<!---------------------------------- -->
+<h3>See also</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#miscellaneous">Miscellaneous</a>,
+<a href="./pstereogram.html">pstereogram</a>
+
+<!---------------------------------- -->
+<h3>C++ prototype</h3>
+<!---------------------------------- -->
+<tt>
+Errc PRds( const Img2duc &amp;imp, Img2duc &amp;im_out );
+</tt>
+
+<!---------------------------------- -->
+<h3>Version fran&ccedil;aise</h3>
+<!---------------------------------- -->
+<p>Construction d'une image st&eacute;réogramme type Random Dot Stereogram.</p>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Author: R&eacute;gis Clouard
+</address>
+<!---------------------------------- -->
+</body>
+</html>

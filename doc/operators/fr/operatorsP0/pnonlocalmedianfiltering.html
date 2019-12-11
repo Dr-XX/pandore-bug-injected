@@ -1,0 +1,124 @@
+<html>
+<head>
+<title>PANDORE OPERATORS</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+
+<body background="#ffffff"><center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>pnonlocalmedianfiltering</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Filtage m&eacute;dian non local d'une image.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>pnonlocalmedianfiltering</b> sigma nb_iter connectivity [<i>im_in</i>|-] [<i>im_out</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p>L'op&eacute;rateur <b>pnonlocalmedianfiltering</b> permet d'appliquer
+un filtrage non local de type m&eacute;dian.
+
+Soit $f$ l'image <i>im_in</i>, l'algorithme applique it&eacute;rativement:
+<br>
+$f(u)^{t+1} = Med_{v \sim u}{v \tilde u}(\sqrt{w(u, v)}(f^t(v) - f^t(u))) + f^t(u)$<br>
+avec $u$ un pixel, $v$ un voisin de $u$, 
+$w(u, v)$ est le poids entre $u$ et $v$
+(qui peut &ecirc;tre une mesure de similarit&eacute;, une distance, etc.).</p>
+
+<p>Les poids sont calcul&eacute;s entre la valeur de pixel
+et ses voisins par: 
+(ici avec un mesure de similarit&eacute; exponentielle):
+<br>
+$w(u, v) = \exp^{-||f(v) - f(u)||^2 / \sigma^2}
+<br>
+avec $w(u, v) = 1$, on a un filtre median classique.
+</p>
+
+<!---------------------------------- -->
+<h3>Param&egrave;tres</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>sigma</i>: seuil maximal de la mesure de similarit&eacute;.
+Plus la valeur de sigma est &eacute;lev&eacute;e, moins fort est
+le filtage.
+</ul>
+
+<ul>
+<li><i>nb_iter</i>: le nombre d'it&eacute;rations.
+</ul>
+
+<ul>
+<li><i>connectivity</i>: la connexit&eacute;:  4 ou 8.
+</ul>
+
+<!---------------------------------- -->
+<h3>Entr&eacute;es</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_in</i>: une image 2D.
+</ul>
+
+<!---------------------------------- -->
+<h3>Sorties</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_out</i>: Une image de meme type que l'image d'entr&eacute;e.
+</ul>
+
+<!---------------------------------- -->
+<h3>R&eacute;sultat</h3>
+<!---------------------------------- -->
+<p>Retourne SUCCESS ou FAILURE.</p>
+
+<!---------------------------------- -->
+<h3>Exemples</h3>
+<!---------------------------------- -->
+<ul>
+<li>Applique un filtrage median non local &agrave; l'image tangram.pan,
+avec une 8-connectivit&eacute;, 10 it&eacute;rations, et un sigma = 15:
+<pre>
+pnonlocalmedianfiltering 15 10 8 tangram.pan out.pan
+</pre>
+</ul>
+
+<!---------------------------------- -->
+<h3>Voir aussi</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#filtering">Filtrage</a>
+
+<!---------------------------------- -->
+<h3>Prototype C++</h3>
+<!---------------------------------- -->
+<tt>
+template <typename T>
+Errc lplRegularization(Imx2d<T> &amp;imgIn, Imx2d<T> &amp;imgOut, float sigma, int connectivity, IRunThroughImage * imageRunner,  IPerformReg * regPerformer);
+</tt>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Author: Matthieu Toutain
+</address>
+<!---------------------------------- -->
+</body>
+</html>

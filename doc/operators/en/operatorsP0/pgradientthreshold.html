@@ -1,0 +1,111 @@
+<html>
+<head>
+<title>PANDORE OPERATORS</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff"><center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>pgradientthreshold</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Estimates the noise level in a gradient image.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>pgradientthreshold</b> <i>percent</i> [<i>-m mask</i>] [<i>im_in</i>|-]</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p><b>pgradientthreshold</b> calculates the threshold value that is supposed
+to separate false contours to true contours. False contours are 
+considered as gradient noise.
+
+<p>The threshold value is computed from the cumulated histogram
+of the positive gradient magnitude in <i>im_in</i>.
+The threshold value is the maximum gradient magnitude
+that represents 1-<i>percent</i> values of the cumulated histogram.
+
+<p>This value can be get by the way of the operator <b>pstatus</b>.</p>
+
+<!---------------------------------- -->
+<h3>Parameters</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>percent</i> is an integer from [0..1] which specifies
+the amount of true contour points from the total number
+of points in the input image.
+A typical value is 0.2 which represents 20%.
+</ul>
+
+<!---------------------------------- -->
+<h3>Inputs</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_in</i>: an image.
+</ul>
+
+<!---------------------------------- -->
+<h3>Result</h3>
+<!---------------------------------- -->
+<p>Returns the threshold value.</p>
+
+<!---------------------------------- -->
+<h3>Examples</h3>
+<!---------------------------------- -->
+<p>Extracts contours from the tangram.pan image:</p>
+<pre>
+   pexponentialfiltering 0.7 tangram.pan i1.pan
+   pgradient 1 i1.pan i2.pan i3.pan
+   pnonmaximasuppression i2.pan i3.pan i4.pan
+   ppostthinning i4.pan i5.pan
+   pgradientthreshold 0.03 i2.pan
+   seuilhaut=`pstatus`
+   pbinarization $seuilhaut 1e30 i5.pan i6.pan
+   pgradientthreshold 0.2 i2.pan
+   seuilbas=`pstatus`
+   pbinarization $seuilbas 1e30 i5.pan  i7.pan 
+   pgeodesicdilation 1 1 -1 i6.pan i7.pan out.pan
+</pre>
+
+<!---------------------------------- -->
+<h3>See also</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#edgedetection">Edge detection</a>
+
+<!---------------------------------- -->
+<h3>C++ prototype</h3>
+<!---------------------------------- -->
+<tt>
+Errc PGradientThreshold( const Img2duc &amp;im_in, float percent );
+</tt>
+
+<!---------------------------------- -->
+<h3>Version fran&ccedil;aise</h3>
+<!---------------------------------- -->
+<p>Estimation du bruit dans une image d'amplitude du gradient.</p>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Author: R&eacute;gis Clouard
+</address>
+<!---------------------------------- -->
+</body>
+</html>

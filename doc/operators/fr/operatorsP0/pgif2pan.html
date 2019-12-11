@@ -1,0 +1,97 @@
+<html>
+<head>
+<title>OPERATEURS PANDORE</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>pgif2pan</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Conversion d'une image GIF en image Pandore.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>pgif2pan</b> <i>im_in</i> [<i>im_out</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p>L'op&eacute;rateur <b>pgif2pan</b> permet de convertir
+une image de type <i>GIF</i> en un fichier <i>Pandore</i>.
+Le fichier r&eacute;sultant est de type:</p>
+<ul>
+<li>Img2duc pour les images en niveaux de gris,
+<li>Imc2duc pour les images couleur.
+</ul>
+
+<p><b>Remarque</b>: Seul les fichiers GIF non compress&eacute;s sont
+pris en compte. Il peut alors &ecirc;tre n&eacute;cessaire d'utiliser
+un autre logiciel de conversion pour supprimer
+la compression.</p>
+
+<!---------------------------------- -->
+<h3>Entr&eacute;es</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_in</i>: un fichier GIF.
+</ul>
+
+<!---------------------------------- -->
+<h3>Sorties</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_out</i>: une image Pandore.
+</ul>
+
+<!---------------------------------- -->
+<h3>R&eacute;sultat</h3>
+<!---------------------------------- -->
+<p>Retourne SUCCESS ou FAILURE.</p>
+
+<!---------------------------------- -->
+<h3>Exemples</h3>
+<!---------------------------------- -->
+<pre>
+   pgif2pan image.gif image.pan
+</pre>
+
+<!---------------------------------- -->
+<h3>Voir aussi</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#conversion">Conversion</a>,
+<a href="./ppan2gif.html">ppan2gif</a>
+
+<!---------------------------------- -->
+<h3>Prototype C++</h3>
+<!---------------------------------- -->
+<tt>
+Errc PGif2Pan( const FILE* fdin, Pobject **objout );
+</tt>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Auteur: R&eacute;gis Clouard
+</address>
+<!---------------------------------- -->
+</body>
+</html>

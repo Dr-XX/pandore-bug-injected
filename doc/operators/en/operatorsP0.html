@@ -1,0 +1,783 @@
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="keywords" content="image processing, library of operators">
+  <title>PANDORE: Operator Index</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+<body background="#ffffff">
+
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<h1>Operator Index</h1>
+<hr>
+<a name=conversion><b>File Format Conversion</b></a>
+<p>Converting between image file formats (gif, bmp, tiff, jpeg, png, pandore, etc).</p>
+<ul>
+<li><a href="./operatorsP0/pany2pan.html">pany2pan</a> - Converts known image format file to Pandore image file.
+<li><a href="./operatorsP0/pbmp2pan.html">pbmp2pan</a> - Converts BMP image file to Pandore image file.
+<li><a href="./operatorsP0/ppan2bmp.html">ppan2bmp</a> - Converts Pandore file to BMP image file.
+<li><a href="./operatorsP0/pgif2pan.html">pgif2pan</a> - Converts GIF image file to Pandore image file.
+<li><a href="./operatorsP0/ppan2gif.html">ppan2gif</a> - Converts Pandore image file to GIF image file.
+<li><a href="./operatorsP0/pjpeg2pan.html">pjpeg2pan</a> - Converts JPEG image file to Pandore image file.
+<li><a href="./operatorsP0/ppan2jpeg.html">ppan2jpeg</a> - Converts Pandore file to JPEG image file.
+<li><a href="./operatorsP0/ppng2pan.html">ppng2pan</a> - Converts PNG image file to Pandore image file.
+<li><a href="./operatorsP0/ppan2png.html">ppan2png</a> - Converts Pandore file to PNG image file.
+<li><a href="./operatorsP0/ppan2ppm.html">ppan2ppm</a> - Converts Pandore image file to PPM (ascii) image file.
+<li><a href="./operatorsP0/pppm2pan.html">pppm2pan</a> - Converts PPM, PGM, or PBM image file to Pandore file. 
+<li><a href="./operatorsP0/ptiff2pan.html">ptiff2pan</a> - Converts TIFF image file to Pandore image file. 
+<li><a href="./operatorsP0/ppan2tiff.html">ppan2tiff</a> - Converts Pandore image file to TIFF image file.
+
+<li><a href="./operatorsP0/pvff2pan.html">pvff2pan</a> - Converts VFF image file to Pandore image file.
+
+<li><a href="./operatorsP0/ppan2vff.html">ppan2vff</a> - Converts Pandore image file to VFF image file (Sunvision). 
+<li><a href="./operatorsP0/ppan2pan.html">ppan2pan</a> - Converts any Pandore file format to current Pandore file format.
+<li><a href="./operatorsP0/pras2pan.html">pras2pan</a> - Converts Sun raster image file to Pandore image file. 
+<li><a href="./operatorsP0/praw2pan.html">praw2pan</a> - Converts raw image file to Pandore image file.
+<li><a href="./operatorsP0/ppan2raw.html">ppan2raw</a> - Converts Pandore file to raw file.
+<li><a href="./operatorsP0/ppan2ps.html">ppan2ps</a> - Converts Pandore image file to Encapsulted PostScript file.
+<li><a href="./operatorsP0/ppan2txt.html">ppan2txt</a> - Converts Pandore image file to text file.
+<li><a href="./operatorsP0/ptxt2pan.html">ptxt2pan</a> - Converts text file to Pandore image file.
+<li><a href="./operatorsP0/pyuv2pan.html">pyuv2pan</a> - Converts a YUV image sequence file to a Pandore image file.
+<li><a href="./operatorsP0/pfits2pan.html">pfits2pan</a> - Converts FITS (Flexible Image Transport System) image file to Pandore image file.
+<li><a href="./operatorsP0/ppan2fits.html">ppan2fits</a> - Converts Pandore gray-scale image (1D, 2D or 3D) to FITS (Flexible Image Transport System) image file.
+<li><a href="./operatorsP0/pparrec2pan.html">pparrec2pan</a> - Converts PAR/REC format image file (Philips Medical System) to Pandore image file.
+<li><a href="./operatorsP0/panalyze2pan.html">panalyze2pan</a> - Converts Pandore image file to ANALYZE 7.5 image file.
+<li><a href="./operatorsP0/ppan2analyze.html">ppan2analyze</a> - Converts ANALYZE 7.5 image file to Pandore image file.
+
+<li><a href="./operatorsP0/ppan2d23d.html">ppan2d23d</a> - Converts a series of Pandore 2D image files to a unique 3D image file.
+<li><a href="./operatorsP0/ppan3d22d.html">ppan3d22d</a> - Converts Pandore 3D image file to a series of 2D Pandore image files.
+</ul>
+
+<hr>
+<a name=casting><b>Pandore Type Conversion</b></a>
+<p>Type casting between Pandore object: float image to uchar image, image to region map, etc.</p>
+<ul>
+<li><a href="./operatorsP0/parray2im.html">parray2im</a> - Converts pixel array to image.
+<li><a href="./operatorsP0/pim2array.html">pim2array</a> - Converts image to pixel array.
+
+<li><a href="./operatorsP0/prg2im.html">prg2im</a> - Converts region map to signed long image.
+<li><a href="./operatorsP0/prg2imc.html">prg2imc</a> - Converts region map to equivalent color image.
+<li><a href="./operatorsP0/pim2rg.html">pim2rg</a> - Converts grayscale image to region map.
+
+<li><a href="./operatorsP0/pgr2im.html">pgr2im</a> - Converts graph to float image.
+
+<li><a href="./operatorsP0/prg2gr.html">prg2gr</a> - Converts region map to graph.
+<li><a href="./operatorsP0/pgr2rg.html">pgr2rg</a> - Converts graph to region map.
+
+<li><a href="./operatorsP0/pim2sf.html">pim2sf</a> - Converts any image type to float image.
+<li><a href="./operatorsP0/pim2uc.html">pim2uc</a> - Converts any image type to unsigned char image.
+<li><a href="./operatorsP0/pim2sl.html">pim2sl</a> - Converts any image type to signed long image.
+
+<li><a href="./operatorsP0/pim2d23d.html">pim2d23d</a> - Converts 2D image or region map to 3D image or region map with 1 slice.
+<li><a href="./operatorsP0/pim3d22d.html">pim3d22d</a> - Converts 3D image or region map with one slice to 2D image or region map.
+
+<li><a href="./operatorsP0/pimc2img.html">pimc2img</a> - Converts color image to grayscale image.
+<li><a href="./operatorsP0/pimc2imx.html">pimc2imx</a> - Creates a multispectral image with a color image. 
+
+<li><a href="./operatorsP0/pimg2imc.html">pimg2imc</a> - Converts a grayscale image into a color image.
+<li><a href="./operatorsP0/pimg2imx.html">pimg2imx</a> - Converts a grayscale image into a multispectral image.
+
+<li><a href="./operatorsP0/pimgs2imc.html">pimgs2imc</a> - Creates a color image from 3 grayscale images.
+<li><a href="./operatorsP0/pimgs2imx.html">pimgs2imx</a> - Creates a multispectral image from several grayscale images.
+
+<li><a href="./operatorsP0/pimx2img.html">pimx2img</a> - Converts one band of multispectral image to grayscale image.
+<li><a href="./operatorsP0/pimx2imc.html">pimx2imc</a> - Converts multispectral image to color image.
+</ul>
+
+<hr> 
+<a name=color><b>Color Space Conversion</b></a>
+<p>Converting color spaces: rgb to hsl, rgb to yuv, etc.</p>
+<ul>
+<li><a href="./operatorsP0/phsi2rgb.html">phsi2rgb</a> - Converts HSI color image to RGB color image.
+<li><a href="./operatorsP0/phsl2rgb.html">phsl2rgb</a> - Converts HSL color image to RGB color image.
+<li><a href="./operatorsP0/phsv2rgb.html">phsv2rgb</a> - Converts HSV color image to RGB color image.
+<li><a href="./operatorsP0/plab2lch.html">plab2lch</a> - Converts Lab color image to LCH color image.
+<li><a href="./operatorsP0/pluv2lch.html">pluv2lch</a> - Converts L*u*v color image to LCH color image.
+<li><a href="./operatorsP0/prgb2pca.html">prgb2pca</a> - Converts rgb color image to principal components.
+<li><a href="./operatorsP0/prgb2ast.html">prgb2ast</a> - Converts rgb color image to AST color image.
+<li><a href="./operatorsP0/prgb2cmyk.html">prgb2cmyk</a> - Converts RGB color image to Cyan-Magenta-Yellow-Key space image.
+<li><a href="./operatorsP0/pcmyk2rgb.html">pcmyk2rgb</a> - Converts Cyan-Magenta-Yellow-Key color image to RGB color image.
+<li><a href="./operatorsP0/prgb2gray.html">prgb2gray</a> - Converts RGB color image to gray space image.
+<li><a href="./operatorsP0/prgb2hsi.html">prgb2hsi</a> - Converts RGB color image to HSI color image.
+<li><a href="./operatorsP0/prgb2hsl.html">prgb2hsl</a> - Converts RGB color image to HSL color image.
+<li><a href="./operatorsP0/prgb2hsv.html">prgb2hsv</a> - Converts RGB color image to HSV color image.
+<li><a href="./operatorsP0/prgb2i1i2i3.html">prgb2i1i2i3</a> - Converts RGB color image to (i1,i2,i3) color image.
+<li><a href="./operatorsP0/prgb2wry.html">prgb2wry</a> - Converts RGB color space to (wb,rg,yb) color space.
+<li><a href="./operatorsP0/prgb2xyz.html">prgb2xyz</a> - Converts RGB color image to XYZ color image.
+<li><a href="./operatorsP0/prgb2rngnbn.html">prgb2rgnbn</a> - Converts RGB color image to normalized RGB color image.
+<li><a href="./operatorsP0/prgb2ycbcr.html">prgb2ycbcr</a> - Converts RGB color image to YCbCr color image.
+<li><a href="./operatorsP0/prgb2ych1ch2.html">prgb2ych1ch2</a> - Converts RGB color space to YCh1Ch2 color image.
+<li><a href="./operatorsP0/prgb2yiq.html">prgb2yiq</a> - Converts RGB color image to YIQ color image.
+<li><a href="./operatorsP0/prgb2yuv.html">prgb2yuv</a> - Converts RGB color image to YUV color image. 
+<li><a href="./operatorsP0/pyuv2rgb.html">pyuv2rgb</a> - Converts YUV color image to RGB color image. 
+<li><a href="./operatorsP0/pxyz2lab.html">pxyz2lab</a> - Converts XYZ color image to Lab color image.
+<li><a href="./operatorsP0/pxyz2luv.html">pxyz2luv</a> - Converts XYZ color image to L*u*v color image.
+<li><a href="./operatorsP0/pxyz2rgb.html">pxyz2rgb</a> - Converts XYZ image to RGB image.
+<li><a href="./operatorsP0/pgray2bw.html">pgray2bw</a> - Converts gray scale image to black and white image.
+<li><a href="./operatorsP0/y.html">pgray2falsecolor</a> - Converts gray level image to false color image.
+</ul> 
+
+<hr>
+<a name=arithmetic><b>Arithmetic</b></a>
+<p>Binary and unary operations on image, graph, or region map.</p>
+<ul>
+<li><a href="./operatorsP0/padd.html">padd</a> - Performs addition between images or graphs.
+<li><a href="./operatorsP0/pdif.html">pdif</a> - Performs difference between images or graphs and non symmetrical difference between region maps.
+<li><a href="./operatorsP0/psub.html">psub</a> - Performs subtraction between images or graphs and non symmetrical difference between region maps.
+<li><a href="./operatorsP0/pmult.html">pmult</a> - Performs multiplication between images or graphs.
+<li><a href="./operatorsP0/pdiv.html">pdiv</a> - Performs division between images or graphs.
+<li><a href="./operatorsP0/pmean.html">pmean</a> - Performs average between images or graphs.
+<li><a href="./operatorsP0/pblend.html">pblend</a> - Performs alpha blending of image or graph.
+<li><a href="./operatorsP0/ppow.html">ppow</a> - Computes nth power of an image or a graph.
+<li><a href="./operatorsP0/psqrt.html">psqrt</a> - Computes square root of image or graph.
+<li><a href="./operatorsP0/pexp.html">pexp</a> - Computes exponential of image or graph.
+<li><a href="./operatorsP0/plog.html">plog</a> - Computes natural logarithm of image or graph.
+<li><a href="./operatorsP0/pmax.html">pmax</a> - Performs maximum values between image or a graph.
+<li><a href="./operatorsP0/pmin.html">pmin</a> - Computes minimum values between image or graph.
+<li><a href="./operatorsP0/pabs.html">pabs</a> - Computes absolute value of image or graph.
+<li><a href="./operatorsP0/pround.html">pround</a> - Computes round integral value of image or graph.
+<li><a href="./operatorsP0/pclipvalues.html">pclipvalues</a> - Clips pixel values inside the specified range.
+<li><a href="./operatorsP0/pnormalization.html">pnormalization</a> - Performs normalization of image or graph. 
+<li><a href="./operatorsP0/pconvolution.html">pconvolution</a> - Convolves image with kernel.
+<li><a href="./operatorsP0/psetcst.html">psetcst</a> - Sets constant to image, graph or region map.
+<li><a href="./operatorsP0/pdivcst.html">pdivcst</a> - Divides constant to image, graph or region map.
+<li><a href="./operatorsP0/pmultcst.html">pmultcst</a> - Multiplies constant to image, graph or region map.
+<li><a href="./operatorsP0/paddcst.html">paddcst</a> - Adds constant to image, graph or region map.
+<li><a href="./operatorsP0/paddval.html">paddval</a>  - Adds constants
+stored in collection to image bands.
+<li><a href="./operatorsP0/psubval.html">psubval</a>  - Subtracts constants
+stored in collection to image bands.
+<li><a href="./operatorsP0/pmultval.html">pmultval</a>  - Multiplies image
+bands with constants stored in collection. 
+<li><a href="./operatorsP0/pdivval.html">pdivval</a> - Divides image bands
+with constants stored in collection.
+<li><a href="./operatorsP0/plipadd.html">plipadd</a> - Performs image addition according to the LIP model.
+<li><a href="./operatorsP0/plipsub.html">plipsub</a> - Performs image subtraction according to the LIP model.
+<li><a href="./operatorsP0/plipmultcst.html">plipmultcst</a> - Performs scalar multiplication of image according to the LIP model.
+<li><a href="./operatorsP0/pintegralimage.html">pintegralimage</a> - Calculates the integral image.
+<li><a href="./operatorsP0/psquareintegralimage.html">psquareintegralimage</a> - Calculates the square integral image.
+</ul>
+
+<hr>
+<a name=logic><b>Logic</b></a>
+<p>Binary and logical operations between image and graph and set operation between region map.</p>
+<ul>
+<li><a href="./operatorsP0/pand.html">pand</a> - Performs binary and between images or graphs and intersection between region maps.
+<li><a href="./operatorsP0/por.html">por</a> - Performs binary or between images or graphs and union between region maps.
+<li><a href="./operatorsP0/pxor.html">pxor</a> - Performs binary xor between images or graphs and symmetrical difference between region maps.
+<li><a href="./operatorsP0/pinverse.html">pinverse</a> - Performs inversion of image or graph and inversion of region map labels. 
+<li><a href="./operatorsP0/pnot.html">pnot</a> - Performs logical negation of image or graph and complementary of region map.
+<li><a href="./operatorsP0/pmask.html">pmask</a> - Performs masking of image, graph or region map by an image or a region map.
+</ul> 
+
+<hr>
+<a name=transformation><b>Geometrical Transformation</b></a>
+<p>Basic geometrical transformation of image, graph or region map contents.</p>
+<ul>
+<li><a href="./operatorsP0/paddborder.html">paddborder</a> - Performs resizing of image or region map by adding a border.
+<li><a href="./operatorsP0/pmaxprojection.html">pmaxprojection</a> - Performs mean value orthogonal projection along main axis.
+<li><a href="./operatorsP0/pmeanprojection.html">pmeanprojection</a> - Performs mean value orthogonal projection along main axis.
+<li><a href="./operatorsP0/pextrude1d22d.html">pextrude1d22d</a> - Performs
+ propagation of value along an axis.
+<li><a href="./operatorsP0/pflip.html">pflip</a> - Performs flip transformation of image or region map.
+<li><a href="./operatorsP0/protation.html">protation</a> - Performs rotation of image or region map.
+<li><a href="./operatorsP0/ptranslation.html">ptranslation</a> - Performs translation of image or region map.
+<li><a href="./operatorsP0/pscrolling.html">pscrolling</a> - Performs a rolling up translation of image or region map.
+<li><a href="./operatorsP0/ptransposition.html">ptransposition</a> - Performs a transposition of image.
+<li><a href="./operatorsP0/presize.html">presize</a> - Performs an affine resizing of image or region map.
+<li><a href="./operatorsP0/prescale.html">prescale</a> - Performs an affine rescaling of image, region map or graph using the nearest neighbor interpolation.
+<li><a href="./operatorsP0/plinearrescale.html">plinearrescale</a> - Performs an affine rescaling of image using the linear interpolation.
+<li><a href="./operatorsP0/pbicubicrescale.html">pbicubicrescale</a> - Performs an affine rescaling of 2D image using the bicubic interpolation.
+
+<li><a href="./operatorsP0/pbellrescale.html">pbellcrescale</a> - Performs a rescaling of image using the Bell algorithm.
+<li><a href="./operatorsP0/phermiterescale.html">phermiterescale</a> - Performs a rescaling of image using the Hermite algorithm. 
+<li><a href="./operatorsP0/planczosrescale.html">planczosrescale</a> - Performs a rescaling of image using the Lanczos algorithm.
+<li><a href="./operatorsP0/pmitchellrescale.html">pmitchellrescale</a>  - Performs a rescaling of image using the Mitchell algorithm.
+</ul>
+
+<hr>
+<a name=utility><b>Image Utility</b></a>
+<p>Some basic image transformations.</p>
+<ul>
+<li><a href="./operatorsP0/psetpixel.html">psetpixel</a> - Sets a given value to a specified pixel.
+<li><a href="./operatorsP0/ppixelvalue.html">ppixelvalue</a> - Gets pixel value from grayscale image and region map.
+<li><a href="./operatorsP0/paddnoise.html">paddnoise</a> - Adds artificial noise to image.
+<li><a href="./operatorsP0/pcliparea.html">pcliparea</a> - Select rectangular region area of image, region map or graph.
+<li><a href="./operatorsP0/pcopyborder.html">pcopyborder</a> - Copy image border.
+<li><a href="./operatorsP0/psetborder.html">psetborder</a> - Sets image border to specified value.
+<li><a href="./operatorsP0/pextractsubimage.html">pextractsubimage</a> - Extracts subimage from image.
+<li><a href="./operatorsP0/pinsertsubimage.html">pinsertsubimage</a> - Inserts subimage into image.
+<li><a href="./operatorsP0/pnewimage.html">pnewimage</a> - Creates a new image from dimensions.
+<li><a href="./operatorsP0/pshapedesign.html">pshapedesign</a> - Creates a new image with synthetic shape.
+<li><a href="./operatorsP0/pmergeimages.html">pmergeimages</a> - Merges 4 images into one image.
+<li><a href="./operatorsP0/psplitimage.html">psplitimage</a> - Splits image into 4 subimages.
+<li><a href="./operatorsP0/pgraylevel2depth.html">pgraylevel2depth</a> - Converts gray levels to depth values.
+<li><a href="./operatorsP0/pdepth2graylevel.html">pdepth2graylevel</a> - Converts depth values to gray levels.
+<li><a href="./operatorsP0/paddslice.html">paddslice</a> - Adds slice to 3D image.
+<li><a href="./operatorsP0/premoveslice.html">premoveslice</a> - Removes slice to 3D image.
+<li><a  href="./operatorsP0/pgetband.html">pgetband</a> - Gets  a band
+  in a multispectral image (or color image).
+<li><a  href="./operatorsP0/psetband.html">psetband</a> - Replace a band in a multispectral image (or color image).
+<li><a href="./operatorsP0/pgetslice.html">pgetslice</a> - Gets slice from 3D image as 2D image.
+<li><a href="./operatorsP0/psetslice.html">psetlice</a> - Sets slice to 3D image.
+
+<li><a href="./operatorsP0/pgetwindowaroundpoints.html">pgetwindowaroundpoints</a> - Extracts pixels in the window around specified points.
+</ul>
+
+<hr>
+<a name=luttransform><b>Lut Transformation</b></a>
+<p>A set of Look-Up Table transformations to perform radiometric corrections.</p>
+<ul>
+<li><a href="./operatorsP0/pextremumsharpening.html">pextremumsharpening</a> - Performs contrast sharpening using extremum values.
+
+<li><a href="./operatorsP0/plineartransform.html">plineartransform</a> - Performs linear transform of the gray-levels.
+<li><a href="./operatorsP0/plogtransform.html">plogtransform</a> - Performs logarithmic and exponential transforms of the gray-levels.
+<li><a href="./operatorsP0/ppowerlawtransform.html">ppowerlawtransform</a> - Performs power-law transform of the gray-levels.
+
+<li><a href="./operatorsP0/phistogramequalization.html">phistogramequalization</a> - Performs contrast stretching using histogram equalization.
+<li><a href="./operatorsP0/phistogramspecification.html">phistogramspecification</a> - Performs contrast stretching using histogram specification.
+</ul>
+
+<hr>
+<a name=filtering><b>Spatial Filtering</b></a>
+<p>Spatial linear or non linear filtering.</p>
+<ul>
+<li><a href="./operatorsP0/pvariancefiltering.html">pvariancefiltering</a> - Performs variance filtering on image.
+
+<li><a href="./operatorsP0/pmedianfiltering.html">pmedianfiltering</a> - Performs median filtering on image.
+<li><a href="./operatorsP0/pmeanfiltering.html">pmeanfiltering</a> - Performs mean filtering on image or graph.
+
+
+<li><a href="./operatorsP0/pnonlocalmedianfiltering.html">pnonlocalmedianfiltering</a> - Performs a non local median filtering on image.
+<li><a href="./operatorsP0/pnonlocalmeanfiltering.html">pnonlocalmeanfiltering</a> - Performs a non local mean filtering on image or graph.
+
+
+<li><a href="./operatorsP0/pgaussianfiltering.html">pgaussianfiltering</a> - Performs Gaussian filtering on image.
+<li><a href="./operatorsP0/pexponentialfiltering.html">pexponentialfiltering</a> - Performs exponential filtering on image.
+
+<li><a href="./operatorsP0/padaptivemeanfiltering.html">padaptivemeanfiltering</a> - Performs adaptive mean filtering on image.
+
+<li><a href="./operatorsP0/pderichesmoothing.html">pderichesmoothing</a> - Performs Deriche filtering on image.
+<li><a href="./operatorsP0/pshensmoothing.html">pshensmoothing</a> - Performs Shen-Castan smoothing on image.
+
+<li><a href="./operatorsP0/pmalikperonafiltering.html">pmalikperonafiltering</a> - Performs non linear diffusion smoothing.
+<li><a href="./operatorsP0/pmcmfiltering.html">pmcmfiltering</a> - Performs Mean Curvature Motion filtering on image.
+
+<li><a href="./operatorsP0/pnagaofiltering.html">pnagaofiltering</a> - Performs Nagao filtering on image.
+<li><a href="./operatorsP0/poutrangefiltering.html">poutrangefiltering</a> - Performs outrange filtering on image.
+<li><a href="./operatorsP0/psigmafiltering.html">psigmafiltering</a> -  Performs sigma filtering on image.
+
+<li><a href="./operatorsP0/psnnfiltering.html">psnnfiltering</a> - Performs Symmetric Nearest Neighborhood filtering on image.
+
+<li><a href="./operatorsP0/ppeergroupfiltering.html">ppeergroupfiltering</a> - Performs Peer Group filtering on color image.
+
+<li><a href="./operatorsP0/pdenoisePDE.html">pdenoisePDE</a> - Performs anisotropic smoothing on image.
+<li><a href="./operatorsP0/psharp.html">psharp</a> - Performs contrast sharpening using Laplacian unsharp masking.
+</ul> 
+
+<hr>
+<a name=surfacefitting><b>Surface Fitting</b></a>
+<p>Approximation of image contents to flat background.</p>
+<ul>
+<li><a href="./operatorsP0/plinearregression.html">plinearregression</a>
+  - Approximates image to flat background using linear regression.
+<li><a href="./operatorsP0/ppolynomialfitting.html">ppolynomialfitting</a>
+  - Approximates image to flat background using polynomial fitting.
+<li><a href="./operatorsP0/plegendrepolynomialfitting.html">plegendrepolynomialfitting</a>
+  - Approximates image to flat background using Legendre polynomial fitting.
+</ul>
+
+<hr>
+<a name=interpolation><b>Interpolation</b></a>
+<p>Interpolation of missing pixels.</p>
+<ul>
+<li><a href="./operatorsP0/plinearinterpolation.html">plinearinterpolation</a>
+  - Replaces missing pixels by linear interpolation of the neighbors.
+</ul>
+
+<hr>
+<a name=frequency><b>Frequency Domain</b></a>
+<p>Frequency operations.
+Complex images are represented by two images.</p>
+<ul>
+
+<li><a href="./operatorsP0/pfft.html">pfft</a> - Performs Fast Fourier Transform.
+<li><a href="./operatorsP0/pifft.html">pifft</a> - Performs inverse Fast Fourier Transform.
+<li><a href="./operatorsP0/pbutterworthfilter.html">pbutterworthfilter</a> - Designs lowpass, highpass, bandpass or bandreject Butterworth filter.
+
+<li><a href="./operatorsP0/pgaussianfilter.html">pgaussianfilter</a> - Designs lowpass, highpass, bandpass or bandreject Gaussian filter.
+
+<li><a href="./operatorsP0/pmodulus.html">pmodulus</a> - Computes modulus between 2 images.
+<li><a href="./operatorsP0/pphase.html">pphase</a> - Computes phase between 2 images.
+
+<li><a href="./operatorsP0/pfftconvolution.html">pfftconvolution</a> - Performs convolution of image by kernel.
+<li><a href="./operatorsP0/pfftdeconvolution.html">pfftdeconvolution</a> - Performs deconvolution of image by kernel.
+<li><a href="./operatorsP0/pfftcorrelation.html">pfftcorrelation</a> - Performs correlation between two images.
+
+<li><a href="./operatorsP0/pfftshift.html">pfftshift</a> - Shifts images in FFT image.
+
+
+<li><a href="./operatorsP0/pqmf.html">pqmf</a> - Designs Quadratic Mirror Filter for wavelet transform.
+<li><a href="./operatorsP0/pdwt.html">pdwt</a> - Performs Direct Wavelet Transform.
+<li><a href="./operatorsP0/pidwt.html">pidwt</a> - Performs inverse Direct Wavelet Transform. 
+<li><a href="./operatorsP0/psetsubband.html">psetsubband</a> - Gets one subband image from DWT image.
+<li><a href="./operatorsP0/pgetsubband.html">pgetsubband</a> - Sets subband into DWT image.
+</ul>
+
+<hr>
+<a name=morphology><b>Mathematical Morphology Domain</b></a>
+<p>Morphological transformations is based on set operations such as erosion 
+and dilation.</p>
+<ul>
+
+<li><a href="./operatorsP0/pdilation.html">pdilation</a> - Performs morphological dilation from a list of predefined structuring elements.
+<li><a href="./operatorsP0/perosion.html">perosion</a> - Performs morphological erosion from a list of predefined structuring elements.
+
+<li><a href="./operatorsP0/pnonlocaldilation.html">pnonlocaldilation</a> - Performs a non local dilation with laplacian regularization on image. 
+<li><a href="./operatorsP0/pnonlocalerosion.html">pnonlocalerosion</a> - Performs a non local erosion with laplacian regularization on image.
+
+<li><a href="./operatorsP0/psedesign.html">psedesign</a> - Builds a structuring element from a list of predefined structuring elements.
+
+<li><a href="./operatorsP0/psedilation.html">psedilation</a> - Performs morphological dilation with a customized structuring elements.
+<li><a href="./operatorsP0/pseerosion.html">pseerosion</a> - Performs morphological erosion  with a customized structuring elements.
+
+<li><a href="./operatorsP0/plineardilation.html">plineardilation</a> - Performs dilation with a linear structuring element.
+<li><a href="./operatorsP0/plinearerosion.html">plinearerosion</a> - Performs linear erosion  with a linear structuring element.
+
+<li><a href="./operatorsP0/pgeodesicdilation.html">pgeodesicdilation</a> - Performs geodesic dilation.
+<li><a href="./operatorsP0/pgeodesicerosion.html">pgeodesicerosion</a> - Performs geodesic erosion.
+
+<li><a href="./operatorsP0/pdilationreconstruction.html">pdilationreconstruction</a> - Performs reconstruction by dilation.
+<li><a href="./operatorsP0/perosionreconstruction.html">perosionreconstruction</a> - Performs reconstruction by erosion.
+
+<li><a href="./operatorsP0/pareaopening.html">pareaopening</a> - Performs area opening (minima killer).
+<li><a href="./operatorsP0/pareaclosing.html">pareaclosing</a> - Performs area closing (maxima killer).
+
+<li><a href="./operatorsP0/pwatershed.html">pwatershed</a> - Performs the watershed on image.
+
+<li><a href="./operatorsP0/phitormiss.html">phitormiss</a> - Performs hit or miss transformation.
+<li><a href="./operatorsP0/pskeletonization.html">pskeletonization</a> - Computes the skeleton of 2D objects.
+<li><a href="./operatorsP0/phomotopicskeletonization.html">phomotopicskeletonization</a> - Computes the homotopic skeleton of 3D objects.
+</ul> 
+
+<hr>
+<a name=pointsofinterest><b>Point of Interest Detection</b></a>
+<p>Detection of points of interest such as corners or junctions.</p>
+<ul>
+<li><a href="./operatorsP0/pharris.html">pharris</a> - Performs Harris corner detection.
+<li><a href="./operatorsP0/psusan.html">psusan</a> - Performs Susan corner detection.
+</ul>
+
+<hr>
+<a name=edgedetection><b>Edge Detection</b></a>
+<p>Detection and localization of edges.</p>
+<ul>
+<li><a    href="./operatorsP0/pgradneumann.html">pgradneumann</a>    -
+Computes  the  discrete gradient  by  forward  finite differences  and
+Neumann boundary conditions. 
+<li><a    href="./operatorsP0/pdivneumann.html">pdivneumann</a>    -
+Computes the divergence by backward finite differences.
+<li><a href="./operatorsP0/pgradient.html">pgradient</a> - Computes the gradient magnitude and direction.
+<li><a href="./operatorsP0/plaplacian.html">plaplacian</a> - Computes the Laplacian magnitude.
+
+<li><a href="./operatorsP0/pprewitt.html">pprewitt</a> - Computes the Prewitt gradient magnitude.
+<li><a href="./operatorsP0/proberts.html">proberts</a> - Computes the Roberts gradient magnitude.
+<li><a href="./operatorsP0/psobel.html">psobel</a> - Computes the Sobel gradient magnitude.
+
+<li><a href="./operatorsP0/pderiche.html">pderiche</a> - Computes gradient magnitude and maxima localization using Deriche algorithm.
+<li><a href="./operatorsP0/pshen.html">pshen</a> - Computes gradient magnitude and maxima localization using Shen-Castan's algorithm.
+
+<li><a href="./operatorsP0/pgradientthreshold.html">pgradientthreshold</a> - Estimates the noise level in a gradient image.
+<li><a href="./operatorsP0/pnonmaximasuppression.html">pnonmaximasuppression</a> - Performs non-maxima suppression for edge detection.
+<li><a href="./operatorsP0/pzerocross.html">pzerocross</a> - Locates zero crossing.
+</ul>
+
+<hr>
+<a name=contour><b>Contour Processing</b></a>
+<p>Contours are chains of connected non null pixels relying on a null background.
+There are connected according to 8-connexity in 2D and the 26-connexity in 3D.
+Contour image are grayscale images.</p>
+
+<ul>
+<li><a href="./operatorsP0/pdistance.html">pdistance</a> - Computes euclidean distance map to nearest contours.
+<li><a href="./operatorsP0/pdistance1.html">pdistance1</a> - Computes distance map to nearest contour.
+
+<li><a href="./operatorsP0/pcontourextensionrect.html">pcontourextensionrect</a> - Performs rectangular-shaped extension of end points.
+<li><a href="./operatorsP0/pcontourextensionconic.html">pcontourextensionconic</a> - Performs cone-shaped extension of end points.
+<li><a href="./operatorsP0/pblindedgeclosing.html">pblindedgeclosing</a> - Performs edge closing by edge tracking.
+<li><a href="./operatorsP0/pedgeclosing.html">pedgeclosing</a> - Performs edge closing from gradient.
+<li><a href="./operatorsP0/pedgedirection.html">pedgedirection</a> - Computes the contours direction.
+<li><a href="./operatorsP0/phoughlines.html">phoughlines</a> - Detects straight lines from a set of contours.
+<li><a href="./operatorsP0/ppostthinning.html">ppostthinning</a> - Performs contour postthinning to guaranty 8-connexity (or 26-connexity).
+
+<li><a href="./operatorsP0/pellipsoidalapproximation.html">pellipsoidalapproximation</a> - Performs ellipsoidal approximation of closed contour.
+<li><a href="./operatorsP0/ppolygonalapproximation.html">ppolygonalapproximation</a> - Performs polygonal approximation of contours.
+
+<li><a href="./operatorsP0/pbarbremoval.html">pbarbremoval</a> - Removes barbs from length.
+
+<li><a href="./operatorsP0/pcontourselection.html">pcontourselection</a> - Selects contour chain from length.
+<li><a href="./operatorsP0/pclosedcontourselection.html">pclosedcontourselection</a> - Selects closed contour from length.
+<li><a href="./operatorsP0/popencontourselection.html">popencontourselection</a> - Selects open contour from length.
+</ul> 
+
+<hr>
+<a name=thresholding><b>Thresholding</b></a>
+<p>Image segmentation using pixel classification.</p>
+<ul>
+<li><a href="./operatorsP0/pbinarization.html">pbinarization</a> - Performs binary thresholding on image or graph from a given threshold value.
+<li><a href="./operatorsP0/padaptivemeanbinarization.html">padaptivemeanbinarization</a> - Performs binarization on image using a local adaptive thresholding based on mean value.
+<li><a href="./operatorsP0/pcorrelationbinarization.html">pcorrelationbinarization</a> - Performs binarization on image using maximum correlation criterion.
+<li><a href="./operatorsP0/pentropybinarization.html">pentropybinarization</a> - Performs binarization on image using maximum entropy criterion.
+<li><a href="./operatorsP0/pniblackbinarization.html">pniblackbinarization</a> - Performs an adaptive binarization based on local contrast according to W. Niblack algorithm enhanced by J. Sauvola.
+<li><a href="./operatorsP0/pvariancebinarization.html">pvariancebinarization</a> - Performs binarization on image using interclass variance criterion.
+<li><a href="./operatorsP0/pcontrastbinarization.html">pcontrastbinarization</a> - Performs binairization based on the boundary contrast value.
+<li><a href="./operatorsP0/pmassbinarization.html">pmassbinarization</a> - Performs binarization based on gray level percent.
+
+<li><a href="./operatorsP0/pthresholding.html">pthresholding</a> - Performs thresholding on image, region map or graph from a given value.
+
+<li><a href="./operatorsP0/pcontrastthresholding.html">pcontrastthresholding</a> - Performs multi-thresholding on image based on the boundary contrast value.
+<li><a href="./operatorsP0/phistothresholding.html">phistothresholding</a> - Performs multi-thresholding on image using histogram analysis.
+<li><a href="./operatorsP0/pfuzzyclustering.html">pfuzzyclustering</a>- Performs multi-thresholding using fuzzy k-means algorithm. 
+<li><a href="./operatorsP0/pentropythresholding.html">pentropythresholding</a> - Performs multi-thresholding on image based on the entropy value.
+<li><a href="./operatorsP0/pchanda.html">pchanda</a> - Performs multi-thresholding on image using Chanda algorithm.
+<li><a href="./operatorsP0/pderavi.html">pderavi</a> - Performs multi-thresholding on image using Deravi algorithm.
+<li><a href="./operatorsP0/pfisher.html">pfisher</a> - Performs multi-thresholding on image using Fisher algorithm.
+<li><a href="./operatorsP0/pweszka.html">pweszka</a> -  Performs multi-thresholding on image using Weszka algorithm.
+</ul>
+
+<hr>
+<a name=segmentation><b>Segmentation</b></a>
+<p>Region spliting, merging, and aggregation operations.</p>
+<ul>
+<li><a href="./operatorsP0/pboundarylabeling.html">pboundarylabeling</a> - Performs region labeling from boundary.
+<li><a href="./operatorsP0/plabeling.html">plabeling</a> - Performs region labeling.
+
+<li><a href="./operatorsP0/pcontrastquadtree.html">pcontrastquadtree</a> - Performs quadtree (or octree) segmentation based on contrast uniformity. 
+<li><a href="./operatorsP0/pcontrast1quadtree.html">pcontrast1quadtree</a> - Performs quadtree (or octree) segmentation based on contrast criterion.
+<li><a href="./operatorsP0/pentropyquadtree.html">pentropyquadtree</a> - Performs quadtree segmentation based on entropy uniformity.
+<li><a href="./operatorsP0/puniformityquadtree.html">puniformityquadtree</a> - Performs quadtree (or octree) segmentation based on uniformity degree.
+<li><a href="./operatorsP0/pvariancequadtree.html">pvariancequadtree</a> - Performs quadtree (or octree) segmentation based on variance uniformity.
+<li><a href="./operatorsP0/pcontrastaggregation.html">pcontrastaggregation</a> - Performs pixel aggregation based on contrast criterion.
+<li><a href="./operatorsP0/pedgebasedragpruning.html">pedgebasedragpruning</a> - 
+Cut adjacency link between regions that are separated by an edge. 
+<li><a href="./operatorsP0/pmeanaggregation.html">pmeanaggregation</a> - Performs pixel aggregation based on mean criterion.
+<li><a href="./operatorsP0/pgaussaggregation.html">pgaussaggregation</a> - Performs pixel aggregation based on Gaussian criterion.
+<li><a href="./operatorsP0/pvarianceaggregation.html">pvarianceaggregation</a> - Performs pixel aggregation based on variance criterion.
+<li><a href="./operatorsP0/pcontrastmerging.html">pcontrastmerging</a> - Performs priority region merging based on contrast criterion.
+<li><a href="./operatorsP0/pentropymerging.html">pentropymerging</a> - Performs priority region merging based on entropy criterion.
+
+
+
+<li><a href="./operatorsP0/pmeanmerging.html">pmeanmerging</a> - Performs  priority region merging based on mean criterion.
+<li><a href="./operatorsP0/pmumfordshahmerging.html">pmumfordshahmerging</a> - Performs priority region merging based on Mumford-Shah criterion.
+<li><a href="./operatorsP0/puniformitymerging.html">puniformitymerging</a> - Performs priority region merging based on uniformity criterion.
+<li><a href="./operatorsP0/pvariancemerging.html">pvariancemerging</a> - Performs priority region merging based on variance criterion.
+<li><a href="./operatorsP0/pboundarymerging.html">pboundarymerging</a> - Performs priority region merging based on uniformity criterion.
+
+<li><a href="./operatorsP0/phistomerging.html">phistomerging</a> - Performs priority region merging based on histogram correlation.
+
+<li><a href="./operatorsP0/plabelmerging.html">plabelmerging</a> - Merges two regions from label value.
+<li><a href="./operatorsP0/pinnermerging.html">pinnermerging</a> - Performs inner region merging.
+<li><a href="./operatorsP0/pinnermostmerging.html">pinnermostmerging</a> - Performs inner-most region merging.
+<li><a href="./operatorsP0/pvoronoi.html">pvoronoi</a> - Calculates the Voronoi diagram.
+
+<li><a href="./operatorsP0/pcolorquantization.html">pcolorquantization</a> - Reduction of the number of colors used to encode an image.
+
+<li><a href="./operatorsP0/pgraphbasedsegmentation.html">pgraphbasedsegmentation</a> - Performs pixel classification on image using boundary information between regions.
+<li><a href="./operatorsP0/pmeanshiftsegmentation.html">pmeanshiftsegmentation</a> Performs pixel classification on image using mean shift algorithm.
+<li><a href="./operatorsP0/psimplelineariterativeclustering.html">psimplelineariterativeclustering</a> - Performs superpixel segmentation.
+<li><a href="./operatorsP0/pseedplacement.html">pseedplacement</a> - Placement of seeds on a regular grid.
+<li><a href="./operatorsP0/psuperpixelsegmentation.html">psuperpixelsegmentation</a> - Oversegmentation of image into superpixels.
+</ul>
+
+<hr>
+<a name=region><b>Region Processing</b></a>
+<p>Operations on region map such as region selection and relabeling. Inputs and outputs
+are region maps.</p>
+<ul>
+<li><a href="./operatorsP0/pboundaryregularization.html">pboundaryregularization</a> - Regularizes the region boundary.
+<li><a href="./operatorsP0/pfillhole.html">pfillhole</a> - Fills region holes.
+<li><a href="./operatorsP0/pholeselection.html">pholeselection</a> - Selects holes in regions.
+<li><a href="./operatorsP0/pconvexhull.html">pconvexhull</a> - Builds convex hull of regions.
+<li><a href="./operatorsP0/pboundary.html">pboundary</a> - Locates region boundary.
+<li><a href="./operatorsP0/pboundingbox.html">pboundingbox</a> - Builds the bounding box around regions.
+<li><a href="./operatorsP0/pcenterofmass.html">pcenterofmass</a> - Locates the centre of mass of regions.
+
+<li><a href="./operatorsP0/plabelselection.html">plabelselection</a> - Selects region by label value.
+<li><a href="./operatorsP0/plabelsselection.html">plabelsselection</a> - Selects regions in the first region map that are also in the second region map.
+
+<li><a href="./operatorsP0/pinnerselection.html">pinnerselection</a> - Selects inner regions.
+<li><a href="./operatorsP0/poutborderselection.html">poutborderselection</a> - Selects regions that do not touch the border.
+<li><a href="./operatorsP0/plocationselection.html">plocationselection</a> - Selects regions from their location.
+
+<li><a href="./operatorsP0/penergyselection.html">penergyselection</a> - Selects regions from energy value.
+<li><a href="./operatorsP0/pmaximumselection.html">pmaximumselection</a> - Selects regions from maximum grayscale value.
+<li><a href="./operatorsP0/pminimumselection.html">pminimumselection</a> - Selects regions from minimum grayscale value.
+<li><a href="./operatorsP0/pmeanselection.html">pmeanselection</a> - Selects regions from mean grayscale value.
+<li><a href="./operatorsP0/pvarianceselection.html">pvarianceselection</a> - Selects regions from variance factor.
+
+<li><a href="./operatorsP0/pcompactnessselection.html">pcompactnessselection</a> - Selects regions from compactness factor.
+<li><a href="./operatorsP0/pconvexityselection.html">pconvexityselection</a> - Selects regions from convexity degree.
+<li><a href="./operatorsP0/pdensityselection.html">pdensityselection</a> - Selects regions from density factor.
+<li><a href="./operatorsP0/pelongationselection.html">pelongationselection</a> - Selects regions from elongation factor.
+<li><a href="./operatorsP0/peulernumberselection.html">peulernumberselection</a> - Selects regions from Euler number.
+<li><a href="./operatorsP0/peccentricityselection.html">peccentricityselection</a> - Selects regions from eccentricity degree.
+<li><a href="./operatorsP0/porientationselection.html">porientationselection</a> - Selects regions from orientation degree.
+<li><a href="./operatorsP0/pperimeterselection.html">pperimeterselection</a> - Selects regions from perimeter length.
+<li><a href="./operatorsP0/prectangularityselection.html">prectangularityselection</a> - Selects regions from rectangularity degree.
+<li><a href="./operatorsP0/psphericityselection.html">psphericityselection</a> - Selects regions from sphericity degree.
+<li><a href="./operatorsP0/psizeselection.html">psizeselection</a> - Selects regions from size.
+<li><a href="./operatorsP0/pareaselection.html">pareaselection</a> - Selects regions from area size.
+<li><a href="./operatorsP0/pvolumeselection.html">pvolumeselection</a> - Selects regions from volume factor.
+
+<li><a href="./operatorsP0/prelabelingfromarray.html">prelabelingfromarray</a> - Relabels regions from label array.
+<li><a href="./operatorsP0/prelabelingwithgraph.html">prelabelingwithgraph</a> - Relabels region and related graph node.
+</ul> 
+
+<hr>
+<a name=regionfeaturesextraction><b>Region Features Extraction</b></a><br>
+<p>Region topological, geometrical, and photometric measurements.</p>
+<ul>
+<li><a href="./operatorsP0/pareadisorderfactor.html">pareadisorderfactor</a> - Measures area disorder factor.
+<li><a href="./operatorsP0/pregioncompactness.html">pregioncompactness</a> - Measures region compactness factor.
+<li><a href="./operatorsP0/pregionconvexity.html">pregionconvexity</a> -Measures region convexity degree.
+<li><a href="./operatorsP0/pregiondensity.html">pregiondensity</a> -Measures region density factor.
+<li><a href="./operatorsP0/pregionelongation.html">pregionelongation</a> - Measure region elongation factor.
+<li><a href="./operatorsP0/pregionenergy.html">pregionenergy</a> -Measures region energy value.
+<li><a href="./operatorsP0/pregioneulernumber.html">pregioneulernumber</a> - Measures region Euler number.
+<li><a href="./operatorsP0/pregioneccentricity.html">pregioneccentricity</a> - Measures region eccentricity degree.
+<li><a href="./operatorsP0/pregionmaximum.html">pregionmaximum</a> - Measures region maximum grayscale value.
+<li><a href="./operatorsP0/pregionminimum.html">pregionminimum</a> - Measures region minimum grayscale value.
+<li><a href="./operatorsP0/pregionmean.html">pregionmean</a> -Measures region mean grayscale value.
+<li><a href="./operatorsP0/pregionorientation.html">pregionorientation</a> -Measures region orientation degree.
+<li><a href="./operatorsP0/pregionperimeter.html">pregionperimeter</a> - Measures region perimeter length.
+<li><a href="./operatorsP0/pregionrectangularity.html">pregionrectangularity</a> - Measures region rectangularity degree.
+
+<li><a href="./operatorsP0/pregionsphericity.html">pregionsphericity</a> - Measures region sphericity degree.
+<li><a href="./operatorsP0/pregionvariance.html">pregionvariance</a> - Measures region variance.
+<li><a href="./operatorsP0/pregionarea.html">pregionarea</a> - Measures region area size.
+<li><a href="./operatorsP0/pregionvolume.html">pregionvolume</a> - Measures region volume.
+<li><a href="./operatorsP0/pregionwidth.html">pregionwidth</a> - Measures region width.
+<li><a href="./operatorsP0/pregionheight.html">pregionheight</a> - Measures region height.
+<li><a href="./operatorsP0/pregiondepth.html">pregiondepth</a> - Measures region depth.
+</ul> 
+
+<hr>
+<a name=imagefeaturesextraction><b>Image Features Extraction</b></a>
+<p>Features extraction for images.</p>
+<ul>
+<li><a href="./operatorsP0/plocalextrema.html">plocalextrema</a> - Computes local extremum values of grayscale image.
+<li><a href="./operatorsP0/plocalmaxima.html">plocalmaxima</a> - Computes local maximum values of grayscale image or graph.
+<li><a href="./operatorsP0/plocalminima.html">plocalminima</a> - Computes local minimum values of grayscale image or graph.
+<li><a href="./operatorsP0/pregionalminima.html">pregionalminima</a> - Computes regional minimum values of grayscale image.
+<li><a href="./operatorsP0/pregionalmaxima.html">pregionalmaxima</a> - Computes regional maximum values of grayscale image.
+
+<li><a href="./operatorsP0/pcontrastvalue.html">pcontrastvalue</a> - Measures the global contrast value of grayscale image or graph.
+<li><a href="./operatorsP0/pcontrast1value.html">pcontrast1value</a> - Measures the global contrast value of grayscale image or graph.
+<li><a href="./operatorsP0/penergyvalue.html">penergyvalue</a> - Measures global energy of grayscale image or graph.
+<li><a href="./operatorsP0/pentropyvalue.html">pentropyvalue</a> - Measures global entropy of grayscale image or graph.
+<li><a href="./operatorsP0/psumvalue.html">psumvalue</a> - Measures global sum of grayscale image or graph.
+<li><a href="./operatorsP0/pvariancevalue.html">pvariancevalue</a> - Measures global variance of grayscale image or graph.
+
+<li><a href="./operatorsP0/pmaximumvalue.html">pmaximumvalue</a> - Measures global maximum value of image, region map or graph.
+<li><a href="./operatorsP0/pminimumvalue.html">pminimumvalue</a> - Measures global minimum value of image, region map or graph.
+<li><a href="./operatorsP0/pmeanvalue.html">pmeanvalue</a> - Measures global mean value of grayscale image or graph.
+<li><a href="./operatorsP0/pmedianvalue.html">pmedianvalue</a> - Measures median value of grayscale image.
+<li><a href="./operatorsP0/pmodevalue.html">pmodevalue</a> - Measures the pixel value that occurs the most frequently in an image.
+
+<li><a href="./operatorsP0/pvaluenumber.html">pvaluenumber</a> - Returns the amount of non null pixels of image, region map or graph.
+<li><a href="./operatorsP0/pvalueclassnumber.html">pvalueclassnumber</a> - Counts the number of different used values of image, region map or graph.
+<li><a href="./operatorsP0/pvaluerank.html">pvaluerank</a> - Gets the nth value for image, region map or graph.
+
+<li><a href="./operatorsP0/phistogram.html">phistogram</a> - Creates histogram from grayscale image.
+</ul>
+
+<hr>
+<a name=evaluation><b>Evaluation</b></a>
+<p>Discrepancy and goodness measures for assessing image processing quality.</p>
+<ul>
+<li><a href="./operatorsP0/passessdetectionaccuracy.html">passessdetectionaccuracy</a> - Assesses region detection accuracy of a segmentation result by comparison with a reference segmentation.
+<li><a href="./operatorsP0/passessfragmentationconsistency.html">passessfragmentationconsistency</a> - Assesses region fragmentation consistency of a segmentation result by comparison with a reference segmentation.
+
+<li><a href="./operatorsP0/passessboundaryprecision.html">passessboundaryprecision</a> - Assesses regio nboundary precision of a segmentation result by comparison with a reference segmentation.
+<li><a href="./operatorsP0/passessshapefidelity.html">passessshapefidelity</a> - Assesses region shape fidelity of a segmentation result by comparison with a reference segmentation.
+<li><a href="./operatorsP0/passesstopologypreservation.html">passesstopologypreservation</a> - Assesses region topology preservation of a segmentation result by comparison with a reference segmentation.
+
+<li><a href="./operatorsP0/passesssegmentationalgorithm.html">passesssegmentationalgorithm</a> -Evaluation of segmentation algorithm performances based on discrepancy measures between segmentation results and reference segmentations. 
+
+<li><a href="./operatorsP0/pranksegmentationalgorithms.html">pranksegmentationalgorithms</a> - Image segmentation algorithms ranking from their performances on test images.
+<li><a href="./operatorsP0/pranksegmentationalgorithmsfromfolders.html">pranksegmentationalgorithmsfromfolders</a> - Image segmentation algorithms ranking from their performances on test images (full).
+
+<li><a href="./operatorsP0/pdisplayperformancevalues.html">pdisplayperformancevalues</a> - Pretty prints segmentation errors computed with operator 'passesssegmentationalgorithm.'
+
+
+<li><a href="./operatorsP0/pvinet.html">pvinet</a> - Computes the discrepancy measure between two region maps based on the number of mis-segmented pixels.
+<li><a href="./operatorsP0/pborsotti.html">pborsotti</a> - Computes the goodness measure based on the number, area and variance of regions.
+<li><a href="./operatorsP0/pzeboudj.html">pzeboudj</a> - Computes the goodness measure based on inter and intra-region contrast.
+<li><a href="./operatorsP0/pinterregioncontrast.html">pinterregioncontrast</a> - Computes the goodness measure based on inter-region contrast.
+<li><a href="./operatorsP0/pintraregionuniformity.html">pintraregionuniformity</a> - Computes the goodness measure based on intra-region uniformity.
+<li><a href="./operatorsP0/pmse.html">pmse</a> - Computes the Mean Square Error.
+<li><a href="./operatorsP0/ppsnr.html">ppsnr</a> - Computes the Peak Signal to Noise Ratio.
+<li><a href="./operatorsP0/psnr.html">psnr</a> - Computes the Signal-to-Noise Ratio.
+</ul>
+
+<hr>
+<a name=motion><b>Motion</b></a>
+<p>Motion reconstruction.</p>
+<ul>
+<li><a href="./operatorsP0/pblockmatching.html">pblockmatching</a> - Motion estimation between 2 images using block matching.
+<li><a href="./operatorsP0/pplotquiver.html">pplotquiver</a> - Renders vector field from multispectral images with 2 bands.
+<li><a href="./operatorsP0/pregistrationPDE.html">pregistrationPDE</a> - Computes the displacement field between two input images.
+</ul>
+
+<hr>
+<a name=reconstruction><b>Reconstruction</b></a>
+<p>Reconstruction of surface and orientation.</P>
+<ul>
+<li><a href="./operatorsP0/pgetquadrangle.html">pgetquadrangle</a> - Select the best quadrangle among a set of lines.
+<li><a href="./operatorsP0/pquadrangle2rectangle.html">pquadrangle2rectangle</a> - Correction of the geometrical distortion so as to transform a quadrangle into a rectangle.
+<li><a href="./operatorsP0/pskewanglecorrection.html">pskewanglecorrection</a> - Detect and correct a skew deviation of an image content.
+</ul>
+
+<hr>
+<a name=templatematching><b>Template Matching</b></a>
+<ul>
+<li><a href="./operatorsP0/pcrosscorrelation.html">pcrosscorrelation</a> - Cross-correlation between an image and a pattern.
+</ul>
+<hr>
+<a name=collection><b>Collection</b></a>
+<p>Collection contents management.
+A collection is a bundle of values and Pandore objects identified by a name.</p>
+<ul>
+<li><a href="./operatorsP0/pcolcatenateitem.html">pcolcatenateitem</a> - Concatenates two collections.
+<li><a href="./operatorsP0/pcolremoveitem.html">pcolremoveitem</a> - Removes item from collection.
+<li><a href="./operatorsP0/pcolrenameitem.html">pcolrenameitem</a> - Renames item in collection.
+
+<li><a href="./operatorsP0/pcolgetvalue.html">pcolgetvalue</a> - Gets numerical value from a collection.
+<li><a href="./operatorsP0/pcolsetvalue.html">pcolsetvalue</a> - Sets numerical value to collection.
+<li><a href="./operatorsP0/pcolgetimages.html">pcolgetimages</a> - Extracts images from collection.
+<li><a href="./operatorsP0/pcolgetobject.html">pcolgetobject</a> - Gets Pandore object from collection.
+<li><a href="./operatorsP0/pcolsetobject.html">pcolsetobject</a> - Sets Pandore object to collection.
+
+<li><a href="./operatorsP0/pobject2col.html">pobject2col</a> - Creates collection from Pandore object.
+
+<li><a href="./operatorsP0/pcol2csv.html">pcol2csv</a> - Converts a collection to a csv file.
+<li><a href="./operatorsP0/pcol2txt.html">pcol2txt</a> - Converts collection to text file.
+<li><a href="./operatorsP0/ptxt2col.html">ptxt2col</a> - Builds a collection from text file.
+</ul> 
+
+<hr>
+<a name=array><b>Array</b></a>
+<p>Arithmetic operations on array stored as collections.</p>
+<ul>
+<li><a href="./operatorsP0/pcreatearray.html">pcreatearray</a> - Creates array in collection.
+<li><a href="./operatorsP0/parray2array.html">parray2array</a> - Coverts array type.
+<li><a href="./operatorsP0/parraygetvalue.html">parraygetvalue</a> - Gets value from array.
+
+<li><a href="./operatorsP0/parraysize.html">parraysize</a> - Returns the size of array in a collection.
+<li><a href="./operatorsP0/parrayargmax.html">parrayargmax</a> - Calculates the maximum values between arrays.
+<li><a href="./operatorsP0/parraycovarmat.html">parraycovarmat</a> - Calculates covariance matrix of arrays items.
+<li><a href="./operatorsP0/parraymean.html">parraymean</a> - Calculates the mean value of array.
+<li><a href="./operatorsP0/parraymedian.html">parraymedian</a> - Calculates the median value of array.
+<li><a href="./operatorsP0/parraymode.html">parraymode</a> - Calculates the most frequently value in array.
+
+<li><a href="./operatorsP0/parrayeuclideannorm.html">parrayeuclideannorm</a> - Calculates euclidean norm of arrays items.
+<li><a href="./operatorsP0/parraynorm.html">parraynorm</a> - Performs normalization between 0 and 1 of items of one array.
+<li><a href="./operatorsP0/parraysnorm.html">parraysnorm</a> - Performs normalization between 0 and 1 of items of several arrays.
+<li><a href="./operatorsP0/parraysmin.html">parraysmin</a> - Computes the minimum values of several arrays in a collection.
+<li><a href="./operatorsP0/parraysmax.html">parraysmax</a> - Computes the maximum values of several arrays in a collection.
+<li><a href="./operatorsP0/parraysmean.html">parraysmean</a> - Computes the mean values of several arrays in a collection.
+<li><a href="./operatorsP0/pcorrelationcoefficient.html">pcorrelationcoefficient</a> - Calculates the correlation cofficient between two arrays of values.
+</ul>
+
+<hr>
+<a name=graph><b>Graph</b></a>
+<p>Operations on graph. A graph is a set of vertices (nodes)
+linked by weighted edges. A vertex (node) references an item (region, point, ...)
+in an array.</p>
+<ul>
+<li><a href="./operatorsP0/pbetagraph.html">pbetagraph</a> - Builds the beta graph.
+<li><a href="./operatorsP0/psig.html">psig</a> - Builds the Sphere of InfluCalculates the correlation cofficient between two arrays of valuesence Graph.
+<li><a href="./operatorsP0/pmst.html">pmst</a> - Builds the Minimum Spanning Tree of graph.
+
+<li><a href="./operatorsP0/pdelaunay.html">pdelaunay</a> - Builds the Delaunay graph from region map.
+
+<li><a href="./operatorsP0/pgraphpruning.html">pgraphpruning</a> - Performs graph pruning.
+<li><a href="./operatorsP0/pedgecutting.html">pedgecutting</a> - Perform edge cutting.
+<li><a href="./operatorsP0/pleafcutting.html">pleafcutting</a> - Performs leaf cutting.
+
+
+<li><a href="./operatorsP0/pgraphneighbours.html">pgraphneighbours</a> -  Valuates nodes with the number of neighbours.
+
+<li><a href="./operatorsP0/pgraphvisu.html">pgraphvisu</a> - Visualizes node and edge of graph.
+<li><a href="./operatorsP0/pedgevisu.html">pedgevisu</a> - Visualization of graph edge weights.
+<li><a href="./operatorsP0/pnodevisu.html">pnodevisu</a> - Visualizes graph node values.
+<li><a href="./operatorsP0/pnodedisc.html">pnodedisc</a> - Visualizes graph node values.
+</ul>
+
+<hr>
+<a name=classification><b>Objects Classification</b></a><br>
+<p>Object classification. Object can be anything like pixel or region.</p>
+<ul>
+<li><a href="./operatorsP0/pgaussclassification.html">pgaussclassification</a> - Performs gauss clustering on a set of objects.
+<li><a href="./operatorsP0/pkmeans.html">pkmeans</a> - Performs K-means clustering on a set of objects.
+<li><a href="./operatorsP0/pknn.html">pknn</a> - Performs K-nearest neighbors clustering on a set of objects.
+</ul> 
+
+<hr>
+<a name=visualization><b>Visualization</b></a><br>
+<p>Displaying graphically or textually Pandore object contents.</p>
+<ul>
+<li><a href="./operatorsP0/pvisu.html">pvisu</a> - Displays Pandore object.
+<li><a href="./operatorsP0/pdraw.html">pdraw</a> - Draws by hand onto Pandore object.
+
+<li><a href="./operatorsP0/pcontentsdisplay.html">pcontentsdisplay</a> - Displays the contents of Pandore object.
+
+<li><a href="./operatorsP0/pplot1d.html">pplot1d</a> - Renders a plot of a 1D function as a color image.
+<li><a href="./operatorsP0/pcolorcube.html">pcolorcube</a> - Creates the RGB cube of image color repartition.
+<li><a href="./operatorsP0/pcolorize.html">pcolorize</a> - Colorization of regions with internal average value.
+<li><a href="./operatorsP0/psuperimposition.html">psuperimposition</a> -
+Superimposition of contours onto an image.
+</ul> 
+
+<hr>
+<a name=information><b>Information</b></a><br>
+<p>Displaying information about Pandore objects.</p>
+<ul>
+<li><a href="./operatorsP0/pproperty.html">pproperty</a> - Gets Pandore object attribute value.
+<li><a href="./operatorsP0/pfile.html">pfile</a> - Displays properties of Pandore file.
+<li><a href="./operatorsP0/psetstatus.html">psetstatus</a> - Sets the current status value.
+<li><a href="./operatorsP0/pstatus.html">pstatus</a> - Prints out the value returned by the last executed operator.
+<li><a href="./operatorsP0/pman.html">pman</a> - Finds and displays reference manual pages.
+<li><a href="./operatorsP0/pversion.html">pversion</a> - Prints the current Pandore version number. 
+</ul>
+
+<hr>
+<a name=miscellaneous><b>Miscellaneous</b></a>
+<p>Some miscellaneous image operations not in direct relationship with image processing.</p>
+<ul>
+<li><a href="./operatorsP0/prds.html">prds</a> - Builds Random Dot Stereogram.
+<li><a href="./operatorsP0/pstereogram.html">pstereogram</a> - Builds Autostereogram.
+<li><a href="./operatorsP0/psubsampling.html">psubsampling</a> - Performs image subsampling.
+</ul>
+
+<hr>
+<center>
+<font size=1><a href="https://www.greyc.fr/node/36">Image Team - GREYC Laboratory</a><br>
+UMR CNRS 6072 - Ensicaen &amp; University of Caen, France<br>
+Last modified: <!--#config timefmt="%A, %d %B %Y" -->
+		<!--#echo var="last_modified" -->
+</font>
+</center>
+
+</body>
+</html>

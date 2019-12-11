@@ -1,0 +1,114 @@
+<html>
+<head>
+<title>PANDORE OPERATORS</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>penergyvalue</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Measures global energy of image or graph.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>penergyvalue</b> [<i>im_in</i>|-]  [<i>col_out</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p><b>penergyvalue</b> measures the global energy
+of the input image <i>im_in</i> or the input graph <i>im_in</i>.</p>
+
+<p>The energy is:</p>
+<pre>
+   energy = SUM{ im_in[p] * im_in[p]} / N
+</pre>
+
+<p>For image, the energy is measured per band from the pixel values.</p>
+
+<p>For graph, the energy is measured from the node values.</p>
+
+<p>The energy values for each band are stored in the collection <i>col_out</i>.</p>
+
+<!---------------------------------- -->
+<h3>Inputs</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_in</i>: an image or a graph.
+</ul>
+
+<!---------------------------------- -->
+<h3>Outputs</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>col_out</i>: a collection of float values.
+</ul>
+
+<!---------------------------------- -->
+<h3>Result</h3>
+<!---------------------------------- -->
+<p>Returns the global energy value (for the first band only).
+This value can be get using operator <b>pstatus</b>.</p>
+
+<!---------------------------------- -->
+<h3>Examples</h3>
+<!---------------------------------- -->
+<p>Measures the global energy of the tangram.pan (Unix version):</p>
+<pre>
+   penergyvalue tangram.pan col.pan
+   val=`pstatus`
+   echo "Energy = $val"
+</pre>
+
+<p>Measures the global energy of the tangram.pan (MsDos version):</p>
+<pre>
+   penergyvalue tangram.pan col.pan
+   call pstatus
+   call pset val
+   echo Energy = %val%
+</pre>
+
+<!---------------------------------- -->
+<h3>See also</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#imagefeaturesextraction">Image Features Extraction</a>
+
+<!---------------------------------- -->
+<h3>C++ prototype</h3>
+<!---------------------------------- -->
+<tt>
+Float PEnergyValue( const Img2duc &amp;im_in, Collection &amp; col_out );
+</tt>
+
+<!---------------------------------- -->
+<h3>Version fran&ccedil;aise</h3>
+<!---------------------------------- -->
+<p>Calcul de l'&eacute;nergie d'une image ou d'un graphe.</p>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Author: R&eacute;gis Clouard
+</address>
+<!---------------------------------- -->
+</body>
+</html>

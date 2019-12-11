@@ -1,0 +1,151 @@
+<html>
+<head>
+<title>PANDORE OPERATORS</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>pfft</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Performs Fast Fourier Transform.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>pfft</b> [-m mask] [<i>im_in1</i>|-] [<i>im_in2</i>|-] [<i>im_out1</i>|-] [<i>im_out2</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p><b>pfft</b> computes the Fast Fourier Transform of the input complex image
+<i>im_in1</i>. The input complex image is composed of two images:</p>
+<ul>
+<li><i>im_in1</i> is the real part;
+<li><i>im_in2</i> is the imaginary part. 
+</ul>
+
+<p>The imaginary image must be at least empty (see 
+<a href="./pnewimage.html">pnewimage</a>, <a href="./psetcst.html">psetcst</a>).</p>
+
+<p>The output complex images is also composed of two images:</p>
+<ul>
+<li><i>im_out1</i> is the real part of the transform;
+<li><i>im_out2</i> is the imaginary part of the transform.
+</ul>
+
+<p>Fast Fourier Transform is a way of going from the
+spatial domain to the frequency domain:</p>
+<ul>
+<li>The spatial domain is the domain where each value at the coordinate
+(x,y) contains the intensity value of the related point
+(x',y') in the scene. The distance between 2 pixels corresponds
+to a real distance in the scene.</p>
+
+<li>The frequency domain is the domain where each value
+of the image at the coordinate F(u,v) contains a quantity such that
+the intensity values in the input image varies on a distance
+related to F. For example, suppose that the value at the related coordinate for
+frequency 0.1 is 20 (ie. 1 period every 10 pixels). It means  that in
+the spatial domain of the related image, the intensity value
+varies from dark to clear on a distance of 10 pixels and the contrast between
+the dark and the clear values occupies 40 gray levels (2*20).
+</ul>
+
+<p>The Fourier transform of an image represents the likeness degree
+between the image seen as function f and the functions are
+sine and cosine with various frequencies. Each point represents
+a particular frequency in the spatial domain.</p>
+<pre>
+if N is the number of pixels.
+F(u,v) = 1/(N*N) * Sigma(x){Sigma(y){ I(x,y)*exp(-i2PI((u*i)/N+(v*i)/N))}}
+</pre>
+
+<p>This equation can be interpreted as follows:<br>
+The value of the point (u,v) results from the multiplication of
+the spatial image with the various basis function. The basis functions
+are sine and cosine with increasing frequencies.
+F(0,0) represents the mean intensity of the image, whereas
+F(N-1,N-1) represents the higher frequency.</p>
+
+<p>The size of the output images <i>im_out1</i> and <i>im_out1</i>
+is the same as the input images <i>im_in1</i> and <i>im_in2</i>.</p>
+
+<!---------------------------------- -->
+<h3>Inputs</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_in1</i>: a gray level image (the real part of the transform).
+<li><i>im_in2</i>: a gray level image with the same properties than <i>im_in1</i> (the imaginary part of the transform).
+</ul>
+
+<!---------------------------------- -->
+<h3>Outputs</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_out1</i>: a gray level image (the real part of the transform).
+<li><i>im_out2</i>: a gray level image (the imaginary part of the transform).
+</ul>
+
+<!---------------------------------- -->
+<h3>Result</h3>
+<!---------------------------------- -->
+<p>Returns SUCCESS or FAILURE.</p>
+
+<!---------------------------------- -->
+<h3>Examples</h3>
+<!---------------------------------- -->
+<p>Computes the magnitude of the Fast Fourier Transform of tangram.pan.
+The imaginary part (i1.pan) is null. (Use log transform dynamic in pvisu
+to display out.pan.):</p>
+<pre>
+   psetcst 0 tangram.pan i1.pan
+   pfft tangram.pan i1.pan i2.pan i3.pan
+   pfftshift i2.pan i3.pan i4.pan i5.pan
+   pmodulus i4.pan i5.pan out.pan
+</pre>
+
+<!---------------------------------- -->
+<h3>See also</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#frequency">Frequency</a>,
+<a href="./pifft.html">pifft</a>,
+<a href="./pfftshift.html">pfftshift</a>
+
+<!---------------------------------- -->
+<h3>C++ prototype</h3>
+<!---------------------------------- -->
+<tt>
+Errc PFFT( const Img2duc &amp;im_in1, const Img2duc &amp;im_in2, Img2dsf &amp;im_out1, Img2dsf &amp;im_out2 );
+</tt>
+
+<!---------------------------------- -->
+<h3>Version fran&ccedil;aise</h3>
+<!---------------------------------- -->
+<p>Calcul de la Transform&eacute;e de Fourier Rapide d'une image.</p>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Author: Herissay &amp; Berthet 
+</address>
+<!---------------------------------- -->
+</body>
+</html>

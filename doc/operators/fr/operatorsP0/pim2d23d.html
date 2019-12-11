@@ -1,0 +1,94 @@
+<html>
+<head>
+<title>OPERATEURS PANDORE</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff"><center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>pim2d23d</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Construction d'une image ou d'une carte de r&eacute;gions 3D &agrave; partir d'une image ou d'une carte de r&eacute;gions 2D.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>pim2d23d</b> [<i>-m mask </i>] [<i>im_in</i>|-] [<i>im_out</i>|-] 
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p>L'op&eacute;rateur <b>pim2d23d</b> construit une image 3D 
+&agrave; un plan avec une image 2D.</p>
+
+<p>Si l'entr&eacute;e est une carte
+de r&eacute;gions 2D alors la sortie sera une carte de r&eacute;gion 3D.</p>
+
+<p>L'op&eacute;rateur <a href="./psetslice.html">psetslice</a> peut &ecirc;tre
+utilis&eacute; pour ins&eacute;rer une image 2D dans une image
+3D.</p>
+
+<!---------------------------------- -->
+<h3>Entr&eacute;es</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_in</i>: une image 2D.
+</ul>
+
+<!---------------------------------- -->
+<h3>Sorties</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_out</i>: une image 3D &agrave; 1 plan.
+</ul>
+
+<!---------------------------------- -->
+<h3>R&eacute;sultat</h3>
+<!---------------------------------- -->
+<p>Retourne SUCCESS ou FAILURE.</p>
+
+<!---------------------------------- -->
+<h3>Exemples</h3>
+<!---------------------------------- -->
+<p>Convertit l'image 2D tangram.pan en image 3D:</p>
+<pre>
+   pim2d23d tangram.pan a.pan
+</pre>
+
+<!---------------------------------- -->
+<h3>Voir aussi</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#casting">Coercition</a>,
+<a href="./pim3d22d.html">pim3d22d</a>
+
+<!---------------------------------- -->
+<h3>Prototype C++</h3>
+<!---------------------------------- -->
+<tt>
+Errc PIm2d23d( const Img2duc &amp;im_in, Img3duc &amp;im_out );
+</tt>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Auteur: Jean-Marie Janik
+</address>
+<!---------------------------------- -->
+</body>
+</html>

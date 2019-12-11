@@ -1,0 +1,373 @@
+/* -*- c-basic-offset: 3; mode: c++ -*-
+ *
+ * Copyright (c), GREYC.
+ * All rights reserved
+ *
+ * You may use this file under the terms of the BSD license as follows:
+ *
+ * "Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are
+ * met:
+ *   * Redistributions of source code must retain the above copyright
+ *     notice, this list of conditions and the following disclaimer.
+ *   * Redistributions in binary form must reproduce the above copyright
+ *     notice, this list of conditions and the following disclaimer in
+ *     the documentation and/or other materials provided with the
+ *     distribution.
+ *   * Neither the name of the GREYC, nor the name of its
+ *     contributors may be used to endorse or promote products
+ *     derived from this software without specific prior written
+ *     permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, 
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, 
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
+ *
+ * 
+ * For more information, refer to:
+ * https://clouard.users.greyc.fr/Pandore
+ */
+
+/**
+ * @author Régis Clouard - 2001-08-01
+ * @author Régis Clouard - 2004-07-30 (type completion)
+ */
+
+#include <pandore.h>
+using namespace pandore;
+
+/**
+ * @file ptransposition.cpp
+ * @brief Transpose an image where row becomes columns, etc.
+ */
+
+##begin PTransposition2G < TIN, LOOPP, POINT >
+Errc PTransposition( const TIN &ims, TIN &imd, int /*direction */) {
+   POINT p;
+   
+   imd.New(ims.Width(), ims.Height());
+
+##LOOPP(ims, p)
+      {
+	 imd(p.x, p.y) = ims[p];
+      }
+   return SUCCESS;
+}
+
+## append loadcases
+   if (objs[0]->Type() == Po_$TIN) {
+      TIN* const ims = (TIN*)objs[0];
+      objd[0] = new TIN;
+      TIN* const imd = (TIN*)objd[0];
+      
+      result = PTransposition(*ims, *imd, (Uchar)atoi(parv[0]));
+      goto end;
+   }
+## end
+##end
+
+##begin PTransposition2C < TIN, LOOPP, POINT >
+Errc PTransposition( const TIN &ims, TIN &imd, int /* direction */ ) {
+   POINT p;
+   
+   imd.ColorSpace(ims.ColorSpace());
+   imd.New(ims.Width(), ims.Height());
+   
+##LOOPP(ims, p)
+      {
+	 imd(0, p.x, p.y) = ims(0, p);
+	 imd(1, p.x, p.y) = ims(1, p);
+	 imd(2, p.x, p.y) = ims(2, p);
+      }
+
+   return SUCCESS;
+}
+
+## append loadcases
+   if (objs[0]->Type() == Po_$TIN) {
+      TIN* const ims = (TIN*)objs[0];
+      objd[0] = new TIN;
+      TIN* const imd = (TIN*)objd[0];
+      
+      result = PTransposition(*ims, *imd, (Uchar)atoi(parv[0]));
+      goto end;
+   }
+## end
+##end
+
+##begin PTransposition2X < TIN, LOOPP, POINT >
+Errc PTransposition( const TIN &ims, TIN &imd, int /* direction*/ ) {
+   POINT p;
+   
+   imd.New(ims.Bands(), ims.Width(), ims.Height());
+   
+##LOOPP(ims, p)
+   {
+      for (int b = 0; b < ims.Bands(); b++) {
+	 imd(b, p.x, p.y) = ims(b, p.y, p.x);
+      }
+   }
+   
+   return SUCCESS;
+}
+
+## append loadcases
+   if (objs[0]->Type() == Po_$TIN) {
+      TIN* const ims = (TIN*)objs[0];
+      objd[0] = new TIN;
+      TIN* const imd = (TIN*)objd[0];
+      
+      result = PTransposition(*ims, *imd, (Uchar)atoi(parv[0]));
+      goto end;
+   }
+## end
+##end
+
+
+##begin PTransposition2R < TIN, LOOPP, POINT >
+Errc PTransposition( const TIN &rgs, TIN &rgd, int /* direction */ ) {
+   POINT p;
+   
+   rgd.New(rgs.Width(), rgs.Height());
+   rgd.Labels(rgs.Labels());
+
+##LOOPP(rgs, p)
+      {
+	 rgd(p.x, p.y) = rgs(p.y, p.x);
+      }
+   return SUCCESS;
+}
+
+## append loadcases
+   if (objs[0]->Type() == Po_$TIN) {
+      TIN* const rgs = (TIN*)objs[0];
+      objd[0] = new TIN;
+      TIN* const rgd = (TIN*)objd[0];
+      
+      result = PTransposition(*rgs, *rgd, (Uchar)atoi(parv[0]));
+      goto end;
+   }
+## end
+##end
+
+
+##begin PTransposition3G < TIN, LOOPP, POINT >
+Errc PTransposition( const TIN &ims, TIN &imd, int direction ) {
+  POINT p;
+  
+  switch(direction ) {
+  case 0 :
+   imd.New(ims.Depth(), ims.Width(), ims.Height());
+##LOOPP(ims, p)
+     {
+	imd(p.z, p.x, p.y) = ims[p];
+     }
+     break;
+  case 1 :
+   imd.New(ims.Width(), ims.Height(), ims.Depth());
+##LOOPP(ims, p)
+     {
+	imd(p.x, p.y, p.z) = ims[p];
+     }
+     break;
+  case 2 :
+   imd.New(ims.Height(), ims.Depth(), ims.Width());
+##LOOPP(ims, p)
+     {
+	imd(p.y, p.z, p.x) = ims[p];
+     }
+     break;
+  default: return FAILURE;
+  }
+  
+  return SUCCESS;
+}
+
+## append loadcases
+   if (objs[0]->Type() == Po_$TIN) {
+      TIN* const ims = (TIN*)objs[0];
+      objd[0] = new TIN;
+      TIN* const imd = (TIN*)objd[0];
+      
+      result = PTransposition(*ims, *imd, (Uchar)atoi(parv[0]));
+      goto end;
+   }
+## end
+##end
+
+##begin PTransposition3C < TIN, LOOPP, POINT >
+Errc PTransposition( const TIN &ims, TIN &imd, int direction ) {
+   POINT p;
+  
+   imd.ColorSpace(ims.ColorSpace());
+   switch(direction ) {
+   case 0 :
+   imd.New(ims.Depth(), ims.Width(), ims.Height());
+##LOOPP(ims, p)
+      {
+	 imd(0, p.z, p.x, p.y) = ims(0, p);
+	 imd(1, p.z, p.x, p.y) = ims(1, p);
+	 imd(2, p.z, p.x, p.y) = ims(2, p);
+      }
+      break;
+   case 1 :
+   imd.New(ims.Width(), ims.Height(), ims.Depth());
+##LOOPP(ims, p)
+      {
+	 imd(0, p.x, p.y, p.z) = ims(0, p);
+	 imd(1, p.x, p.y, p.z) = ims(1, p);
+	 imd(2, p.x, p.y, p.z) = ims(2, p);	 
+      }
+      break;
+   case 2 :
+      imd.New(ims.Height(), ims.Depth(), ims.Width());
+##LOOPP(ims, p)
+      {
+	 imd(0, p.y, p.z, p.x) = ims(0, p);
+	 imd(1, p.y, p.z, p.x) = ims(1, p);
+	 imd(2, p.y, p.z, p.x) = ims(2, p);
+      }
+      break;
+   default: return FAILURE;
+   }
+   
+   return SUCCESS;
+}
+
+## append loadcases
+   if (objs[0]->Type() == Po_$TIN) {
+      TIN* const ims = (TIN*)objs[0];
+      objd[0] = new TIN;
+      TIN* const imd = (TIN*)objd[0];
+      
+      result = PTransposition(*ims, *imd, (Uchar)atoi(parv[0]));
+      goto end;
+   }
+## end
+##end
+
+##begin PTransposition3X < TIN, LOOPP, POINT >
+Errc PTransposition( const TIN &ims, TIN &imd, int direction ) {
+   POINT p;
+  
+   switch(direction ) {
+   case 0 :
+   imd.New(ims.Bands(), ims.Depth(), ims.Width(), ims.Height());
+##LOOPP(ims, p)
+      {
+	 for (int b = 0; b < ims.Bands(); b++) {
+	    imd(b, p.z, p.x, p.y) = ims(b, p);
+	 }
+      }
+      break;
+   case 1 :
+   imd.New(ims.Bands(), ims.Width(), ims.Height(), ims.Depth());
+##LOOPP(ims, p)
+      {
+	 for (int b = 0; b < ims.Bands(); b++) {
+	    imd(b, p.x, p.y, p.z) = ims(b, p);
+	 }
+      }
+      break;
+   case 2 :
+   imd.New(ims.Bands(), ims.Height(), ims.Depth(), ims.Width());
+##LOOPP(ims, p)
+      {
+	 for (int b = 0; b < ims.Bands(); b++) {
+	    imd(b, p.y, p.z, p.x) = ims(b, p);
+	 }
+      }
+      break;
+   default: return FAILURE;
+   }
+   
+   return SUCCESS;
+}
+
+## append loadcases
+   if (objs[0]->Type() == Po_$TIN) {
+      TIN* const ims = (TIN*)objs[0];
+      objd[0] = new TIN;
+      TIN* const imd = (TIN*)objd[0];
+      
+      result=PTransposition(*ims, *imd, (Uchar)atoi(parv[0]));
+      goto end;
+   }
+## end
+##end
+
+##begin PTransposition3R < TIN, LOOPP, POINT >
+Errc PTransposition( const TIN &rgs, TIN &rgd, int direction ) {
+  POINT p;
+  
+  switch(direction) {
+  case 0 :
+   rgd.New(rgs.Depth(), rgs.Width(), rgs.Height());
+##LOOPP(rgs, p)
+     {
+	rgd(p.z, p.x, p.y) = rgs[p];
+     }
+     break;
+  case 1 :
+   rgd.New(rgs.Width(), rgs.Height(), rgs.Depth());
+##LOOPP(rgs, p)
+     {
+	rgd(p.x, p.y, p.z) = rgs[p];
+     }
+     break;
+  case 2 :
+   rgd.New(rgs.Height(), rgs.Depth(), rgs.Width());
+##LOOPP(rgs, p)
+     {
+	rgd(p.y, p.z, p.x) = rgs[p];
+     }
+     break;
+  default: return FAILURE;
+  }
+  rgd.Labels(rgs.Labels());
+
+  return SUCCESS;
+}
+
+## append loadcases
+   if (objs[0]->Type() == Po_$TIN) {
+      TIN* const rgs = (TIN*)objs[0];
+      objd[0] = new TIN;
+      TIN* const rgd = (TIN*)objd[0];
+      
+      result = PTransposition(*rgs, *rgd, (Uchar)atoi(parv[0]));
+      goto end;
+   }
+## end
+##end
+
+
+##forall(PTransposition2G, /Img2d/)
+##forall(PTransposition3G, /Img3d/)
+
+##forall(PTransposition2C, /Imc2d/)
+##forall(PTransposition3C, /Imc3d/)
+
+##forall(PTransposition2X, /Imx2d/)
+##forall(PTransposition3X, /Imx3d/)
+
+##forall(PTransposition2R, /Reg2d/)
+##forall(PTransposition3R, /Reg3d/)
+
+#ifdef MAIN
+#define	USAGE	"usage: %s direction [im_in|-] [im_out|-]"
+#define	PARC	1
+#define	FINC	1
+#define	FOUTC	1
+#define	MASK	0
+
+##main(PARC, FINC, FOUTC, MASK, USAGE)
+#endif

@@ -1,0 +1,124 @@
+/* -*- mode: c++; c-basic-offset: 3 -*-
+ *
+ * Copyright (c), GREYC.
+ * All rights reserved
+ *
+ * You may use this file under the terms of the BSD license as follows:
+ *
+ * "Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are
+ * met:
+ *   * Redistributions of source code must retain the above copyright
+ *     notice, this list of conditions and the following disclaimer.
+ *   * Redistributions in binary form must reproduce the above copyright
+ *     notice, this list of conditions and the following disclaimer in
+ *     the documentation and/or other materials provided with the
+ *     distribution.
+ *   * Neither the name of the GREYC, nor the name of its
+ *     contributors may be used to endorse or promote products
+ *     derived from this software without specific prior written
+ *     permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, 
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, 
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
+ *
+ * 
+ * For more information, refer to:
+ * https://clouard.users.greyc.fr/Pandore
+ */
+
+/**
+ * @file padaptivemeanfiltering.cpp
+ * Filtre de lissage adaptatif.
+ * Affecter comme valeur du pixel courant 
+ * la moyenne des voisins du pixel voisin
+ * de valeur de gradient minimale.
+ */
+
+#include <pandore.h>
+using namespace pandore;
+
+##begin PAdaptiveMeanFiltering < TIN1, TIN2, LOOPPB, POINT, VOISS, VOISL >
+Errc PAdaptiveMeanFiltering( const TIN1 &ims, TIN2 &ima, TIN1 &imd, Uchar connexity ) {
+   POINT p, p2;
+   int v, w;
+   Float m;
+  
+   // Recopie des bords de l'image source dans l'image destination
+   imd.Frame(ims, 2, 2);
+   
+   if (connexity == 4) {
+##LOOPPB(ims, p, 2)
+      {
+	 for (w = 0, v = 0; v < $VOISS; v++) {
+	    if (ima[p + v$VOISS[v]] < ima[p + v$VOISS[w]]) {
+	       w = v;
+	    }
+	 }
+	 p2 = p + v4[w];
+	 m = 0;
+	 for (v = 0; v<$VOISS; v++) {
+	    m += ims[p2 + v$VOISS[v]];
+	 }
+	 imd[p] = (TIN1::ValueType)(m / $VOISS);
+      }
+   } else {
+##LOOPPB(ims, p, 2)
+      {
+	 for (w = 0, v = 0; v < $VOISL; v++) {
+	    if (ima[p + v$VOISL[v]] < ima[p + v$VOISL[w]]) {
+	       w = v;
+	    }
+	 }
+	 p2 = p + v$VOISL[w];
+	 m = 0;
+	 for (v = 0; v < $VOISL; v++) {
+	    m += ims[p2 + v$VOISL[v]];
+	 }
+	 imd[p] = (TIN1::ValueType)(m / $VOISL);
+      }
+   }
+   
+   return SUCCESS;
+}
+
+## append loadcases
+   if (objs[0]->Type() == Po_$TIN1 && objs[1]->Type() == Po_$TIN2) {
+      TIN1* const ims1 = (TIN1*)objs[0];
+      TIN2* const ims2 = (TIN2*)objs[1];
+      objd[0] = new TIN1(ims1->Size());
+      TIN1* const imd = (TIN1*)objd[0];
+      
+      result = PAdaptiveMeanFiltering(*ims1, *ims2, *imd, (Uchar)atoi(parv[0]));
+      
+      goto end;
+   }
+## end
+##end
+
+/*
+ * Modify only the following constants, and the function call.
+ */
+##forall(PAdaptiveMeanFiltering, /Img2d/, /Img2d.[cl]/)
+
+/*
+ * Modify only the following constants, and the function call.
+ */
+#ifdef MAIN
+#define	USAGE	"usage: %s connexity [-m mask] [im_in|-] [im_amp|-] [im_out|-]"
+#define	PARC	1
+#define	FINC	2
+#define	FOUTC	1
+#define	MASK	3
+
+##main(PARC, FINC, FOUTC, MASK, USAGE)
+#endif

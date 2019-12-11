@@ -1,0 +1,137 @@
+<html>
+<head>
+<title>PANDORE OPERATORS</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>pregistrationPDE</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Computes the displacement field between two input images.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>pregistrationPDE</b> <i>smoothness precision</i> [<i>im_in1</i>|-] [<i>im_in2</i>|-] [<i>im_out</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p><b>pregistrationPDE</b> estimates the 2D displacement field <i>im_out</i>
+between the two images <i>im_in1</i> and <i>im_in2</i>.
+The field is calculated from <i>im_in1</i> to <i>im_in2</i>.<p>
+
+<p>The displacement field is based on the minimization of the following criteria:</p>
+<pre>
+   E(U) = integral(|I1(p)-I2(p+U)| + smoothness*Laplac(U)).
+</pre>
+
+<p>Such minimization is done by PDE descent with different image scales.</p>
+
+<p>The result is a multispectral image with two bands. The first band corresponds
+to x-component of the displacement vector and the second band to the y-component.
+This vector field can be drawn with the operator <a href="./pplotquiver.html">pplotquiver</a>.</p>
+
+<!---------------------------------- -->
+<h3>Parameters</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>smoothness</i> is a real value between [0..1]
+which controls the regularity of the field.
+The value 0  corresponds to no regularity, 0.1 to an average regularity
+and 0.9, to a strong regularity (quasi-constant field).
+If the displacement is known as rigid (eg. translation)
+a high smoothness value is recommended. When the displacement is known
+as non rigid a low smoothness value is recommended.
+
+<li><i>precision</i> is a real value which defines the precision factor.
+The higher is the precision, the longer is the computing time. 
+A typical value is 0.9.
+</ul>
+
+<!---------------------------------- -->
+<h3>Inputs</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_in1</i> a 2D image.
+<li><i>im_in1</i> a 2D image (same type and same size as im_in1).
+</ul>
+
+<!---------------------------------- -->
+<h3>Outputs</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_out</i> a 2D multispectral image.
+</ul>
+
+<!---------------------------------- -->
+<h3>Result</h3>
+<!---------------------------------- -->
+<p>Returns SUCCESS or FAILURE.</p>
+
+<!---------------------------------- -->
+<h3>Examples</h3>
+<!---------------------------------- -->
+<p>Displays the vector field of a translation of the tangram.pan image:
+<pre>
+   ptranslation 0 10 tangram.pan tangram1.pan
+   pregistrationPDE 0.1 0.9 tangram.pan tangram1.pan a.pan
+   pplotquiver 800 800 10 -20 a.pan out.pan
+</pre>
+
+<!---------------------------------- -->
+<h3>See also</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#motion">Motion</a>
+
+<!---------------------------------- -->
+<h3>C++ prototype</h3>
+<!---------------------------------- -->
+<tt>
+Errc PRegistrationPDE( const Imx2d &amp;ims1, const Imx2d &amp;ims2, Img2duc &amp;imd, Float smoothness, Float precision );<br>
+</tt>
+
+<!---------------------------------- -->
+<h3>Version fran&ccedil;aise</h3>
+<!---------------------------------- -->
+<p>Estimation du champ de d&eacute;placement entre deux images.</p>
+
+<!---------------------------------- -->
+<h3>Important notice</h3>
+<!---------------------------------- -->
+<p><font color="#ff0000">The source code of this Pandore operator is governed by a specific
+Free-Software License (the <a href="http://www.cecill.info/licences/Licence_CeCILL_V1.1-US.html">CeCiLL</a> License),
+also applying to the CImg Library. Please read it carefully, if you want to use this module
+in your own project (file CImg.h).</p>
+<p>IN PARTICULAR, YOU ARE NOT ALLOWED TO USE THIS PANDORE MODULE IN A
+CLOSED-SOURCE PROPRIETARY PROJECT WITHOUT ASKING AN AUTHORIZATION
+TO THE CIMG LIBRARY AUTHOR ( http://www.greyc.ensicaen.fr/~dtschump/ )
+</font></p>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Author: D. Tschumperl&eacute;
+</address>
+<!---------------------------------- -->
+
+</body>
+</html>

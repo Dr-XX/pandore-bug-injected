@@ -1,0 +1,124 @@
+<html>
+<head>
+<title>OPERATEURS PANDORE</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>puniformitymerging</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Fusion prioritaire de r&eacute;gions selon le crit&egrave;re d'uniformit&eacute;.
+
+<br><br><hr noshade size=1 width=100 align=left>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>puniformitymerging</b> <i>nb_fusion</i> <i>seuil</i> [<i>-m mask</i>] [<i>rg_in</i>|-] [<i>gr_in</i>|-] [<i>im_in</i>|-] [<i>rg_out</i>|-] [<i>gr_out</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p>L'op&eacute;rateur <b>puniformitymerging</b> permet de fusionner les r&eacute;gions de la carte
+de r&eacute;gions <i>rg_in</i> selon le crit&egrave;re de l'uniformit&eacute;.</p>
+
+<p>La notion de voisinage entre les r&eacute;gions est d&eacute;tenue par
+le graphe <i>gr_in</i>.</p>
+
+<p>Le principe de l'algorithme est le suivant:<br>
+Pour chaque r&eacute;gion de la carte de r&eacute;gions <i>rg_in</i>,
+l'algorithme calcule la diff&eacute;rence de variance avec la r&eacute;gion voisine.
+Si la diff&eacute;rence est inf&eacute;rieure au <i>seuil</i> donn&eacute; en param&egrave;tre,
+alors les r&eacute;gions sont fusionn&eacute;es.<br>
+On utilise ici l'algorithme de croissance prioritaire qui
+consiste &agrave; fusionner &agrave; chaque fois les 2 r&eacute;gions dont la diff&eacute;rence
+est la plus faible.</p>
+
+<p>L'uniformit&eacute; est calcul&eacute;e par la formule:</p>
+<pre>
+uniformite(R)= (1-variance(R)/moyenne(R)^2) des deux r&eacute;gions).  
+</pre>
+
+<!---------------------------------- -->
+<h3>Param&egrave;tres</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>nb_fusion</i> permet de sp&eacute;cifier le nombre de fusion
+&agrave; effectuer (la valeur -1 signifie d'ignorer ce param&egrave;tre
+et d'ex&eacute;cuter l'algorithme tant qu'il y a des fusions possibles).</p>
+
+<li><i>seuil</i>  permet de sp&eacute;cifier la tol&eacute;rance par rapport
+au crit&egrave;re d'uniformit&eacute; entre deux r&eacute;gions.
+Les valeurs appartiennent &agrave; l'intervalle [0..1],
+o&ugrave; 1 correspond &agrave; des r&eacute;gions totalement uniformes.<br>
+On utilisera en g&eacute;n&eacute;ral des valeurs proches de 1 (e.g., 0.95).
+</ul>
+
+<!---------------------------------- -->
+<h3>Entr&eacute;es</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>rg_in</i>: les cartes de r&eacute;gions.
+<li><i>gr_in</i>: les graphes.
+</ul>
+
+<!---------------------------------- -->
+<h3>Sorties</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>rg_out</i>: une carte de r&eacute;gions.
+<li><i>gr_out</i>: un graphe.
+</ul>
+
+<!---------------------------------- -->
+<h3>R&eacute;sultat</h3>
+<!---------------------------------- -->
+<p>Retourne le nombre de fusions effectu&eacute;es.</p>
+
+<!---------------------------------- -->
+<h3>Exemples</h3>
+<!---------------------------------- -->
+<p>Fusionne les r&eacute;gions issues d'une partition :</p>
+<pre>
+   puniformityquadtree 0.9 tangram.pan a.pan
+   prg2gr a.pan b.pan
+   puniformitymerging -1 0.99 a.pan b.pan tangram.pan c.pan d.pan
+</pre>
+
+<!---------------------------------- -->
+<h3>Voir aussi</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#segmentation">Segmentation</a>
+
+<!---------------------------------- -->
+<h3>Prototype C++</h3>
+<!---------------------------------- -->
+<tt>
+Errc PUniformityMerging( const Reg2d &amp;rg_in, const Graph2d &amp;gr_in, Img2duc &amp;im_in, Reg2d &amp;rg_out, Graph2d &amp;gr_out, Uchar seuil );
+</tt>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Auteur: Laurent Quesnel
+</address>
+<!---------------------------------- -->
+
+</body>
+</html>

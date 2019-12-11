@@ -1,0 +1,121 @@
+<html>
+<head>
+<title>PANDORE OPERATORS</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>pzerocross</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Locates zero crossing.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>pzerocross</b> <i>connexity</i> <i>value</i> [<i>-m mask</i>] [<i>im_in</i>|-] [<i>im_out</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p><b>pzerocross</b> detects the place where the pixel is a transition
+between two neighbor pixels.
+A transition is detected when:</p>
+<ul>
+<li>A pixel value is greater than <i>value</i> and at least one of its neighbors
+is lower than <i>value</i>,
+<li>A pixel value is lower than <i>value</i> and at least one of its neighbors
+is greater than <i>value</i>.
+</ul>
+
+<p>The output image <i>im_out</i> is a unsigned char grayscale image
+(Img2duc or Img3duc).</p>
+
+<p>This operator is mainly used to detect
+zero crossing of the laplacian. For example,
+the value is equal to 127 for unsigned char images
+and 0 for signed long image.</p>
+
+<!---------------------------------- -->
+<h3>Parameters</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>connexity</i> defines the neighbor
+relationship: 4, 8 in 2D or 6, 26 in 3D.
+This parameter is ignored for graph.
+<li><i>value</i> belongs to gray levels
+of the input image <i>im_in</i>.
+</ul>
+
+<!---------------------------------- -->
+<h3>Inputs</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_in</i>: a grayscale image.
+</ul>
+
+<!---------------------------------- -->
+<h3>Outputs</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_out</i>: a binary image.
+</ul>
+
+<!---------------------------------- -->
+<h3>Result</h3>
+<!---------------------------------- -->
+<p>Returns SUCCESS or FAILURE.</p>
+
+<!---------------------------------- -->
+<h3>Examples</h3>
+<!---------------------------------- -->
+<p>Performs an edge detection using the DOG algorithm (Difference Of Gaussian):</p>
+<pre>
+   pexponentialfiltering 0.2 tangram.pan a.pan
+   pexponentialfiltering 0.8 tangram.pan b.pan
+   psub a.pan b.pan c.pan
+   pzerocross 8 0 c.pan out.pan
+</pre>
+
+<!---------------------------------- -->
+<h3>See also</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#edgedetection">Edge detection</a>
+
+<!---------------------------------- -->
+<h3>C++ prototype</h3>
+<!---------------------------------- -->
+<tt>
+Errc PZeroCross( const Img2duc &amp;im_in, Img2duc &amp;im_out, int connexity, Uchar value );
+</tt>
+
+<!---------------------------------- -->
+<h3>Version fran&ccedil;aise</h3>
+<!---------------------------------- -->
+<p>Localisation des changements de signe des valeurs de pixels.</p>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Author: R&eacute;gis Clouard
+</address>
+<!---------------------------------- -->
+</body>
+</html>

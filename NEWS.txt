@@ -1,0 +1,345 @@
+Version 6.6.5 (Jul 1, 2014)
+
+	* added operators pgraphbasedsegmentation, psimplelineariterativecliustering
+Version 6.6.5 (Jul 1, 2014)
+	* revised: pwatershed, phistomerging
+	* improved: pvisu
+	* added: operators parraysmin, arraysmax, plinearinterpolation
+
+Version 6.6.4 (Jun 17, 2013)
+	* added operator prgb2cmyk
+	* fix bug on prg2imc, planczos, pgaussianfiltering.
+	* add operators pgetwindowsaroundpoints.
+
+Version 6.6.3 (Jan 03, 2013)
+	* improved pvisu/pdraw.
+	* added option "-s" to get the operator signature
+	* added pvisu: image directory traversal facilities
+	* fixed bug on pintegralimage.cpp and psquareintegralimage.cpp (3D) 
+	* add operators: pnonlocalmeanfiltering, pnonlocalmedianfiltering, pnonlocaldialtation, pnonlocalerosion (Matthieu Toutain).
+	* image.h: remove parameter 'band' for pixel access in monochrome images.
+
+Version 6.6.2 (Jun 08, 2012)
+        * added mean shift segmentation operator.
+        * added rescale operators.
+        * changed image internal representation (1D array).
+	* added pppm2pan 3D images.
+	* added png and jpeg image conversion (+ pany2pan).
+	* added pniblackbinarization operator.
+	* removed uchar image among paddnoise outputs.
+        * fixed bug on fillhole, pboundarylabeling, pmcmfiltering
+        * errc.h: change the default status file location from $HOME to /tmp.
+
+Version 6.6.1 (Sep 27, 2011)
+	* fixed bug: pmeanvalue
+	* fixed bug: pgeodesicerosion
+
+Version 6.6.0 (Aug 17, 2011)
+	* added: pvisu with several input image files
+	* revised: morphological operators algorithms
+	* Complete revision of the image access through [][][].
+	* added: arithmetic/pintegralimage.cpp
+	* added: arithmetic/psquareintegralimage.cpp
+	* added: psizeselection operator.
+	* added: mean shift operator.
+	* added: pbm images
+	* revised: pderichesmoothing
+	* revised: pderiche to generate gradient direction
+	* changed image direction to radian of pgradient.
+	* fixed: region/pboundingbox.cpp overlapping bug
+  	* revised: visualization/psuperimposition.cpp
+
+Version 6.5.2 (Oct 29, 2010)
+	* fixed bug on pviewer.h (namespace mismatched)
+
+Version 6.5.1 (Oct 29, 2010)
+	* added new operator visualization/psuperimposition.cpp
+	* fixed bugs on documentation
+
+Version 6.5.0 (Jun 21, 2010)
+ 	* include/pobject.ht: generalize method: Props(). 
+	* psetstatus, pstatus: add string case
+	* src/operatorsP0/thresholding/pentropybinarization.cpp: fix bug for float image case. 
+ 	* include/pobject.ht: generalize method: Props().
+	* graph.cpp: fix bug in method Link(). 
+	* pvisu: add read bmp, png, jpg ... images
+	* surfacefitting: add surface fitting operators. 
+	* arithmetic: add operators: addval, difval, multval, divval
+	* imagefeatureextraction: add multispectral images feature extraction. 
+
+Version 6.4.2 (May 12, 2010)
+	* graph.cpp: fix bug in method Link(). 
+	* pvisu: add opening bmp, png, jpg ... images
+	* surfacefitting: add surface fitting operators. 
+	* arithmetic: add operators: addval, difval, multval, divval
+	* imagefeatureextraction: add multispectral images feature extraction. 
+
+Version 6.4.2 (May 12, 2010)
+	* pdiv: change the zero convention (new x div 0=0)
+	* plipadd, plipsub, plibmultcst: add new LIP arithmetic operators. 
+
+Version 6.4.1 (2009-06-29)
+	* fixed bugs (pmse, pgradient). 
+
+Version 6.4.0 (2009-04-08)
+	* New graph version (several edges between nodes is now possible)
+                            (ascending compatibility not ensured!!)
+	* fixed bugs.
+
+Version 6.3.3 (2009-01-07)
+	* new documentation directory organization
+	* added new operator: motion/pblockmatching
+	* fixed bug on conversion/ppan2tiff
+
+Version 6.3.2 (2008-05-06)
+	* fixed bug on region/*selection
+
+Version 6.3.1 (2008-04-28)
+	* performed some enhancements.	
+
+Version 6.3.0 (2008-03-12)
+
+	* Fixed bug on ppm2pan (P6 case)
+	* added directed graph -> change the graph representation.
+	* added operator transformation :: pscrolling.
+	* fixed bug:  src/operatorsP0/arithmetic/pblend.cct: 
+
+Version 6.2.0 (2008-01-15)
+
+	* modified: Graph value and weight type from Float to Double.
+	* src/objects/graph.cpp: fix bug on Init(const Reg2d &rgs) and Init(const Reg3d &rgs)
+	* pdelaunay.cpp : fix bug.
+
+Version 6.1.3 (2007-09-18)
+
+	* renamed: presizing to presize.
+	* revised: pbmp2pan, pppm2pan, pvisu.cpp, parray2im, pmst, pbicubicrescale.
+	* fixed bug: src/operatorsP0/conversion/pppm2pan.cpp (on pgm images).
+	* src/operatorsP0/transformation/pbicubicrescale.cct: clip values (case of char images)
+	* src/viewers/Qt/pvisu.cpp: fix bug on Imx2dsf, Imx3dsf
+	* src/operatorsP0/casting/parray2im.cct: fix bug on multispectral images.
+	* src/operatorsP0/conversion/pbmp2pan.cpp: add new conversion for color images
+	* src/operatorsP0/graph/pmst.cpp: fix bug.
+
+Version 6.1.2 (2007-04-02)
+
+	* src/viewers/Qt/profileview.cpp: change display of row or column index (-> MacOS)
+	* src/viewers/Qt/valuesview.cpp: change display of coordinates (-> MacOS)
+	* src/viewers/Qt/imagemodel.cpp: fix bug (case NaN).
+	* src/operatorsP0/region/psphericityselection.cpp: fix bug.
+	* src/operatorsP0/graph/pedgecutting.cpp: fix error on case high<low
+	* src/operatorsP0/graph : add pedgecutting
+	* pwatershed : fix bug.
+	* src/operatorsP0/logic/por.cct: fix bug on region case.
+	* src/operatorsP0/morphology/structelt.h (MSE3D): inversion between circle and square
+	* src/operatorsP0/luttransform/plineartransform:
+	* src/operatorsP0/luttransform/ppowerlawtransform:
+	* src/operatorsP0/luttransform/plogtransform: color images: change marginal approach to vectoral approach.
+	* src/operatorsP0/transformation/protation.cct: change to bilinear interpolation.
+	* src/object/collection.cpp: fig bug on Delete().
+	* src/operatorsP0/logic/por.cct: fig bug on regions.
+	* phoughline: Changed parameter number
+	* pzoom: renamed to prescale.
+	* plinearrescale, pbicubrescale: Added.
+
+Version 6.0.2 (2006-12-13)
+
+	* include/image.ht: Fix bug on colorspace saving.
+	* include/image.ht: Change SavaData+LoadData since Visual cannot save a buffer larger than 64 Mb.
+	* include/region.ht: Change SavaData+Loaddata since Visual cannot save a buffer larger than 64 Mb.
+	* pfile : fix bug on open(file,"r"); -> open(file,"rb");
+	* src/object/bundled.cct : fix bug on object deletion.
+	* ppan2gif : fix bug (line 647: colors[256] -> colors[257])
+	* fitsio.h : fix bug (#endif missing)
+
+Version 6.0.0 (2006-08-28)
+
+	* rename all operators.
+	* image::operator=: Free and reallocate memory if size are different.
+	* image: Allocate only one block for multispectral images.
+	* main: Change parv[] type from Float to char* (also change all operators.)
+	* Collection: overload operator= (eq. Clone())
+	* Add namespace pandore.
+	* Rename all .cc files to .cpp files.
+
+Version 5.2.0 (2006-03-30)
+
+Version 5.1.4 (2006-02-21)
+	
+	* src/operatorP0: reorganization of the class of operators.	
+	* src/viewers/Qt/imagemodel.cpp: Add thresholding in and thresholding out facilities
+	* src/objects/bundled.cct: fix bug on invert read of "Array:Float"
+	* src/viewers/Qt/visu.cpp: add new facilities
+	* src/operatorsP0/visualisation/attribut.cct: complete
+	* src/operatorsP0/passerelle/yuv2pan.cc: fix bug
+	* src/operatorsP0/classification/seuillage.cct: add multispectral images.
+	* src/operatorsP0/lissage/gauss.cct: add color and multispectral images cases.
+	* src/operatorsP0/passerelle/yuv2pan.cc: fux bug on argv[5]
+	* new evaluation operators: borsotti, interregionuniformity, intraregioncontrast, mse,psnr,snr, vinet, zeboudj.
+	* new passerelle operators: pa2fits, fits2pan.
+	* src/operatorsP0/passerelle/fits2pan.cc: new opertor
+	* src/operatorsP0/passerelle/pan2fits.cc: new opertor
+	* src/operatorsP0/logique/ou.cct: fix bug on regions union.
+	* src/operatorsP0/statistique/entropie.cct: fix bug on histogram
+
+Version 5.1.0 (2005-11-25)
+
+	* src/operatorsP0/visualisation/setstatut.cc: new operator
+	* src/objects/bundled.cct: Fix bug!
+	* include/image.ht: fix bug:allocation with predefined data  -> public.
+	* src/objects/image.cc: fix bug for Mask();
+	* include/image.h: fix bug for Frame();
+	* src/operatorsP0/differenciation/laplacien.cct: fix bug for unsigned images
+	* src/operatorsP0/frequentiel/fft.cct: 
+	* src/operatorsP0/frequentiel/ifft.cct: 
+	* src/operatorsP0/frequentiel/fftshift.cct:  fix bug on function fft()
+	* src/operatorsP0/lissage/meanfilter.cct: change moyenneur with new parameter (halfsize vs cnonnexity)
+
+Version 5.1.0 (2005-09-21)
+
+	* src/operatorsP0/restauration/denoisePDE.cc: new operator.
+	* src/operatorsP0/mouvement/plotquiver.cc: new operator.
+	* src/operatorsP0/mouvement/registrationPDE.cc: new operator.
+	* src/operatorsP0/passerelle/parrec2pan.cc: new operator.
+	* src/operatorsP0/passerelle/analyze2pan.cc: new operator.
+	* src/operatorsP0/passerelle/pan2analyze.cc: new operator.
+	* src/operatorsP0/lissage/lcm.cct: add 3d + change prototype
+	* src/operatorsP0/amelioration/egalisation.cct: fix bug.
+	* Qt viewer
+	* boxes: integration Pandore boxes (for Unix).
+
+Version 5.0.4 (2005-04-13)
+
+	* Adapted to doxygen.
+	* Point.h, Dimension.h: Change return value for operator=().
+	* src/operatorsP0/frequentiel/qmf.cc: Fux bug.
+	* src/operatorsP0/passerelle/pan2d23d.cc: Fix bug (break missing!)
+	* src/operatorsP0/statistique/bruitage.cct: Fix bug on triangular noise case.
+	* Pobject.cc, Bundled.cc : Compatibility of Pandore file beetwen hardware architecture.
+	* src/operatorsP0/classification/fuzzyclustering.cc: Fix bug on 3d images.
+	* src/operatorsP0/passerelle/raw2pan.cc: Improve: skip possible header of the raw file
+	* src/operatorsP0/passerelle/pan2d23d.cc: fix bug on Insert (size(T))
+	* Correction configure
+	* Correction de image.h pour Visual 6.0
+
+Version 5.0.0 (2004-06-28)
+
+	* New hierarchy for images: all images inherit from Imx3d.
+	* Change numbering in Freeman 3d (6 and 26 connexity).
+	* Revision visu for Windows.
+	* Extension inputs types for operators.
+	* Addition Pandore boxes.
+	* src/operatorsP0/visualisation/voir : add option -M
+	* src/operatorsP0/visualisation/VISU/visuoutil.cc: add sliders when image size is greater than the screen. Add icone.
+	* fftconvolutiopn, fftdeconvolution: fix bug.
+	* convolution: fix bug for even kernel.
+	* Rename dilationconditionnelle to dilatationgeodesique
+	* Rename erosionconditionnelle to erosiongeodesique
+	* Correction moyenneur (process image border).
+	* Correction ffconvolution: add fftshift at the end of convolution.
+	* Correction visu (threshold for float image).
+	* Changement im2d23d (use height versus 255)
+	* Correction (div: division by 0 eand log: case of 0)
+	* Rename valcontmoy to seuillagecontrastemax
+	* Rename valvarmax to binarisationvariancemax
+	* concateneattribut.cc: fix bug line 57 (delete )
+	* lpe.cc: fux bug on color images.
+	 means[0][r]=(float)impot.X[p]; -> means[0][r]+=(float)impot.X[p];
+	 means[1][r]=(float)impot.Y[p];	-> means[1][r]+=(float)impot.Y[p];
+	 means[2][r]=(float)impot.Z[p];	-> means[2][r]+=(float)impot.Z[p];
+	* segmentation/marquage.cc: fux bug on 3d 26-connexity.
+	* Fix bug (statut.cpp : array size to small)
+	* Add calcul_volume, selection_volume.
+	* Add: mathematical morphology operators.
+	* fix bug on Heap (plist.h)
+	* Add color image for lpe
+	* Change multcst (int value became float value).
+	* Change rgb2hsl (change semantic and type of return image).
+	* Revision: caracterisation + calcul_euler
+	* Revision: gradient.
+	* Fix bug: nagao, visu
+	* New: frequentiel (ondelette...).
+
+Version 4.0.4 (2003-02-14)
+
+	* Fix bug on pan2pan for Reg2d
+	* Fix bug on visu
+	* Add operator vecteur/getitemarray.cc
+	* passerelle/pan2pan3.cc (Pan2Pan3): fix bug.
+	* Region: Change type Long to Ulong: libpandore.so: 593864
+	* Remove double type for image type
+	* Region: Change SaveData and Loadata : libpandore.so: 680676
+	* Add operator Abs.
+	* rename setcst to affectecst.
+
+Version 4.0.0 (2002-12-05)
+
+	* Remove Img2dss, Img2sc, Img2dus image types.
+	* Change type of Reg (Ushort -> Long)
+	* add Long image type : img2dsl
+	* add collection.h directly in pandore.h
+	* change graph.cc -> GNODE Long Item() to Ulong Item() and Lomg item to Ulong item)
+	  ->Consequences: image are no more compatible with Version 3.xx
+	* Add pan2pan to convert panodrev2 to pandorev3.
+	* src/operatorsP0/region/croissancemoy.cct (CroissanceMoy): Fix bug.
+	* src/operatorsP0/amelioration/egalisation.cct (Egalisation): Change
+	argument list. Add floating image egalization.
+	* src/operatorsP0/visualisation/visu.cxx: Add zoom out options.
+	* src/operatorsP0/visualisation/visu.cxx (Visu): Fix bugs for Reg3d
+	visualization.
+	* src/operatorsP0/transtypage/im2uc.cc: Rename functions from Casting to Im2Uc
+	* src/operatorsP0/transtypage/im2us.cc: Rename functions from Casting to Im2Us
+	* src/operatorsP0/transtypage/img2imc.cc: Rename functions from castingto Img2Imc
+	* src/operatorsP0/morphologie/lpe.cct (Lpe): Fix bug with Char potential images.
+	* src/objects/image.cc: fix bug on Imc3d<T>::LoadAttributes();
+	* src/objects/image.cc: fix bug on Imc3d<T>::SaveAttributes();
+	* src/objects/image.cc: Fix bug on : new Img2duc(h,w,data);
+	* src/operatorsP0/contour/postamincissement.cc: Fix bug.
+	* src/operatorsP0/morphologie/lpe.cc: Add Lpe(Reg2d, Img2d,Img2d), Lpe(Reg3d, Img3d,Img3d).
+	* src/operatorsP0/visualisation/visu.cxx: Add new facilities (contrast, brightness, values...)
+	* src/operatorsP0/differenciation/gradient.cc: Change image
+	direction mfrom contour direction to gradient direction.
+	* src/operatorsP0/contour/suprresionnonmaxima.cc: use the gradient
+	direction instead of contour direction.
+	* src/operatorsP0/utilitaire/synthese.cc: Add case num=0 and num=10
+	for new empty image (2D with num=0 and 3D with num=10)
+	* src/operatorsP0/localisation/maximalocaux.cct: Fix bug ("<" versus ">").
+	* src/operatorsP0/region/comblement.cc (Fusionne): Add (if (c1 == c2)
+	return to avoid bas reallocation of labels.
+	* src/operatorsP0/passerelle/pan2pan.cc (Pan2Pan): Add reading of Img3duc
+	for Version 3.
+	* src/operatorsP0/region/croissancemoy.cc (CroissanceMoy):  fix bug.
+
+Version 3.02 (2001-11-10)
+
+	* src/operatorsP0/passerelle/pan2bmp.cc (DonneesBmp):
+	* src/operatorsP0/passerelle/pan2gif.cc (DonneesBmp):
+	* src/operatorsP0/passerelle/pan2tiff.cc (DonneesBmp): fix bug on color with Reg2d.
+	* src/operatorsP0/region/comblement.cc:  fix bug: Problem with border.
+	* src/operatorsP0/morphologie/reconstruction.cc: fix bug: Wrong cast (Uchar)
+	* src/operatorsP0/visualisation/VISU/visuoutil.cc: Add visualization
+	with 16 and 24 bit planes screen.
+	* src/operatorsP0/visualisation/statut.cct (main): fix bug line 46: (argc>1)
+	* src/operatorsP0/transformation/projectionmax.cc: fix bug on PLANZ
+
+Version 3.0.1 (2001-08-28)
+
+	* src/operatorsP0/arithmetique/dif.cct (Dif): Wrong signs in Dif
+	for color images.
+	* src/operatorsP0/passerelle/pan2tiff.cc: Add Reg2d case.	
+	* src/operatorsP0/passerelle/pan2bmp.cc: Add Reg2d case.
+	* src/operatorsP0/passerelle/pan2gif.cc: Add Reg2d case.
+	* src/operatorsP0/amelioration/egalisation.cct: Fix bug.
+	* src/operatorsP0/transformation/retourne.cct: new operator.
+	* src/operatorsP0/transformation/projectionmoy.cc: fix bugs.
+	* src/operatorsP0/transformation/projectionmax.cct fix bugs.
+	* src/operatorsP0/visualisation/visu.cxx (main): increase array Char Nomentree[50] to Char Nomentree[255] for large image names.
+
+Version 3.0.0 (2001-07-03)
+
+	* Attributes become privates -> Creation of new consulting methods.
+	* Images are reorganized and multispectral image (Imx) is created.
+
+Version 2.2 (2000-12-12)
+
+Version 2.0 (1999-12-24)

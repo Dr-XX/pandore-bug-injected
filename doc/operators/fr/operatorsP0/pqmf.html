@@ -1,0 +1,113 @@
+<head>
+<title>PANDORE OPERATORS</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>pqmf</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+G&eacute;n&eacute;ration d'un filtre QMF pour la transform&eacute;e en ondelette.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>pqmf</b> <i>name</i> <i>order</i> [<i>col_out</i>|-]
+</tt> 
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p>L'op&eacute;rateur <b>pqmf</b> (Quadratic Mirror Filter) permet de cr&eacute;er
+un fichier collection contenant les 
+informations sur un filtre n&eacute;cessaire &agrave; l'utilisation 
+de  <a href="./pdwt.html">pdwt</a>.
+Ces informations sont le nom et l'ensemble des coefficients du
+filtre passe-bas utilis&eacute;
+pour le calcul de l'approximation lors de la d&eacute;composition
+en ondelettes dyadiques d'une image. Cela donne aussi, implicitement,
+la longueur du filtre.</p>
+
+<!---------------------------------- -->
+<h3>Param&egrave;tres</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>name</i> sp&eacute;cifie le nom du filtre parmi
+les 7  filtres disponibles.
+<li><i>order</i> specifie l'ordre du filtre.
+<ul>
+<li>haar: 1
+<li>beylkin: 1
+<li>coiflet: 1, 2, 3, 4 ou 5
+<li>daubechies: 4, 6, 8, 10, 12, 14, 16, 18 ou 20
+<li>symmlet: 4, 5, 6, 7, 8, 9 ou 10
+<li>vaidyanathan:  1
+<li>battle: 1, 3 ou 5
+</ul>
+</ul>
+
+<!---------------------------------- -->
+<h3>Sortie</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>col_out</i>: une collection qui contient les coefficients du filtre choisi.
+</ul>
+
+<!---------------------------------- -->
+<h3>R&eacute;sultat</h3>
+<!---------------------------------- -->
+<p>Retourne SUCCESS ou FAILURE.</p>
+
+<!---------------------------------- -->
+<h3>Exemples</h3>
+<!---------------------------------- -->
+<p>Construit une image synth&eacute;tique avec un carr&eacute;
+pour illustrer le ph&eacute;nom&egrave;ne de Gibbs an analyse par ondelettes:</p>
+<pre>
+   pshapedesign 256 256 0 2 150 150 a.pan
+   pqmf daubechies 4 b.pan
+   pdwt 1 a.pan b.pan c.pan
+   psplitimage c.pan d1.pan d2.pan d3.pan d4.pan
+   pthresholding 20 400 d2.pan e2.pan
+   pthresholding 20 400 d3.pan e3.pan
+   pthresholding 20 400 d4.pan e4.pan
+   pmergeimages d1.pan e2.pan e3.pan e4.pan f.pan
+   pidwt 1 f.pan b.pan out.pan
+</pre>
+
+<!---------------------------------- -->
+<h3>Voir aussi</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#frequency">Domaine Fr&eacute;quentiel</a>,
+<a href="./dwt.html">dwt</a>, <a href="./idwt.html">idwt</a>
+
+<!---------------------------------- -->
+<h3>Prototype C++</h3>
+<!---------------------------------- -->
+<tt>Errc PQmf( const char *name, const char *order, Collection&amp; col_out );</tt> 
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Auteur: Ludovic Soltys 
+</address>
+<!---------------------------------- -->
+
+</body>
+</html>

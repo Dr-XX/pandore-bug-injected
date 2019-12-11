@@ -1,0 +1,137 @@
+<html>
+<head>
+<title>OPERATEURS PANDORE</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>pdistance1</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Calcul d'une image de distance quelconque aux contours.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>pdistance1</b> <i>d1</i> <i>d2</i> <i>d3</i> [<i>-m mask</i>] [<i>im_in</i>|-] [<i>im_out</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p>L'op&eacute;rateur <b>pdistance1</b> calcule pour chaque point de l'image <i>im_in</i>,
+sa distance au contour le plus proche.</p>
+
+<p>Les contours de l'image <i>im_in</i>  sont des chaînes de pixels de valeur
+non nulle reposant sur un fond de valeur nulle.</p>
+
+<p>La distance est calcul&eacute;e en 8 voisinage pour le 2D
+selon les valeurs <i>d1</i> et <i>d2</i>
+et en 26 voisinage pour le 3D selon les valeurs <i>d1</i>, <i>d2</i> et <i>d3</i>
+donn&eacute;es en param&egrave;tres.<br>
+Le principe de calcul est le suivant:</p>
+
+<ul>
+<li>Si le pixel est un point de contour alors distance = 0.
+<li>Sinon, la distance est le minimum de la distance de ces voisins + d1 s'il est
+dans son 4 voisinage (voisin 0, 2 , 6) ou + d2 sinon, comme ci-dessous:
+<pre>
+	+d2 +d1 +d2
+	+d1  x  +d1
+	+d2 +d1 +d2
+</pre>
+</ul>
+
+<p>L'image de sortie <i>im_out</i> est une image r&eacute;elle, o&ugrave; chaque pixel indique la valeur
+enti&egrave;re de la distance de ce point au contour le plus proche.</p>
+
+<!---------------------------------- -->
+<h3>Param&egrave;tres</h3>
+<!---------------------------------- -->
+<ul>
+<li> <i>d1</i>, <i>d2</i>  et <i>d3</i>
+sont des r&eacute;els qui permettent de sp&eacute;cifier la m&eacute;trique.
+En 2D, <i>d3</i>
+n'est pas utilis&eacute;, mais doit &ecirc;tre donn&eacute;.<br>
+Les m&eacute;triques plus utilis&eacute;es sont:</p>
+<ul>
+<li>Euclidienne  : d1 = 1 ; d2 = sqrt(2), d3 = sqrt(3); 
+<li>Jeux d'echec : d1 = 1 ; d2 = 2; d3 = 3;
+<li>Manhattan    : d1 = 1 ; d2 = 1; d3 = 1;
+</ul>
+</ul>
+
+<!---------------------------------- -->
+<h3>Entr&eacute;es</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_in</i>: une image de niveaux de gris ou un graphe.
+</ul>
+
+<!---------------------------------- -->
+<h3>Sorties</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_out</i>: une image r&eacute;elle ou un graphe.
+</ul>
+
+<!---------------------------------- -->
+<h3>R&eacute;sultat</h3>
+<!---------------------------------- -->
+<p>Retourne SUCCESS ou FAILURE.</p>
+
+<!---------------------------------- -->
+<h3>Exemples</h3>
+<!---------------------------------- -->
+<p>Ferme les contours obtenus par une
+simple d&eacute;tection de contours :</p>
+<pre>
+   psobel tangram.pan b.pan
+   pbinarization 50 1e30 b.pan c.pan
+   pskeletonization c.pan d.pan 
+   ppostthinning d.pan e.pan
+   pdistance1 1 1 1 e.pan f.pan
+   plocalmaxima 8 f.pan g.pan
+   plabeling 8 g.pan h.pan
+   pinverse f.pan i.pan
+   pwatershed h.pan i.pan j.pan
+   pboundary 8 j.pan out.pan
+</pre>
+
+<!---------------------------------- -->
+<h3>Voir aussi</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#contour">Contour</a>
+
+<!---------------------------------- -->
+<h3>Prototype C++</h3>
+<!---------------------------------- -->
+<tt>
+Errc PDistance1( const Img2duc &amp;im_in, Img2dsf &amp;im_out, float d1, float d2, float d3 );
+</tt>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Auteur: R&eacute;gis Clouard
+</address>
+<!---------------------------------- -->
+
+</body>
+</html>

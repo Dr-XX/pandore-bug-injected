@@ -1,0 +1,418 @@
+/* -*- mode: c++; c-basic-offset: 3 -*-
+ *
+ * Copyright (c), GREYC.
+ * All rights reserved
+ *
+ * You may use this file under the terms of the BSD license as follows:
+ *
+ * "Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are
+ * met:
+ *   * Redistributions of source code must retain the above copyright
+ *     notice, this list of conditions and the following disclaimer.
+ *   * Redistributions in binary form must reproduce the above copyright
+ *     notice, this list of conditions and the following disclaimer in
+ *     the documentation and/or other materials provided with the
+ *     distribution.
+ *   * Neither the name of the GREYC, nor the name of its
+ *     contributors may be used to endorse or promote products
+ *     derived from this software without specific prior written
+ *     permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
+ *
+ * 
+ * For more information, refer to:
+ * https://clouard.users.greyc.fr/Pandore
+ */
+
+/**
+ * @author Abderrahim Elmoataz - 1999-02-19
+ * @author Régis Clouard - 2002-05-24
+ */
+
+#include <pandore.h>
+using namespace pandore;
+
+/**
+ * @file pdilationreconstruction.cpp
+ * Reconstruction by dilation.
+ * ims1 : markers image
+ * ims2 : mask image
+ * Need ims1 <= ims2.
+ */
+##begin PDilationReconstruction < TIN, LOOPP, LOOPPIN, POINT, VOISL >
+Errc PDilationReconstruction( const TIN &ims1, const TIN &ims2, TIN &imd, int connexity ) {
+   POINT p, q;
+   int v;
+   TIN::ValueType val, maxv;
+   Fifo<POINT> f;
+
+   if (connexity != 2 && connexity != 4 && connexity != 8 && connexity != 6 && connexity != 26) {
+      std::cerr << "Error pdilationreconstruction: bad connexity value:" << connexity << std::endl;
+      return FAILURE;
+   }
+   if ( ims1.Size() != ims2.Size()) {
+      std::cerr << "Error pdilationreconstruction: Incompatible image size." << std::endl;
+      return FAILURE;
+   }
+   if ( ims1.Bands() != ims2.Bands() ) {
+      std::cerr << "Error pdilationreconstruction: Incompatible number of bands." << std::endl;
+      return FAILURE;
+   }
+
+   // Build the MIN(ims1, ims2)
+   imd = ims1;
+##LOOPP(imd, p)
+   {
+      maxv = imd[p];
+      for (v = 0; v < connexity / 2; v++) {
+	 if (imd.Hold(p + reinterpret_cast<const POINT*>(vc[connexity])[v])) {
+	    val = imd[p + reinterpret_cast<const POINT*>(vc[connexity])[v]];
+	    if (val > maxv) {
+	       maxv = val;
+	    }
+	 }
+      }
+      imd[p] = MIN(maxv, ims2[p]);
+   }
+   // Backward scanning
+##LOOPPIN(imd, p)
+   {
+      maxv = imd[p];
+      for (v = connexity / 2; v < connexity; v++) {
+	 if (imd.Hold(p + reinterpret_cast<const POINT*>(vc[connexity])[v])) {
+	    val = imd[p + reinterpret_cast<const POINT*>(vc[connexity])[v]];
+	    if (val > maxv) {
+	       maxv = val;
+	    }
+	 }
+      }
+      imd[p] = MIN(maxv, ims2[p]);
+      for (v = connexity / 2;  v < connexity; v++) {
+	 q = p + reinterpret_cast<const POINT*>(vc[connexity])[v];
+	 if (imd.Hold(q) && (imd[q] < imd[p]) && (imd[q] < ims2[q])) { 
+	    f.Push(p);
+	    break;
+	 }
+      }
+   }
+   
+   // Propagation
+   while (!f.Empty()) {
+      p = f.Pop();
+      for (v = 0; v < connexity; v++) {
+	 q = p + reinterpret_cast<const POINT*>(vc[connexity])[v];
+	 if (imd.Hold(q) && (imd[q] < imd[p]) && (ims2[q] != imd[q])) {
+	    f.Push(q);
+	    imd[q] = MIN(imd[p], ims2[q]);
+	 }
+
+      }
+   }
+
+   return SUCCESS;
+}
+
+## append loadcases
+   if ((objs[0]->Type() == Po_$TIN) && (objs[1]->Type() == Po_$TIN)) {
+     TIN* const ims1 = (TIN*)objs[0];
+     TIN* const ims2 = (TIN*)objs[1];
+     objd[0] = new TIN(ims1->Props());
+     TIN* const imd = (TIN*)objd[0];
+     
+     result = PDilationReconstruction(*ims1, *ims2, *imd, atoi(parv[0]));
+     goto end;
+   }
+## end
+##end
+
+##begin PDilationReconstructionC < TIN, LOOPP, LOOPPIN, POINT, VOISL
+Errc PDilationReconstruction( const TIN &ims1, const TIN &ims2, TIN &imd, int connexity ) {
+   POINT p; 
+   int v;
+   TIN::ValueType val, maxv;
+   Fifo<POINT> fX, fY, fZ;
+
+   if (connexity != 4 && connexity != 8 && connexity != 6 && connexity != 26) {
+      std::cerr << "Error pdilationreconstruction: bad connexity value:" << connexity << std::endl;
+      return FAILURE;
+   }
+   if ( ims1.Size() != ims2.Size()) {
+      std::cerr << "Error pdilationreconstruction: Incompatible image size." << std::endl;
+      return FAILURE;
+   }
+   if ( ims1.Bands() != ims2.Bands() ) {
+      std::cerr << "Error pdilationreconstruction: Incompatible number of bands." << std::endl;
+      return FAILURE;
+   }
+   
+   imd = ims1;
+   
+   // Forward scanning
+##LOOPP(imd, p)
+   {
+      maxv = imd.X[p];
+      for (v = 0; v < connexity / 2; v++) {
+	 if (imd.Hold(p + reinterpret_cast<const POINT*>(vc[connexity])[v])) {
+	    val = imd.X[p + reinterpret_cast<const POINT*>(vc[connexity])[v]];
+	    if (val > maxv) {
+	       maxv = val;
+	    }
+	 }
+      }
+      imd.X[p] = MIN(maxv, ims2.X[p]);
+
+      maxv = imd.Y[p];
+      for (v = 0; v < connexity / 2; v++) {
+	 if (imd.Hold(p + reinterpret_cast<const POINT*>(vc[connexity])[v])) {
+	    val = imd.Y[p + reinterpret_cast<const POINT*>(vc[connexity])[v]];
+	    if (val > maxv) {
+	       maxv = val;
+	    }
+	 }
+      }
+      imd.Y[p] = MIN(maxv, ims2.Y[p]);
+
+      maxv = imd.Z[p];
+      for (v = 0; v < connexity / 2; v++) {
+	 if (imd.Hold(p + reinterpret_cast<const POINT*>(vc[connexity])[v])) {
+	    val = imd.Z[p + reinterpret_cast<const POINT*>(vc[connexity])[v]];
+	    if (val > maxv) {
+	       maxv = val;
+	    }
+	 }
+      }
+      imd.Z[p] = MIN(maxv, ims2.Z[p]);
+   }
+   
+   // Backward scanning
+##LOOPPIN(imd, p)
+   {
+      maxv = imd.X[p];
+      for (v = connexity / 2; v < connexity; v++) {
+	 if (imd.Hold(p + reinterpret_cast<const POINT*>(vc[connexity])[v])) {
+	    val = imd.X[p + reinterpret_cast<const POINT*>(vc[connexity])[v]];
+	    if (val > maxv) {
+	       maxv = val;
+	    }
+	 }
+      }
+      imd.X[p] = MIN(maxv, ims2.X[p]);
+      for (v = connexity / 2; v < connexity; v++) {
+	 if (imd.Hold(p + reinterpret_cast<const POINT*>(vc[connexity])[v])
+	     && (imd.X[p + reinterpret_cast<const POINT*>(vc[connexity])[v]] < imd.X[p])
+	     && (imd.X[p + reinterpret_cast<const POINT*>(vc[connexity])[v]] < ims2.X[p + reinterpret_cast<const POINT*>(vc[connexity])[v]])) { 
+	    fX.Push(p);
+	    break;
+	 }
+      }
+ 
+      maxv = imd.Y[p];
+      for (v = connexity / 2; v < connexity; v++) {
+	 if (imd.Hold(p + reinterpret_cast<const POINT*>(vc[connexity])[v])) {
+	    val = imd.Y[p + reinterpret_cast<const POINT*>(vc[connexity])[v]];
+	    if (val > maxv) {
+	       maxv = val;
+	    }
+	 }
+      }
+      imd.Y[p] = MIN(maxv, ims2.Y[p]);
+      for (v = connexity / 2; v < connexity; v++) {
+	 if (imd.Hold(p + reinterpret_cast<const POINT*>(vc[connexity])[v])
+	     && (imd.Y[p + reinterpret_cast<const POINT*>(vc[connexity])[v]] < imd.Y[p])
+	     && (imd.Y[p + reinterpret_cast<const POINT*>(vc[connexity])[v]] < ims2.Y[p + reinterpret_cast<const POINT*>(vc[connexity])[v]])) {  
+	    fY.Push(p);
+	    break;
+	 }
+      }
+      maxv = imd.Z[p];
+      for (v = connexity / 2; v < connexity; v++) {
+	 if (imd.Hold(p + reinterpret_cast<const POINT*>(vc[connexity])[v])) { 
+	    val = imd.Z[p + reinterpret_cast<const POINT*>(vc[connexity])[v]];
+	    if (val > maxv) {
+	       maxv = val;
+	    }
+	 }
+      }
+      imd.Z[p] = MIN(maxv, ims2.Z[p]);
+      for (v = connexity / 2; v < connexity; v++) {
+	 if (imd.Hold(p + reinterpret_cast<const POINT*>(vc[connexity])[v])
+	     && (imd.Z[p + reinterpret_cast<const POINT*>(vc[connexity])[v]] < imd.Z[p])
+	     && (imd.Z[p + reinterpret_cast<const POINT*>(vc[connexity])[v]] < ims2.Z[p+reinterpret_cast<const POINT*>(vc[connexity])[v]])) { 
+	    fZ.Push(p);
+	    break;
+	 }
+      }
+   }
+   
+   // Propagation
+   POINT q;
+   while (!fX.Empty()) {
+      p = fX.Pop();
+      for (v = 0; v < connexity; v++) {
+	 q = p + reinterpret_cast<const POINT*>(vc[connexity])[v];
+	 if (imd.Hold(q) && (imd.X[q] < imd.X[p]) && (ims2.X[q] != imd.X[q])) {
+	    fX.Push(q);
+	    imd.X[q] = MIN(imd.X[p], ims2.X[q]);
+	 }
+      }
+   }
+   
+
+   while (!fY.Empty()) {
+      p = fY.Pop();
+      for (v = 0; v < connexity; v++) {
+	 q = p + reinterpret_cast<const POINT*>(vc[connexity])[v];
+	 if (imd.Hold(q) && (imd.Y[q] < imd.Y[p]) && (ims2.Y[q] != imd.Y[q])) {
+	    fY.Push(q);
+	    imd.Y[q] = MIN(imd.Y[p], ims2.Y[q]);
+	 }
+
+      }
+   }
+   
+   while (!fZ.Empty()) {
+      p = fZ.Pop();
+      for (v = 0; v < connexity; v++) {
+	 q = p + reinterpret_cast<const POINT*>(vc[connexity])[v];
+	 if (imd.Hold(q) && (imd.Z[q] < imd.Z[p]) && (ims2.Z[q] != imd.Z[q])) {
+	    fZ.Push(q);
+	    imd.Z[q]  =MIN(imd.Z[p], ims2.Z[q]);
+	 }
+      }
+   }
+   
+   return SUCCESS;
+}
+
+## append loadcases
+   if ((objs[0]->Type() == Po_$TIN) && (objs[1]->Type() == Po_$TIN)) {
+     TIN* const ims1 = (TIN*)objs[0];
+     TIN* const ims2 = (TIN*)objs[1];
+     objd[0] = new TIN(ims1->Props());
+     TIN* const imd = (TIN*)objd[0];
+     
+     result = PDilationReconstruction(*ims1, *ims2, *imd, atoi(parv[0]));
+     goto end;
+   }
+## end
+##end
+
+
+##begin PDilationReconstructionGraph< TIN >
+Errc PDilationReconstruction( const TIN &grs1, const TIN &grs2, TIN &grd ) {
+   int i, j;		/*Gm=gs1=masque=numerique=I*/
+   TIN::ValueType u, v;	/*G=gs2=marqueurs=J*/
+   bool propage;	/*G->Gmax=gd=maxima regionaux de G*/
+   GEdge *ptr;
+   Fifo<Point1d> f;
+   
+   grd = grs2;
+   
+   for (i = 0; i < grd.Size(); i++) {
+      if ((grd[i])) {
+	 grd[i]->value = 255.0;
+      }
+   }
+   for (i = 0; i < grd.Size(); i++) {
+      if (!grd[i] || grd[i]->value != 255.0) {
+	 continue;
+      }
+      propage = false;
+      for (ptr = grd[i]->Neighbours(); ptr != NULL; ptr = ptr->Next()) {
+	 if (grs2[i]->value < grs2[ptr->Node()]->value) {
+	    propage = true;
+	 }
+      }
+      if (propage) {
+	 f.Push(Point1d(i));
+	 grd[i]->value = 0;
+	 while (!f.Empty()) {
+	    j = f.Pop().x;
+	    for (ptr = grd[j]->Neighbours(); ptr != NULL; ptr = ptr->Next()) {
+	       if ((grd[ptr->Node()]->value == 255.0)
+		   && (grs2[j]->value >= grd[ptr->Node()]->value)) {
+		  f.Push(Point1d(ptr->Node()));
+		  grd[ptr->Node()]->value = 0.0;
+	       }
+	    }
+	 }
+      }
+   }
+   
+   for (i = 0; i < grd.Size(); i++) {
+      if (grd[i] && grd[i]->value) {
+	 grd[i]->value = grs2[i]->value;
+      }
+   }
+   for (i = 0; i < grd.Size(); i++) {
+      if (!grd[i] || grd[i]->value == 0) {
+	 continue;
+      }
+      propage = false;
+      for (ptr = grd[i]->Neighbours(); ptr != NULL; ptr = ptr->Next()) {
+	 if (grd[ptr->Node()]->value == 0) {
+	    propage = true;
+	 }
+      }
+      if (propage) {
+	 f.Push(Point1d(i));
+      }
+   }
+   
+   while (!f.Empty()) {
+      j = f.Pop().x;
+      for (ptr = grd[j]->Neighbours(); ptr != NULL; ptr = ptr->Next()) {
+	 if ((grd[ptr->Node()]->value < grd[j]->value)
+	     && (grd[ptr->Node()]->value != grs1[ptr->Node()]->value)) {
+	    u = grd[j]->value;
+	    v = grs1[ptr->Node()]->value;
+	    grd[ptr->Node()]->value = (u < v) ? u : v;
+	    f.Push(Point1d(ptr->Node()));
+	 }
+      }
+   }
+   
+   return SUCCESS;
+}
+
+## append loadcases
+   if ((objs[0]->Type() == Po_$TIN) && (objs[1]->Type() == Po_$TIN)) {
+     TIN* const grs1 = (TIN*)objs[0];
+     TIN* const grs2 = (TIN*)objs[1];
+     objd[0] = new TIN(grs1->Props());
+     TIN* const grd = (TIN*)objd[0];
+     
+     result = PDilationReconstruction(*grs1, *grs2, *grd);
+     goto end;
+   }
+## end
+##end
+
+##forall(PDilationReconstruction, /Img1d./)
+##forall(PDilationReconstruction, /Img2d./)
+##forall(PDilationReconstruction, /Img3d./)
+##forall(PDilationReconstructionC, /Imc2d./)
+##forall(PDilationReconstructionC, /Imc3d./)
+##forall(PDilationReconstructionGraph, /Graph./)
+
+#ifdef MAIN
+#define	USAGE	"usage: %s connexity [-m mask] [im_in1|-] [im_in2|-] [im_out|-]"
+#define	PARC	1
+#define	FINC	2
+#define	FOUTC	1
+#define	MASK	1
+
+##main(PARC, FINC, FOUTC, MASK, USAGE)
+#endif

@@ -1,0 +1,495 @@
+/* -*- mode: c++; c-basic-offset: 3 -*-
+ *
+ * Copyright (c), GREYC.
+ * All rights reserved
+ *
+ * You may use this file under the terms of the BSD license as follows:
+ *
+ * "Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are
+ * met:
+ *   * Redistributions of source code must retain the above copyright
+ *     notice, this list of conditions and the following disclaimer.
+ *   * Redistributions in binary form must reproduce the above copyright
+ *     notice, this list of conditions and the following disclaimer in
+ *     the documentation and/or other materials provided with the
+ *     distribution.
+ *   * Neither the name of the GREYC, nor the name of its
+ *     contributors may be used to endorse or promote products
+ *     derived from this software without specific prior written
+ *     permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
+ *
+ * 
+ * For more information, refer to:
+ * https://clouard.users.greyc.fr/Pandore
+ */
+
+/**
+ * @author Régis Clouard - 1996-02-19
+ * @author Régis Clouard - 2003-05-23 (new algorithm)
+ * @author Régis Clouard - Jun 19, 2011 (new algorithm)
+ */
+
+#define _USE_MATH_DEFINES
+#include <math.h>
+#include <pandore.h>
+using namespace pandore;
+#include "morphology/structelt.h"
+
+/**
+ * @file perosiongeodesique.cpp
+ * Geodesic erosion:: erosion controled by a mask image.
+ * if iteration=-1, erosion is done until idempotence
+ * wich corresponds to a reconstruction by erosion.
+ */
+
+##begin PGeodesicErosionG2D < TIN1, TIN2 >
+Errc PGeodesicErosion( const TIN1 &ims, const TIN2 &imq, TIN1 &imd, int numSE, int halfsize, int iteration ) {
+   if (numSE > 8 || numSE < 0) {
+      std::cerr << "Error pgeodesicerosion: bad structuring element type: " << numSE << std::endl;
+      return FAILURE;
+   }
+   if (halfsize < 1) {
+      std::cerr << "Error pgeodesicerosion: bad structuring element size: " << halfsize << std::endl;
+      return FAILURE;
+   }
+   if ( ims.Size() != imq.Size()) {
+      std::cerr << "Error perosionreconstruction: Incompatible image size." << std::endl;
+      return FAILURE;
+   }
+
+   StructuringElement2d *se = new StructuringElement2d(numSE, halfsize);
+
+   Point2d p, p1;
+   Fifo<Point2d> toBeVisited[2];
+
+   imd = ims;
+   for (p.y = 0; p.y < ims.Height(); p.y++) {
+      for (p.x = 0; p.x < ims.Width(); p.x++) {
+	 if ((!imq[p])) {
+	    TIN1::ValueType min = Limits<TIN1::ValueType>::max(), val;
+	    for (int i = 0; i < se->length; i++) {
+	       p1 = p;
+	       se->Move(i, p1);
+	       if (ims.Hold(p1) && ((val = ims[p1]) < min) && (imq[p1] == imq[p])) {
+		  min = val;
+	       }
+	    }
+	    if (ims[p] > min) {
+	       imd[p] = min;
+	       toBeVisited[0].Push(p);
+	    }
+	 }
+      }
+   }
+   int fifo = 0;
+   if (iteration < 0) {
+      iteration = Limits<Long>::max();
+   }
+   iteration--;
+
+   while (iteration > 0 && !toBeVisited[fifo].Empty()) {
+      iteration--;
+      while (!toBeVisited[fifo].Empty()) {
+	 Point2d p3 = toBeVisited[fifo].Pop();
+	 for (int v = 0; v < 8; v++) {
+	    p = p3 + v8[v];
+	    
+	    if (imq.Hold(p) && (!imq[p])) {
+	       TIN1::ValueType min = imd[p], val;
+	       for (int i = 0; i < se->length; i++) {
+		  p1 = p;
+		  se->Move(i, p1);
+		  if (imd.Hold(p1) && ((val = imd[p1]) < min) && (imq[p1] == imq[p])) {
+		     min = val;
+		  }
+	       }
+	       if (imd[p] > min) {
+		  imd[p] = min;
+		  toBeVisited[1 - fifo].Push(p);
+	       }
+	    }
+	 }
+      }
+      fifo = 1 - fifo;
+   }
+
+   delete se;
+   return SUCCESS;
+}
+
+## append loadcases
+   if (objs[0]->Type() == Po_$TIN1 && objs[1]->Type() == Po_$TIN2) {
+      TIN1* const ims = (TIN1*)objs[0];
+      TIN2* const imq = (TIN2*)objs[1];
+      objd[0] = new TIN1(ims->Props());
+      TIN1* const imd = (TIN1*)objd[0];
+      
+      result = PGeodesicErosion(*ims, *imq, *imd, atoi(parv[0]), atoi(parv[1]), atoi(parv[2]));
+      goto end;
+   }
+## end
+##end
+
+##begin PGeodesicErosionG3D < TIN1, TIN2 >
+Errc PGeodesicErosion( const TIN1 &ims, const TIN2 &imq, TIN1 &imd, int numSE, int halfsize, int iteration ) {
+   if (numSE > 12 || numSE < 0) {
+      std::cerr << "Error pgeodesicerosion: bad structuring element type: " << numSE << std::endl;
+      return FAILURE;
+   }
+   if (halfsize < 1) {
+      std::cerr << "Error pgeodesicerosion: bad structuring element size: " << halfsize << std::endl;
+      return FAILURE;
+   }
+   if ( ims.Size() != imq.Size()) {
+      std::cerr << "Error perosionreconstruction: Incompatible image size." << std::endl;
+      return FAILURE;
+   }
+
+   Point3d p, p1;
+   Fifo<Point3d> toBeVisited[2];
+
+   StructuringElement3d *se = new StructuringElement3d(numSE, halfsize);
+
+   imd = ims;
+   for (p.z = 0; p.z < ims.Depth(); p.z++) {
+      for (p.y = 0; p.y < ims.Height(); p.y++) {
+	 for (p.x=  0; p.x < ims.Width(); p.x++) {
+	    if ((imq[p])) {
+	       TIN1::ValueType min = Limits<TIN1::ValueType>::max(), val;
+	       for (int i = 0; i < se->length; i++) {
+		  p1 = p;
+		  se->Move(i, p1);
+		  if (ims.Hold(p1) && ((val = ims[p1])<min) && (imq[p1] == imq[p])) {
+		     min = val;
+		  }
+	       }
+	       if (ims[p] > min) {
+		  imd[p] = min;
+		  toBeVisited[0].Push(p);
+	       }
+	    }
+	 }
+      }
+   }
+   
+   if (iteration < 0) {
+      iteration = Limits<Long>::max();
+   }
+   iteration--;
+   int fifo  =0;
+   while (iteration > 0 && !toBeVisited[fifo].Empty()) {
+      iteration--;
+      while(!toBeVisited[fifo].Empty()) {
+	 Point3d p3 = toBeVisited[fifo].Pop();
+	 for (int v = 0; v < 26; v++) {
+	    p = p3 + v26[v];
+	    if (imq.Hold(p) && (imq[p])) {
+	       TIN1::ValueType min = Limits<TIN1::ValueType>::max(), val;
+	       for (int i = 0; i < se->length; i++) {
+		  p1 = p;
+		  se->Move(i, p1);
+		  if (imd.Hold(p1)&& ((val = imd[p1]) < min) && (imq[p1] == imq[p])) {
+		     min = val;
+		  }
+	       }
+	       if (imd[p] > min) {
+		  imd[p] = min;
+		  toBeVisited[1 - fifo].Push(p);
+	       }
+	    }
+	 }
+      }
+      fifo = 1 - fifo;
+   }
+   
+   delete se;
+   return SUCCESS;
+}
+
+## append loadcases
+   if (objs[0]->Type() == Po_$TIN1 && objs[1]->Type() == Po_$TIN2) {
+      TIN1* const ims = (TIN1*)objs[0];
+      TIN2* const imq = (TIN2*)objs[1];
+      objd[0] = new TIN1(ims->Props());
+      TIN1* const imd = (TIN1*)objd[0];
+      
+      result = PGeodesicErosion(*ims, *imq, *imd, atoi(parv[0]), atoi(parv[1]), atoi(parv[2]));
+      goto end;
+   }
+## end
+##end
+
+#ifndef __LOWER_H__
+#define __LOWER_H__
+/*
+ * Lexicographic order between 2 colors (cx, cy, cz) and (cx1, cy1, cz1)
+ */
+template<typename T>
+static bool Lower( T cx1, T cy1, T cz1, T cx, T cy, T cz ) {
+   if (cx1 < cx) {
+      return true;
+   } else if (cx1 > cx) {
+      return false;
+   }
+   if (cy1 < cy) {
+      return true;
+   } else if (cy1 > cy) {
+      return false;
+   }
+   if (cz1 < cz) {
+      return true;
+   } else if (cz1 > cz) {
+      return false;
+   } else {
+      return false;
+   }
+}
+
+#endif
+
+##begin PGeodesicErosionC2D < TIN1, TIN2 >
+Errc PGeodesicErosion( const TIN1 &ims, TIN2 &imq, TIN1 &imd, int numSE, int halfsize, int iteration ) {
+   if (numSE > 8 || numSE < 0) {
+      std::cerr << "Error pgeodesicerosion: bad structuring element type: " << numSE << std::endl;
+      return FAILURE;
+   }
+   if (halfsize < 1) {
+      std::cerr << "Error pgeodesicerosion: bad structuring element size: " << halfsize << std::endl;
+      return FAILURE;
+   }
+   if ( ims.Size() != imq.Size()) {
+      std::cerr << "Error perosionreconstruction: Incompatible image size." << std::endl;
+      return FAILURE;
+   }
+
+   Point2d p, p1;
+   Fifo<Point2d> toBeVisited[2];
+
+   StructuringElement2d *se = new StructuringElement2d(numSE, halfsize);
+
+   imd = ims;
+   for (p.y = 0; p.y < ims.Height(); p.y++) {
+      for (p.x = 0; p.x < ims.Width(); p.x++) {
+	 if ((imq[p])) {
+	    TIN1::ValueType minX = Limits<TIN1::ValueType>::max();
+	    TIN1::ValueType minY = Limits<TIN1::ValueType>::max();
+	    TIN1::ValueType minZ = Limits<TIN1::ValueType>::max();
+	    for (int i = 0; i < se->length; i++) {
+	       p1 = p;
+	       se->Move(i, p1);
+	       if (ims.Hold(p1)
+		   && Lower(ims.X[p1], ims.Y[p1], ims.Z[p1], minX, minY, minZ)
+		   && (imq[p1] == imq[p])) {
+		  minX = ims.X[p1];
+		  minY = ims.Y[p1];
+		  minZ = ims.Z[p1];
+	       }
+	    }
+	    if (ims.X[p] != minX|| ims.Y[p] != minY || ims.Z[p] != minZ ) {
+	       imd.X[p] = minX;
+	       imd.Y[p] = minY;
+	       imd.Z[p] = minZ;
+	       toBeVisited[0].Push(p);
+	    }
+	 }
+      }
+   }
+
+   if (iteration < 0) {
+      iteration = Limits<Long>::max();
+   }
+   iteration--;
+   int fifo = 0;
+   while(iteration > 0 && !toBeVisited[fifo].Empty()) {
+      iteration--;
+      while(!toBeVisited[fifo].Empty()) {
+	 Point2d p3 = toBeVisited[fifo].Pop();
+	 for (int v = 0; v < 8; v++) {
+	    p = p3 + v8[v];
+	    if (imq.Hold(p) && (imq[p])) {
+	       TIN1::ValueType minX = Limits<TIN1::ValueType>::max();
+	       TIN1::ValueType minY = Limits<TIN1::ValueType>::max();
+	       TIN1::ValueType minZ = Limits<TIN1::ValueType>::max();
+	       for (int i = 0; i < se->length; i++) {
+		  p1 = p;
+		  se->Move(i, p1);
+		  if (imd.Hold(p1)
+		      && Lower(imd.X[p1], imd.Y[p1], imd.Z[p1], minX, minY, minZ)
+		      && (imq[p1] == imq[p])) {
+		     minX = imd.X[p1];
+		     minY = imd.Y[p1];
+		     minZ = imd.Z[p1];
+		  }
+	       }
+	       if (imd.X[p] != minX || imd.Y[p] != minY || imd.Z[p] != minZ) {
+		  imd.X[p] = minX;
+		  imd.Y[p] = minY;
+		  imd.Z[p] = minZ;
+		  toBeVisited[1 - fifo].Push(p);
+	       }
+	    }
+	 }
+      }
+      fifo = 1 - fifo;
+   }
+
+   delete se;
+   return SUCCESS;
+}
+
+## append loadcases
+   if (objs[0]->Type() == Po_$TIN1 && objs[1]->Type() == Po_$TIN2) {
+      TIN1* const ims = (TIN1*)objs[0];
+      TIN2* const imq = (TIN2*)objs[1];
+      objd[0] = new TIN1(ims->Props());
+      TIN1* const imd = (TIN1*)objd[0];
+      
+      result = PGeodesicErosion(*ims, *imq, *imd, atoi(parv[0]), atoi(parv[1]), atoi(parv[2]));
+      goto end;
+   }
+## end
+##end
+
+##begin PGeodesicErosionC3D < TIN1, TIN2 >
+Errc PGeodesicErosion( const TIN1 &ims, const TIN2 &imq, TIN1 &imd, int numSE, int halfsize, int iteration ) 
+{   if (numSE > 12 || numSE < 0) {
+      std::cerr << "Error pgeodesicerosion: bad structuring element type: " << numSE << std::endl;
+      return FAILURE;
+   }
+   if (halfsize < 1) {
+      std::cerr << "Error pgeodesicerosion: bad structuring element size: " << halfsize << std::endl;
+      return FAILURE;
+   }
+   if ( ims.Size() != imq.Size()) {
+      std::cerr << "Error perosionreconstruction: Incompatible image size." << std::endl;
+      return FAILURE;
+   }
+
+   Point3d p, p1;
+   Fifo<Point3d> toBeVisited[2];
+
+   StructuringElement3d *se = new StructuringElement3d(numSE, halfsize);
+
+   imd = ims;
+   for (p.z = 0; p.z < ims.Depth(); p.z++) {
+      for (p.y = 0; p.y < ims.Height(); p.y++) {
+	 for (p.x = 0; p.x < ims.Width(); p.x++) {
+	    if ((imq[p])) {
+	       TIN1::ValueType minX = ims.X[p];
+	       TIN1::ValueType minY = ims.Y[p];
+	       TIN1::ValueType minZ = ims.Z[p];
+	       for (int i = 0; i < se->length; i++) {
+		  p1 = p;
+		  se->Move(i, p1);
+		  if (ims.Hold(p1)
+		      && Lower(ims.X[p1], ims.Y[p1], ims.Z[p1], minX, minY, minZ)
+		      && (imq[p1] == imq[p])) {
+		     minX = ims.X[p1];
+		     minY = ims.Y[p1];
+		     minZ = ims.Z[p1];
+		  }
+	       }
+	       if (ims.X[p] != minX|| ims.Y[p] != minY || ims.Z[p] != minZ ) {
+		  imd.X[p] = minX;
+		  imd.Y[p] = minY;
+		  imd.Z[p] = minZ;
+		  toBeVisited[0].Push(p);
+	       }
+	    }
+	 }
+      }
+   }
+
+   if (iteration < 0) {
+      iteration = Limits<Long>::max();
+   }
+   iteration--;
+   int fifo = 0;
+   while (iteration > 0 && !toBeVisited[fifo].Empty()) {
+      iteration--;
+      while (!toBeVisited[fifo].Empty()) {
+	 Point3d p3 = toBeVisited[fifo].Pop();
+	 for (int v = 0; v < 26; v++) {
+	    p = p3 + v26[v];
+	    
+	    if (imq.Hold(p) && (imq[p])) {
+	       TIN1::ValueType minX = imd.X[p];
+	       TIN1::ValueType minY = imd.Y[p];
+	       TIN1::ValueType minZ = imd.Z[p];
+	       for (int i = 0; i < se->length; i++) {
+		  p1 = p;
+		  se->Move(i, p1);
+		  if (imd.Hold(p1)
+		      && Lower(imd.X[p1], imd.Y[p1], imd.Z[p1], minX, minY, minZ)
+		      && (imq[p1] == imq[p])) {
+		     minX = imd.X[p1];
+		     minY = imd.Y[p1];
+		     minZ = imd.Z[p1];
+		  }
+	       }
+	       if (imd.X[p] != minX || imd.Y[p] != minY || imd.Z[p] != minZ) {
+		  imd.X[p] = minX;
+		  imd.Y[p] = minY;
+		  imd.Z[p] = minZ;
+		  toBeVisited[1 - fifo].Push(p);
+	       }
+	    }
+	 }
+      }
+      fifo = 1 - fifo;
+   }
+   
+   delete se;
+   return SUCCESS;
+}
+
+## append loadcases
+   if (objs[0]->Type() == Po_$TIN1 && objs[1]->Type() == Po_$TIN2) {
+      TIN1* const ims = (TIN1*)objs[0];
+      TIN2* const imq = (TIN2*)objs[1];
+      objd[0] = new TIN1(ims->Props());
+      TIN1* const imd = (TIN1*)objd[0];
+      
+      result = PGeodesicErosion(*ims, *imq, *imd, atoi(parv[0]), atoi(parv[1]), atoi(parv[2]));
+      goto end;
+   }
+## end
+##end
+
+##forall(PGeodesicErosionG2D, /Img2d/, /Img2duc/)
+##forall(PGeodesicErosionG2D, /Img2d/, /Reg2d/)
+##forall(PGeodesicErosionG2D, /Reg2d/, /Reg2d/)
+
+##forall(PGeodesicErosionG3D, /Img3d/, /Img3duc/)
+##forall(PGeodesicErosionG3D, /Img3d/, /Reg3d/)
+##forall(PGeodesicErosionG3D, /Reg3d/, /Reg3d/)
+
+##forall(PGeodesicErosionC2D, /Imc2d/, /Img2duc/)
+##forall(PGeodesicErosionC2D, /Imc2d/, /Reg2d/)
+
+##forall(PGeodesicErosionC3D, /Imc3d/, /Img3duc/)
+##forall(PGeodesicErosionC3D, /Imc3d/, /Reg3d/)
+
+
+#ifdef MAIN
+#define	USAGE	"usage: %s num_es halfsize iteration [-m mask] [im_in|-] [im_mq|-] [im_out|-]"
+#define	PARC	3
+#define	FINC	2
+#define	FOUTC	1
+#define	MASK	1
+
+##main(PARC, FINC, FOUTC, MASK, USAGE)
+#endif

@@ -1,0 +1,111 @@
+<html>
+<head>
+<title>PANDORE OPERATORS</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>pscrolling</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Performs scrolling of image or region map.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>pscrolling</b> <i>direction</i> <i>shift</i> [<i>-m mask</i>] [<i>im_in</i>|-] [<i>im_out</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p><b>pscrolling</b> translates the content of the
+input image (or region map) <i>im_in</i> to <i>shift</i>
+pixels in the specified <i>direction</i>.
+Pixels that are moved out the image are set to the other side of the image.</p>
+
+<!---------------------------------- -->
+<h3>Parameters</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>direction</i> is in the interval [0..2] where:</p>
+<ul>
+<li>0: along x axis.
+<li>1: along y axis.
+<li>2: along z xis.
+</ul>
+
+<li><i>shift</i> is a positive or negative integer.
+It is measured in pixel unit.
+</ul>
+
+<!---------------------------------- -->
+<h3>Inputs</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_in</i>: an image or a region map.
+</ul>
+
+<!---------------------------------- -->
+<h3>Outputs</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_out</i>: an object of the same type as <i>im_in</i>.
+</ul>
+
+<!---------------------------------- -->
+<h3>Result</h3>
+<!---------------------------------- -->
+<p>Returns SUCCESS or FAILURE.</p>
+
+<!---------------------------------- -->
+<h3>Examples</h3>
+<!---------------------------------- -->
+<p>Scrolls the tangram.pan image of 50 pixels from the left: </p>
+<pre>
+   pscrolling 0 50 tangram.pan a.pan
+</pre>
+
+<!---------------------------------- -->
+<h3>See also</h3>
+<!---------------------------------- -->
+<a href="./ptranslate.html">ptranslate</a>,
+<a href="../operatorsP0.html#transformation">Transformation</a>
+
+<!---------------------------------- -->
+<h3>C++ prototype</h3>
+<!---------------------------------- -->
+<tt>
+Errc PScrolling( const Img3duc &amp;im_in,Img3duc &amp;im_out, int direction, Long shift );
+</tt>
+
+<!---------------------------------- -->
+<h3>Version fran&ccedil;aise</h3>
+<!---------------------------------- -->
+<p>Construction de l'enroulé d'une image.</p>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Author: R&eacute;gis Clouard
+</address>
+<!---------------------------------- -->
+
+</body>
+</html>

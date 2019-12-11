@@ -1,0 +1,116 @@
+<html>
+<head>
+<title>OPERATEURS PANDORE</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>prgb2xyz</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Changement d'espace couleur de RGB vers XYZ.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>prgb2xyz</b> <i>primaries</i> [<i>-m mask</i>] [<i>im_in</i>|-] [<i>im_out</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p>L'op&eacute;rateur <b>prgb2xyz</b> permet de changer l'espace
+RGB vers l'espace X,Y,Z. En XYZ, chaque valeur est repr&eacute;sent&eacute;e
+par un ensemble de valeurs positives entre 0..1.</p>
+
+<p>L'algorithme de conversion utilise la matrice de transformation
+pour le cas <i>primaries</i> = 4 (illuminant C CIE):</p>
+<pre>
+    |  0.607   0.174   0.200 |
+    |  0.299   0.587   0.114 |
+    |  0.000   0.066   1.116 | / VALMAX
+</pre>
+<p>o&ugrave; VALMAX est la valeur maximale du type (ex: 255 pour les images d'octets).</p>
+
+<!---------------------------------- -->
+<h3>Param&egrave;tres</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>primaries</i>  est un entier de l'espace [0..6] qui d&eacute;finit
+le type de conversion :</p>
+<ul>
+<li>0-illuminant E
+<li>1-illuminant primaries CIE-DIN
+<li>2-illuminant A primaries macbeth colour chart
+<li>3-illuminant A primaries CIE
+<li>4-illuminant C primaries NTSC
+<li>5-illuminant C primaries CIE
+<li>6-illuminant D65
+</ul>
+</ul>
+
+<!---------------------------------- -->
+<h3>Entr&eacute;es</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_in</i>: une image couleur RGB.
+</ul>
+
+<!---------------------------------- -->
+<h3>Sorties</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_out</i>: une image couleur XYZ.
+</ul>
+
+<!---------------------------------- -->
+<h3>R&eacute;sultat</h3>
+<!---------------------------------- -->
+<p>Retourne SUCCESS ou FAILURE.</p>
+
+<!---------------------------------- -->
+<h3>Exemples</h3>
+<!---------------------------------- -->
+<p>Convertit parrot.pan de rgb en xyz and r&eacute;ciproquement.</p>
+<pre>
+   prgb2xyz 4 parrot.pan a.pan
+   pxyz2rgb 4 a.pan b.pan
+</pre>
+
+<!---------------------------------- -->
+<h3>Voir aussi</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#color">Color</a>
+
+<!---------------------------------- -->
+<h3>Prototype C++</h3>
+<!---------------------------------- -->
+<tt>
+Errc PRGB2XYZ( const Imc2duc &amp;im_in, Imc2dsf &amp;im_out, int primaries );
+</tt>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Auteur: Olivier Lezoray
+</address>
+<!---------------------------------- -->
+
+</body>
+</html>

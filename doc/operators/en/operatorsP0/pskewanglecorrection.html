@@ -1,0 +1,100 @@
+<html>
+<head>
+<title>PANDORE OPERATORS</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff"><center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>pskewanglecorrection</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Skew angle detection and correction.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>pskewanglecorrection</b> [<i>-m mask</i>] [<i>rg1_in</i>|-] [<i>rg2_in</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p><b>pskewanglecorrection</b> detects and corrects the skew
+deviation in a document according to the writings orientation.</p>
+
+<p>The mask of size <i>width</i> x <i>height</i>
+that is used to estimate the skew angle. This mask is extracted from the
+input image and represents the best tradeoff between density
+and number of black and white transitions in row.
+Then, the skew angle is determined by the angle which gives
+the higher maximum in the Wigner-Ville distribution of
+the horizontal distribution of the mask image.</p>
+
+<!---------------------------------- -->
+<h3>Parameters</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>width</i>, <i>height</i> are the size of the mask that is used
+to estimate the skew angle. This mask is extracted from the
+input image and represents the best trade-off between density
+and number of black and white transitions in row.
+<li><i>max_skew_angle</i> is the maximum degree accepted for the correction.
+</ul>
+
+<!---------------------------------- -->
+<h3>Inputs</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im1_in</i>: a region map (segmented image).
+<li><i>im2_in</i>: a region map (reference image/ ground truth).
+</ul>
+
+<!---------------------------------- -->
+<h3>Result</h3>
+<!---------------------------------- -->
+<p>The skew angle value in degree.</p>
+
+<!---------------------------------- -->
+<h3>Examples</h3>
+<!---------------------------------- -->
+<p></p>
+<pre>
+pskewanglecorrection 70 100 10 page.pan a.pan
+</pre>
+
+<!---------------------------------- -->
+<h3>See also</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#reconstruction">Reconstruction</a>
+
+<!---------------------------------- -->
+<h3>C++ prototype</h3>
+<!---------------------------------- -->
+<tt>
+Errc PSkewAngleCorrection( const Img2duc &amp;rg1_in, const Img2duc &amp;rg2_in, int width, int height, int max_angle );
+</tt>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Author: R&eacute;gis Clouard
+</address>
+<!---------------------------------- -->
+
+</body>
+</html>

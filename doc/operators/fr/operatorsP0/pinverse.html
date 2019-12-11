@@ -1,0 +1,122 @@
+<html>
+<head>
+<title>OPERATEURS PANDORE</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>pinverse</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Inversion du valeurs de pixel d'une image ou d'un graphe,
+et inversion des num&eacute;ros de labels de carte de r&eacute;gions.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>pinverse</b> [<i>-m mask</i>] [<i>im_in</i>|-] [<i>im_out</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p>L'op&eacute;rateur <b>pinverse</b> effectue l'inversion des valeurs
+de pixel de l'image d'entr&eacute;e <i>im_in</i>.</p>
+
+<p>Pour les images d'octets,
+l'inversion est appliqu&eacute;e en fonction des valeurs
+minimale et maximale du type (0-255) :</p>
+<pre>
+   pixel = (max(type) + min(type)) - pixel.
+</pre>
+
+<p>Pour les images de r&eacute;els ou d'entiers longs, l'inversion est 
+faite sur les valeurs minimale et maximale de l'image :</p>
+<pre>
+   pixel = (max(image) + min(image)) - pixel.
+</pre>
+
+<p>Pour les images couleur et multispectrales, l'inversion est 
+effectu&eacute;e sur chaque bande s&eacute;par&eacute;ment.</p>
+
+<p>Pour les graphes, l'inversion est appliqu&eacute; sur chaque
+valeur de noeud :</p>
+<pre>
+   val = (max(graphe) - min(graphe)) - val.
+</pre>
+
+<p>Pour les cartes de r&eacute;gions, l'inversion est
+appliqu&eacute;e sur chaque label non nul :</p>
+<pre>
+label 0 -> 0;
+label 1 -> valeur de label maximum;
+label 2 -> valeur de label maximum -1;
+...
+label maximum -> 1;
+</pre>
+
+<!---------------------------------- -->
+<h3>Entr&eacute;es</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_in</i>: une image, un graphe ou une carte de r&eacute;gions.
+</ul>
+
+<!---------------------------------- -->
+<h3>Sorties</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_out</i>: un objet du m&ecirc;me type que l'entr&eacute;e.
+</ul>
+
+<!---------------------------------- -->
+<h3>R&eacute;sultat</h3>
+<!---------------------------------- -->
+<p>Retourne SUCCESS ou FAILURE.</p>
+
+<!---------------------------------- -->
+<h3>Exemples</h3>
+<!---------------------------------- -->
+<ul>
+<li>Inverse les valeurs de pixels de l'image butterfly :
+<pre>
+   inverse examples/butterfly.pan a.pan
+</pre>
+</ul>
+
+<!---------------------------------- -->
+<h3>Voir aussi</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#logic">Logique</a>
+
+<!---------------------------------- -->
+<h3>Prototype C++</h3>
+<!---------------------------------- -->
+<tt>
+Errc PInverse( const Img2duc &amp;im_in, Img2duc &amp;im_out );
+</tt>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Auteur: R&eacute;gis Clouard
+</address>
+<!---------------------------------- -->
+</body>
+</html>

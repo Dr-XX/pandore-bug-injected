@@ -1,0 +1,155 @@
+<html>
+<head>
+<title>OPERATEURS PANDORE</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff"><center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>passesstopologypreservation</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+&Eacute;valuation de la pr&eacute;servation de la topologie des r&eacute;gions d'un r&eacute;sultat de segmentation par comparaison avec une segmentation de r&eacute;f&eacute;rence.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>passesstopologypreservation</b> <i>matching_algorithm_id</i> <i>matching_threshold</i> [<i>segmentation_result_in</i>|-] [<i>reference_segmentation_in</i>|-] [<i>col_out</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p>L'op&eacute;rateur <b>passesstopologypreservation</b> permet de calculer 2 mesures pour &eacute;valuer la
+pr&eacute;servation de la topologie des r&eacute;gions d'un r&eacute;sultat de segmentation
+par comparaison avec une segmentation de r&eacute;f&eacute;rence (v&eacute;rit&eacute; terrain).</p>
+
+<p>L'&eacute;valuation de la topologie en 2D se r&eacute;sume &agrave; l'analyse des trous internes aux r&eacute;gions.
+La pr&eacute;servation de la topologie est mesur&eacute;e par deux erreurs&nbsp;:</p>
+<ul>
+<li>L'<b>erreur d'ajout de trou</b> qui rend compte de la proportion de faux trous d&eacute;tect&eacute;s.
+<li>L'<b>erreur de suppression de trou</b> qui rend compte de la proportion de trous non d&eacute;tect&eacute;s.
+</ul>
+
+<p>Les valeurs d'erreurs sont dans l'intervalle [0..1], o&ugrave; 0 signifie aucune erreur
+et 1 le pire r&eacute;sultat.
+Une erreur d'ajout de trous de  <i>x</i> signifie que <i>x * 100</i> %
+des trous d&eacute;tect&eacute;s sont des trous ajout&eacute;s.
+Une erreur de suppression de trous de <i>x</i> signifie que <i>x * 100</i> %
+des trous n'ont pas &eacute;t&eacute; d&eacute;tect&eacute;s.
+Le r&eacute;sultat est stock&eacute; dans la collection de sortie <i>col_out</i>
+qui contient les valeurs pour chacune des 2 mesures d'erreur.</p>
+
+
+<p>Les mesures sont calcul&eacute;es sur la base d'un graphe de correspondance
+entre les segments du r&eacute;sultat de la segmentation et les r&eacute;gions de
+la segmentation de r&eacute;f&eacute;rence. Deux types de mise en correspondance
+sont possibles selon le param&egrave;tre <i>matching_algorithm_id</i>&nbsp:
+le premier autorise la sur-segmentation et
+la sous-segmentation et le second ne permet que la mise en correspondance unique,
+un segment avec une r&eacute;gion.
+Dans ce graphe, un segment <i>S</i> d&eacute;tecte une r&eacute;gion <i>R</i>
+si la surface de recouvrement | R * S | est telle que&nbsp;:
+<pre>
+  | R * S |                                   | R * S |    
+  --------- >= <i>matching_threshold</i> and  --------- >= <i>matching_threshold</i>
+    | R |                                       | S |
+</pre>
+
+<!---------------------------------- -->
+<h3>Param&egrave;tres</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>matching_algorithm_id</i>&nbsp;: sp&eacute;cifie le num&eacute;ro de l'algorithme de mise en correspondance &agrave; utiliser&nbsp;:
+<ul>
+<li>0&nbsp;: pour une correspondance de type 1-n et n-1.
+Un segment du r&eacute;sultat de la segmentation peut regrouper plusieurs
+r&eacute;gions de la r&eacute;f&eacute;rence (sous-segmentation),
+et une r&eacute;gion de la r&eacute;f&eacute;rence peut &ecirc;tre d&eacute;coup&eacute;e en plusieurs
+segments du r&eacute;sultat de la segmentation (sur-segmentation). 
+Toutefois, un segment ou une r&eacute;gion ne peuvent participer &agrave; la fois &agrave; une sur-segmentation
+et &agrave; une sous-segmentation.
+<li>1&nbsp;: pour une correspondance de type 1-1.
+Un segment du r&eacute;sultat de la segmentation ne peut &ecirc;tre mis en correspondance qu'avec au plus
+une r&eacute;gion de la r&eacute;f&eacute;rence, et une r&eacute;gion de la r&eacute;f&eacute;rence
+ne peut &ecirc;tre mise en correspondance qu'avec au plus un segment du r&eacute;sultat de la segmentation. 
+</ul>
+<li><i>matching_threshold</i>&nbsp;: indique la proportion minimale de surface de recouvrement
+entre une r&eacute;gion et un segment pour accepter une d&eacute;tection.
+C'est une valeur entre [0,1] o&ugrave; la valeur <i>x</i> correspond &agrave;
+un recouvrement minimum de (<i>x</i>*100)%.
+</ul>
+
+<!---------------------------------- -->
+<h3>Entr&eacute;es</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>segmentation_result_in</i>&nbsp;: une carte de r&eacute;gions contenant le r&eacute;sultat d'une segmentation.
+<li><i>reference_segmentation_in</i>&nbsp;: une carte de r&eacute;gions contenant la segmentation de r&eacute;f&eacute;rence.
+</ul>
+
+<!---------------------------------- -->
+<h3>Sorties</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>col_out</i>&nbsp;: une collection avec les 2 valeurs d'erreur.
+</ul>
+
+<!---------------------------------- -->
+<h3>R&eacute;sultat</h3>
+<!---------------------------------- -->
+<p>Retourne SUCCESS ou FAILURE en cas de probl&egrave;me.</p>
+
+<!---------------------------------- -->
+<h3>Exemples</h3>
+<!---------------------------------- -->
+<p>&Eacute;valuation de la pr&eacute;servation de la topologie des r&eacute;gions du r&eacute;sultat de la segmentation
+avec un taux de recouvrement minimum de 50%&nbsp&nbsp;:</p>
+<pre>
+passesstopologypreservation 0 0.5 resultimages/algo001/tangram.pan groundtruths/expert001/tangram.pan errors.pan
+pvisu errors.pan
+</pre>
+
+<!---------------------------------- -->
+<h3>Voir aussi</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#evaluation">Evaluation</a>,
+<a href="./passessdetectionaccuracy.html">passessdetectionaccuracy</a>,
+<a href="./passessfragmentationconsistency.html">passessfragmentationconsistency</a>,
+<a href="./passessboundaryprecision.html">passessboundaryprecision</a>,
+<a href="./passessshapefidelity.html">passessshapefidelity</a>,
+<a href="./passesssegmentationalgorithm.html">passesssegmentationalgorithm</a>,
+<a href="./pranksegmentationalgorithms.html">pranksegmentationalgorithms</a>,
+<a href="./pranksegmentationalgorithmsfromfolders.html">pranksegmentationalgorithmsfromfolders</a>
+
+<!---------------------------------- -->
+<h3>Prototype C++</h3>
+<!---------------------------------- -->
+<tt>
+Errc PAssessTopologyPreservation( const Reg2d &amp;segmentation_result_in, const Reg2d &amp;reference_segmentation_in, Collection &amp;cold,
+const int matching_algorithm_id,  const float matching_threshold );
+</tt>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Auteur&nbsp;: R&eacute;gis Clouard
+</address>
+<!---------------------------------- -->
+
+</body>
+</html>

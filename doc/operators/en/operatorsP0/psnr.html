@@ -1,0 +1,118 @@
+<html>
+<head>
+<title>PANDORE OPERATORS</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff"><center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>psnr</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Computes the Signal-to-Noise Ratio.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>psnr</b> [<i>im_in1</i>|-] [<i>im_in2</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p><b>psnr</b> measures the ratio between the meaningful information and
+the noise in an image.
+It is computed from the two input images: <i>im_in1</i> is the initial
+image that contains the
+signal and noise and <i>im_in2</i> is the restored or enhanced version of
+<i>im1_in</i> that is
+supposed to contain only meaningful information. <br>
+Consequently, the higher is the SNR, the better is the signal and
+better is the related image processing (restoration or enhancement).</p>
+
+<p>Because many signals have a very wide dynamic range, SNR is expressed
+in terms of decibel (dB).</p>
+
+<p>SNR is defined as follows:</p>
+<pre>
+    S = 10*log<sub>10</sub>(R<sub>12</sub>)
+    R<sub>12</sub> = sum {(ims1)<sup>2</sup>} / sum (ims2-ims1)<sup>2</sup>}
+</pre>
+
+<p>Input images <i>im_in1</i> and <i>im_in2</i> must have the same dimensions
+and the same type.</p>
+
+<p>For color or multispectral images, the definition of SNR is
+the same except that each sum uses all bands.</p>
+
+<p><b>Note:</b> R<sub>12</sub> is dependent not only on the difference
+<i>ims1</i>-<i>ims2</i>, but also on <i>ims1</i>. Thus, the signal-to-noise
+ratio value is dependent to input images and is often used for processing
+comparison with the same input images.</p>
+
+<!---------------------------------- -->
+<h3>Inputs</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_in1</i>: an image.
+<li><i>im_in2</i>: an image (restored or enhanced version of im_in1).
+</ul>
+
+<!---------------------------------- -->
+<h3>Example</h3>
+<!---------------------------------- -->
+<p>Computes the SNR after a meanfilter smoothing:</p>
+<pre>
+   pmeanfiltering 2 tangram.pan i1.pan
+   psnr tangram.pan i1.pan
+   pstatus
+</pre>
+
+<!---------------------------------- -->
+<h3>Result</h3>
+<!---------------------------------- -->
+<p>Returns the ratio value as a positive real value expressed in dB.<br>
+(Use <code>pstatus</code> to get this value).</p>
+
+<!---------------------------------- -->
+<h3>See also</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#evaluation">Evaluation</a>,
+<a href="./pmse.html">pmse</a>,
+<a href="./ppsnr.html">ppsnr</a>
+
+<!---------------------------------- -->
+<h3>C++ prototype</h3>
+<!---------------------------------- -->
+<tt>
+Errc PSNR( const Img2duc &amp;im_in1, const Img2duc &amp;im_in2 );
+</tt>
+
+<!---------------------------------- -->
+<h3>Version fran&ccedil;aise</h3>
+<!---------------------------------- -->
+<p>Calcul du rapport signal sur bruit.</p>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Author: R&eacute;gis Clouard
+</address>
+<!---------------------------------- -->
+
+</body>
+</html>

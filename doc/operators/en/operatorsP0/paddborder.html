@@ -1,0 +1,119 @@
+<html>
+<head>
+<title>PANDORE OPERATORS</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>paddborder</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Performs resizing of image or region map by adding or removing an empty border.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>paddborder</b> <i>ll</i> <i>lr</i> <i>hu</i> <i>hd</i> <i>df</i> <i>db</i> [<i>-m mask</i>] [<i>im_in</i>|-] [<i>im_out</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p><b>paddborder</b> magnifies the input image <i>im_in</i>
+by adding a border around the input image.
+If the parameters are negative, this operator shrinks the image.</p>
+
+<p>The size of the border is defined by 
+<i>ll</i> + <i>lr</i> width,
+<i>hu</i> + <i>hd</i> height
+and  <i>df</i> + <i>db</i> depth.</p>
+
+<p>Pixels in the new border is set to 0.</p>
+
+<!---------------------------------- -->
+<h3>Parameters</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>df</i> is the size of the forward border (3D image).
+<li><i>db</i> is the size of the backward border (3D image).
+<li><i>hu</i> is the size of the higher border.
+<li><i>hd</i> is the size of the lower border.
+<li><i>ll</i> is the size of left border.
+<li><i>lr</i> is the size of right border.
+<p><i>df</i> and <i>db</i> are ignored in case of 2D image.</p>
+<p>If the parameters are negative, the operator shrinks the image.</p>
+</ul>
+
+<!---------------------------------- -->
+<h3>Inputs</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_in</i>: an image or a region map.
+</ul>
+
+<!---------------------------------- -->
+<h3>Outputs</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_out</i>: an object of the same type as <i>im_in</i>.
+</ul>
+
+<!---------------------------------- -->
+<h3>Result</h3>
+<!---------------------------------- -->
+<p>Returns SUCCESS or FAILURE.</p>
+
+<!---------------------------------- -->
+<h3>Examples</h3>
+<!---------------------------------- -->
+<p>Adds an empty border around tangram.pan</p>
+<pre>
+   paddborder 1 1 1 1 0 0 tangram.pan a.pan
+</pre>
+<p>Removes border around tangram.pan</p>
+<pre>
+   paddborder -1 -1 -1 -1 0 0 tangram.pan a.pan
+</pre>
+
+<!---------------------------------- -->
+<h3>See also</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#transformation">Transformation</a>
+
+<!---------------------------------- -->
+<h3>C++ prototype</h3>
+<!---------------------------------- -->
+<tt>
+Errc PAddBorder( const Img2duc &amp;im_in, Img2duc &amp;im_out, int ll, int lr, int hu, int hd );
+</tt>
+
+<!---------------------------------- -->
+<h3>Version fran&ccedil;aise</h3>
+<!---------------------------------- -->
+<p>Agrandissement our r&eacute;duction d'une image en lui ajoutant un bord &agrave; 0.</p>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Author: R&eacute;gis Clouard
+</address>
+<!---------------------------------- -->
+
+</body>
+</html>

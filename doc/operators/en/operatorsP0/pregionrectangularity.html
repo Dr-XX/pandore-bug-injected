@@ -1,0 +1,112 @@
+<html>
+<head>
+<title>PANDORE OPERATORS</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>pregionrectangularity</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Measures region rectangularity degree.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>pregionrectangularity</b> <i>name</i> [<i>-m mask</i>] [<i>rg_in</i>|-] [<i>col_out</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p><b>pregionrectangularity</b> measures the rectangularity of
+the regions inside the region map <i>rg_in</i>.
+Each region rectangularity is stored as a float
+in the array named <i>name</i> inside the collection <i>col_out</i>.
+The ith item in the array corresponds to the 
+i+1th region because the region 0 is not considered.</p>
+
+<p>Rectangularity is the ratio of a region area to
+the area of the minimum bounding rectangle.
+The maximum value is 1.0 for a square.</p>
+
+<!---------------------------------- -->
+<h3>Parameters</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>name</i> is a string that contains the
+name of the array inside the collection.
+</ul>
+
+<!---------------------------------- -->
+<h3>Inputs</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>rg_in</i>: a 2D region map.
+</ul>
+
+<!---------------------------------- -->
+<h3>Outputs</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>col_out</i>: a collection.
+</ul>
+
+<!---------------------------------- -->
+<h3>Result</h3>
+<!---------------------------------- -->
+<p>Returns SUCCESS or FAILURE.</p>
+
+<!---------------------------------- -->
+<h3>Examples</h3>
+<!---------------------------------- -->
+<p>Displays rectangularity of the regions yielded by a
+simple binarization of tangram.pan:</p>
+<pre>
+   pbinarization 100 1e30 tangram.pan a.pan
+   plabeling 8 a.pan b.pan
+   pregionrectangularity rectangularity b.pan c.pan
+   pcol2txt c.pan
+</pre>
+
+<!---------------------------------- -->
+<h3>See also</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#regionfeaturesextraction">Region Features Extraction</a>
+
+<!---------------------------------- -->
+<h3>C++ prototype</h3>
+<!---------------------------------- -->
+<tt>
+PRegioinRectangularity( const Reg2d &amp;rg_in, Collection &amp;cold, const std::string &amp;name );
+</tt>
+
+<!---------------------------------- -->
+<h3>Version fran&ccedil;aise</h3>
+<!---------------------------------- -->
+<p>Calcul de la rectangularit&eacute; des régions.</p>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Author: Alexandre Duret-Lutz
+</address>
+<!---------------------------------- -->
+</body>
+</html>

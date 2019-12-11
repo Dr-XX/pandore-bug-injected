@@ -1,0 +1,122 @@
+<html>
+<head>
+<title>OPERATEURS PANDORE</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>pbetagraph</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Construction du b&eacute;ta-graphe d'un graphe.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>pbetagraph</b> <i>beta</i> [<i>-m mask</i>] [<i>gr_in</i>|-] [<i>gr_out</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p>Un b&eacute;ta graphe est un graphe dans lequel ont &eacute;t&eacute; supprim&eacute;s tous
+les arcs consid&eacute;r&eacute;s comme trop longs. Le principe de l'algorithme consiste
+&agrave; couper un arc si l'un de deux cercles d'intersection autour de
+ses deux sommets contient un autre sommet.
+Le cercle d'intersection entre un sommet i et un sommet j a pour
+centre et pour rayon:<br>
+<pre>
+   centre=(1-beta/2)*p(i)+beta/2*p(j)
+   rayon=beta/2*distance(p(p(i),p(j))
+</pre>
+
+<p>On utilise ici la distance euclidienne entre les coordonn&eacute;es
+des deux sommets.</p>
+
+<p><i>beta</i> donne la taille du rayon de l'intersection.</p>
+<ul>
+<li>Pour <i>beta</i>=1 on obtient alors le graphe de Gabriel.
+<li>Pour <i>beta</i>=2 on obtient alors le graphe de voisins relatifs (GVR).
+</ul>
+
+<p>Les valeurs des sommets sont conserv&eacute;s dans <i>gr_out</i>. Par contre,
+les valeurs des poids sont mis &agrave; 1.</p>
+
+<!---------------------------------- -->
+<h3>Param&egrave;tres</h3>
+<!---------------------------------- -->
+<ul>
+<li>Le param&egrave;tre <i>beta</i> est une valeur enti&egrave;re
+appartenant &agrave; l'intervalle [0..2] qui sp&eacute;cifie le rayon
+du cercle d'intersection.
+</ul>
+
+<!---------------------------------- -->
+<h3>Entr&eacute;es</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>gr_in</i>: un graphe.
+</ul>
+
+<!---------------------------------- -->
+<h3>Sorties</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>gr_out</i>: un graphe.
+</ul>
+
+<!---------------------------------- -->
+<h3>R&eacute;sultat</h3>
+<!---------------------------------- -->
+<p>Retourne SUCCESS ou FAILURE.</p>
+
+<!---------------------------------- -->
+<h3>Exemples</h3>
+<!---------------------------------- -->
+<p>Calcule le graphe de Delaunay &agrave; partir des centres de gravit&eacute;
+des objets dans l'image tangram.pan
+puis extrait le beta graphe.</p>
+<pre>
+   pbinarization 90 1e30 tangram.pan a.pan
+   plabeling 8 a.pan r1.pan
+   pcenterofmass r1.pan r2.pan
+   pdelaunay r2.pan g2.pan
+   pbetagraph 1 g2.pan g3.pan
+</pre>
+
+<!---------------------------------- -->
+<h3>Voir aussi</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#graph">Graphe</a>
+
+<!---------------------------------- -->
+<h3>Prototype C++</h3>
+<!---------------------------------- -->
+<tt>
+Errc PBetaGraph( const Graph2d &amp;gr_in, Graph &amp;gr_out, float beta );
+</tt>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Auteur: Fran&ccedil;ois Angot
+</address>
+<!---------------------------------- -->
+</body>
+</html>

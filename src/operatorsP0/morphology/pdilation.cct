@@ -1,0 +1,737 @@
+/* -*- mode: c++; c-basic-offset: 3 -*-
+ *
+ * Copyright (c), GREYC.
+ * All rights reserved
+ *
+ * You may use this file under the terms of the BSD license as follows:
+ *
+ * "Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are
+ * met:
+ *   * Redistributions of source code must retain the above copyright
+ *     notice, this list of conditions and the following disclaimer.
+ *   * Redistributions in binary form must reproduce the above copyright
+ *     notice, this list of conditions and the following disclaimer in
+ *     the documentation and/or other materials provided with the
+ *     distribution.
+ *   * Neither the name of the GREYC, nor the name of its
+ *     contributors may be used to endorse or promote products
+ *     derived from this software without specific prior written
+ *     permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
+ *
+ * 
+ * For more information, refer to:
+ * https://clouard.users.greyc.fr/Pandore
+ */
+
+/**
+ * @author Régis Clouard - 1996-02-19
+ * @author Francois Angot - 1996-08-05
+ * @author Olivier Lezoray - 1996-09-30
+ * @author Regis Clouard - 2003-05-22 (new algorithm)
+ * @author Regis Clouard - Jun 19, 2011 (speeded up using fifo)
+ * @author Alexis François - Nov 03, 2012 (speed up for square structuring element).
+ */
+
+#define _USE_MATH_DEFINES
+#include <math.h>
+#include <pandore.h>
+using namespace pandore;
+#include "morphology/structelt.h"
+
+/**
+ * @file pdilation.cpp
+ * Morphological dilation.
+ * numSE: Structuring Element index between
+ * halfsize : halfsize of the structuring element.
+ */
+##begin PDilationG1D <TIN>
+Errc PDilation( const TIN &ims, TIN &imd, int numSE, int halfsize ) {
+   if (halfsize < 1) {
+      std::cerr << "Error pdilation: bad structuring element size: " << halfsize << std::endl;
+      return FAILURE;
+   }
+
+   StructuringElement1d *se = new StructuringElement1d(numSE, halfsize);
+
+   Point1d p, p1;
+   for (p.x = 0; p.x < ims.Width(); p.x++) {
+      TIN::ValueType max = Limits<TIN::ValueType>::min();
+      TIN::ValueType val;
+      for (int i = 0; i < se->length; i++) {
+  	 p1 = p;
+ 	 se->Move(i, p1);
+	 if (ims.Hold(p1) && ((val = ims[p1]) > max)) {
+	    max = val;
+	 }
+      }
+      imd[p] = max;
+   }
+
+   delete se;
+   return SUCCESS;
+}
+
+## append loadcases
+   if (objs[0]->Type() == Po_$TIN) {
+      TIN* const ims = (TIN*)objs[0];
+      objd[0] = new TIN(ims->Props());
+      TIN* const imd = (TIN*)objd[0];
+      
+      result = PDilation(*ims, *imd, atoi(parv[0]), atoi(parv[1]));
+      goto end;
+   }
+## end
+##end
+
+template <typename T>
+Errc PDilationGeneral( const Imx2d<T> &ims, Imx2d<T> &imd, int numSE, int halfsize ) {
+   if (numSE > 9 || numSE < 0) {
+      std::cerr << "Error pdilation: bad structuring element type: " << numSE << std::endl;
+      return FAILURE;
+   }
+   if (halfsize < 1) {
+      std::cerr << "Error pdilation: bad structuring element size: " << halfsize << std::endl;
+      return FAILURE;
+   }
+
+   StructuringElement2d *se = new StructuringElement2d(numSE, halfsize);
+
+   Point2d p, p1;
+   for (int b = 0; b < ims.Bands(); b++) {
+      for (p.y = 0; p.y < ims.Height(); p.y++) {
+	 for (p.x = 0; p.x < ims.Width(); p.x++) {
+	    T max = Limits<T>::min(), val;
+	    for (int i = 0; i < se->length; i++) {
+	       p1 = p;
+	       se->Move(i, p1);
+	       if (ims.Hold(p1) && ((val = ims[b][p1]) > max)) {
+		  max = val;
+	       }
+	    }
+	    imd[b][p] = max;
+	 }
+      }
+   }
+   
+   delete se;
+   return SUCCESS;
+}
+
+////// Alexis' extension
+
+/**
+ * Dilation horizontal
+ */
+template<typename T>
+void dxFastDilationVertical( const pandore::Imx2d<T>& ims, pandore::Imx2d<T>& imd, int halfsize ) {
+   const Long height_1 = ims.Height() - 1;
+   const Long width = ims.Width();
+   
+   // Using structuring element 1x2 :
+   // X
+   // X
+
+   Imx2d<T> imt;
+   const Imx2d<T> *ims_ptr = reinterpret_cast<const pandore::Imx2d<T>*>(&ims);
+   bool write = false;
+   
+   for (int b = 0; b < ims.Bands(); b++) {
+      for (int hs = 0; hs < halfsize; ++hs ) {
+	 for (int x = 0; x < width; ++x) {
+            T p2 = (*ims_ptr)(b, 0, x);
+            for (int y = 0; y < height_1; ++y) {
+	       T p1 = p2;
+	       p2 = (*ims_ptr)(b, y + 1, x);
+	       if (p1 != p2) {
+		  if (p1 > p2) {
+		     imd(b, y + 1, x) = p1;
+		     write = true;
+		  } else {
+		     if (write) {
+			if (p2 > imd(b, y, x)) {
+			   imd(b, y, x) = p2;
+			}
+			write = false;
+		     } else {
+			imd(b, y, x) = p2;
+		     }
+		  }
+	       }
+            }
+	 }
+	 if (hs != halfsize - 1) {
+            imt = imd;
+            ims_ptr = &imt;
+	 }
+      }
+   }
+}
+
+/**
+ * Dilation vertical
+ */
+template<typename T>
+void dxFastDilationHorizontal( const pandore::Imx2d<T>& ims, pandore::Imx2d<T>& imd, int halfsize ) {
+    const Long height = ims.Height();
+    const Long width_1 = ims.Width() - 1;
+
+    // Using structuring element 2x1 :
+    // X X
+    Imx2d<T> imt;
+    const Imx2d<T> *ims_ptr = reinterpret_cast<const pandore::Imx2d<T>*>(&ims);
+    bool write = false;
+
+    for (int b = 0; b < ims.Bands(); b++) {
+       for (int hs = 0; hs < halfsize; ++hs ) {
+	  for (int y = 0; y < height; ++y) {
+	     T p2 = (*ims_ptr)(b, y, 0);
+	     for (int x = 0; x < width_1; ++x) {
+                T p1 = p2;
+                p2 = (*ims_ptr)(b, y, x + 1);
+                if (p1 != p2) {
+		   if (p1 > p2) {
+		      imd(b, y, x + 1) = p1;
+		      write = true;
+		   } else {
+		      if (write) {
+			 if (p2 > imd(b, y, x)) {
+			    imd(b, y, x) = p2;
+			 }
+			 write = false;
+		      } else {
+			 imd(b, y, x) = p2;
+		      }
+		   }
+                }
+	     }
+	  }
+	  if (hs != halfsize - 1) {
+	     imt = imd;
+	     ims_ptr = &imt;
+	  }
+       }
+    }
+}
+
+/**
+ * Fast dilation for square structuring element
+ */
+template<typename T>
+void dxFastDilation8( const pandore::Imx2d<T>& ims, pandore::Imx2d<T>& imd, int halfsize ) {
+   Imx2d<T> imt(ims);
+   dxFastDilationVertical(ims, imt, halfsize);
+   imd = imt;
+   dxFastDilationHorizontal(imt, imd, halfsize);
+}
+
+template<typename T>
+void dxFastDilationHorizontal( const pandore::Imx3d<T>& ims, pandore::Imx3d<T>& imd, int halfsize ) {
+    const Long height = ims.Height();
+    const Long depth = ims.Depth();
+    const Long width_1 = ims.Width() - 1;
+
+    Imx3d<T> imt;
+    const Imx3d<T> *ims_ptr = reinterpret_cast<const pandore::Imx3d<T>*>(&ims);
+    bool write = false;
+
+    for (int b = 0; b < ims.Bands(); b++) {
+       for (int hs = 0; hs < halfsize; ++hs ) {
+	  for (Long z = 0; z < depth; ++z) {
+	     for (Long y = 0; y < height; ++y) {
+		T p2 = (*ims_ptr)(b, z, y, 0);
+		for (Long x = 0; x < width_1; ++x) {
+		   T p1 = p2;
+		   p2 = (*ims_ptr)(b, z, y, x + 1);
+		   if (p1 != p2) {
+		      if (p1 > p2) {
+			 imd(b, z, y, x + 1) = p1;
+			 write = true;
+		      } else {
+			 if (write) {
+			    if (p2 > imd(b, z, y, x)) {
+			       imd(b, z, y, x) = p2;
+			    }
+			    write = false;
+			 } else {
+			    imd(b, z, y, x) = p2;
+			 }
+		      }
+		   }
+		}
+	     }
+	  }
+	  if (hs != halfsize - 1) {
+	     imt = imd;
+	     ims_ptr = &imt;
+	  }
+       }
+    }
+}
+
+template<typename T>
+void dxFastDilationVertical( const pandore::Imx3d<T>& ims, pandore::Imx3d<T>& imd, int halfsize ) {
+    const Long height_1 = ims.Height()-1;
+    const Long depth = ims.Depth();
+    const Long width = ims.Width();
+
+    Imx3d<T> imt;
+    const Imx3d<T> *ims_ptr = reinterpret_cast<const pandore::Imx3d<T>*>(&ims);
+    bool write = false;
+
+    for (int b = 0; b < ims.Bands(); b++) {
+       for (int hs = 0; hs < halfsize; ++hs ) {
+	  for (Long z = 0; z < depth; ++z) {
+	     for (Long x = 0; x < width; ++x) {
+		T p2 = (*ims_ptr)(b, z, 0, x);
+		for (Long y = 0; y < height_1; ++y) {
+		   T p1 = p2;
+		   p2 = (*ims_ptr)(b, z, y + 1, x);
+		   if (p1 != p2) {
+		      if (p1 > p2) {
+			 imd(b, z, y + 1, x) = p1;
+			 write = true;
+		      } else {
+			 if (write) {
+			    if (p2 > imd(b, z, y, x)) {
+			       imd(b, z, y, x) = p2;
+			    }
+			    write = false;
+			 } else {
+			    imd(b, z, y, x) = p2;
+			 }
+		      }
+		   }
+		}
+	     }
+	  }
+	  if (hs != halfsize - 1) {
+	     imt = imd;
+	     ims_ptr = &imt;
+	  }
+       }
+    }
+}
+
+template<typename T>
+void dxFastDilationDepth( const pandore::Imx3d<T>& ims, pandore::Imx3d<T>& imd, int halfsize ) {
+    const Long height = ims.Height();
+    const Long depth_1 = ims.Depth() - 1;
+    const Long width = ims.Width();
+
+    Imx3d<T> imt;
+    const Imx3d<T> *ims_ptr = reinterpret_cast<const pandore::Imx3d<T>*>(&ims);
+    bool write = false;
+
+    for (int b = 0; b < ims.Bands(); b++) {
+       for (int hs = 0; hs < halfsize; ++hs ) {
+	  for (Long y = 0; y < height; ++y) {
+	     for (Long x = 0; x < width; ++x) {
+		T p2 = (*ims_ptr)(b, 0, y, x);
+		for (Long z = 0; z < depth_1; ++z) {
+		   T p1 = p2;
+		   p2 = (*ims_ptr)(b, z + 1, y, x);
+		   if (p1 != p2) {
+		      if (p1 > p2) {
+			 imd(b, z + 1, y, x) = p1;
+			 write = true;
+		      } else {
+			 if (write) {
+			    if (p2 > imd(b, z, y, x)) {
+			       imd(b, z, y, x) = p2;
+			    }
+			    write = false;
+			 } else {
+			    imd(b, z, y, x) = p2;
+			 }
+		      }
+		   }
+		}
+	     }
+	  }
+	  if (hs != halfsize - 1) {
+	     imt = imd;
+	     ims_ptr = &imt;
+	  }
+       }
+    }
+}
+
+/**
+ * Fast dilation for square structuring element
+ */
+template<typename T>
+void dxFastDilation26( const pandore::Imx3d<T>& ims, pandore::Imx3d<T>& imd, int halfsize ) {
+   imd = ims;
+   dxFastDilationVertical(ims, imd, halfsize);
+   Imx3d<T> imt(imd);
+   dxFastDilationHorizontal(imd, imt, halfsize);
+   imd = imt;
+   dxFastDilationDepth(imt, imd, halfsize);
+}
+///////
+
+template <typename T>
+Errc PDilation( const Imx2d<T> &ims, Imx2d<T> &imd, int numSE, int halfsize ) {
+   if (numSE == 1) {
+      dxFastDilation8(ims, imd, halfsize);
+      return SUCCESS;
+   }
+   return PDilationGeneral(ims, imd, numSE, halfsize);
+}
+
+##begin PDilationG2D<TIN>
+## append loadcases
+   if (objs[0]->Type() == Po_$TIN) {
+      TIN* const ims = (TIN*)objs[0];
+      objd[0] = new TIN(ims->Props());
+      TIN* const imd = (TIN*)objd[0];
+      
+      result = PDilation(*ims, *imd, atoi(parv[0]), atoi(parv[1]));
+      goto end;
+   }
+## end
+##end
+
+template <typename T>
+Errc PDilation( const Imx3d<T> &ims, Imx3d<T> &imd, int numSE, int halfsize ) {
+   if (numSE > 12 || numSE < 0) {
+      std::cerr << "Error pdilation: bad structuring element type: " << numSE << std::endl;
+   }
+   if (halfsize < 1) {
+      std::cerr << "Error pdilation: bad structuring element size: " << halfsize << std::endl;
+      return FAILURE;
+   }
+
+   if (numSE == 1) {
+      dxFastDilation26(ims, imd, halfsize);
+      return SUCCESS;
+   }
+
+   StructuringElement3d *se = new StructuringElement3d(numSE, halfsize);
+
+   Point3d p, p1;
+   for (int b = 0; b < ims.Bands(); b++) {
+      for (p.z = 0; p.z < ims.Depth(); p.z++) {
+	 for (p.y = 0; p.y < ims.Height(); p.y++) {
+	    for (p.x = 0; p.x < ims.Width(); p.x++) {
+	       T max = Limits<T>::min(), val;
+	       for (int i = 0; i < se->length; i++) {
+		  p1 = p;
+		  se->Move(i, p1);
+		  if (ims.Hold(p1) && ((val = ims[b][p1]) > max)) {
+		     max = val;
+		  }
+	       }
+	       imd[b][p] = max;
+	    }
+	 }
+      }
+   }
+   delete se;
+   return SUCCESS;
+}
+
+##begin PDilationG3D <TIN>
+## append loadcases
+   if (objs[0]->Type() == Po_$TIN) {
+      TIN* const ims = (TIN*)objs[0];
+      objd[0] = new TIN(ims->Props());
+      TIN* const imd = (TIN*)objd[0];
+      
+      result = PDilation(*ims, *imd, atoi(parv[0]), atoi(parv[1]));
+      goto end;
+   }
+## end
+##end
+
+#ifndef __GREATER_H__
+#define __GREATER_H__
+/*
+ * Lexicographic ordering between 2 colors (cx, cy, cz) and (cx1, cy1, cz1)
+ */
+template<typename T>
+bool Greater(T cx, T cy, T cz, T cx1, T cy1, T cz1) {
+   if (cx1 < cx) {
+      return true;
+   } else if (cx1 > cx) {
+      return false;
+   }
+   if (cy1 < cy) {
+      return true;
+   } else if (cy1 > cy) {
+      return false;
+   }
+   if (cz1 < cz) {
+      return true;
+   } else if (cz1 > cz) {
+      return false;
+   } else {
+      return false;
+   }
+}
+#endif
+
+template <typename T>
+Errc PDilation( const Imc2d<T> &ims, Imc2d<T> &imd, int numSE, int halfsize ) {
+   if (numSE > 9 || numSE < 0) {
+      std::cerr << "Error pdilation: bad structuring element type: " << numSE << std::endl;
+   }
+   if (halfsize < 1) {
+      std::cerr << "Error pdilation: bad structuring element size: " << halfsize << std::endl;
+      return FAILURE;
+   }
+
+   StructuringElement2d *se = new StructuringElement2d(numSE, halfsize);
+
+   Point2d p, p1;
+   for (p.y = 0; p.y < ims.Height(); p.y++) {
+      for (p.x = 0; p.x < ims.Width(); p.x++) {
+ 	 T maxX = Limits<T>::min();
+ 	 T maxY = Limits<T>::min();
+ 	 T maxZ = Limits<T>::min();
+	 for (int i = 0; i < se->length; i++) {
+	    p1 = p;
+	    se->Move(i, p1);
+	    if (ims.Hold(p1) && Greater(ims.X[p1], ims.Y[p1], ims.Z[p1], maxX, maxY, maxZ)) {
+	       maxX = ims.X[p1];
+	       maxY = ims.Y[p1];
+	       maxZ = ims.Z[p1];
+	    }
+	 }
+	 imd.X[p] = maxX;
+	 imd.Y[p] = maxY;
+	 imd.Z[p] = maxZ;
+      }
+   }
+
+   delete se;
+   return SUCCESS;
+}
+
+##begin PDilationC2D<TIN>
+## append loadcases
+   if (objs[0]->Type() == Po_$TIN) {
+      TIN* const ims = (TIN*)objs[0];
+      objd[0] = new TIN(ims->Props());
+      TIN* const imd = (TIN*)objd[0];
+      
+      result = PDilation(*ims, *imd, atoi(parv[0]), atoi(parv[1]));
+      goto end;
+   }
+## end
+##end
+
+template <typename T>
+Errc PDilation( const Imc3d<T> &ims, Imc3d<T> &imd, int numSE, int halfsize ) {
+   if (numSE > 12 || numSE < 0) {
+      std::cerr << "Error pdilation: bad structuring element type: " << numSE << std::endl;
+      return FAILURE;
+   }
+   if (halfsize < 1) {
+      std::cerr << "Error pdilation: bad structuring element size: " << halfsize << std::endl;
+      return FAILURE;
+   }
+   
+   StructuringElement3d *se = new StructuringElement3d(numSE, halfsize);
+   
+   Point3d p, p1;
+   for (p.z = 0; p.z < ims.Depth(); p.z++) {
+      for (p.y = 0; p.y < ims.Height(); p.y++) {
+	 for (p.x = 0; p.x < ims.Width(); p.x++) {
+	    T maxX = Limits<T>::min();
+	    T maxY = Limits<T>::min();
+	    T maxZ = Limits<T>::min();
+	    for (int i = 0; i < se->length; i++) {
+	       p1 = p;
+	       se->Move(i, p1);
+	       if (ims.Hold(p1) && Greater(ims.X[p1], ims.Y[p1], ims.Z[p1], maxX, maxY, maxZ)) {
+		  maxX = ims.X[p1];
+		  maxY = ims.Y[p1];
+		  maxZ = ims.Z[p1];
+	       }
+	    }
+	    imd.X[p] = maxX;
+	    imd.Y[p] = maxY;
+	    imd.Z[p] = maxZ;
+	 }
+      }
+   }
+
+   delete se;
+   return SUCCESS;
+}
+
+##begin PDilationC3D<TIN>
+## append loadcases
+   if (objs[0]->Type() == Po_$TIN) {
+      TIN* const ims = (TIN*)objs[0];
+      objd[0] = new TIN(ims->Props());
+      TIN* const imd = (TIN*)objd[0];
+      
+      result = PDilation(*ims, *imd, atoi(parv[0]), atoi(parv[1]));
+      goto end;
+   }
+## end
+##end
+
+Errc PDilation( const Reg2d &ims, Reg2d &imd, int numSE, int halfsize ) {
+   if (numSE > 9 || numSE < 0) {
+      std::cerr << "Error pdilation: bad structuring element type: " << numSE << std::endl;
+      return FAILURE;
+   }
+   if (halfsize < 1) {
+      std::cerr << "Error pdilation: bad structuring element size: " << halfsize << std::endl;
+      return FAILURE;
+   }
+
+   StructuringElement2d *se = new StructuringElement2d(numSE, halfsize);
+
+   Point2d p, p1;
+   for (p.y = 0; p.y < ims.Height(); p.y++) {
+      for (p.x = 0; p.x < ims.Width(); p.x++) {
+ 	 Reg2d::ValueType max = Limits<Reg2d::ValueType>::min(), val;
+	 if (ims[p] != 0) {
+	    imd[p] = ims[p];
+	 } else {
+	    for (int i = 0; i < se->length; i++) {
+	       p1 = p;
+	       se->Move(i, p1);
+	       if (ims.Hold(p1) && ((val = ims[p1]) > max)) {
+		  max = val;
+	       }
+	    }
+	    imd[p] = max;
+	 }
+      }
+   }
+
+   delete se;
+   imd.Labels(ims.Labels());
+   return SUCCESS;
+}
+
+##begin PDilationR2D<TIN>
+## append loadcases
+   if (objs[0]->Type() == Po_$TIN) {
+      TIN* const ims = (TIN*)objs[0];
+      objd[0] = new TIN(ims->Props());
+      TIN* const imd = (TIN*)objd[0];
+      
+      result = PDilation(*ims, *imd, atoi(parv[0]), atoi(parv[1]));
+      goto end;
+   }
+## end
+##end
+
+Errc PDilation( const Reg3d &ims, Reg3d &imd, int numSE, int halfsize ) {
+   if (numSE > 12 || numSE < 0) {
+      std::cerr << "Error pdilation: bad structuring element type: " << numSE << std::endl;
+      return FAILURE;
+   }
+   if (halfsize < 1) {
+      std::cerr << "Error pdilation: bad structuring element size: " << halfsize << std::endl;
+      return FAILURE;
+   }
+
+   StructuringElement3d *se = new StructuringElement3d(numSE, halfsize);
+
+   Point3d p, p1;
+   for (p.z = 0; p.z < ims.Depth(); p.z++) {
+      for (p.y = 0; p.y < ims.Height(); p.y++) {
+	 for (p.x = 0; p.x < ims.Width(); p.x++) {
+	    if (ims[p] != 0) {
+	       imd[p] = ims[p];
+	    } else {
+	       Reg3d::ValueType max = Limits<Reg3d::ValueType>::min(), val;
+	       for (int i = 0; i<se->length; i++) {
+		  p1 = p;
+		  se->Move(i, p1);
+		  if (ims.Hold(p1) && ((val = ims[p1]) > max)) {
+		     max = val;
+		  }
+	       }
+	       imd[p] = max;
+	    }
+	 }
+      }
+   }
+   delete se;
+   imd.Labels(ims.Labels());
+   return SUCCESS;
+}
+
+##begin PDilationR3D<TIN>
+## append loadcases
+   if (objs[0]->Type() == Po_$TIN) {
+      TIN* const ims = (TIN*)objs[0];
+      objd[0] = new TIN(ims->Props());
+      TIN* const imd = (TIN*)objd[0];
+      
+      result = PDilation(*ims, *imd, atoi(parv[0]), atoi(parv[1]));
+      goto end;
+   }
+## end
+##end
+
+##begin PDilationG <TIN>
+Errc PDilation( const TIN &grs, TIN &grd ) {
+   grd = grs;
+   
+   for (int i = 1 ; i < grd.Size(); i++) {
+      if (grs[i]) {
+	 for (GEdge* ptr = grs[i]->Neighbours(); ptr != NULL; ptr = ptr->Next()) {
+	    if (grs[ptr->Node()]->value > grd[i]->value) {
+	       grd[i]->value = grs[ptr->Node()]->value;
+	    }
+	 }
+      }
+   }
+   
+   return SUCCESS;
+}
+
+## append loadcases
+   if (objs[0]->Type() == Po_$TIN) {
+      TIN* const grs = (TIN*)objs[0];
+      objd[0] = new TIN(grs->Props());
+      TIN * const grd = (TIN*)objd[0];
+      
+      result = PDilation(*grs, *grd);
+      goto end;
+   }
+## end
+##end
+
+##forall(PDilationG1D, /Img1d/)
+##forall(PDilationG2D, /Img2d/)
+##forall(PDilationG2D, /Imx2d/)
+##forall(PDilationR2D, /Reg2d/)
+##forall(PDilationC2D, /Imc2d/)
+##forall(PDilationC3D, /Imc3d/)
+##forall(PDilationG3D, /Img3d/)
+##forall(PDilationG2D, /Imx3d/)
+##forall(PDilationR3D, /Reg3d/)
+##forall(PDilationG, /Graph/)
+
+#ifdef MAIN
+#define	USAGE	"usage: %s se halfsize [-m mask] [im_in|-] [im_out|-]"
+#define	PARC	2
+#define	FINC	1
+#define	FOUTC	1
+#define	MASK	1
+
+##main(PARC, FINC, FOUTC, MASK, USAGE)
+#endif

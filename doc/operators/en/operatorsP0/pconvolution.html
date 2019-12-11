@@ -1,0 +1,125 @@
+<html>
+<head>
+<title>PANDORE OPERATORS</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>pconvolution</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Convolves image with kernel.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>pconvolution</b> <i>filename</i> [<i>-m mask</i>] [<i>im_in</i>|-] [<i>im_out</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p><b>pconvolution</b> convolves an image <i>im_in</i>
+by the kernel given in the <i>filename</i>.</p>
+
+<p>Convolution at point (x,y) consists in:</p>
+<pre>
+   im_out[y][x]= SUM_k,l {im_in[y+l][x+k] * mask[l][k]} / norm
+</pre>
+
+<p>The result is normalized by the sum of each kernel coefficients
+(<tt>norm</tt>) or by 1 if the sum is null.
+
+<p>The <i>filename</i> is a text file which contains
+several lines formated as follows:</p>
+<ul>
+<li>the size of the kernel: number_of_plane*number_rows*number_columns;
+<li>the coefficients (real or integer) are organized in sequence
+separated by blanks. The order is planes, rows and then columns.
+</ul>
+<pre>
+   nprof*nrow*ncol
+   c1 c2 c3 ...
+</pre>
+
+<p>For example, the following kernel is used to
+approximate the 2D laplacian filtering:</p>
+<pre>
+3*3
+-1.0 -1.0 -1.0 -1.0 8 -1 -1 -1 -1
+</pre>
+
+<!---------------------------------- -->
+<h3>Inputs</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_in</i>: an image.
+</ul>
+
+<!---------------------------------- -->
+<h3>Outputs</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_out</i>: a Float image.
+</ul>
+
+<!---------------------------------- -->
+<h3>Result</h3>
+<!---------------------------------- -->
+<p>Returns SUCCESS or FAILURE.</p>
+
+<!---------------------------------- -->
+<h3>Examples</h3>
+<!---------------------------------- -->
+<p>The followings kernel can be used to perform
+mean filter on tangram.pan:</p>
+<pre>
+   kernel.txt:
+   3*3
+   1 1 1 1 1 1 1 1 1
+
+   pconvolution kernel.txt tangram.pan a.pan
+</pre>
+
+<!---------------------------------- -->
+<h3>See also</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#arithmetic">Arithmetic</a>
+
+<!---------------------------------- -->
+<h3>C++ prototype</h3>
+<!---------------------------------- -->
+<tt>
+Errc PConvolution( const Img2duc &amp;im_in1, Img2dsf &amp;im_in2, char* filename );
+</tt>
+
+<!---------------------------------- -->
+<h3>Version fran&ccedil;aise</h3>
+<!---------------------------------- -->
+<p>Convolution d'une image par un noyau.</p>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Author: R&eacute;gis Clouard
+</address>
+<!---------------------------------- -->
+
+</body>
+</html>

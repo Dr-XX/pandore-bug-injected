@@ -1,0 +1,116 @@
+<html>
+<head>
+<title>OPERATEURS PANDORE</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>ptxt2col</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Conversion d'un fichier texte en une collection.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>ptxt2col</b> <i>filename</i> [<i>col_out</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p>L'op&eacute;rateur <b>ptxt2col</b> permet de cr&eacute;er une collection
+contenant des valeurs et des tableaux.</p>
+
+<p>Pour une valeur, le fichier doit avoir la forme:</p>
+<pre>Type nom valeur</pre>
+<p><u>Exemple:</u></p>
+
+<pre>
+Float pi 3.141592
+</pre>
+
+<p>Pour un tableau, le type est pr&eacute;fix&eacute; par <tt>Array:<i>type</i></tt>
+et les valeurs sont multiples.</p>
+
+<p><u>Exemple:</u></p>
+<pre>
+Array:Ushort iota 1 2 3 4 5 6 7
+Array:Char hop 15 34 x 6 56 72 78
+</pre>
+
+<p>Cet exemple cr&eacute;e une collection contenant un
+tableau <tt>iota</tt> de 7 Ushort et une collection contenant
+un tableau <tt>hop</tt> de 10 Char.
+(<tt>34 x 6</tt> indique que 34 est r&eacute;p&eacute;t&eacute; 6 fois).&nbsp;
+<p><b>Cas particulier: </b>les cha&icirc;nes de caract&egrave;res qui sont
+stock&eacute;es dans un Array:Char et sont de la forme:</p>
+<pre>Array:Char nom valeur</pre>
+
+<p><u>Exemple:</u></p>
+<pre>Array:Char my_string hello_word</pre>
+
+<p>Les retours &agrave; la ligne jouent le m&ecirc;me r&ocirc;le que les
+espaces dans la s&eacute;paration des mots.</p>
+
+<!---------------------------------- -->
+<h3>Entr&eacute;es</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>filename</i>: un fichier texte au bon format.
+</ul>
+
+<!---------------------------------- -->
+<h3>Sorties</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>col_out</i>: une collection.
+</ul>
+
+<!---------------------------------- -->
+<h3>R&eacute;sultat</h3>
+<!---------------------------------- -->
+<p>Retourne SUCCESS ou FAILURE.</p>
+
+<!---------------------------------- -->
+<h3>Exemples</h3>
+<!---------------------------------- -->
+<p>Cr&eacute;e la collection col.pan &agrave; partir du fichier texte a.txt:</p>
+<pre>
+   ptxt2col a.txt col.pan
+</pre>
+
+<!---------------------------------- -->
+<h3>Voir aussi</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#collection">Collection</a>
+
+<!---------------------------------- -->
+<h3>Prototype C++</h3>
+<!---------------------------------- -->
+<tt>Errc PTxt2Col( const std::string &amp;filename, Collection &amp;col_in_out );</tt>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Auteur: Alexandre Duret-Lutz
+</address>
+<!---------------------------------- -->
+</body>
+</html>

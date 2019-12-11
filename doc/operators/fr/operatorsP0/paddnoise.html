@@ -1,0 +1,153 @@
+<html>
+<head>
+<title>OPERATEURS PANDORE</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>paddnoise</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+G&eacute;n&eacute;ration d'un bruit al&eacute;atoire sur une image.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>paddnoise</b> <i>loi</i> <i>moyenne</i> <i>ecart_type</i> [<i>-m mask</i>] [<i>im_in</i>|-] [<i>im_out</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p>L'op&eacute;rateur <b>paddnoise</b> permet d'ajouter du bruit
+artificiel &agrave; une image. Plusieurs lois de g&eacute;n&eacute;ration de bruit
+sont possibles (cf. le param&egrave;tre <i>loi</i>).
+L'image de sortie <i>im_out</i> est calcul&eacute;e selon la loi:</p>
+<ul>
+<li>Cas d'une loi additive : im_out = im_in + im_bruit;
+<li>Cas d'une loi multiplicative : im_out = im_in * im_bruit;
+</ul>
+<p>o&ugrave; <tt>im_bruit</tt> est une image de bruit g&eacute;n&eacute;r&eacute;e &agrave; partir de la loi choisie
+comme suit:</p>
+
+<p>Soit u1 et u2 deux valeurs r&eacute;elles al&eacute;atoires uniform&eacute;ment distribu&eacute;e. 
+sur l'intervalle [0..1], les valeurs de <i>bruit</i> pour
+les diff&eacute;rentes lois sont calcul&eacute;es par:
+</p>
+<ul>
+<li>la loi gaussienne (algorithme de Box Muller):
+<pre>
+  z0=sqrt(-2.0*log(u1))*cos(2.0*M_PI*u2);
+  bruit[i] = ecart_type*z0 + moyenne;
+</pre>
+
+<li>la loi exponentielle (m&eacute;thode par inversion):
+<pre>
+  z0=-1.0*log(u1);
+  bruit[i]= ecart_type*z0 + moyenne;
+</pre>
+
+<li>la loi uniforme (rem : ecart-type = (max-min)/sqrt(12)):
+<pre>
+  z0=(u1-0.5)*sqrt(12.0);
+  bruit[i] = ecart_type*z0 + moyenne;
+</pre>
+
+<li>la loi triangulaire:
+<pre>
+  z0=(u1+u2-1.0)*sqrt(6.0);  
+  bruit[i] = ecart_type*z0 + moyenne;
+</pre>
+</ul>
+
+<!---------------------------------- -->
+<h3>Param&egrave;tres</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>loi</i> indique la nature de bruit &agrave; ajouter parmi:
+<ul>
+<li>1: bruit additif gaussien.
+<li>2: bruit additif exponentiel.
+<li>3: bruit additif uniforme.
+<li>4: bruit additif triangulaire.
+
+<li>11: bruit multiplicatif gaussien.
+<li>12: bruit multiplicatif exponentiel.
+<li>13: bruit multiplicatif uniforme.
+<li>14: bruit multiplicatif triangulaire.
+
+</ul>
+
+<li>La <i>moyenne</i> et l'<i>ecart-type</i> sont des r&eacute;els,
+param&egrave;tres de la loi choisie.</p>
+</ul>
+
+<!---------------------------------- -->
+<h3>Entr&eacute;es</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_in</i>: une image.
+</ul>
+
+<!---------------------------------- -->
+<h3>Sorties</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_out</i>: une image de m&ecirc;me type que l'image d'entr&eacute;e.
+</ul>
+
+<!---------------------------------- -->
+<h3>R&eacute;sultat</h3>
+<!---------------------------------- -->
+<p>Retourne SUCCESS ou FAILURE en cas de mauvais param&egrave;trage.</p>
+
+<!---------------------------------- -->
+<h3>Exemples</h3>
+<!---------------------------------- -->
+<p>Ajoute un bruit gaussien avec un moyenne 0
+et un &eacute;cart type de 1,5 &agrave; l'image tangram.pan
+puis calcule le PSNR du filtre moyenneur:</p>
+<pre>
+   paddnoise 1 0 1.5 tangram.pan a.pan
+   pmeanfilter 2 a.pan i1.pan
+   ppsnr 255 tangram.pan i1.pan
+   pstatus
+</pre>
+
+
+<!---------------------------------- -->
+<h3>Voir aussi</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#utilitaire">Utilitaire</a>
+
+<!---------------------------------- -->
+<h3>Prototype C++</h3>
+<!---------------------------------- -->
+<tt>
+Errc PAddNoise( const Img2duc &amp;im_in, Img2duc &amp;im_out, int loi, Float moyenne, Float ecart_type );
+</tt>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Auteur: R&eacute;gis Clouard
+</address>
+<!---------------------------------- -->
+</body>
+</html>

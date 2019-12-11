@@ -1,0 +1,105 @@
+<html>
+<head>
+<title>PANDORE OPERATORS</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>prelabelingwithgraph</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Relabels region and related graph node.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>prelabelingwithgraph</b> [<i>rg_in</i>|-] [<i>gr_in</i>|-] [<i>rg_out</i>|-] [<i>gr_out</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p><b>prelabelingwithgraph</b> relabels regions of the input region
+map <i>rg_in</i> and the related nodes in the input graph <i>gr_in</i>.
+
+Each region of the output region map <i></i> is set with a new
+label so as to use all labels between 0 and the number of regions.
+The related graph nodes of the output graph <i>graph_out</i>
+are set with the same label value.</p>
+
+<p><b>Remarque</b>: To relabel a region map without a graph
+use operator <a href="./plabeling.html">plabeling</a></i>.</p>
+
+<!---------------------------------- -->
+<h3>Inputs</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>rg_in</i>: a region map.
+<li><i>gr_in</i>: a graph.
+</ul>
+
+<!---------------------------------- -->
+<h3>Outputs</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>rg_in</i>: a region map.
+<li><i>gr_out</i>: a graph.
+</ul>
+
+<!---------------------------------- -->
+<h3>Result</h3>
+<!---------------------------------- -->
+<p>Returns the maximum label value in the region map.</p>
+
+<!---------------------------------- -->
+<h3>Examples</h3>
+<!---------------------------------- -->
+<p>Relabels regions of the rin.pan region map
+and updates the related graph g.pan:</p>
+<pre>
+   relabelingwithgraph rin.pan g.pan rut.pn
+</pre>
+
+<!---------------------------------- -->
+<h3>See also</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#region">Region</a>,
+<a href="./plabeling.html">plabeling</a>
+
+<!---------------------------------- -->
+<h3>C++ prototype</h3>
+<!---------------------------------- -->
+<tt>
+Errc PRelabelingWithGraph( const Reg2d &amp;rg_in, Graph2d &amp;gr_in, Reg2d &amp;rg_out, Graph2d &amp;gr_out );
+</tt>
+
+<!---------------------------------- -->
+<h3>Version fran&ccedil;aise</h3>
+<!---------------------------------- -->
+<p>Renum&eacute;rotation des régions d'une carte et des sommets du graphe associé.</p>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Author: R&eacute;gis Clouard
+</address>
+<!---------------------------------- -->
+
+</body>
+</html>

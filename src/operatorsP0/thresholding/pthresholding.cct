@@ -1,0 +1,219 @@
+/* -*- mode: c++; c-basic-offset: 3 -*-
+ *
+ * Copyright (c), GREYC.
+ * All rights reserved
+ *
+ * You may use this file under the terms of the BSD license as follows:
+ *
+ * "Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are
+ * met:
+ *   * Redistributions of source code must retain the above copyright
+ *     notice, this list of conditions and the following disclaimer.
+ *   * Redistributions in binary form must reproduce the above copyright
+ *     notice, this list of conditions and the following disclaimer in
+ *     the documentation and/or other materials provided with the
+ *     distribution.
+ *   * Neither the name of the GREYC, nor the name of its
+ *     contributors may be used to endorse or promote products
+ *     derived from this software without specific prior written
+ *     permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
+ *
+ * 
+ * For more information, refer to:
+ * https://clouard.users.greyc.fr/Pandore
+ */
+
+#include <pandore.h>
+using namespace pandore;
+
+/**
+ * @file pthresholding.cpp
+ * Thresholding.
+ * If low <= high -> [low..high]
+ * If low > high  -> [min..low[ U ]high..max]
+ */
+template <typename T>
+Errc PThresholding( const Imx3d<T> &ims, Imx3d<T> &imd, float low, float high ) {
+   float nlow = low;
+   float nhigh = high;
+   
+   if (low < (float)Limits<T>::min()) {
+      nlow = (float)Limits<T>::min();
+   } else if (low > (float)Limits<T>::max()) {
+      nlow = (float)Limits<T>::max();
+   }
+   if (high > (float)Limits<T>::max()) {
+      nhigh = (float)Limits<T>::max();
+   } else if (high < (float)Limits<T>::min()) {
+      nhigh = (float)Limits<T>::min();
+   }
+   T *ps = ims.Vector();
+   T *pd = imd.Vector();
+   const T *pe = ps + ims.VectorSize() * ims.Bands();
+   
+   if (high < low) {
+      for ( ; ps < pe; ps++, pd++) {
+	 if (((float)*ps >= low) || ((float)*ps < high)) {
+	    *pd = *ps;
+	 } else {
+	    *pd = 0;
+	 }
+      }
+   } else {
+      for ( ; ps < pe; ps++, pd++) { 
+	 if (((float)*ps >= nlow) && ((float)*ps <= nhigh)) {
+	    *pd = *ps;
+	 } else {
+	    *pd = 0;
+	 }
+      }
+   }
+   return SUCCESS;
+}
+
+##begin PThresholdingI < TIN   >
+## append loadcases
+   if (objs[0]->Type() == Po_$TIN) {
+      TIN* const ims = (TIN*)objs[0];
+      objd[0] = new TIN(ims->Props());
+      
+      TIN* const imd = (TIN*)objd[0];
+      
+      result = PThresholding(*ims, *imd, (float)atof(parv[0]), (float)atof(parv[1]));
+      goto end;
+   }
+## end
+##end
+
+##begin PThresholdingR < TIN >
+Errc PThresholding( const TIN &rgs, TIN &rgd, float low, float high ) {
+   if (low < 0) {
+      low = 0;
+   } else if (low > (float)rgs.Labels()) {
+      low = (float)rgs.Labels();
+   }
+   
+   if (high > (float)rgs.Labels()) {
+      high = (float)rgs.Labels();
+   } else if (high < 0) {
+      high = 0;
+   }
+   
+   TIN::ValueType *ps = rgs.Vector();
+   TIN::ValueType *pd = rgd.Vector();
+   const TIN::ValueType *pe = ps + rgs.VectorSize() * rgs.Bands();
+   
+   if (high < low) {
+      for ( ; ps < pe; ps++, pd++) {
+	 if (((float)*ps >= low) || ((float)*ps < high)) {
+	    *pd = *ps;
+	 } else {
+	    *pd = 0;
+	 }
+      }
+      rgd.Labels(rgs.Labels());
+   } else {
+      for ( ; ps < pe; ps++, pd++) {
+	 if (((float)*ps >= low) && ((float)*ps <= high)) {
+	    *pd = *ps;
+	 } else {
+	    *pd = 0;
+	 }
+      }
+      if (high > rgs.Labels()) {
+	 rgd.Labels(rgs.Labels());
+      } else {
+	 rgd.Labels((int)high);
+      }
+   }
+   
+   return SUCCESS;
+}
+
+## append loadcases
+   if (objs[0]->Type() == Po_$TIN) {
+      TIN* const rgs = (TIN*)objs[0];
+      objd[0] = new TIN(rgs->Props());
+      
+      TIN* const rgd = (TIN*)objd[0];
+      
+      result = PThresholding(*rgs, *rgd, (float)atof(parv[0]), (float)atof(parv[1]));
+      goto end;
+   }
+## end
+##end
+
+
+##begin PThresholdingG < TIN >
+Errc PThresholding( const TIN &grs, TIN &grd, TIN::ValueType low, TIN::ValueType high ) {
+
+   if (low < (TIN::ValueType)Limits<TIN::ValueType>::min()) {
+      low = (TIN::ValueType)Limits<TIN::ValueType>::min();
+   } else if (low > (TIN::ValueType)Limits<TIN::ValueType>::max()) {
+      low = (TIN::ValueType)Limits<TIN::ValueType>::max();
+   }
+
+   if (high > (TIN::ValueType)Limits<TIN::ValueType>::max()) {
+      high = (TIN::ValueType)Limits<TIN::ValueType>::max();
+   } else if (high < (TIN::ValueType)Limits<TIN::ValueType>::min()) {
+      high = (TIN::ValueType)Limits<TIN::ValueType>::min();
+   }
+   
+   grd = grs;
+   if (high < low) {
+      for (int i = 1; i < grs.Size(); i++) {
+	 if ((grs[i]->value <= low) && (grs[i]->value >= high)) {
+	    grd[i]->value = 0;
+	 }
+      }
+   } else {
+      for (int i = 1; i < grs.Size(); i++) {
+	 if ((grs[i]->value < low) || (grs[i]->value > high)) {
+	    grd[i]->value = 0;
+	 }
+      }
+   }
+
+   return SUCCESS;
+}
+
+## append loadcases
+   if (objs[0]->Type() == Po_$TIN) {
+      TIN* const grs = (TIN*)objs[0];
+      objd[0] = new TIN(grs->Size());
+      
+      TIN* const grd = (TIN*)objd[0];
+      
+      result = PThresholding(*grs, *grd, (TIN::ValueType)atof(parv[0]), (TIN::ValueType)atof(parv[1]));
+      goto end;
+   }
+## end
+##end
+
+##forall(PThresholdingI, /Im/)
+##forall(PThresholdingR, /Reg/)
+##forall(PThresholdingG, /Graph/)
+
+#ifdef MAIN
+#define	USAGE	"usage: %s low high [-m mask] [im_in|-][im_out|-]"
+#define	PARC	2
+#define	FINC	1
+#define	FOUTC	1
+#define	MASK	1
+
+##main(PARC, FINC, FOUTC, MASK, USAGE)
+
+#endif

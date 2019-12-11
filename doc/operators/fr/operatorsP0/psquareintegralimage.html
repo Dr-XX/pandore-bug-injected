@@ -1,0 +1,100 @@
+<html>
+<head>
+<title>OPERATEURS PANDORE</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>psquareintegralimage</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Calcul de l'image int&eacute;grale carr&eacute;e d'une
+image. 
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt><b>psquareintegralimage</b> [<i>-m mask</i>] [<i>im_in</i>|-] [<i>col_out</i>|-]</tt>
+
+<!---------------------------------- -->
+<h3>Description</H3>
+<!---------------------------------- -->
+L'op&eacute;rateur
+<b>psquareintegralimage</b> calcule l'image int&eacute;grale
+carr&eacute;e de l'image d'entr&eacute;e <i>im_in</i>. Le r&eacute;sultat
+est stock&eacute; dans un vecteur de taille nombre de lignes * nombre
+de colonnes de l'image d'entr&eacute;e.
+L'image int&eacute;grale carr&eacute;e permet de facilement
+calculer la somme carr&eacute;e &agrave; l'int&eacute;rieur
+d'une fen&ecirc;tre de l'image.</p>
+<p>L'image int&eacute;grale carr&eacute;e est d&eacute;finie
+comme suit: 
+</p>
+<pre>
+   output(x,y) = SUM(input(i,j)*input(i,j)) o&ugrave; i dans [0..x] et j dans [0..y].
+</pre>
+
+<!---------------------------------- -->
+<h3>Entr&eacute;es</h3>
+<!---------------------------------- -->
+<ul>
+<li><p>
+<i>im_in</i>: une image.
+</ul>
+
+<!---------------------------------- -->
+<h3>Sorties</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>col_out</i>: une collection avec un tableau de valeur nomm&eacute; "internal_array".
+</ul>
+
+<!---------------------------------- -->
+<h3>R&eacute;sultat</h3>
+<!---------------------------------- -->
+Retourne SUCCESS ou FAILURE.
+
+<!---------------------------------- -->
+<h3>Exemples</h3>
+<!---------------------------------- -->
+
+<p>Calcule l'image int&eacute;grale care&eacute;e de tangram.pan.</p>
+<pre>
+   psquareintegralimage tangram.pan d.pan
+</pre>
+
+<!---------------------------------- -->
+<h3>Voir aussi</h3>
+<!---------------------------------- -->
+<a HREF="../operatorsP0.html#arithmetic">Arithmetique</A>
+
+<!---------------------------------- -->
+<h3>Prototype C++</h3>
+<!---------------------------------- -->
+<tt>Errc PsquareIntegralImage( const Img2duc &amp;im_in, Collection &amp;col_out); </tt>
+
+<hr>
+
+<!---------------------------------- -->
+<address>
+Auteur: Pierre Buyssens
+</address>
+<!---------------------------------- -->
+
+</body>
+</html>

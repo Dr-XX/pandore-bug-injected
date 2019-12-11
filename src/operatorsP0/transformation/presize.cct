@@ -1,0 +1,456 @@
+/* -*- c-basic-offset: 3; mode: c++ -*-
+ *
+ * Copyright (c), GREYC.
+ * All rights reserved
+ *
+ * You may use this file under the terms of the BSD license as follows:
+ *
+ * "Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are
+ * met:
+ *   * Redistributions of source code must retain the above copyright
+ *     notice, this list of conditions and the following disclaimer.
+ *   * Redistributions in binary form must reproduce the above copyright
+ *     notice, this list of conditions and the following disclaimer in
+ *     the documentation and/or other materials provided with the
+ *     distribution.
+ *   * Neither the name of the GREYC, nor the name of its
+ *     contributors may be used to endorse or promote products
+ *     derived from this software without specific prior written
+ *     permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
+ *
+ * 
+ * For more information, refer to:
+ * https://clouard.users.greyc.fr/Pandore
+ */
+
+/**
+ * @author Regis Clouard - 1997-02-22
+ */
+
+#include <math.h>
+#include <pandore.h>
+using namespace pandore;
+
+/**
+ * @file presize.cpp
+ * Resize image.
+ */
+##begin PResize2I < TYPE, LOOPP, POINT >
+Errc PResize( const TYPE &ims, TYPE &imd ) {
+   double tx, ty;
+   POINT p;
+   
+   tx = (double)ims.Width() / imd.Width();
+   ty = (double)ims.Height() / imd.Height();
+   
+##LOOPP(imd,p)
+   {
+      imd[p] = ims[int(p.y * ty)][int(p.x * tx)];
+   }
+
+   return SUCCESS;
+}
+
+## append loadcases
+   if (objs[0]->Type() == Po_$TYPE) {
+      if ((atol(parv[1]) <= 0) ||
+	  (atol(parv[0]) <= 0) ) {
+	 std::cerr << "Error presize: Bad parameter values: " << parv[0] << " " << parv[1] << std::endl;
+	 result = FAILURE;
+	 goto end;
+      }
+
+      TYPE* const ims = (TYPE*)objs[0];
+      objd[0] = new TYPE((Long)atol(parv[1]), (Long)atol(parv[0]));
+      TYPE* const imd = (TYPE*)objd[0];
+      result = PResize(*ims, *imd);
+      goto end;
+   }
+
+## end
+##end
+
+##begin PResize2C < TYPE, LOOPP, POINT >
+Errc PResize( const TYPE &ims, TYPE &imd ) {
+   double tx, ty;
+   POINT p;
+   
+   imd.ColorSpace(ims.ColorSpace());
+ 
+   tx = (double)ims.Width() / imd.Width();
+   ty = (double)ims.Height() / imd.Height();
+   
+##LOOPP(imd, p)
+   {
+      imd.X[p] = ims.X[int(p.y * ty)][int(p.x * tx)];
+      imd.Y[p] = ims.Y[int(p.y * ty)][int(p.x * tx)];
+      imd.Z[p] = ims.Z[int(p.y * ty)][int(p.x * tx)];
+   }
+
+   return SUCCESS;
+}
+
+## append loadcases
+   if (objs[0]->Type() == Po_$TYPE) {
+      if ((atol(parv[1]) <= 0) ||
+	  (atol(parv[0]) <= 0) ) {
+	 std::cerr << "Error presize: Bad parameter values: " << parv[0] <<" " << parv[1] << std::endl;
+	 result = FAILURE;
+	 goto end;
+      }
+
+      TYPE* const ims = (TYPE*)objs[0];
+      objd[0] = new TYPE((Long)atol(parv[1]), (Long)atol(parv[0]));
+      TYPE* const imd = (TYPE*)objd[0];
+      result = PResize(*ims,*imd);
+      goto end;
+   }
+
+## end
+##end
+##begin PResize2X < TYPE, LOOPP, POINT >
+Errc PResize( const TYPE &ims, TYPE &imd ) {
+   double tx, ty;
+   POINT p;
+
+   tx = (double)ims.Width() / imd.Width();
+   ty = (double)ims.Height() / imd.Height();
+   
+##LOOPP(imd,p)
+   {
+      for (int b = 0; b < ims.Bands(); b++) {
+	 imd[b][p] = ims[b][int(p.y * ty)][int(p.x * tx)];
+      }
+   }
+   
+   return SUCCESS;
+}
+
+## append loadcases
+   if (objs[0]->Type() == Po_$TYPE) {
+      if ((atol(parv[1]) <= 0) ||
+	  (atol(parv[0]) <= 0) ) {
+	 std::cerr << "Error presize: Bad parameter values: " << parv[0] << " " << parv[1] << std::endl;
+	 result = FAILURE;
+	 goto end;
+      }
+
+      TYPE* const ims = (TYPE*)objs[0];
+      objd[0] = new TYPE(ims->Bands(), (Long)atol(parv[1]), (Long)atol(parv[0]));
+      TYPE* const imd = (TYPE*)objd[0];
+      result = PResize(*ims, *imd);
+      goto end;
+   }
+
+## end
+##end
+
+##begin PResize3I < TYPE, LOOPP, POINT >
+Errc PResize( const TYPE &ims, TYPE &imd ) {
+   double tx, ty, tz;
+   POINT p;
+   
+   tx = (double)ims.Width() / imd.Width();
+   ty = (double)ims.Height() / imd.Height();
+   tz = (double)ims.Depth() / imd.Depth();
+   
+##LOOPP(imd,p)
+   {
+      imd[p] = ims[int(p.z * tz)][int(p.y * ty)][int(p.x * tx)];
+   }
+
+   return SUCCESS;
+}
+
+## append loadcases
+   if (objs[0]->Type() == Po_$TYPE) {
+      if ((atol(parv[2]) <= 0) ||
+	  (atol(parv[1]) <= 0) ||
+	  (atol(parv[0]) <= 0) ) {
+	 std::cerr << "Error presize: Bad parameter values: " << parv[0] << " " << parv[1] << " "<< parv[2] << std::endl;
+	 result = FAILURE;
+	 goto end;
+      }
+
+      TYPE* const ims = (TYPE*)objs[0];
+      objd[0] = new TYPE((Long)atol(parv[2]), (Long)atol(parv[1]), (Long)atol(parv[0]));
+      TYPE* const imd = (TYPE*)objd[0];
+      result = PResize(*ims, *imd);
+      goto end;
+   }
+
+## end
+##end
+
+##begin PResize3C < TYPE, LOOPP, POINT >
+Errc PResize( const TYPE &ims, TYPE &imd ) {
+   double tx, ty, tz;
+   POINT p;
+
+   imd.ColorSpace(ims.ColorSpace());
+   
+   tx = (double)ims.Width() / imd.Width();
+   ty = (double)ims.Height() / imd.Height();
+   tz = (double)ims.Depth() / imd.Depth();
+   
+##LOOPP(imd, p)
+   {
+      imd.X[p] = ims.X[int(p.z * tz)][int(p.y * ty)][int(p.x * tx)];
+      imd.Y[p] = ims.Y[int(p.z * tz)][int(p.y * ty)][int(p.x * tx)];
+      imd.Z[p] = ims.Z[int(p.z * tz)][int(p.y * ty)][int(p.x * tx)];
+   }
+
+   return SUCCESS;
+}
+
+## append loadcases
+   if (objs[0]->Type() == Po_$TYPE) { 
+      if ((atol(parv[2]) <= 0) ||
+	  (atol(parv[1]) <= 0) ||
+	  (atol(parv[0]) <= 0) ) {
+	 std::cerr << "Error presize: Bad parameter values: " << parv[0] <<" " << parv[1] << " " << parv[2] << std::endl;
+	 result = FAILURE;
+	 goto end;
+      }
+
+      TYPE* const ims = (TYPE*)objs[0];
+      objd[0] = new TYPE((Long)atol(parv[2]),(Long)atol(parv[1]),(Long)atol(parv[0]));
+      TYPE* const imd = (TYPE*)objd[0];
+      result = PResize(*ims, *imd);
+      goto end;
+   }
+
+## end
+##end
+
+##begin PResize3X < TYPE, LOOPP, POINT >
+Errc PResize( const TYPE &ims, TYPE &imd ) {
+   double tx, ty, tz;
+   POINT p;
+
+   tx = (double)ims.Width() / imd.Width();
+   ty = (double)ims.Height() / imd.Height();
+   tz = (double)ims.Depth() / imd.Depth();
+   
+##LOOPP(imd,p)
+   {
+      for (int b = 0; b < ims.Bands(); b++) {
+	 imd[b][p] = ims[b][int(p.z * tz)][int(p.y * ty)][int(p.x * tx)];
+      }
+   }
+
+   return SUCCESS;
+}
+
+## append loadcases
+   if (objs[0]->Type() == Po_$TYPE) {
+      if ((atol(parv[2]) <= 0) ||
+	  (atol(parv[1]) <= 0) ||
+	  (atol(parv[0]) <= 0) ) {
+	 std::cerr << "Error presize: Bad parameter values: " << parv[0] <<" " << parv[1] << " " << parv[2] << std::endl;
+	 result = FAILURE;
+	 goto end;
+      }
+
+      TYPE* const ims = (TYPE*)objs[0];
+      objd[0] = new TYPE(ims->Bands(), (Long)atol(parv[2]), (Long)atol(parv[1]), (Long)atol(parv[0]));
+      TYPE* const imd = (TYPE*)objd[0];
+      result = PResize(*ims, *imd);
+      goto end;
+   }
+
+## end
+##end
+
+##begin PResize2R < TYPE, LOOPP, POINT >
+Errc PResize( const TYPE &rgs, TYPE &rgd ) {
+   double tx, ty;
+   POINT p;
+   
+   tx = (double)rgs.Width() / rgd.Width();
+   ty = (double)rgs.Height() / rgd.Height();
+   
+##LOOPP(rgd,p)
+   {
+      rgd[p] = rgs[int(p.y * ty)][int(p.x * tx)];
+   }
+
+   rgd.Labels(rgs.Labels());
+   return SUCCESS;
+}
+
+## append loadcases
+   if (objs[0]->Type() == Po_$TYPE) {
+      if ((atol(parv[1]) <= 0) ||
+	  (atol(parv[0]) <= 0) ) {
+	 std::cerr << "Error presize: Bad parameter values: " << parv[0] << " " << parv[1] << std::endl;
+	 result = FAILURE;
+	 goto end;
+      }
+
+      TYPE* const rgs = (TYPE*)objs[0];
+      objd[0] = new TYPE((Long)atol(parv[1]), (Long)atol(parv[0]));
+      TYPE* const rgd = (TYPE*)objd[0];
+      result = PResize(*rgs, *rgd);
+      goto end;
+   }
+
+## end
+##end
+
+##begin PResize3R < TYPE, LOOPP, POINT >
+Errc PResize( const TYPE &rgs, TYPE &rgd ) {
+   double tx, ty, tz;
+   POINT p;
+   
+   tx = (double)rgs.Width() / rgd.Width();
+   ty = (double)rgs.Height() / rgd.Height();
+   tz = (double)rgs.Depth() / rgd.Depth();
+   
+##LOOPP(rgd,p)
+   {
+      rgd[p] = rgs[int(p.z * tz)][int(p.y * ty)][int(p.x * tx)];
+   }
+
+   rgd.Labels(rgs.Labels());
+   return SUCCESS;
+}
+
+## append loadcases
+   if (objs[0]->Type() == Po_$TYPE) {
+      if ((atol(parv[2]) <= 0) ||
+	  (atol(parv[1]) <= 0) ||
+	  (atol(parv[0]) <= 0) ) {
+	 std::cerr << "Error presize: Bad parameter values: " << parv[0] << " " << parv[1] << " " << parv[2] << std::endl;
+	 result = FAILURE;
+	 goto end;
+      }
+
+      TYPE* const rgs = (TYPE*)objs[0];
+      objd[0] = new TYPE((Long)atol(parv[2]), (Long)atol(parv[1]), (Long)atol(parv[0]));
+      TYPE* const rgd = (TYPE*)objd[0];
+      result  =PResize(*rgs, *rgd);
+      goto end;
+   }
+
+## end
+##end
+
+##begin PResizeG2 < TYPE, LOOPP, POINT >
+Errc PResize( const TYPE &grs, TYPE &grd ) {
+   double tx, ty;
+   GEdge *l;
+
+   tx = (double)grs.Width() / grd.Width();
+   ty = (double)grs.Height() / grd.Height();
+   
+   for (int i = 0; i < grs.Size(); i++) {
+      if (grs[i] != NULL) {
+	 grd.Add(i, grs[i]->Item(), (int)(grs[i]->seed.y / ty), (int)(grs[i]->seed.x / tx));
+	 grd[i]->value=grs[i]->value;
+	 for (l = grs[i]->Neighbours(); l != NULL; l = l->Next()) {
+	    if (i>l->Node()) {
+	       grd.Link(i, l->Node(), l->weight);
+	    }
+	 }
+      }
+   }
+   
+   return SUCCESS;
+}
+
+## append loadcases
+   if (objs[0]->Type() == Po_$TYPE) {
+      if ((atol(parv[1]) <= 0) ||
+	  (atol(parv[0]) <= 0) ) {
+	 std::cerr << "Error presize: Bad parameter values: " << parv[0] << " " << parv[1] << std::endl;
+	 result = FAILURE;
+	 goto end;
+      }
+
+      TYPE* const grs = (TYPE*)objs[0];
+      objd[0] = new TYPE(grs->Size(), (Long)atol(parv[1]), (Long)atol(parv[0]));
+      TYPE* const grd = (TYPE*)objd[0];
+
+      result = PResize(*grs, *grd);
+      goto end;
+   }
+
+## end
+##end
+
+##begin PResizeG3 < TYPE, LOOPP, POINT >
+Errc PResize( const TYPE &grs, TYPE &grd ) {
+   double tx, ty, tz;
+   GEdge *l;
+   
+   tx = (double)grs.Width() / grd.Width();
+   ty = (double)grs.Height() / grd.Height();
+   tz = (double)grs.Depth() / grd.Depth();
+   
+   for (int i = 0; i < grs.Size(); i++) {
+      if (grs[i] != NULL) {
+	 grd.Add(i,grs[i]->Item(), (int)(grs[i]->seed.z / tz), (int)(grs[i]->seed.y / ty), (int)(grs[i]->seed.x / tx));
+	 grd[i]->value = grs[i]->value;
+	 for (l = grs[i]->Neighbours(); l != NULL; l = l->Next()) {
+	    if (i>l->Node()) {
+	       grd.Link(i, l->Node(), l->weight);
+	    }
+	 }
+      }
+   }
+      
+   return SUCCESS;
+}
+
+## append loadcases
+   if (objs[0]->Type() == Po_$TYPE) {
+      if ((atol(parv[2]) <= 0) ||
+	  (atol(parv[1]) <= 0) ||
+	  (atol(parv[0]) <= 0) ) {
+	 std::cerr <<"Error presize: parameter values: " << atol(parv[0]) << " " << atol(parv[1]) << " " << atol(parv[2]) << std::endl;
+	 result = FAILURE;
+	 goto end;
+      }
+      TYPE* const grs = (TYPE*)objs[0];
+      objd[0] = new TYPE(grs->Size(),(Long)atol(parv[2]), (Long)atol(parv[1]), (Long)atol(parv[0]));
+      TYPE* const grd = (TYPE*)objd[0];
+      result = PResize(*grs,*grd);
+      goto end;
+   }
+
+## end
+##end
+
+##forall(PResize2I,/Img2d/)
+##forall(PResize3I,/Img3d/)
+##forall(PResize2C,/Imc2d/)
+##forall(PResize3C,/Imc3d/)
+##forall(PResize2X,/Imx2d/)
+##forall(PResize3X,/Imx3d/)
+##forall(PResize2R,/Reg2/)
+##forall(PResize3R,/Reg3/)
+##forall(PResizeG2,/Graph2d/)
+##forall(PResizeG3,/Graph3d/)
+
+#ifdef MAIN
+#define	USAGE	"usage: %s width height depth [-m mask] [im_in|-] [im_out|-]"
+#define	PARC	3
+#define	FINC	1
+#define	FOUTC	1
+#define	MASK	2
+##main(PARC,FINC,FOUTC,MASK,USAGE)
+#endif

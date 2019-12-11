@@ -1,0 +1,101 @@
+<html>
+<head>
+<title>PANDORE OPERATORS</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>phistogram</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Cr&eacute;ation de l'histogramme d'une image.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>phistogram</b> [<i>-m mask</i>] [<i>im_in</i>|-] [<i>im_out</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p>L'op&eacute;rateur <b>histogramme</b> g&eacute;n&egrave;re
+l'histogramme de l'image <i>im_in</i>.
+Un histogramme est un signal dont l'
+num&eacute;ro <i>i</i> indique le nombre d'apparition de la valeur
+<i>i</i> dans l'image source.</p>
+
+<p>Pour les images sign&eacute;es, l'histogramme est
+d&eacute;cal&eacute; de telle sorte que
+le premier &eacute;l&eacute;ment indique
+le nombre d'apparition de MIN dans l'image source
+et le dernier MAX-MIN.</p>
+
+<p>Le type de l'image de sortie <i>im_out</i> est une image
+1D de Long.</p>
+
+<!---------------------------------- -->
+<h3>Entr&eacute;es</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_in</i>: une image de niveaux de girs.
+</ul>
+
+<!---------------------------------- -->
+<h3>Sorties</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_out</i>: une image 1D de Long.
+</ul>
+
+<!---------------------------------- -->
+<h3>R&eacute;sultat</h3>
+<!---------------------------------- -->
+<p>Retourne SUCCESS ou FAILURE.</p>
+
+<!---------------------------------- -->
+<h3>Exemples</h3>
+<!---------------------------------- -->
+<p>Construit l'histogramme de l'image tangram.pan:</p>
+<pre>
+   phistogram tangram.pan a.pan
+   pplot1d 256 256 0 0 0 a.pan b.pan
+   pvisu b.pan
+</pre>
+
+<!---------------------------------- -->
+<h3>Voir aussi</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#imagefeaturesextraction">Caract&eacute;risation image</a>
+
+<!---------------------------------- -->
+<h3>Prototype C++</h3>
+<!---------------------------------- -->
+<tt>
+Errc PHistogram( const Img2duc &amp;im_in1, Img1dus &amp;im_in2 );
+</tt>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Auteur: Alexandre Duret-Lutz
+</address>
+<!---------------------------------- -->
+</body>
+</html>

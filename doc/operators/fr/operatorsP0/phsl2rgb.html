@@ -1,0 +1,127 @@
+<html>
+<head>
+<title>OPERATEURS PANDORE</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>phsl2rgb</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Changement d'espace couleur de HSL vers RGB.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>phsl2rgb</b> [<i>-m mask</i>] [<i>im_in</i>|-] [<i>im_out</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p>L'op&eacute;rateur <b>phsl2rgb</b> permet de changer l'espace
+couleur HSL  (Teinte, Saturation, Luminance) vers
+vers l'espace RGB (Rouge, Vert, Bleu).</p>
+
+<p>La teinte (Hue) est la qualit&eacute; de couleur correspondant &agrave; sa position dans le spectre:
+rouge, orange, jaune, vert, cyan, bleu, magenta. Elle s'exprime en degr&eacute; [0,360].</p>
+
+<p>La saturation est l'intensit&eacute; d'une couleur. Elle s'exprime par une valeur
+d'intensit&eacute; de pourcentage de l'intervalle [0..100].
+A 0% de saturation, une couleur appara&icirc;t blanche,
+&agrave; 100% de saturation, une couleur atteint son degr&eacute; de plus intense.</p>
+
+<p>La luminosit&eacute; (Lightness) est la quantit&eacute; de blanc et de noir
+contenue dans une couleur. Elle s'exprime par une valeur d'intensit&eacute;
+de l'intervalle [0,255].</p>
+
+<p>La conversion utilise la transformation suivante :</p>
+<pre>
+q= | l * (1+s),  si l <  1/2
+   | l+s - (l*s) si l >= 1/2
+
+p = 2 * l - q
+
+t_k = t / 360
+
+t_R = t_k+1/3
+t_V = t_k
+t_B = t_k-1/3
+
+Pour chaque C dans {R,V,B}
+  si t_C < 0 : t_C = t_C + 1.0
+  si t_C > 1 : t_C = t_C - 1.0
+
+      | p+((q-p)*6*t_C)        si t_C <1/6
+      | q                      si 1/6 <= T_C <1/2
+  C = | p+ ((q-p)*6*(2/3-T_C)) si 1/2 <= T_C < 2/3
+      | p                      sinon
+          
+</pre>
+
+<!---------------------------------- -->
+<h3>Entr&eacute;es</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_in</i>: une image couleur hsl.
+</ul>
+
+<!---------------------------------- -->
+<h3>Sorties</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_out</i>: une image couleur RGB.
+</ul>
+
+<!---------------------------------- -->
+<h3>R&eacute;sultat</h3>
+<!---------------------------------- -->
+<p>Retourne SUCCESS ou FAILURE.</p>
+
+<!---------------------------------- -->
+<h3>Exemples</h3>
+<!---------------------------------- -->
+<p>Convertit l'image parrot.pan de rgb en hsl et r&eacute;ciroquement.</p>
+<pre>
+   prgb2hsl parrot.pan a.pan
+   phsl2rgb a.pan b.pan
+</pre>
+
+<!---------------------------------- -->
+<h3>Voir aussi</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#color">Color</a>,
+<a href="./prgb2hsl.html">prgb2hsl</a>
+
+<!---------------------------------- -->
+<h3>Prototype C++</h3>
+<!---------------------------------- -->
+<tt>
+Errc PHSL2RGB( const Imc2dsf &amp;im_in, Imc2dsf &amp;im_out );
+</tt>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Auteur: R&eacute;gis Clouard
+</address>
+<!---------------------------------- -->
+
+</body>
+</html>

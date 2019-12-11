@@ -1,0 +1,186 @@
+/* -*- c-basic-offset: 3; mode: c++ -*-
+ *
+ * Copyright (c), GREYC.
+ * All rights reserved
+ *
+ * You may use this file under the terms of the BSD license as follows:
+ *
+ * "Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are
+ * met:
+ *   * Redistributions of source code must retain the above copyright
+ *     notice, this list of conditions and the following disclaimer.
+ *   * Redistributions in binary form must reproduce the above copyright
+ *     notice, this list of conditions and the following disclaimer in
+ *     the documentation and/or other materials provided with the
+ *     distribution.
+ *   * Neither the name of the GREYC, nor the name of its
+ *     contributors may be used to endorse or promote products
+ *     derived from this software without specific prior written
+ *     permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
+ *
+ * 
+ * For more information, refer to:
+ * https://clouard.users.greyc.fr/Pandore
+ */
+
+/**
+ * @author Régis Clouard - Feb 14, 2011
+ */
+
+#define _USE_MATH_DEFINES
+#include <cmath>
+#include <pandore.h>
+using namespace pandore;
+
+/**
+ * @file planczosrescale.cpp
+ *
+ * Rescales the image according to Lanczos interpolation
+ * algorithm.
+ * This implementation uses convolution between the image
+ * and a kernel.
+ */
+
+#include <cmath>
+#include <map>
+
+const float FilterRadius = 3.0f;
+
+typedef std::map<float,float> MapLanczos;
+/** Used to speed optimization: store the computed lanczos values. */
+static MapLanczos lanczos;
+
+static inline float Kernel( float x ) {
+   if (x == 0.0) return 1.0;
+   if (x <= -FilterRadius || x >= FilterRadius) return 0.0;
+   if (x < 0) { x = -x; }
+   const MapLanczos::iterator found = lanczos.find(x);
+   if (found!=lanczos.end()) { return (*found).second; };
+   const double card = x * M_PI;
+   const float l=(float)(FilterRadius * std::sin(card) * std::sin(card/FilterRadius) / (card*card));
+   lanczos[x]=l;
+   return l;
+}
+
+// Include the convolution algorithm.
+#include "convolution.h"
+
+template <typename T>
+inline Errc PLanczosRescale( const Imx2d<T> &ims, Imx2d<T> &imd, const float factory, const float factorx ) {
+   Errc result = PConvolution(ims,imd,factory,factorx);
+   lanczos.clear();
+   return result;
+}
+
+##begin PLanczosRescale2G < TYPE >
+## append loadcases
+   if (objs[0]->Type() == Po_$TYPE) {
+      const float scalex = (float)atof(parv[0]);
+      const float scaley = (float)atof(parv[1]);
+      if ( scalex<=0 || scaley<=0)
+	 result=FAILURE;
+      else {
+	 TYPE* const ims=(TYPE*)objs[0];
+	 objd[0]=new TYPE(Long(ims->Height()*scaley),Long(ims->Width()*scalex));
+	 TYPE* const imd=(TYPE*)objd[0];
+	 result=PLanczosRescale(*ims,*imd, scaley, scalex);
+      }
+      goto end;
+   }
+## end
+##end
+
+##begin PLanczosRescale2X < TYPE >
+## append loadcases
+   if (objs[0]->Type() == Po_$TYPE) {
+      const float scalex = (float)atof(parv[0]);
+      const float scaley = (float)atof(parv[1]);
+      if ( scalex<=0 || scaley<=0)
+	 result=FAILURE;
+      else {
+	 TYPE* const ims=(TYPE*)objs[0];
+	 objd[0]=new TYPE(ims->Bands(),Long(ims->Height()*scaley),Long(ims->Width()*scalex));
+	 TYPE* const imd=(TYPE*)objd[0];
+	 result=PLanczosRescale(*ims,*imd,scaley,scalex);
+      }
+      goto end;
+   }
+## end
+##end
+
+template <typename T>
+inline Errc PLanczosRescale( const Imx3d<T> &ims, Imx3d<T> &imd, const float factorz, const float factory, const float factorx ) {
+   Errc result = PConvolution(ims,imd,factorz,factory,factorx);
+   lanczos.clear();
+   return result;
+}
+
+##begin PLanczosRescale3G < TYPE >
+## append loadcases
+   if (objs[0]->Type() == Po_$TYPE) {
+      const float scalex = (float)atof(parv[0]);
+      const float scaley = (float)atof(parv[1]);
+      const float scalez = (float)atof(parv[2]);
+      if ( scalex<=0 || scaley<=0 || scalez<=0) {
+	 result=FAILURE;
+      } else {
+	 TYPE* const ims=(TYPE*)objs[0];
+	 objd[0]=new TYPE(Long(ims->Depth()*scalez),Long(ims->Height()*scaley),Long(ims->Width()*scalex));
+	 TYPE* const imd=(TYPE*)objd[0];
+	 result=PLanczosRescale(*ims,*imd,scalez,scaley,scalex);
+      }
+      goto end;
+   }
+## end
+##end
+
+##begin PLanczosRescale3X < TYPE >
+## append loadcases
+   if (objs[0]->Type() == Po_$TYPE) {
+      const float scalex = (float)atof(parv[0]);
+      const float scaley = (float)atof(parv[1]);
+      const float scalez = (float)atof(parv[2]);
+      if ( scalex<=0 || scaley<=0 || scalez<=0) {
+	 result=FAILURE;
+      } else {
+	 TYPE* const ims=(TYPE*)objs[0];
+	 objd[0]=new TYPE(ims->Bands(),Long(ims->Depth()*scalez),Long(ims->Height()*scaley),Long(ims->Width()*scalex));
+	 TYPE* const imd=(TYPE*)objd[0];
+	 result=PLanczosRescale(*ims,*imd,scalez,scaley,scalex);
+      }
+      goto end;
+   }
+## end
+##end
+
+##forall(PLanczosRescale2G,/Img2d/)
+##forall(PLanczosRescale2X,/Imc2d/)
+##forall(PLanczosRescale2X,/Imx2d/)
+
+##forall(PLanczosRescale3G,/Img3d/)
+##forall(PLanczosRescale3X,/Imc3d/)
+##forall(PLanczosRescale3X,/Imx3d/)
+
+#ifdef MAIN
+#define	USAGE	"usage: %s zoomx zoomy zoomz [im_in|-] [im_out|-]"
+#define	PARC	3
+#define	FINC	1
+#define	FOUTC	1
+#define	MASK	0
+
+##main(PARC,FINC,FOUTC,MASK,USAGE)
+#endif
+ 

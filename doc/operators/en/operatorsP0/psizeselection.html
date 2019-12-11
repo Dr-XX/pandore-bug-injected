@@ -1,0 +1,118 @@
+<html>
+<head>
+<title>PANDORE OPERATORS</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>psizeselection</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Selects regions from size measures.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>psizeselection</b> <i>relation</i> <i>width</i> <i>height</i> <i>depth</i> [<i>-m mask</i>] [<i>rg_in</i>|-] [<i>rg_out</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p><b>psizeselection</b> selects regions from their size measures (depth, height, and width).
+The parameter <i>relation</i> specifies the order relation on
+the size values that are used to select or not a region.</p>
+<p>If one of size parameter =-1 then this size feature is not
+taken into account to select regions.</p>
+
+<!---------------------------------- -->
+<h3>Parameters</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>relation</i> is an integer from [-2,2] which specifies
+the order relation on the size value:</p>
+<ul>
+<li><i>relation</i> = 2: regions &gt;= size
+<li><i>relation</i> = 1: regions &gt; size.
+<li><i>relation</i> = 0: regions = size.
+<li><i>relation</i> = -1: regions &lt; size.
+<li><i>relation</i> = -2: regions &lt;= size.
+</ul>
+
+<li><i>depth</i> is an integer defined in pixel unit.
+If the parameter value =-1 then this size is not taken into account.</p>
+<li><i>height</i> is an integer defined in pixel unit.
+If the parameter value =-1 then this size is not taken into account.</p>
+<li><i>width</i> is an integer defined in pixel unit.
+If the parameter value =-1 then this size is not taken into account.</p>
+</ul>
+
+<!---------------------------------- -->
+<h3>Inputs</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>rg_in</i>: a region map.
+</ul>
+
+<!---------------------------------- -->
+<h3>Outputs</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>rg_out</i>: a region map.
+</ul>
+
+<!---------------------------------- -->
+<h3>Result</h3>
+<!---------------------------------- -->
+<p>Returns the number of selected regions.</p>
+
+<!---------------------------------- -->
+<h3>Examples</h3>
+<!---------------------------------- -->
+<p>Selects all regions with width = 50 pixels in the
+input region map rin.pan:</p>
+<pre>
+   psizeselection 0 50 -1 0 rin.pan rout.pan
+</pre>
+
+<!---------------------------------- -->
+<h3>See also</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#region">Region</a>
+
+<!---------------------------------- -->
+<h3>C++ prototype</h3>
+<!---------------------------------- -->
+<tt>
+Errc PSizeSelection( const Reg2d &amp;rg_in, Reg2d &amp;rg_out, int relation, long width, long height, long depth );
+</tt>
+
+<!---------------------------------- -->
+<h3>Version fran&ccedil;aise</h3>
+<!---------------------------------- -->
+<p>S&eacute;lection de régions sur leur taille.</p>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Author: R&eacute;gis Clouard
+</address>
+<!---------------------------------- -->
+</body>
+</html>

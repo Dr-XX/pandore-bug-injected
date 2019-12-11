@@ -1,0 +1,109 @@
+<html>
+<head>
+<title>PANDORE OPERATORS</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff"><center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>pmse</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Computes the Mean Square Error.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>pmse</b> [<i>im_in1</i>|-] [<i>im_in2</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p><b>pmse</b> measures the Mean Squared Error (MSE) between
+the initial image <i>im_in1</i>
+and the restored or enhanced image <i>im_in2</i>.<br>
+A lower value for MSE means lesser error.
+However, the MSE depends on the maximum values of the input images.
+For example, a MSE=100.0 for Uchar image is very high whilst a MSE=100.0
+for Long images with value in [0...65535] is very low.</p>
+
+<p>MSE is defined as follows:</p>
+<pre>
+   MSE=1/N * sum { (im_in1(pixel)-im_in2(pixel))^2 }
+</pre>
+<p>where N is the total number of pixel in the input image <i>im_in1</i>.</p>
+
+<p>Input images <i>im_in1</i> and <i>im_in2</i> must have the same dimensions and
+the same type.</p>
+
+<p>For color images or multispectral images, the definition of MSE is
+the same except that the sum over all squared value differences is 
+also divided by the number of bands (ie. 3 for the color images).</p>
+
+<!---------------------------------- -->
+<h3>Inputs</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_in1</i>: an image.
+<li><i>im_in2</i>: an image (restored or enhanced version of im_in1).
+</ul>
+
+<!---------------------------------- -->
+<h3>Result</h3>
+<!---------------------------------- -->
+<p>Returns the value as a positive real value.<br>
+(Use <code>pstatus</code> to get this value).</p>
+
+<!---------------------------------- -->
+<h3>Examples</h3>
+<!---------------------------------- -->
+<p>Computes the MSE for the meanfilter smoothing operator:</p>
+<pre>
+   pmeanfiltering 2 tangram.pan i1.pan
+   pmse tangram.pan i1.pan
+   pstatus
+</pre>
+
+<!---------------------------------- -->
+<h3>See Also</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#evaluation">Evaluation</a>,
+<a href="./psnr.html">psnr</a>,
+<a href="./ppsnr.html">ppsnr</a>
+
+<!---------------------------------- -->
+<h3>C++ prototype</h3>
+<!---------------------------------- -->
+<tt>
+Errc PMSE( const Img2duc &amp;im_in1, const Img2duc &amp;im_in2 );
+</tt>
+
+<!---------------------------------- -->
+<h3>Version fran&ccedil;aise</h3>
+<!---------------------------------- -->
+<p>Calcul de l'Erreur Quadique Moyenne (Mean Square Error).</p>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Author: R&eacute;gis Clouard
+</address>
+<!---------------------------------- -->
+
+</body>
+</html>

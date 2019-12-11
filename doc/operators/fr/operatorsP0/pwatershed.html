@@ -1,0 +1,116 @@
+<html>
+<head>
+<title>OPERATEURS PANDORE</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>pwatershed</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Ligne de Partage des Eaux.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>pwatershed</b> [<i>-m mask</i>] [<i>rg_in</i>|-] [<i>im_pot</i>|-] [<i>rg_out</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p>L'op&eacute;rateur <b>pwatershed</b> segmente les images en r&eacute;gions
+en utilisant une ligne de partage des eaux &agrave; partir de germes initiaux.
+La ligne de partage des eaux permet de faire cro&icirc;tre les germes
+donn&eacute;s dans la carte d'entr&eacute;e <i>rg_in</i> en utilisant l'ordre de priorit&eacute;
+donn&eacute; par l'image de potentiels <i>im_pot</i>. La carte de sortie <i>rg_out</i>
+garde les m&ecirc;mes valeurs de label que la carte d'entr&eacute;e <i>rg_in</i>.</p>
+
+<p>Si l'image de potentiels est une image de niveaux de gris,
+chaque valeur de pixel correspond &agrave; la valeur de potentiel du point.
+Par exemple, une image de distance aux fronti&egrave;res des objets
+ou directement l'image des niveaux de gris sont des images de potentiels
+acceptables.<br>
+Dans ce cas, le principe de l'algorithme est d'&eacute;tiqueter tous les pixels qui touchent une
+r&eacute;gion germe en commencant par ceux qui ont la valeur de potentiel
+la plus basse. Pour cela, on g&egrave;re une file prioritaire.</p>
+
+<p>Si l'image de potentiels est une image couleur,
+alors la valeur de potentielle est la distance euclidienne
+entre la couleur du point et la couleur moyenne de la r&eacute;gion.</p>
+
+<p>Remarque: Pour obtenir un r&eacute;sultat acceptable, il faut que les germes
+soient dans des puits de potentiels. Pour cela,
+il peut &ecirc;tre n&eacute;cessaire d'inverser l'image de potentiels
+(voir <a href="./pinverse.html">pinverse</a>).</p>
+
+<!---------------------------------- -->
+<h3>Entr&eacute;es</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>rg_in</i>: une carte de r&eacute;gions.
+<li><i>im_pot</i>: une image de niveaux de gris ou de couleur.
+</ul>
+
+<!---------------------------------- -->
+<h3>Sorties</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>rg_out</i>: une carte de r&eacute;gions.
+</ul>
+
+<!---------------------------------- -->
+<h3>R&eacute;sultat</h3>
+<!---------------------------------- -->
+<p>Retourne SUCCESS ou FAILURE.</p>
+
+<!---------------------------------- -->
+<h3>Exemples</h3>
+<!---------------------------------- -->
+<ul>
+<li>Squelette par zone d'influence (le skiz):
+<pre>
+   pbinarization 100 1e30 examples/tangram.pan i1.pan
+   pdistance i1.pan i2.pan
+   plabeling 8 i1.pan i3.pan
+   pwatershed i3.pan i2.pan i4.pan
+   pboundary 8 i4.pan out.pan
+</pre>
+</ul>
+
+<!---------------------------------- -->
+<h3>Voir aussi</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#morphology">Morphologie</a>
+
+<!---------------------------------- -->
+<h3>Prototype C++</h3>
+<!---------------------------------- -->
+<tt>
+Errc PWatershed( const Reg2d &amp;rg_in, const Img2duc &amp;im_pot, Reg2d &amp;rg_out );
+</tt>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Auteur: Abderrahim Elmoataz, Olivier Lezoray
+</address>
+<!---------------------------------- -->
+</body>
+</html>

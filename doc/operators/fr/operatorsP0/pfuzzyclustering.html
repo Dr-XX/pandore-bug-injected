@@ -1,0 +1,102 @@
+<html>
+<head>
+<title>OPERATEURS PANDORE</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>pfuzzyclustering</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Classification des pixels d'une image par la m&eacute;thode des k moyennes floues.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>pfuzzyclustering</b> <i>nbclass</i> <i>degre_flou</i> [<i>-m mask</i>] [<i>im_in</i>|-] [<i>rg_out</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p>L'op&eacute;rateur <b>pfuzzyclustering</b> permet de faire une
+classification des pixels de l'image <i>im_in</i> en <i>nbclass</i> classes.
+La m&eacute;thode utilise l'algorithme des C moyennes floues.</p>
+
+<p>La carte de r&eacute;gions de sortie <i>rg_out</i> est faite avec des labels
+croissants pour chacune des classes extraites de l'image.</p>
+
+<!---------------------------------- -->
+<h3>Param&egrave;tres</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>nbclass</i> indique le nombre de classes disjointes
+d&eacute;sir&eacute;es en sortie.</p>
+
+<li><i>degre_flou</i> permet de d&eacute;finir le degr&eacute; de flou de la
+m&eacute;thode. C'est un r&eacute;el entre 1 et 2: 1 pas de flou, 2 flou maximum.</p>
+</ul>
+
+<!---------------------------------- -->
+<h3>Entr&eacute;es</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_in</i>: une image 2D.
+</ul>
+
+<!---------------------------------- -->
+<h3>Sorties</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>rg_out</i>: une carte de r&eacute;gions 2D.
+</ul>
+
+<!---------------------------------- -->
+<h3>R&eacute;sultat</h3>
+<!---------------------------------- -->
+<p>Retourne SUCCESS ou FAILURE.</p>
+
+<!---------------------------------- -->
+<h3>Exemples</h3>
+<!---------------------------------- -->
+<p>Segmente les pi&egrave;ces de tangram:</p>
+<pre>
+   pfuzzyclustering 2 1.5 tangram.pan out.pan
+</pre>
+<!---------------------------------- -->
+<h3>Voir aussi</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#thresholding">Seuillage</a>
+
+<!---------------------------------- -->
+<h3>Prototype C++</h3>
+<!---------------------------------- -->
+<tt>
+Errc PFuzzyClustering( const Img2duc &amp;im_in, Reg2d &amp;rg_out, int nbclass, float degre_flou );
+</tt>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Auteur: Jalal Fadili
+</address>
+<!---------------------------------- -->
+
+</body>
+</html>

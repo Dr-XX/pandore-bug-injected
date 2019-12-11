@@ -1,0 +1,120 @@
+/* -*- mode: c++; c-basic-offset: 3 -*-
+ *
+ * Copyright (c), GREYC.
+ * All rights reserved
+ *
+ * You may use this file under the terms of the BSD license as follows:
+ *
+ * "Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are
+ * met:
+ *   * Redistributions of source code must retain the above copyright
+ *     notice, this list of conditions and the following disclaimer.
+ *   * Redistributions in binary form must reproduce the above copyright
+ *     notice, this list of conditions and the following disclaimer in
+ *     the documentation and/or other materials provided with the
+ *     distribution.
+ *   * Neither the name of the GREYC, nor the name of its
+ *     contributors may be used to endorse or promote products
+ *     derived from this software without specific prior written
+ *     permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
+ *
+ * 
+ * For more information, refer to:
+ * https://clouard.users.greyc.fr/Pandore
+ */
+
+/**
+ * Régis Clouard - 2006-12-04
+ */
+
+#include <math.h>
+#include <pandore.h>
+using namespace pandore; 
+
+//#define DEBUG 
+
+/**
+ * @file pcliparea.cpp
+ * Clip the image area specified by the cordinates.
+ * It consists in a masking operation of the values outside
+ * the clip area.
+ */
+
+/**
+ * @param zmin, ymin, xmin, , zmax, ymax, xmax defines the cordinates the clip rectangle.
+ */
+template <typename T>
+Errc PClipArea( const Imx3d<T> &ims, Imx3d<T> &imd, const int zclip, const int yclip, const int xclip, int dclip, int hclip, int wclip) {
+   
+#ifdef DEBUG  
+   printf("cordinates = (x=%d,y=%d,z=%d) et size = (w=%d,h=%d,d=%d)\n",xclip,yclip,zclip, wclip,hclip,dclip);
+#endif
+   
+   if (zclip<0 || yclip<0 || xclip<0 ) {
+      fprintf(stderr,"Error pcliparea: Bad parameter values %d %d %d %d %d %d\n", xclip, yclip, zclip, wclip, hclip, dclip) ;
+      return FAILURE;
+   }
+
+   int zend = zclip+dclip;
+   int yend = yclip+hclip;
+   int xend = xclip+wclip;
+
+   if (dclip < 1 || zend>ims.Depth()) zend = ims.Depth();
+   if (hclip < 1 || yend>ims.Height()) yend = ims.Height();
+   if (wclip < 1 || xend>ims.Width()) xend = ims.Width();
+   
+   imd=0;
+#ifdef DEBUG  
+   printf("z : %d -> %d\n",zclip,zend);
+   printf("y : %d -> %d\n",yclip,yend);
+   printf("x : %d -> %d\n",xclip,xend);
+#endif
+   for (int b=0;b<ims.Bands(); b++)
+      for (int z=zclip; z<zend; z++)
+	 for (int y=yclip; y<yend; y++)
+	    for (int x=xclip; x<xend; x++) {
+	       imd[b][z][y][x] = ims[b][z][y][x];
+	    }
+   return SUCCESS;
+}
+
+##begin PClipArea < TYPE >
+## append loadcases
+   if (objs[0]->Type() == Po_$TYPE) {
+      TYPE* const ims=(TYPE*)objs[0];
+      objd[0]=new TYPE(ims->Props());
+      TYPE* const imd=(TYPE*)objd[0];
+
+      result=PClipArea(*ims,*imd,
+		       atoi(parv[2]),atoi(parv[1]),atoi(parv[0]),
+		       atoi(parv[5]),atoi(parv[4]),atoi(parv[3]));
+      goto end;
+   }
+
+## end
+##end
+
+##forall(PClipArea,/Im.[23]/)
+
+#ifdef MAIN
+#define	USAGE	"usage: %s x y z width height depth [im_in|-] [im_out|-]"
+#define	PARC	6
+#define	FINC	1
+#define	FOUTC	1
+#define	MASK	0
+
+##main(PARC,FINC,FOUTC,MASK,USAGE)
+#endif

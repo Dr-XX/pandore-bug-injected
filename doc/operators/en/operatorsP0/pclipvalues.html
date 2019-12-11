@@ -1,0 +1,129 @@
+<html>
+<head>
+<title>PANDORE OPERATORS</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>pclipvalues</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Clips pixel values inside the specified range.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>pclipvalues</b> <i>low</i> <i>high</i> [<i>-m mask</i>] [<i>im_in</i>|-] [<i>im_out</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p><b>pclipvalues</b> restricts the pixel values of the input
+image <i>im_in</i> to the range defined by the parameters
+[<i>low</i>..<i>high</i>].
+Pixels with a value lower than <i>low</i> will be set to <i>low</i>;
+pixels with a value higher than <i>high</i> will be set to <i>high</i>.
+</p>
+
+<p>More formally, <i>im_out</i> is built using the following algorithm
+for each pixel p:</p>
+<pre>
+if (im_in[p] &gt; high) im_out[p]=high
+else if (im_in[p] &lt; low) im_out[p]=low
+     else im_out[p]=im_in[p];
+</pre>
+
+<!---------------------------------- -->
+<h3>Parameters</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>low</i> and <i>high</i> specifies the
+range of the output pixel values. They are related
+to the input type image (for example Img2duc [0..255],Img2dsl [-2147483648..+2147483648]).</p>
+<b>Note</b>: if <i>min &gt; max</i> then min and max are set respectively
+with the minimum and maximum values of the input image type.
+(For example, 0 and 255 for Uchar images or +2147483648 for Img2dsl).</p>
+</ul>
+
+<!---------------------------------- -->
+<h3>Inputs</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_in</i>: an image.
+</ul>
+
+<!---------------------------------- -->
+<h3>Outputs</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_out</i>: an image with the same properties as im_in.
+</ul>
+
+<!---------------------------------- -->
+<h3>Result</h3>
+<!---------------------------------- -->
+<p>SUCCESS or FAILURE in case of invalid parameter values.</p>
+
+<!---------------------------------- -->
+<h3>Examples</h3>
+<!---------------------------------- -->
+<p>Contrast sharpening of the tangram.pan image using 
+the unsharp masking technique. The sharpened image is built
+by adding a highpass filtering image of the initial image
+tangram.pan. The highpass image is built by subtracting
+from the tangram.pan image a blurred version of itself.
+At the end, only pixel values within the range [0..255]
+are kept in the final result. All the processing is done
+with float images.</p>
+<pre>
+   pim2sf tangram.pan i1.pan
+   pgauss 0.8 i1.pan i2.pan
+   psub i1.pan i2.pan i3.pan
+   pmultcst 0.7 i3.pan i4.pan
+   padd i1.pan i4.pan i5.pan
+   pclipvalues 0 255 i5.pan mean.pan
+</pre>
+
+<!---------------------------------- -->
+<h3>See also</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#arithmetic">Arithmetic</a>
+
+<!---------------------------------- -->
+<h3>C++ prototype</h3>
+<!---------------------------------- -->
+<tt>
+Errc PClipValues( const Img2duc &amp;im_in, Img2duc &amp;im_out, float low, float high );
+</tt>
+
+<!---------------------------------- -->
+<h3>Version fran&ccedil;aise</h3>
+<!---------------------------------- -->
+<p>Ecr&ecirc;tage des valeurs de pixels</p>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Author: R&eacute;gis Clouard
+</address>
+<!---------------------------------- -->
+
+</body>
+</html>

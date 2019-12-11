@@ -1,0 +1,127 @@
+<html>
+<head>
+<title>PANDORE OPERATORS</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>pbicubicrescale</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Performs an affine rescaling of 2D image using the bicubic interpolation.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>pbicubicrescale</b> <i>zoomx</i> <i>zoomy</i> <i>zoomyz</i> [<i>im_in</i>|-] [<i>im_out</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p><b>pbicubicrescale</b> changes magnification of the input image <i></i>
+by a factor <i>zoomx</i> along the x axis,
+<i>zoomy</i> along the y axis and
+<i>zoomz</i> along the z axis (for 3D images).
+The image is enlarged along an axis if the zoom factor is &gt; 1 and
+is shrunk if the zoom factor is &gt;0 and &lt;1.</p>
+
+<p>This version uses the bicubic interpolation. 
+For bicubic interpolation, the output pixel value is a weighted average\
+of pixels in the nearest 4-by-4 neighborhood.
+
+<p>This operator needs a long execution time.
+Thus it can only be used for 2D images.
+To rescale region map or graph or 3D image, use the operator 
+<a href="./prescale.html">prescale</a>.</p>
+
+<!---------------------------------- -->
+<h3>Parameters</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>zoomx</i>, <i>zoomy</i>, <i>zoomz</i>
+are positive real values.
+<p>if a zoom factor is &gt; 1 then the image is enlarged along
+the related axis.<br>
+<p>if a zoom factor is &lt; 1 then the image is shrunk along
+the related axis.<br>
+<i>zoomz</i> is ignored since this operator only works on 2D images.
+</ul>
+
+<!---------------------------------- -->
+<h3>Inputs</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_in</i>: an 2D image.
+</ul>
+
+<!---------------------------------- -->
+<h3>Outputs</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_out</i>: an image of the same type as the input image.
+</ul>
+
+<!---------------------------------- -->
+<h3>Result</h3>
+<!---------------------------------- -->
+<p>Returns SUCCESS or FAILURE.</p>
+
+<!---------------------------------- -->
+<h3>Examples</h3>
+<!---------------------------------- -->
+<ul>
+<li>Enlarges the tangram.pan image by a factor 2:
+<pre>
+   pbicubicrescale 2 2 0 tangram.pan a.pan
+</pre>
+<li>Shrinks the tangram.pan image by a factor 2:
+<pre>
+   pbicubicrescale 0.5 0.5 0 tangram.pan a.pan
+</pre>
+</ul>
+
+<!---------------------------------- -->
+<h3>See also</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#transformation">Transformation</a>,
+<a href="./plinearrescale.html">plinearrescale</a>,
+<a href="./prescale.html">prescale</a>
+
+<!---------------------------------- -->
+<h3>C++ prototype</h3>
+<!---------------------------------- -->
+<tt>
+Errc PBicubicRescale( const Img2duc &amp;im_in, Img2duc &amp;im_out, float zoomy, float zoomx );
+</tt>
+
+<!---------------------------------- -->
+<h3>Version fran&ccedil;aise</h3>
+<!---------------------------------- -->
+<p>Augmentation ou r&eacute;duction de la taille d'une image par interpolation bicubique.</p>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Author: R&eacute;gis Clouard
+</address>
+<!---------------------------------- -->
+
+</body>
+</html>

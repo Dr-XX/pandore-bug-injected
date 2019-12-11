@@ -1,0 +1,420 @@
+/* -*- c-basic-offset: 3; mode: c++ -*-
+ *
+ * Copyright (c), GREYC.
+ * All rights reserved
+ *
+ * You may use this file under the terms of the BSD license as follows:
+ *
+ * "Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are
+ * met:
+ *   * Redistributions of source code must retain the above copyright
+ *     notice, this list of conditions and the following disclaimer.
+ *   * Redistributions in binary form must reproduce the above copyright
+ *     notice, this list of conditions and the following disclaimer in
+ *     the documentation and/or other materials provided with the
+ *     distribution.
+ *   * Neither the name of the GREYC, nor the name of its
+ *     contributors may be used to endorse or promote products
+ *     derived from this software without specific prior written
+ *     permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
+ *
+ * For more information, refer to:
+ * https://clouard.users.greyc.fr/Pandore
+ */
+
+/**
+ * @author Francois Angot - 2000-07-04
+ * @author Regis Clouard - 2001-04-27 (version 3.00) 
+ * @author Regis Clouard - 2002-11-28 (version 3.5)
+ * @author Regis Clouard - 2006-05-12 (add 1D images).
+ * @author Alexis Mignon - 2009-01-06 (fix bug on multispectral images).
+*/
+
+#include <pandore.h>
+using namespace pandore;
+
+/**
+ * @file pcontentsdisplay.cpp
+ * Displays the content of a Pandore object.
+ */
+
+##begin PContentsDisplayImg1d < TIN, LOOPP >
+Errc PContentsDisplay( const TIN &ims ) {
+   Point1d p;
+   
+   std::cout <<"Gray image 1d of " << (TypeName<TIN::ValueType>::Name()).c_str() << std::endl;
+   std::cout << ims.Width() << " columns." << std::endl << std::endl;
+   std::cout << "Legend: x : (value)" << std::endl;
+##LOOPP(ims,p)
+   {
+      // (Select::Largest) to avoid cout << char.
+      if (ims[p])
+	 std::cout << p.x <<":("<<(Select< TIN::ValueType, Short>::Largest)ims[p]<<")\t";
+   }
+   return SUCCESS;
+}
+## append loadcases
+   if (objs[0]->Type()==Po_$TIN) {
+      TIN* const ims=(TIN*)objs[0];
+      
+      result=PContentsDisplay(*ims);
+      goto end;
+   }
+## end
+##end
+
+##begin PContentsDisplayImc1d < TIN, LOOPP >
+Errc PContentsDisplay( const TIN &ims ) {
+   Point1d p;
+   
+   std::cout <<"Color image 1d of " << (TypeName<TIN::ValueType>::Name()).c_str() << std::endl;
+   std::cout << ims.Width() << " columns." << std::endl << std::endl;
+   std::cout << "Legend: x : (value,value,value)" << std::endl;
+##LOOPP(ims,p)
+   {
+      // (Select::Largest) to avoid cout << char.
+      if (ims[p])
+	 std::cout << p.x <<":(" <<(Select< TIN::ValueType, Short>::Largest)ims.X[p]
+		   <<","
+		   <<(Select< TIN::ValueType, Short>::Largest)ims.Y[p]
+		   <<","
+		   <<(Select< TIN::ValueType, Short>::Largest)ims.Z[p]
+		   <<")\t";
+   }
+   return SUCCESS;
+}
+## append loadcases
+   if (objs[0]->Type()==Po_$TIN) {
+      TIN* const ims=(TIN*)objs[0];
+      
+      result=PContentsDisplay(*ims);
+      goto end;
+   }
+## end
+##end
+
+##begin PContentsDisplayImx1d < TIN, LOOPP >
+Errc PContentsDisplay( const TIN &ims ) {
+   Point1d p;
+   
+   std::cout <<"Multispectral image 1d of " << (TypeName<TIN::ValueType>::Name()).c_str() << std::endl;
+   std::cout << ims.Width() << " columns." << std::endl << std::endl;
+   std::cout << "Legend: x : (value, value, ...)" << std::endl;
+##LOOPP(ims,p)
+   {
+      // (Select::Largest) to avoid cout << char.
+      bool empty=true;
+      for (int b=0; b<ims.Bands(); b++) if (ims[b][p] != 0) { empty=false; break; }
+      if (! empty) {
+	 std::cout <<p.x<<":(";
+         std::cout << (Select< TIN::ValueType, Short>::Largest)ims[0][p];
+	 for (int b=1; b<ims.Bands(); b++) {
+	    std::cout <<","<< (Select< TIN::ValueType, Short>::Largest)ims[b][p];
+	 }
+	 std::cout <<")\t";
+      }
+   }
+   return SUCCESS;
+}
+## append loadcases
+   if (objs[0]->Type()==Po_$TIN) {
+      TIN* const ims=(TIN*)objs[0];
+      
+      result=PContentsDisplay(*ims);
+      goto end;
+   }
+## end
+##end
+
+##begin PContentsDisplayImg2d < TIN, LOOP, VARS, ACC >
+Errc PContentsDisplay( const TIN &ims ) {
+   register int VARS;
+   
+   std::cout <<"Gray image 2d of " << (TypeName<TIN::ValueType>::Name()).c_str() << std::endl;
+   std::cout << ims.Height() << "rows "<< ims.Width() << " columns." << std::endl << std::endl;
+   std::cout << "Legend: y,x : (value)" << std::endl;
+##LOOP(ims,VARS)
+   {
+      // (Select::Largest) to avoid cout << char.
+      if (ims[ACC])
+	 std::cout<<y<<","<<x<<":("<<(Select< TIN::ValueType, Short>::Largest)ims[ACC]<<")\t";
+   }
+   return SUCCESS;
+}
+## append loadcases
+   if (objs[0]->Type()==Po_$TIN) {
+      TIN* const ims=(TIN*)objs[0];
+      
+      result=PContentsDisplay(*ims);
+      goto end;
+   }
+## end
+##end
+
+##begin PContentsDisplayImc2d < TIN, LOOP, VARS, ACC >
+Errc PContentsDisplay( const TIN &ims ) {
+   register int VARS;
+   
+   std::cout<<"Color image 2d of "<< (TypeName<TIN::ValueType>::Name()).c_str()<< std::endl;
+   std::cout<<ims.Height()<<" rows, "<<ims.Width()<<" columns." << std::endl << std::endl;
+   std::cout<<"Legend: y,x : (value,value,value)" << std::endl;
+##LOOP(ims,VARS)
+   {
+      if (ims.X[ACC] || ims.Y[ACC] || ims.Z[ACC])
+	 std::cout<<y<<","<<x<<":("<<(Select< TIN::ValueType,Short>::Largest)ims.X[ACC]<<","
+		  <<(Select< TIN::ValueType,Short>::Largest)ims.Y[ACC]<<","
+		  <<(Select< TIN::ValueType,Short>::Largest)ims.Z[ACC]<<")\t";
+   }
+   return SUCCESS;
+}
+## append loadcases
+   if (objs[0]->Type()==Po_$TIN) {
+      TIN* const ims=(TIN*)objs[0];
+      
+      result=PContentsDisplay(*ims);
+      goto end;
+   }
+## end
+##end
+
+##begin PContentsDisplayImx2d < TIN, LOOPP >
+Errc PContentsDisplay( const TIN &ims ) {
+   Point2d p;
+   
+   std::cout <<"Multispectral image 2d of " << (TypeName<TIN::ValueType>::Name()).c_str() << std::endl;
+   std::cout << ims.Width() << " columns." << std::endl << std::endl;
+   std::cout << "Legend: y,x : (value, value, ...)" << std::endl;
+##LOOPP(ims,p)
+   {
+      // (Select::Largest) to avoid cout << char.
+      bool empty=true;
+      for (int b=0; b<ims.Bands(); b++) if (ims[b][p] != 0) { empty=false; break; }
+      if (! empty) {
+	 std::cout <<p.y<<","<<p.x<<":(";
+	 std::cout << (Select< TIN::ValueType, Short>::Largest)ims[0][p];
+	 for (int b=1; b<ims.Bands(); b++) {
+	    std::cout << "," << (Select< TIN::ValueType, Short>::Largest)ims[b][p];
+	 }
+	 std::cout <<")\t";
+      }
+   }
+   return SUCCESS;
+}
+## append loadcases
+   if (objs[0]->Type()==Po_$TIN) {
+      TIN* const ims=(TIN*)objs[0];
+      
+      result=PContentsDisplay(*ims);
+      goto end;
+   }
+## end
+##end
+
+##begin PContentsDisplayImg3d < TIN, LOOP, VARS, ACC >
+Errc PContentsDisplay( const TIN &ims ) {
+   register int VARS;
+   
+   std::cout<<"Gray image 3d of " << (TypeName<TIN::ValueType>::Name()).c_str() << std::endl;
+   std::cout<< ims.Depth() << "slices, " << ims.Height() << " rows, " << ims.Width() << " columns." << std::endl << std::endl;
+   std::cout<<"Legend: z,y,x : (value)" << std::endl;
+##LOOP(ims,VARS)
+   {
+      if (ims[ACC])
+	 std::cout<<z<<","<<y<<","<<x<<":("<<(Select< TIN::ValueType,Short>::Largest)ims[ACC]<<")\t";
+   }
+   return SUCCESS;
+}
+## append loadcases
+   if (objs[0]->Type()==Po_$TIN) {
+      TIN* const ims=(TIN*)objs[0];				   
+      result=PContentsDisplay(*ims);
+      goto end;
+   }
+## end
+##end
+
+##begin PContentsDisplayImc3d < TIN, LOOP, VARS, ACC >
+Errc PContentsDisplay( const TIN &ims ) {
+   register int VARS;
+   
+   std::cout<<"Color image 3d of "<<(TypeName<TIN::ValueType>::Name()).c_str() << std::endl;
+   std::cout<<ims.Depth()<<" slices, "<<ims.Height()<<" rows, "<<ims.Width()<<" columns." << std::endl << std::endl;
+   std::cout<<"Legend: z,y,x : (value,value,value)"<< std::endl;
+##LOOP(ims,VARS)
+   {
+      if (ims.X[ACC] || ims.Y[ACC] || ims.Z[ACC])
+	 std::cout<<z<<","<<y<<","<<x<<":("<<(Select< TIN::ValueType,Short>::Largest)ims.X[ACC]<<","
+		  <<(Select< TIN::ValueType,Short>::Largest)ims.Y[ACC]<<","
+		  <<(Select< TIN::ValueType,Short>::Largest)ims.Z[ACC]<<")\t";
+   }
+   return SUCCESS;
+}
+## append loadcases
+   if (objs[0]->Type()==Po_$TIN) {
+      TIN* const ims=(TIN*)objs[0];
+      
+      result=PContentsDisplay(*ims);
+      goto end;
+   }
+## end
+##end
+
+##begin PContentsDisplayImx3d < TIN, LOOPP >
+Errc PContentsDisplay( const TIN &ims ) {
+   Point3d p;
+ 
+   std::cout <<"Multispectral image 2d of " << (TypeName<TIN::ValueType>::Name()).c_str() << std::endl;
+   std::cout << ims.Width() << " columns." << std::endl << std::endl;
+   std::cout << "Legend: z,y,x : (value, value, ...)" << std::endl;
+##LOOPP(ims,p)
+   {
+      // (Select::Largest) to avoid cout << char.
+      bool empty=true;
+      for (int b=0; b<ims.Bands(); b++) if (ims[b][p] != 0) { empty=false; break; }
+      if (! empty) {
+	 std::cout <<p.z<<","<<p.y<<","<<p.x<<":(";
+	 std::cout << (Select< TIN::ValueType, Short>::Largest)ims[0][p];
+	 for (int b=1; b<ims.Bands(); b++) {
+	    std::cout <<","<< (Select< TIN::ValueType, Short>::Largest)ims[b][p];
+	 }
+	 std::cout <<")\t";
+      }
+   }
+   return SUCCESS;
+}
+## append loadcases
+   if (objs[0]->Type()==Po_$TIN) {
+      TIN* const ims=(TIN*)objs[0];
+      
+      result=PContentsDisplay(*ims);
+      goto end;
+   }
+## end
+##end
+
+
+Errc PContentsDisplay( const Graph2d &grs ) {
+   Long i;
+   GEdge *ptr;
+   
+   std::cout<<"Graph 2d: " << grs.Size() << " nodes:"<< std::endl;
+   std::cout<<grs.Height() <<" rows, "<< grs.Width()<<" columns." << std::endl << std::endl;
+   for (i=0;i<grs.Size();i++)
+      if (grs[i]) {
+	 std::cout<<i<<": y="<<grs[i]->seed.y<<" x="<<grs[i]->seed.x<<"; value="<<grs[i]->value<<", item="<<grs[i]->Item()<< std::endl << std::endl;
+	 ptr=grs[i]->Neighbours();
+	 if (ptr) {
+	    for (;ptr!=NULL;ptr=ptr->Next())
+	       std::cout<<"  " << ptr->Node() << ":"<< ptr->weight;
+	    std::cout<<std::endl;
+	 }
+      } else {
+	 std::cout<< i << ": NULL" << std::endl;
+      }
+   
+   return SUCCESS;
+}
+
+Errc PContentsDisplay( const Graph3d &grs ) {
+   Long i;
+   GEdge *ptr;
+   
+   std::cout<<"Graph 3d: "<<grs.Size()<<" nodes:" << std::endl;
+   std::cout<<grs.Depth()<<" slices, "<<grs.Height()<<"; rows, "<<grs.Width()<<" columns.\n\n";
+   for (i=1;i<grs.Size();i++)
+      if (grs[i]) {
+	 std::cout<<i<<": z="<<grs[i]->seed.z<<" y="<<grs[i]->seed.y<<" x="<<grs[i]->seed.x<<"; value="<<grs[i]->value<<", item="<<grs[i]->Item()<<std::endl;
+	 ptr=grs[i]->Neighbours();
+	 if (ptr) {
+	    for (;ptr!=NULL;ptr=ptr->Next())
+	       std::cout<<"  "<<ptr->Node()<<":("<<ptr->weight<<");";
+	    std::cout<< std::endl;
+	 }
+      } else {
+	 std::cout<<i<<": NULL" << std::endl;
+      }
+   
+   return SUCCESS;
+}
+
+#ifdef MAIN
+#undef MAIN
+namespace pcol2txt {
+#include "collection/pcol2txt.cpp"
+}
+#define MAIN
+#endif
+
+/*
+ * Collections.
+ */ 
+Errc PContentsDisplay( const Collection &c ) {
+   std::list<std::string> l = c.List();
+   
+   std::cout<<"Type    : Collection (Collection)" << std::endl;
+   std::cout<<"Nb attr : "<< l.size() << std::endl;
+   
+   return pcol2txt::PCol2Txt(c, stdout);
+}
+
+##begin PContentsDisplayGraph < TIN >
+## append loadcases
+   if (objs[0]->Type()==Po_$TIN) {
+      TIN* const grs=(TIN*)objs[0];
+      
+      result=PContentsDisplay(*grs);
+      goto end;
+   }
+## end
+##end
+
+##begin PContentsDisplayCol < TIN >
+## append loadcases
+   if (objs[0]->Type()==Po_$TIN) {
+      TIN* const col=(TIN*)objs[0];
+      
+      result=PContentsDisplay(*col);
+      goto end;
+   }
+## end
+##end
+
+##forall(PContentsDisplayImg2d,/Img2d/)
+##forall(PContentsDisplayImg2d,/Reg2/)
+##forall(PContentsDisplayImc2d,/Imc2d/)
+##forall(PContentsDisplayImx2d,/Imx2d/)
+
+##forall(PContentsDisplayImg3d,/Img3d/)
+##forall(PContentsDisplayImg3d,/Reg3/)
+##forall(PContentsDisplayImc3d,/Imc3d/)
+##forall(PContentsDisplayImx3d,/Imx3d/)
+
+##forall(PContentsDisplayImg1d,/Img1d/)
+##forall(PContentsDisplayImc1d,/Imc1d/)
+##forall(PContentsDisplayImx1d,/Imx1d/)
+
+##forall(PContentsDisplayGraph,/Graph./)
+##forall(PContentsDisplayCol,Collection)
+
+#ifdef MAIN
+#define	USAGE	"usage: %s [-m mask] [im_in|-]"
+#define	PARC	0
+#define	FINC	1
+#define	FOUTC	0
+#define	MASK	1
+
+##main(PARC, FINC, FOUTC, MASK, USAGE)
+#endif

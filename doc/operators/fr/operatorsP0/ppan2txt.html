@@ -1,0 +1,96 @@
+<html>
+<head>
+<title>OPERATEURS PANDORE</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>ppan2txt</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Conversion d'une image en une liste de points dans un fichier texte.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>ppan2txt</b> [<i>-m mask</i>] [<i>im_in</i>|-] [<i>file_out</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p>Cet op&eacute;rateur permet de construire un fichier texte
+contenant la liste des <b>points non nuls</b> de l'image <i>im_in</i>.
+Le fichier texte <i>fichier_texte</i> aura
+la structure suivante (pour une image 3d):</p>
+<pre>
+	valeur x y z
+</pre>
+<p>ou comme suit pour une image 2D :</p>
+<pre>
+	valeur x y
+</pre>
+
+<!---------------------------------- -->
+<h3>Entr&eacute;es</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_in</i>: une image de niveaux de gris (1D, 2D ou 3D).
+</ul>
+
+<!---------------------------------- -->
+<h3>Sorties</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>file_out</i>: un fichier texte.
+</ul>
+
+<!---------------------------------- -->
+<h3>R&eacute;sultat</h3>
+<!---------------------------------- -->
+<p>Retourne SUCCESS ou FAILURE.</p>
+
+<!---------------------------------- -->
+<h3>Exemples</h3>
+<!---------------------------------- -->
+<pre>
+   ppan2txt tangram.pan image.txt
+</pre>
+
+<!---------------------------------- -->
+<h3>Voir aussi</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#conversion">Conversion</a>,
+<a href="./ptxt2pan.html">ptxt2pan</a>
+
+<!---------------------------------- -->
+<h3>Prototype C++</h3>
+<!---------------------------------- -->
+<tt>
+Errc Pan2txt( const Img3duc &amp;im_out, char *nom, Long z, Long y Long x );
+</tt>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Auteur: R&eacute;gis Clouard
+</address>
+<!---------------------------------- -->
+</body>
+</html>

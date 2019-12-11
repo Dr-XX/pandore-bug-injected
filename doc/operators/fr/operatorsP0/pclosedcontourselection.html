@@ -1,0 +1,131 @@
+<html>
+<head>
+<title>OPERATEURS PANDORE</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>pclosedcontourselection</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+S&eacute;lection des cha&icirc;nes de contours ferm&eacute;es sur leur longueur.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>pclosedcontourselection</b> <i>relation</i> <i>longueur</i> [<i>-m mask</i>] [<i>im_in</i>|-] [<i>im_out</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p>L'op&eacute;rateur <b>pclosedcontourselection</b> consiste &agrave; s&eacute;lectionner dans une
+image de contours toutes les <b>cha&icirc;nes ferm&eacute;es</b> ayant une longueur:</p>
+<ul>
+<li>sup&eacute;rieure : si <i>relation &gt; 0</i>
+<li>inf&eacute;rieure : si <i>relation &lt; 0</i> 
+<li>&eacute;gale      : si <i>relation = 0</i>
+</ul>
+<p>&agrave; la valeur de <i>longueur</i> donn&eacute;e en param&egrave;tre
+et compt&eacute;e en nombre de pixels.</p>
+
+<p>Une boucle (ou une chaîne ferm&eacute;e) est une s&eacute;quence continue
+de pixels non nuls, d'&eacute;paisseur 1 pixel, et qui boucle sur elle-m&ecirc;me.</p>
+
+<p><b>Attention</b>: Si les contours ne sont
+pas tous d'&eacute;paisseur 1, l'op&eacute;rateur peut avoir un comportement
+impr&eacute;visible. Attention aussi aux probl&egrave;mes de coins qui peuvent
+engendrer de fausses d&eacute;tections de contours ferm&eacute;s.<br>
+Il faut g&eacute;n&eacute;ralement faire pr&eacute;c&eacute;der cet op&eacute;rateur
+d'op&eacute;rateurs d'amincissement qui garantissent la 8-connexit&eacute;
+(ex: <a href="./ppostthinning.html">ppostthinning</a>).
+
+<!---------------------------------- -->
+<h3>Param&egrave;tres</h3>
+<!---------------------------------- -->
+<ul>
+<li>Le <i>relation</i> est une valeur enti&egrave;re de l'intervalle
+[-3,3], pr&eacute;cisant la relation &agrave; la valeur de longueur.</p>
+<ul>
+<li><i>relation</i> = 3: contours ferm&eacute;s avec la longueur maximale.
+<li><i>relation</i> = 2: contours ferm&eacute;s &gt;= <i>longueur</i>.
+<li><i>relation</i> = 1: contours ferm&eacute;s &gt; <i>longueur</i>.
+<li><i>relation</i> = 0: contours ferm&eacute;s = <i>longueur</i>.
+<li><i>relation</i> = -1: contours ferm&eacute;s &lt; <i>longueur</i>.
+<li><i>relation</i> = -2: contours ferm&eacute;s &lt;= <i>longueur</i>.
+<li><i>relation</i> = -3: contours ferm&eacute;s avec la longueur minimale.
+</ul>
+<li>La longueur <i>longueur</i> est compt&eacute;e en nombre de pixels.</p>
+</ul>
+
+<!---------------------------------- -->
+<h3>Entr&eacute;es</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_in</i>: une image de type Uchar.
+</ul>
+
+<!---------------------------------- -->
+<h3>Sorties</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_out</i>: une image du m&ecirc;me type que l'image d'entr&eacute;e.
+</ul>
+
+<!---------------------------------- -->
+<h3>R&eacute;sultat</h3>
+<!---------------------------------- -->
+<p>Le nombre de cha&icirc;nes s&eacute;lectionn&eacute;es.</p>
+
+<!---------------------------------- -->
+<h3>Exemples</h3>
+<!---------------------------------- -->
+<p>S&eacute;lectionne les plus longs contours ferm&eacute;s
+dans un ensemble de contours obtenus par une simple
+d&eacute;tection d econtours :</p>
+<pre>
+   psobel tangram.pan b.pan
+   pbinarization 45 1e30 b.pan c.pan
+   pskeletonization c.pan d.pan 
+   ppostthinning d.pan e.pan
+   pclosedcontourselection 3 5 e.pan out.pan
+   pstatus
+</pre>
+
+<!---------------------------------- -->
+<h3>Voir aussi</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#contour">Contour</a>
+
+<!---------------------------------- -->
+<h3>Prototype C++</h3>
+<!---------------------------------- -->
+<tt>
+Errc PClosedContourSelection( const Img2duc &amp;im_in, Img2duc &amp;im_out, int relation, int longueur );
+</tt>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Auteur: R&eacute;gis Clouard
+</address>
+<!---------------------------------- -->
+
+</body>
+</html>

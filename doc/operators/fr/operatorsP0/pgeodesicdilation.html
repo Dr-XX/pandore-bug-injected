@@ -1,0 +1,162 @@
+<html>
+<head>
+<title>OPERATEURS PANDORE</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>pgeodesicdilation</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Dilatation g&eacute;od&eacute;sique des points de plus fort contraste de l'image.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>pgeodesicdilation</b> <i>num_se</i> <i>halfsize</i> <i>iteration</i> [<i>-m mask</i>] [<i>im_in</i>|-] [<i>im_msq</i>|-] [<i>im_out</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p>L'op&eacute;rateur <b>pgeodesicdilation</b> effectue la dilatation
+des pixels de l'image <i>im_in</i> tant que ceux-ci
+appartiennent &agrave; une zone non nulle sp&eacute;cifi&eacute;e dans l'image <i>im_msq</i>.
+<i>im_msq</i> est une image de Char ou une carte de r&eacute;gions
+utilis&eacute;e comme masque binaire. Tous les pixels non nuls correspondent
+&agrave; une valeur vrai pour le masque.
+L'&eacute;l&eacute;ment structurant est choisi parmi une liste par <i>num_se</i>
+et sa demi-taille <i>halfsize</i>.
+
+<p>La dilatation g&eacute;od&eacute;sique correspond &agrave; l'op&eacute;ration:</p>
+<pre>
+   if im_msq (p)!=0
+      dilatation(p) = MAX(neighbors of p specified by the structuring element)
+   else
+      dilatation(p) = im_in(p).
+</pre>
+
+<p>La dilatation conditionnelle s'&eacute;crit comme:</p>
+<pre>
+   pdilation se hs in.pan i1.pan
+   pmask i1.pan msq.pan out.pan
+</pre>
+
+<p>Si <i>iteration=-1</i> l'op&eacute;ration est appliqu&eacute;e jusqu'&agrave;
+idempotence.
+
+<p>Pour les cartes de r&eacute;gions, la dilatation s'effectue
+uniquement &agrave; l'int&eacute;rieur d'une m&ecirc;me r&eacute;gion.</p>
+
+<p>Pour les images couleur, c'est l'ordre lexicographique
+qui est utilis&eacute; : d'abord en utilisant la bande X, en cas d'&eacute;galit&eacute;
+en utilisant la bande Y puis la bande Z.</p>
+
+<!---------------------------------- -->
+<h3>Param&egrave;tres</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>num_se</i> sp&eacute;cifie le type de l'&eacute;l&eacute;ment structurant :
+<p>En 2D:</p>
+<ul>
+<li>0: losange (4-connexit&eacute;)
+<li>1: carr&eacute; (8-connexit&eacute;).
+<li>2: cercle
+<li>3: ligne horizontale (-)
+<li>4: ligne verticale (|)
+<li>5: ligne oblique droire (/).
+<li>6: ligne oblique gauche (\).
+</ul>
+
+<p>En 3D:</p>
+<ul>
+<li>0: bipyramide (6-connexit&eacute;)
+<li>1: cube (26-connexitelle s&eacute;)
+<li>2: sph&egrave;re
+<li>3: ligne en x (-)
+<li>4: ligne en y (|)
+<li>5: ligne en z
+</ul>
+
+<li><i>halfsize</i> donne la demi-taille de l'&eacute;l&eacute;ment structurant.
+Par exemple, une demi-taille de 1 pour un carr&eacute; donne un 
+&eacute;l&eacute;ment structurant de taille 3x3.</p>
+
+<li><i>iteration</i> est un entier positif qui donne le nombre
+de dilatation g&eacute;od&eacute;sique &agrave; op&eacute;rer.
+
+Si <i>iteration</i> vaut -1, alors la dilatation g&eacute;od&eacute;sique est effectu&eacute;e
+jusqu'&agrave; idempotence.
+</ul>
+
+<!---------------------------------- -->
+<h3>Entr&eacute;es</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_in</i>: une image de niveaux de gris ou une image couleur.
+<li><i>im_msq</i>: une image d'octets ou une carte de r&eacute;gions.
+</ul>
+
+<!---------------------------------- -->
+<h3>Sorties</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_out</i>: un objet du m&ecirc;me type que <i>im_in</i>.
+</ul>
+
+<!---------------------------------- -->
+<h3>R&eacute;sultat</h3>
+<!---------------------------------- -->
+<p>Retourne SUCCESS ou FAILURE.</p>
+
+<!---------------------------------- -->
+<h3>Exemples</h3>
+<!---------------------------------- -->
+<ul>
+<li>D&eacute;tection de contours bas&eacute;e sur le seuillage par
+hyst&eacute;resis.
+<pre> 
+   pgradient 1 tangram.pan i1.pan i2.pan 
+   pbinarization 80 -1 i1.pan i3.pan
+   pbinarization 30 -1 i1.pan i4.pan
+   pgeodesicdilation 1 1 -1 i3.pan i4.pan out.pan
+</pre>
+</ul>
+
+<!---------------------------------- -->
+<h3>Voir aussi</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#morphology">Morphologie</a>,
+<a href="./pgeodesicerosion.html">pgeodesicerosion</a>
+
+<!---------------------------------- -->
+<h3>Prototype C++</h3>
+<!---------------------------------- -->
+<tt>
+Errc PGeodesicDilation( const Img2duc &amp;im_in, const Img2duc &amp;im_msq, Img2duc &amp;im_out, int num_se, int halfsize, int iteration );
+</tt>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Auteur: R&eacute;gis Clouard
+</address>
+<!---------------------------------- -->
+</body>
+</html>

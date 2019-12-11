@@ -1,0 +1,155 @@
+<html>
+<head>
+<title>PANDORE OPERATORS</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>pgeodesicerosion</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Performs geodesic erosion.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>pgeodesicerosion</b> <i>num_se</i> <i>halfsize</i> <i>iteration</i> [<i>-m mask</i>] [<i>im_in</i>|-] [<i>im_msq</i>|-] [<i>im_out</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p><b>pgeodesicerosion</b> performs the erosion of
+the pixels of the image <i>im_in</i> as long as those pixels belong
+to a null area specified in the image <i>im_msq</i>.
+<i>im_msq</i> is an image of bytes or a region map used as
+a binary mask. All the non null pixels correspond to a true value for
+the mask.
+The structuring element is specified by its type <i>num_se</i>
+and its size <i>halfsize</i>.</p>
+
+<p>Geodesic erosion of point p corresponds to the operation:</p> 
+<pre>
+   if im_msq (p)=0
+      erosion(p) = MIN(neighbors of p specified by the structuring element)
+   else
+      erosion(p) = im_in(p).
+</pre>
+
+<p>Whereas, conditional erosion is defined as :</p> 
+<pre>
+   pinverse msq.pan i1.pan
+   por in.pan i1.pan i2.pan
+   perosion hs i2.pan i3.pan
+   pmask i3.pan msq.pan out.pan 
+</pre>
+
+<p>For the color images, the lexicographic order is used:
+initially by using band X, in the event of equality by using the band Y
+then band Z.</p>
+
+<!---------------------------------- -->
+<h3>Parameters</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>num_se</i> specifies the type of the structuring element:
+<p>case of 2D:</p>
+<ul>
+<li>0: diamond (4-connexity) 
+<li>1: square (8-connexity) 
+<li>2: disc 
+<li>3: horizontal line (-) 
+<li>4: vertical line (|) 
+<li>5: right oblique line (/). 
+<li>6: left oblique line (\). 
+</ul>
+
+<p>case of 3D:</p>
+<ul>
+<li>0: bipyramid (6-connexity) 
+<li>1: cube (26-connexity) 
+<li>2: sphere 
+<li>3: line along X (-) 
+<li>4: line along Y (|) 
+<li>5: line along Z 
+</ul>
+
+<li><i>halfsize</i> specifies the half-size of the structuring
+element. For example, a half-size of 1 for a square gives a structuring
+element of size 3x3.
+
+<li><i>iteration</i> specifies the number of iterations.
+If <i>iteration</i>=-1, then geodesic dilation is carried out until idempotence. 
+</ul>
+
+<!---------------------------------- -->
+<h3>Inputs</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_in</i>: a gray level or a color image.
+<li><i>im_msq</i>: an image of bytes or a region map.
+</ul>
+
+<!---------------------------------- -->
+<h3>Outputs</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_out</i>: an image of the same type as <i>im_in</i>.
+</ul>
+
+<!---------------------------------- -->
+<h3>Result</h3>
+<!---------------------------------- -->
+<p>Returns SUCCESS or FAILURE.</p>
+
+<!---------------------------------- -->
+<h3>Examples</h3>
+<!---------------------------------- -->
+<ul>
+<li>Performs edge detection based on hysteresis thresholding:
+<pre> 
+   pgradient 1 tangram.pan i1.pan i2.pan 
+   pbinarization 0 80 i1.pan i3.pan
+   pbinarization 0 30 i1.pan i4.pan
+   pgeodesicerosion 1 1 -1 i3.pan i4.pan i5.pan
+   pinverse i5.pan out.pan
+</pre>
+</ul>
+
+<!---------------------------------- -->
+<h3>See also</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#morphologie">Morphology</a>,
+<a href="./pgeodesicdilation.html">pgeodesicdilation</a>
+
+<!---------------------------------- -->
+<h3>C++ prototype</h3>
+<!---------------------------------- -->
+<tt>
+Errc PGeodesicErosion( const Img2duc &amp;im_in, const Img2duc &amp;im_msq, Img2duc &amp;im_out, int num_se, int halfsize, int iteration );
+</tt>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Author: R&eacute;gis Clouard
+</address>
+<!---------------------------------- -->
+</body>
+</html>

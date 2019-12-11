@@ -1,0 +1,145 @@
+/* -*- c-basic-offset: 3; mode: c++ -*-
+ *
+ * Copyright (c), GREYC.
+ * All rights reserved
+ *
+ * You may use this file under the terms of the BSD license as follows:
+ *
+ * "Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are
+ * met:
+ *   * Redistributions of source code must retain the above copyright
+ *     notice, this list of conditions and the following disclaimer.
+ *   * Redistributions in binary form must reproduce the above copyright
+ *     notice, this list of conditions and the following disclaimer in
+ *     the documentation and/or other materials provided with the
+ *     distribution.
+ *   * Neither the name of the GREYC, nor the name of its
+ *     contributors may be used to endorse or promote products
+ *     derived from this software without specific prior written
+ *     permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
+ *
+ * 
+ * For more information, refer to:
+ * https://clouard.users.greyc.fr/Pandore
+ */
+
+/**
+ * @author Régis Clouard - 1997-07-23
+ * @author Régis Clouard - 2001-05-09 (version 3.00)
+ * @author Régis Clouard - 2002-12-06 (version 4.00)
+ * @author Régis Clouard - 2005-09-13 (fix bugs)
+ */
+
+#include <map>
+#include <pandore.h>
+#include <math.h>
+using namespace pandore;
+
+/**
+ * @file phistogramequalization.cpp
+ * @brief Histogram equalization.
+ *
+ * Change the dynamic of the input image
+ * to improves contrast.
+ */
+template <typename T>
+Errc PHistogramEqualization( const Imx3d<T> &ims, Imx3d <T> &imd, float minout, float maxout ) {   
+   std::map<T,float> histo;
+   std::map<T,float> histoc;
+   
+   if (minout < (float)Limits<T>::min() ||
+       maxout > (float)Limits<T>::max()) {
+      std::cerr<< "Error phistogramequalization: Bad parameter values out of bound"<<std::endl;
+      return FAILURE;
+   }
+   for (int b=0; b<ims.Bands(); b++) {
+      // Compute the histogram and the min-max values.
+      T minval,maxval;
+      maxval=minval=*(ims.Vector(b));
+
+      T* ps=ims.Vector(b);
+      for (;ps<ims.Vector(b)+ims.VectorSize();ps++) {
+	 T val=*ps;
+	 histo[val]++;
+	 if (val>maxval) maxval=val;
+	 if (val<minval) minval=val;
+      }
+      
+      // Compute the cumulated histogram.
+      // (discard h[min] -> set histoc[min]=0)
+      // This is usefull to begin exactly the output histogram
+      // at min (either minout or minval)
+      float sum=0;
+      
+      typename std::map<T,float>::const_iterator h;
+
+      h=histo.begin();
+      float hdeb=histo[h->first];
+      histoc[h->first]=0.0F;
+      h++;
+      float total=ims.VectorSize()-hdeb;
+      for (;h != histo.end();h++) {
+	 sum=histoc[h->first]=sum+h->second;
+	 histoc[h->first]=histoc[h->first] / total;
+      }
+      
+      Float coef;
+      Float min;
+      if (minout>maxout) {
+	 coef=(Float)(maxval-minval);
+	 min=(float)minval;
+      } else {
+	 coef=(Float)(maxout-minout);
+	 min=minout;
+      }
+      
+      ps=ims.Vector(b);
+      T* pd=imd.Vector(b);
+      for (;ps<ims.Vector(b)+ims.VectorSize();ps++,pd++) {
+	 *pd=(T)(min+histoc[*ps]*coef);
+      }
+      histo.clear();
+      histoc.clear();
+   }
+   return SUCCESS;
+}
+
+##begin PHistogramEqualization < TIN >
+## append loadcases
+   if (objs[0]->Type()==Po_$TIN) {
+      TIN* const ims=(TIN*)objs[0];
+      objd[0]=new TIN(ims->Props());
+      TIN* const imd=(TIN*)objd[0];
+      
+      result=PHistogramEqualization(*ims,*imd,(float)atof(parv[0]),(float)atof(parv[1]));
+      goto end;
+   }
+## end
+##end
+
+
+##forall(PHistogramEqualization,/Im.[23]d/)
+
+#ifdef MAIN
+#define	USAGE	"usage: %s min max [-m mask] [im_in|-] [im_out|-]"
+#define	PARC	2
+#define	FINC	1
+#define	FOUTC	1
+#define	MASK	1
+
+##main(PARC,FINC,FOUTC,MASK,USAGE)
+
+#endif

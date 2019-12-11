@@ -1,0 +1,121 @@
+<html>
+<head>
+<title>PANDORE OPERATORS</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>pproperty</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Gets Pandore object property value.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>pproperty</b> <i>property_index</i> [<i>im_in</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p><b>pproperty</b> returns the property value of the
+given Pandore object.
+The property is specified by a number based on a
+pure convention (see parameters).</p>
+
+<p>The value is got using the operator <b>pstatus</b>.
+
+<!---------------------------------- -->
+<h3>Parameters</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>property_index</i> is based on the following convention:</p>
+<ul>
+<li>0: the number of columns (for image, region map and graph);
+<li>1: the number of rows (for image, region map and graph);
+<li>2: the number of planes (for image, region map and graph);
+<li>3: the number of bands for image, or<br>
+the number of labels for region map, or<br>
+the number of nodes for graph (size).
+<li>4 : the color space number:<br>
+[-1: no color space (or gray scale), 0: RGB; 1: XYZ; 2: LUV; 3: LAB; 4: HSL; 5: AST; 6: I1I2I3; 7: LCH;
+8: WRY; 9: RNGNBN; 10: YCBCR; 11: YCH1CH; 12: YIQ; 13: YUV].
+</ul>
+</ul>
+
+<!---------------------------------- -->
+<h3>Inputs</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_in</i>: a Pandore file.
+</ul>
+
+<!---------------------------------- -->
+<h3>Result</h3>
+<!---------------------------------- -->
+<p>Returns the value of the selected property.</p>
+
+<!---------------------------------- -->
+<h3>Examples</h3>
+<!---------------------------------- -->
+<ul>
+<li>Unix/Linux/MACOS: Build a new image with the same
+dimension than tangram.pan which contains
+a white disc of radius 50:
+<pre>
+   pproperty 0 tangram.pan; w=`pstatus`
+   pproperty 1 tangram.pan; h=`pstatus`
+   pshapedesign $w $h 0 1 50 50 a.pan
+</pre>
+
+<li>MsDos: Build a new image with the same
+dimension than tangram.pan which contains
+a white disc of radius 50:
+<pre>
+   pproperty 0 tangram.pan
+   call pstatus
+   call pset w 
+   pproperty 1 tangram.pan
+   call pstatus
+   call pset h
+   pshapedesign $w $h 0 1 50 50 a.pan
+</pre>
+</ul>
+
+<!---------------------------------- -->
+<h3>See also</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#information">Information</a>
+
+<!---------------------------------- -->
+<h3>C++ prototype</h3>
+<!---------------------------------- -->
+<tt>
+Errc PProperty( const Img2duc &amp;img, int property_index );
+</tt>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Author: R&eacute;gis Clouard
+</address>
+<!---------------------------------- -->
+</body>
+</html>

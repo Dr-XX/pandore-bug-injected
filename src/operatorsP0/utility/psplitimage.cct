@@ -1,0 +1,187 @@
+/* -*- c-basic-offset: 3; mode: c++ -*-
+ *
+ * Copyright (c), GREYC.
+ * All rights reserved
+ *
+ * You may use this file under the terms of the BSD license as follows:
+ *
+ * "Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are
+ * met:
+ *   * Redistributions of source code must retain the above copyright
+ *     notice, this list of conditions and the following disclaimer.
+ *   * Redistributions in binary form must reproduce the above copyright
+ *     notice, this list of conditions and the following disclaimer in
+ *     the documentation and/or other materials provided with the
+ *     distribution.
+ *   * Neither the name of the GREYC, nor the name of its
+ *     contributors may be used to endorse or promote products
+ *     derived from this software without specific prior written
+ *     permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
+ *
+ * 
+ * For more information, refer to:
+ * https://clouard.users.greyc.fr/Pandore
+ */
+
+/**
+ * @author Ludovic SOLTYS - 02-02-2003
+ * @author Regis Clouard - 2004-08-04 (add types)
+ */
+
+#include <stdio.h>
+#include <string.h>
+#include <pandore.h>
+using namespace pandore;
+
+/**
+ * @file psplitimage.cpp
+ * Eclate une image en 4 sous-images de dimensions moities.
+ */
+
+##begin PSplitImageG < TIN, LOOPP, POINT >
+Errc PSplitImage( const TIN &ims, TIN &imd0, TIN &imd1, TIN &imd2, TIN &imd3 ) {
+   int h = imd0.Height();
+   int w = imd0.Width();
+   
+   for (int x = 0; x < w; x++) {
+      for (int y = 0; y < h; y++) {
+	 imd0[y][x] = ims[y][x];
+	 imd1[y][x] = ims[y][x + w];
+	 imd2[y][x] = ims[y + h][x];
+	 imd3[y][x] = ims[y + h][x + w];
+      }
+   }
+   
+   return SUCCESS;
+}
+
+## append loadcases
+   if (objs[0]->Type() == Po_$TIN) {
+      TIN* const ims = (TIN*)objs[0];	
+      
+      objd[0] = new TIN((ims->Height()) / 2, (ims->Width()) / 2);
+      objd[1] = new TIN((ims->Height()) / 2, (ims->Width()) / 2);
+      objd[2] = new TIN((ims->Height()) / 2, (ims->Width()) / 2);
+      objd[3] = new TIN((ims->Height()) / 2, (ims->Width()) / 2);
+      
+      TIN* const imd0 = (TIN*)objd[0];
+      TIN* const imd1 = (TIN*)objd[1];
+      TIN* const imd2 = (TIN*)objd[2];
+      TIN* const imd3 = (TIN*)objd[3];
+      
+      result = PSplitImage(*ims, *imd0, *imd1, *imd2, *imd3);
+      goto end;
+   }
+
+## end
+##end
+
+##begin PSplitImageC < TIN, LOOPP, POINT >
+Errc PSplitImage( const TIN &ims, TIN &imd0, TIN &imd1, TIN &imd2, TIN &imd3 ) {
+   imd0.ColorSpace(ims.ColorSpace());
+   imd1.ColorSpace(ims.ColorSpace());
+   imd2.ColorSpace(ims.ColorSpace());
+   imd3.ColorSpace(ims.ColorSpace());
+   int h = imd0.Height();
+   int w = imd0.Width();
+   
+   for (int x = 0; x < w; x++) {
+      for (int y = 0; y < h; y++) {
+	 for (int b = 0; b < ims.Bands(); b++) {
+	    imd0[b][y][x] = ims[b][y][x];
+	    imd1[b][y][x] = ims[b][y][x + w];
+	    imd2[b][y][x] = ims[b][y + h][x];
+	    imd3[b][y][x] = ims[b][y + h][x + w];
+	 }
+      }
+   }
+   
+   return SUCCESS;
+}
+
+## append loadcases
+   if (objs[0]->Type() == Po_$TIN) {
+      TIN* const ims = (TIN*)objs[0];	
+      
+      objd[0] = new TIN((ims->Height()) / 2, (ims->Width()) / 2);
+      objd[1] = new TIN((ims->Height()) / 2, (ims->Width()) / 2);
+      objd[2] = new TIN((ims->Height()) / 2, (ims->Width()) / 2);
+      objd[3] = new TIN((ims->Height()) / 2, (ims->Width()) / 2);
+      
+      TIN* const imd0 = (TIN*)objd[0];
+      TIN* const imd1 = (TIN*)objd[1];
+      TIN* const imd2 = (TIN*)objd[2];
+      TIN* const imd3 = (TIN*)objd[3];
+      
+      result = PSplitImage(*ims, *imd0, *imd1, *imd2, *imd3);
+      goto end;
+   }
+
+## end
+##end
+
+##begin PSplitImageX < TIN, LOOPP, POINT >
+Errc PSplitImage( const TIN &ims, TIN &imd0, TIN &imd1, TIN &imd2, TIN &imd3 ) {
+   int h = imd0.Height();
+   int w = imd0.Width();
+   
+   for (int x = 0; x < w; x++) {
+      for (int y = 0; y < h; y++) {
+	 for (int b = 0;b < ims.Bands(); b++) {
+	    imd0[b][y][x] = ims[b][y][x];
+	    imd1[b][y][x] = ims[b][y][x + w];
+	    imd2[b][y][x] = ims[b][y + h][x];
+	    imd3[b][y][x] = ims[b][y + h][x + w];
+	 }
+      }
+   }
+   return SUCCESS;
+}
+
+## append loadcases
+   if (objs[0]->Type() == Po_$TIN) {
+      TIN* const ims = (TIN*)objs[0];
+      
+      objd[0] = new TIN(ims->Bands(), (ims->Height()) / 2, (ims->Width()) / 2);
+      objd[1] = new TIN(ims->Bands(), (ims->Height()) / 2, (ims->Width()) / 2);
+      objd[2] = new TIN(ims->Bands(), (ims->Height()) / 2, (ims->Width()) / 2);
+      objd[3] = new TIN(ims->Bands(), (ims->Height()) / 2, (ims->Width()) / 2);
+       
+      TIN* const imd0 = (TIN*)objd[0];
+      TIN* const imd1 = (TIN*)objd[1];
+      TIN* const imd2 = (TIN*)objd[2];
+      TIN* const imd3 = (TIN*)objd[3];
+      
+      result = PSplitImage(*ims, *imd0, *imd1, *imd2, *imd3);
+      goto end;
+   }
+
+## end
+##end
+
+##forall(PSplitImageG, /Img2d/)
+##forall(PSplitImageC, /Imc2d/)
+##forall(PSplitImageX, /Imx2d/)
+
+#ifdef MAIN
+#define	USAGE	"usage: %s  [im_in|-] [im_out0|-] [im_out1|-] [im_out2|-] [im_out3|-]"
+#define	PARC	0
+#define	FINC	1
+#define	FOUTC	4
+#define	MASK	0
+
+##main(PARC, FINC, FOUTC, MASK, USAGE)
+#endif

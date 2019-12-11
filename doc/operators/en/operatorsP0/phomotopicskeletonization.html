@@ -1,0 +1,107 @@
+<html>
+<head>
+<title>PANDORE OPERATORS</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>phomotopicskeletonization</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Computes the homotopic skeleton of 3D objects.
+
+<br><br><hr noshade size=1 width=100 align=left>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>phomotopicskeletonization</b> <i>connexity</i> [<i>-m mask</i>] [<i>im_in</i>|-] [<i>im_out</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p><b>phomotopicskeletonization</b> computes the skeleton of the binary
+objects in the 3D image <i>im_in</i>. Binary objects are regions
+with connected non null pixels.</p>
+
+<p>The algorithm rests on a sequential suppression of the simple points.
+A simple points is a point whose suppression preserves the topology of
+the image.</p>
+
+<!---------------------------------- -->
+<h3>Parameters</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>connexity</i> specifies the number of neighbors for a pixel: 6 or 26.
+</ul>
+
+<!---------------------------------- -->
+<h3>Inputs</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_in</i>: a 3D Uchar grayscale image.
+</ul>
+
+<!---------------------------------- -->
+<h3>Outputs</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_out</i>: a 3D Uchar grayscale image.
+</ul>
+
+<!---------------------------------- -->
+<h3>Result</h3>
+<!---------------------------------- -->
+<p>Returns SUCCESS or FAILURE.</p>
+
+<!---------------------------------- -->
+<h3>Examples</h3>
+<!---------------------------------- -->
+<ul>
+<li>Build the homotopic skeleton of a parallelepiped
+(it will be reduced to a point):
+<pre>
+   pshapedesign 256 256 128 13 120 80 a.pan
+   phomotopicskeletonization 26 a.pan out.pan
+</pre>
+</ul>
+
+<!---------------------------------- -->
+<h3>See also</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#morphology">Morphology</a>,
+<a href="./pskeletonization.html">pskeletonization</a>
+
+<!---------------------------------- -->
+<h3>C++ prototype</h3>
+<!---------------------------------- -->
+<tt>
+Errc PHomotopicSkeletonization( const Img2duc &amp;im_in, Img2duc &amp;im_out, int connexity );
+</tt>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Author: S&eacute;bastien Fourey
+</address>
+<!---------------------------------- -->
+
+</td>
+
+</body>
+</html>

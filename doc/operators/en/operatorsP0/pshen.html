@@ -1,0 +1,117 @@
+<html>
+<head>
+<title>PANDORE OPERATORS</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>pshen</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Computes gradient magnitude and maxima localization using Shen-Castan's algorithm.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>pshen</b> <i>strength</i> [<i>-m mask</i>] [<i>im_in</i>|-] [<i>im_out</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p><b>pshen</b> computes the gradient magnitude
+and performs the maxima localization. The output image can then
+be used to locate the contours.
+The output image <i>im_out</i> is built with the
+maximum magnitude value in the direction of the gradient.
+Other values are set to 0.</p>
+
+<p>The gradient magnitude value reflects the amount of grayscale variation
+in this point. The more is the variation the greater is the value.</p>
+
+<p>The gradient extraction and localization is done in three steps :</p>
+<ol>
+<li>smoothing ;
+<li>gradient computing ;
+<li>local maxima extraction.
+</ol>
+
+<p><b>Note</b>: The image border of size 1 is set to 0.</p>
+
+<!---------------------------------- -->
+<h3>Parameters</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>strength</i> specifies the strength of
+the smoothing. The lower is value, the stronger is the smoothing
+thus less there are contour points in the output image.
+A typical value is 1.
+</ul>
+
+<!---------------------------------- -->
+<h3>Inputs</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_in</i>: a 2D grayscale image.
+</ul>
+
+<!---------------------------------- -->
+<h3>Outputs</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_out</i>: an image of the same type as im_in.
+</ul>
+
+<!---------------------------------- -->
+<h3>Result</h3>
+<!---------------------------------- -->
+<p>Returns SUCCESS or FAILURE.</p>
+
+<!---------------------------------- -->
+<h3>See also</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#edgedetection">Edge detection</a>
+
+<!---------------------------------- -->
+<h3>Examples</h3>
+<!---------------------------------- -->
+<p>Performs an edge detection for the tangram.pan image:</p>
+<pre>
+   pshen 1 tangram.pan a.pan
+   pbinarization 10 1e30 a.pan b.pan
+</pre>
+
+<!---------------------------------- -->
+<h3>C++ prototype</h3>
+<!---------------------------------- -->
+<tt>Errc PShen( const Img2duc &amp;im_in, Img2duc &amp;im_out, float strength );</tt>
+
+<!---------------------------------- -->
+<h3>Version fran&ccedil;aise</h3>
+<!---------------------------------- -->
+<p>D&eacute;tection et localisation des contours de Shen-Castan.</p>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Author: Carlotti &amp; Joguet
+</address>
+<!---------------------------------- -->
+</body>
+</html>

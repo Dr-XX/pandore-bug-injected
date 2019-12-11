@@ -1,0 +1,104 @@
+<html>
+<head>
+<title>OPERATEURS PANDORE</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>pregionheight</h1>
+<!---------------------------------- -->
+<hr noshade size=1 height=100 align=left><br>
+
+Calcul de la profondeur des r&eacute;gions.
+
+<br><br><hr noshade size=1 height=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>pregionheight</b> <i>attr</i> [<i>-m mask</i>] [<i>rg_in</i>|-] [<i>col_out</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p>L'op&eacute;rateur <b>pregionheight</b> cr&eacute;e une collection
+<i>col_out</i> contenant un tableau nomm&eacute; <i>attr</i> de
+Ulong dans lequel le i&egrave;me  correspond
+&agrave; la profondeur de la r&eacute;gion de label i+1.</p>
+
+<p>La valeur de profondeur est calcul&eacute;e en nombre de pixels</p>
+
+<!---------------------------------- -->
+<h3>Param&egrave;tres</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>attr</i> est une chaîne de caract&egrave;res qui d&eacute;finit
+le nom donn&eacute; du tableau qui va contenir
+les valeurs de profondeur dans la collection.
+</ul>
+
+<!---------------------------------- -->
+<h3>Entr&eacute;es</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>rg_in</i>: une cartes de r&eacute;gions.
+</ul>
+
+<!---------------------------------- -->
+<h3>Sorties</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>col_out</i>: une collection.
+</ul>
+
+<!---------------------------------- -->
+<h3>R&eacute;sultat</h3>
+<!---------------------------------- -->
+<p>Retourne SUCCESS ou FAILURE.</p>
+
+<!---------------------------------- -->
+<h3>Exemples</h3>
+<!---------------------------------- -->
+<p>Affiche la profondeur des r&eacute;gions obtenues
+par une simple binarisation de l'image tangram.pan:</p>
+<pre>
+   pbinarization 100 1e30 tangram.pan a.pan
+   plabeling 8 a.pan b.pan
+   pregionheight area b.pan c.pan
+   pcol2txt c.pan
+</pre>
+
+<!---------------------------------- -->
+<h3>Voir aussi</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#regionfeaturesextraction">Caract&eacute;risation de r&eacute;gion</a>
+
+<!---------------------------------- -->
+<h3>Prototype C++</h3>
+<!---------------------------------- -->
+<tt>
+Errc PRegionHeight( const Reg2d &amp;rg_in, Collection &amp;cold, const std::string &amp;attr );
+</tt>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Auteur: Alexandre Duret-Lutz
+</address>
+<!---------------------------------- -->
+</body>
+</html>

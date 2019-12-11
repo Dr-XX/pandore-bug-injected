@@ -1,0 +1,122 @@
+<html>
+<head>
+<title>PANDORE OPERATORS</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>pimx2imc</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Converts multispectral image to color image.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>pimx2imc</b> <i>colorspace</i> [<i>-m mask</i>] [<i>im_in</i>|-] [<i>im_out</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p><b>pimx2imc</b> converts the multispectral image <i>im_in</i>
+to the color image <i>im_out</i>. Only multispectral image
+with less or equal to 3 bands can be converted.
+If input image have less than 3 bands, others bands are
+set to 0.</p>
+
+<p>The color space of the result image is specified from the
+parameter <i>colorspace</i>.</p>
+
+<!---------------------------------- -->
+<h3>Parameters</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>colorspace</i> is an integer that specifies
+the colorspace:</p>
+<ul>
+<li>0: RGB
+<li>1: XYZ
+<li>2: LUV
+<li>3: LAB
+<li>4: HSL
+<li>5: AST
+<li>6: I1I2I3
+<li>7: LCH
+<li>8: WRY
+<li>9: RNGNBN
+<li>10: YCBCR
+<li>11: YCH1CH2
+<li>12: YIQ
+<li>13: YUV
+</ul>
+</ul>
+
+<!---------------------------------- -->
+<h3>Inputs</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_in</i>: a multispectral image.
+</ul>
+
+<!---------------------------------- -->
+<h3>Outputs</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_out</i>: a color image.
+</ul>
+
+<!---------------------------------- -->
+<h3>Result</h3>
+<!---------------------------------- -->
+<p>Returns SUCCESS or FAILURE.</p>
+
+<!---------------------------------- -->
+<h3>Examples</h3>
+<!---------------------------------- -->
+<p>Converts multispectral image a.pan to RGB color image b.pan:</p>
+<pre>
+   pimx2imc 0 a.pan b.pan
+</pre>
+
+<!---------------------------------- -->
+<h3>See also</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#casting">Casting</a>
+
+<!---------------------------------- -->
+<h3>C++ prototype</h3>
+<!---------------------------------- -->
+<tt>
+Errc PImx2imc( const Imx2duc &amp;im_in, Imc2duc &amp;im_out, int colorspace );
+</tt>
+
+<!---------------------------------- -->
+<h3>Version fran&ccedil;aise</h3>
+<!---------------------------------- -->
+<p>Construction d'une image couleur &agrave; partir d'une image multispectrale à 3 bandes.</p>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Author: R&eacute;gis Clouard
+</address>
+<!---------------------------------- -->
+</body>
+</html>

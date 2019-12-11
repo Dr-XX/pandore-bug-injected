@@ -1,0 +1,136 @@
+<html>
+<head>
+<title>PANDORE OPERATORS</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>pppm2pan</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Converts PPM (Portable PixMap), PGM (Portable GrayMap) ou PBM (Portable BitMap) image file to Pandore file. 
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>pppm2pan</b> <i>im_in</i> [<i>im_out</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p><b>pppm2pan</b> converts a PPM (Portable PixMap image),
+PGM (Portable GrayMap image), 
+or PBM (Portable BitMap image) to Pandore image file.</p>
+
+<p>A PPM, PGM, PBM consists of the followings:</p>
+<ul>
+<li>The first line contains the "magic number" among:
+ <ul>
+ <li>P2: for binary image with ASCII data.
+ <li>P2: for gray scale image with ASCII data.
+ <li>P4: for binary image with pure binary data. 
+ <li>P5: for gray scale image with pure binary data.
+ <li>P3: for color image with ASCII data.
+ <li>P6: for color image with pure binary data.
+</ul>
+<li>The second line contains the number of columns and rows in ASCII.
+<li>The third line contains the number of colors.
+<p>Each line can include comments introduced by #.</p>
+
+<li>The data format depends on the magic number:
+(Caution: No line should be longer than 70 characters.)
+
+<ul>
+<li>P1: pixel is represented as an ASCII decimal number (0: while, 1:black). 
+<li>P2: pixel is represented as an ASCII decimal number.
+<li>P5: pixel is represented as 1 bit (0: while, 1: black). 
+<li>P5: pixel is represented as 1 byte.
+<li>P3: pixel is represented as a triplet of ASCII decimal number (Red, Green Blue).
+<li>P6: pixel is represented as a triplet of bytes (Red, Green Blue).
+</ul>
+</ul>
+
+<p>Examples:</p>
+<pre>
+P2
+#Gray scale image
+#with 5 columns and 5 rows.
+5 4
+255
+1 2 3 4 5
+1 2 3 4 5
+1 2 3 4 5
+1 2 3 4 5
+</pre>
+
+<p><b>Tip</b>: PPM image can be easily built by hand.
+This is a convenient way to build image from scratch.</p>
+
+<!---------------------------------- -->
+<h3>Inputs</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_in</i>: a PPM, PGM or PBM image file.
+</ul>
+
+<!---------------------------------- -->
+<h3>Outputs</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_out</i>: a 2D Pandore image.
+</ul>
+
+<!---------------------------------- -->
+<h3>Result</h3>
+<!---------------------------------- -->
+<p>Returns SUCCESS or FAILURE.</p>
+
+<!---------------------------------- -->
+<h3>Examples</h3>
+<!---------------------------------- -->
+<ul>
+<li>Convert ppm image into pandore image, then display it:
+<pre>
+   pppm2pan image.ppm image.pan
+   pvisu image.pan
+</pre>
+</ul
+
+<!---------------------------------- -->
+<h3>See also</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#conversion">Conversion</a>,
+<a href="./ppan2ppm.html">ppan2ppm</a>
+
+<!---------------------------------- -->
+<h3>C++ prototype</h3>
+<!---------------------------------- -->
+<tt>
+Errc PPPM2Pan( const char* filename, Pobject **obj_out );
+</tt>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Author: R&eacute;gis Clouard
+</address>
+<!---------------------------------- -->
+</body>
+</html>

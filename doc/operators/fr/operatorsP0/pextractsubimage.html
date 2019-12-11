@@ -1,0 +1,118 @@
+<html>
+<head>
+<title>OPERATEURS PANDORE</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>pextractsubimage</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Extraction d'une sous-image d'une image.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>pextractsubimage</b> <i>x</i> <i>y</i> <i>z</i> <i>l</i> <i>h</i> <i>p</i> [<i>im_in</i>|-] [<i>im_out</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p>L'op&eacute;rateur <b>pextractsubimage</b> construit une sous-image <i>im_out</i> avec
+les pixels de la fen&ecirc;tre de l'image <i>im_in</i> commen&ccedil;ant aux coordonn&eacute;es
+(<i>x,y,z</i>) et de dimension (<i>l,h,p</i>).</p>
+
+<p>Pour les cartes de r&eacute;gions, il n'y a pas de relabelisation, il
+se peut alors qu'une r&eacute;gion se retrouve d&eacute;coup&eacute;e en 2 et qu'il y ait
+des trous dans la num&eacute;rotation.</p>
+
+<!---------------------------------- -->
+<h3>Param&egrave;tres</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>x,y,z</i> sp&eacute;cifient les coordonn&eacute;es du coin sup&eacute;rieur gauche
+de la fen&ecirc;tre &agrave; extraire dans l'image <i>im_in1</i>.
+
+<li><i>l,h,p</i> sp&eacute;cifient la taille de la fen&ecirc;tre &agrave; extraire.
+Si l'une des tailles est inf&eacute;erieure &agrave; 0 ou sup&eacute;rieure &agrave; la taille de l'image
+alors c'est la taille maximale qui est utilis&eacute;e.
+
+<p><i>z</i> et <i>p</i> ne sont pas pris en compte pour le cas des images 2D,
+mais doivent &ecirc;tre donn&eacute;s.</p>
+</ul>
+
+<!---------------------------------- -->
+<h3>Entr&eacute;es</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_in</i>: une image ou une carte de r&eacute;gions.
+</ul>
+
+<!---------------------------------- -->
+<h3>Sorties</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_out</i>: une image de m&ecirc;me type que l'image d'entr&eacute;e ou une carte de r&eacute;gions.
+</ul>
+
+<!---------------------------------- -->
+<h3>R&eacute;sultat</h3>
+<!---------------------------------- -->
+<p>Retourne SUCCESS ou FAILURE.<br>
+Pour les cartes de r&eacute;gions retourne la valeur
+de label maximale.</p>
+
+<!---------------------------------- -->
+<h3>Exemples</h3>
+<!---------------------------------- -->
+<p>Extrait une partie de l'image tangram.pan &agrave; partir des coordonn&eacute;es (75, 55)
+et de taille (50,55) sous la forme d'une nouvelle image.</p>
+<pre>
+   pextractsubimage 75 55 0 50 55 0 examples/tangram.pan a.pan
+</pre>
+
+<p>Extrait une partie de l'image tangram.pan &agrave; partir des coordonn&eacute;es (75, 55)
+jusqu'aux coordonn&eacute;es maximales de l'image sous la forme d'une nouvelle image.</p>
+<pre>
+   pextractsubimage 75 55 0 -1 -1 0 examples/tangram.pan a.pan
+</pre>
+
+<!---------------------------------- -->
+<h3>Voir aussi</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#utility">Utilitaire</a>,
+<a href="./pinsertsubimage.html">pinsertsubimage</a>
+
+<!---------------------------------- -->
+<h3>Prototype C++</h3>
+<!---------------------------------- -->
+<tt>
+Errc PExtractSubImage( const Img2duc &amp;im_in, Img2duc &amp;im_out, Long cx, Long cy, Long cz );
+</tt>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Auteur: R&eacute;gis Clouard
+</address>
+<!---------------------------------- -->
+
+</body>
+</html>

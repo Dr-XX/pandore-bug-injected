@@ -1,0 +1,180 @@
+<html>
+<head>
+<title>PANDORE OPERATORS</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>pgaussianfilter</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+G&eacute;n&egrave;re un filtre Gaussien passe-bas, passe-haut, coupe-bande ou passe-bande.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>pgaussianfilter</b> [-m mask] <i>ncol nrow ndep highpass cutin cutoff</i> [<i>im_out</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p>L'op&eacute;rateur <b>pgaussianfilter</b> 
+g&eacute;n&egrave;re un filtre Gaussien passe-bas, passe-haut, coupe-bande
+ou passe-bande.
+
+<p>Si <i>ndep&lt;1</i> le filtre <i>im_out</i> est une image 2D de Float
+avec size nrow*ncol sinon le filtre
+<i>im_out</i> est une image 3D de Float avec
+la taille ndep*nrow*ncol.</p>
+
+<p>Le filtre passe-bas de Butterworth coupe les hautes
+fr&eacute;quences des composantes de la transform&eacute;e de Fourier
+qui sont &agrave; une distance sup&eacute;rieure &agrave; la distance
+sp&eacute;cifi&eacute;e D0 (la valeur <i>cutoff</i>) &agrave; partir
+de l'origine du centre de la transformation.</p>
+
+<p>La fonction de transfert d'un filtre 2D passe-bas gaussien
+avec une fr&eacute;quence de coupe &agrave; la distance
+D0 de l'origine est d&eacute;finie par :</p>
+<pre>
+   Hlp(u,v) = exp(-D<sup>2</sup>(u,v)/2D0<sup>2</sup>)
+</pre>
+<p>o&ugrave; D(u,v) est la distance du point (u,v) &agrave; l'origine :</p>
+<pre>
+   D(u,v)=sqrt((u-M/2)<sup>2</sup> + (v-N/2)<sup>2</sup>)
+</pre>
+<p>o&ugrave; N est le nombre de lignes et M est le nombre de colonnes.</p>
+
+<p>La fonction de transfert d'un filtre passe-haut :</p>
+<pre>
+   H(u,v) =  1- Hlp(u,v)
+</pre>
+
+<p>La fonction de transfert d'un filtre coupe-bande : </p>
+<pre>
+   H(u,v) = Hhp(u,v) - Hlp(u,v)
+</pre>
+<p>o&ugrave; Hhp(u,v) est le filtre passe-haut avec le param&egrave;tre cutoff
+et Hlp(u,v) est le filtre passe-bas avec le param&egrave;tre cutin.</p>
+
+<!---------------------------------- -->
+<h3>Param&egrave;tres</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>ncol, nrow, ndep</i> sp&eacute;cifie la taille
+de l'image de sortie. Si <i>ndep</i>&lt;1
+alors la sortie est une image 2D sinon une image 3D.
+<li><i>highpass</i> est utilis&eacute;e.  conjonction avec le 
+param&egrave;tre <i>cutin</i>. Il sp&eacute;cifie le type
+de filtre :</p>
+<ul>
+<li>highpass=0 et cutin=0 : filtre passe-bas
+<li>highpass=1 et cutin=0 : filtre passe-haut
+<li>highpass=0 et cutin=1 : filtre coupe-bande
+<li>highpass=1 et cutin=1 : filtre passe-bande.
+</ul>
+<li><i>cutin</i> est la fr&eacute;quence de coupe du filtre
+D0 en cas de filtre coupe-bande ou bande-passe.
+Dans ce cas, l'&eacute;paisseur des bandes = cutoff-cutin 
+et D0=(cutoff+cutin)/2.
+<li><i>cutoff</i> est la fr&eacute;quence de coupe du filtre D0.
+C'est un r&eacute;el positif dans l'intervalle ]0.. sqrt(M*m+N*n)/2].
+Il correspond &agrave; la distance euclidienne de la bande au centre
+de l'image. Plus cutoff est &eacute;lev&eacute;, plus le filtrage passe-bas
+est faible et plus le filtrage passe_haut est fort.
+</ul>
+
+<!---------------------------------- -->
+<h3>Sorties</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_out</i>: une image de Float (Img2dsf).
+</ul>
+
+<!---------------------------------- -->
+<h3>R&eacute;sultat</h3>
+<!---------------------------------- -->
+<p>Retourne SUCCESS ou FAILURE en cas de mauvais param&eacute;trage.
+
+<!---------------------------------- -->
+<h3>Exemples</h3>
+<!---------------------------------- -->
+<p>Effectue un filtrage passe-bas de Gauss :</p>
+<pre>
+   pimage1 0 tangram.pan i1.pan
+   pfft tangram.pan i1.pan i2.pan i3.pan
+   pgaussianfilter 256 256 0 0 0 100 i4.pan
+   pmult i2.pan i4.pan i5.pan
+   pmult i3.pan i4.pan i6.pan
+   pifft i5.pan i6.pan out.pan i8.pan
+</pre>
+
+<p>Effectue un filtrage passe-haut de Gauss :</p>
+<pre>
+   psetcst 0 tangram.pan i1.pan
+   pfft tangram.pan i1.pan i2.pan i3.pan
+   pgaussianfilter 256 256 0 1 0 50 i4.pan
+   pmult i2.pan i4.pan i5.pan
+   pmult i3.pan i4.pan i6.pan
+   pifft i5.pan i6.pan out.pan i8.pan
+</pre>
+
+<p>Effectue un filtrage coupe-bande de Gauss :</p>
+<pre>
+   psetcst 0 tangram.pan i1.pan
+   pfft tangram.pan i1.pan i2.pan i3.pan
+   pgaussianfilter 256 256 0 0 25 50 i4.pan
+   pmult i2.pan i4.pan i5.pan
+   pmult i3.pan i4.pan i6.pan
+   pifft i5.pan i6.pan out.pan i8.pan
+</pre>
+
+<p>Effectue un filtrage passe-bande de Gauss :</p>
+<pre>
+   psetcst 0 tangram.pan i1.pan
+   pfft tangram.pan i1.pan i2.pan i3.pan
+   pgaussianfilter 256 256 0 1 25 50 i4.pan
+   pmult i2.pan i4.pan i5.pan
+   pmult i3.pan i4.pan i6.pan
+   pifft i5.pan i6.pan out.pan i8.pan
+</pre>
+
+<!---------------------------------- -->
+<h3>Voir aussi</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#frequency">Domaine Fr&eacute;quentiel</a>,
+<a href="./pifft.html">pifft</a>,
+<a href="./pfftshift.html">pfftshift</a>
+
+<!---------------------------------- -->
+<h3>Prototype C++</h3>
+<!---------------------------------- -->
+<tt>
+Errc GaussianFilter( Img2dsf &amp;im_out, int ndep, int nrow, int ncol, int highpass, float cutin, float cutoff );
+</tt>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Auteur: R&eacute;gis Clouard 
+</address>
+<!---------------------------------- -->
+</body>
+</html>

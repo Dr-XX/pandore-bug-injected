@@ -1,0 +1,111 @@
+<html>
+<head>
+<title>PANDORE OPERATORS</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff"><center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>pvinet</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Computes the discrepancy measure between two region maps based on the number of mis-segmented pixels.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>pvinet</b> [<i>-m mask</i>] [<i>rg1_in</i>|-] [<i>rg2_in</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p><b>pvinet</b> computes a discrepancy measure that accounts for the disparity
+between a segmented image (the region map <i>rg1_in</i>) and a reference image
+(the region map <i>rg2_in</i>) as defined by L. Vinet<sup>*</sup>.</p>
+
+<p>The method consists in determining each pair of regions
+that have a maximum overlapping ratio between the two region maps 
+and to characterize the discrepancy by the number of pixels
+that do not participate to the overlapping.</p>
+
+<p>The result measure is in [0..1].
+The smaller is the discrepancy measure, the better is the segmentation.</p>
+
+<p><b>Caution:</b> Regions with label=0 are not considered for computing.</p>
+
+<!---------------------------------- -->
+<h3>Inputs</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>rg1_in</i>: a region map (segmented image).
+<li><i>rg2_in</i>: a region map (reference image/ ground truth).
+</ul>
+
+<!---------------------------------- -->
+<h3>Result</h3>
+<!---------------------------------- -->
+<p>Returns a positive real value in [0,1]. 0 means that
+all the regions are identical, and 1 that all the regions
+are totally different.<br>
+(Use <code>pstatus</code> to get this value).</p>
+
+<!---------------------------------- -->
+<h3>Examples</h3>
+<!---------------------------------- -->
+<p>Discrepancy measure between two region maps,
+one translated from the other:</p>
+<pre>
+   pbinarization 80 1e30 tangram.pan i1.pan
+   plabeling 8 i1.pan i2.pan
+   ptranslation 0 10 i2.pan i3.pan
+   pvinet i2.pan i3.pan
+   pstatus
+</pre>
+
+<!---------------------------------- -->
+<h3>See also</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#evaluation">Evaluation</a>
+
+<!---------------------------------- -->
+<h3>C++ prototype</h3>
+<!---------------------------------- -->
+<tt>
+Errc PVinet( const Reg2d &amp;rg1_in, const Reg2d &amp;rg2_in );
+</tt>
+
+<!---------------------------------- -->
+<h3>Version fran&ccedil;aise</h3>
+<!---------------------------------- -->
+<p>Calcul de la mesure de dissimilarit&eacute; entre deux segmentations basée sur le nombre de pixels mal segmentés.</p>
+
+<!---------------------------------- -->
+<h3>Reference</h3>
+<!---------------------------------- -->
+<p><sup>*</sup>JP. Cocquerez, S. Philipp,
+"<i>Analyse d'images: filtrage et segmentation</i>", Masson, 1995.</p>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Author: R&eacute;gis Clouard
+</address>
+<!---------------------------------- -->
+
+</body>
+</html>

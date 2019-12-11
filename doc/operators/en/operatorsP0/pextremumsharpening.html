@@ -1,0 +1,108 @@
+<html>
+<head>
+<title>PANDORE OPERATORS</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center><hr>
+
+
+<!---------------------------------- -->
+<h1>pextremumsharpening</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Performs constrast sharpening using extremum values.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>pextremumsharpening</b> [<i>-m mask</i>] [<i>im_in</i>|-] [<i>im_out</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p><b>pextremumsharpening</b> performs a contrast sharpening of the input image <i>im_in</i>.
+The objective is to highlight fine detail and to enhance details
+that are blurred. Sharpening consists in shrinking the width of intensity
+variation without affecting the mean intensity of regions on
+both sides of the variation.</p>
+
+<p>The algorithm consists in replacing a pixel by
+the closest neighborhood minimum or maximum values.</p>
+Let W by a neighborhood, and im_in(p) a pixel of the input image:
+<pre>
+	if (im_in(p)-min(W) &lt; max-im_in(p))
+	then im_out[p]=min
+	else im_out[p]=max
+</pre>
+
+<p>For color and multispectral images, the transform
+uses the marginal approach: it is applied on each band individually.</p>
+
+<!---------------------------------- -->
+<h3>Inputs</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_in</i>: an image.
+</ul>
+
+<!---------------------------------- -->
+<h3>Outputs</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_out</i>: an image with the same properties as im_in.
+</ul>
+
+<!---------------------------------- -->
+<h3>Result</h3>
+<!---------------------------------- -->
+<p>Returns SUCCESS or FAILURE in case of memory faults.</p>
+
+<!---------------------------------- -->
+<h3>Examples</h3>
+<!---------------------------------- -->
+<p>Sharpens the tangram.pan image.</p>
+<pre>
+   pextremumsharpening tangram.pan a.pan
+</pre>
+
+<!---------------------------------- -->
+<h3>See also</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#luttransform">Lut transform</a>
+
+<!---------------------------------- -->
+<h3>C++ prototype</h3>
+<!---------------------------------- -->
+<tt>
+Errc PExtremumSharpening( const Img2duc &amp;im_in, Img2duc &amp;im_out );
+</tt>
+
+<!---------------------------------- -->
+<h3>Version fran&ccedil;aise</h3>
+<!---------------------------------- -->
+<p>Rehaussement du contraste par utilisation des valeurs extr&eacute;males.</p>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Author: R&eacute;gis Clouard
+</address>
+<!---------------------------------- -->
+
+</body>
+</html>

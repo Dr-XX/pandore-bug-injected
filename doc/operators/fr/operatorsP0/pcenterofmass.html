@@ -1,0 +1,102 @@
+<html>
+<head>
+<title>PANDORE OPERATORS</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff"><center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>pcenterofmass</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Localisation des centres de gravit&eacute; de r&eacute;gions.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>pcenterofmass</b> [<i>-m mask</i>] [<i>rg_in</i>|-] [<i>rg_out</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p>L'op&eacute;rateur <b>pcenterofmass</b> permet de localiser les centres de
+gravit&eacute; des r&eacute;gions dans la carte <i>rg_in</i> par un point
+dans la carte de r&eacute;gions de sortie <i>rg_out</i>.
+Les centres de gravit&eacute; de <i>rg_out</i> conservent les m&ecirc;mes
+labels que les r&eacute;gions d'origine.</p>
+
+<p>Le centre de gravit&eacute; d'une r&eacute;gion de taille N pixels
+est calcul&eacute; par:</p>
+<pre>
+   gx = SOMME(x[Ri])/N
+   gy = SOMME(y[Ri])/N
+</pre>
+
+<p><b>Attention</b>: les centres de gravit&eacute; ne se trouvent
+pas n&eacute;cessairement sur la r&eacute;gion.
+De ce fait, si 2 centres de gravit&eacute; sont superpos&eacute;s,
+il ne restera que le dernier sur la carte de r&eacute;gion finale.</p>
+
+<!---------------------------------- -->
+<h3>Entr&eacute;es</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>rg_in</i>: une carte de r&eacute;gions.
+</ul>
+
+<!---------------------------------- -->
+<h3>Sorties</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>rg_out</i>: une carte de r&eacute;gions.
+</ul>
+
+<!---------------------------------- -->
+<h3>R&eacute;sultat</h3>
+<!---------------------------------- -->
+<p>Retourne SUCCESS ou FAILURE.</p>
+
+<!---------------------------------- -->
+<h3>Exemples</h3>
+<!---------------------------------- -->
+<p>Localise les centre de gravit&eacute; des r&eacute;gions de la carte rin.pan :</p>
+<pre>
+   pcenterofmass rin.pan rout.pan
+</pre>
+
+<!---------------------------------- -->
+<h3>Voir aussi</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#region">R&eacute;gion</a>
+
+<!---------------------------------- -->
+<h3>Prototype C++</h3>
+<!---------------------------------- -->
+<tt>
+Errc PCenterOfMass( const Reg2d &amp;rg_in, Reg2d &amp;rg_out );
+</tt>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Auteur: R&eacute;gis Clouard
+</address>
+<!---------------------------------- -->
+</body>
+</html>

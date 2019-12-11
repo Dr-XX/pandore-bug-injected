@@ -1,0 +1,105 @@
+<html>
+<head>
+<title>OPERATEURS PANDORE</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>plabelmerging</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Fusion nominative de 2 r&eacute;gions.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>plabelmerging</b> <i>label1</i> <i>label2</i> [<i>rg_in</i>|-] [<i>gr_in</i>|-] [<i>rg_out</i>|-] [<i>gr_out</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p>L'op&eacute;rateur <b>plabelmerging</b> effectue la fusion de deux
+r&eacute;gions identifi&eacute;es par leur num&eacute;ro de label.
+En sortie, la r&eacute;gion r&eacute;sultante conserve
+le num&eacute;ro <i>label1</i>. Dans le graphe associ&eacute;, les
+coordonn&eacute;es du nouveau sommet sont plac&eacute;es au milieu des
+2 sommets fusionn&eacute;s. De plus, la liste des voisins de chacun
+des sommets est fusionn&eacute;e dans le nouveau.</p>
+
+<!---------------------------------- -->
+<h3>Param&egrave;tres</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>label1</i> et <i>label2</i> sont des num&eacute;ros de label
+valides dans la carte <i>rg_in</i>.
+</ul>
+
+<!---------------------------------- -->
+<h3>Entr&eacute;es</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>rg_in</i>: une carte de r&eacute;gions.
+<li><i>gr_in</i>: un graphe.
+</ul>
+
+<!---------------------------------- -->
+<h3>Sorties</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>rg_out</i>: une carte de r&eacute;gions.
+<li><i>gr_out</i>: un graphe.
+</ul>
+
+<!---------------------------------- -->
+<h3>R&eacute;sultat</h3>
+<!---------------------------------- -->
+<p>Retourne SUCCESS ou FAILURE selon que la fusion est r&eacute;ussie ou pas.</p>
+
+<!---------------------------------- -->
+<h3>Exemples</h3>
+<!---------------------------------- -->
+<p>Segmente l'image tangram.pan puis fusionne
+les deux labels 1 et 2 :</p>
+<pre>
+  puniformityquadtree 0.9 tangram.pan a.pan
+  prg2gr a.pan b.pan
+  plabelmerging  1 2 a.pan b.pan out1.pan out2.pan
+</pre>
+
+<!---------------------------------- -->
+<h3>Voir aussi</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#segmentation">Segmentation</a>
+
+<!---------------------------------- -->
+<h3>Prototype C++</h3>
+<!---------------------------------- -->
+<tt>
+Errc PLabelMerging( const Reg2d &amp;rg_in, cconst Graph2d &amp;gr_in, Reg2d &amp;rg_out Graph2d &amp;gr_out, int label1, int label2 );
+</tt>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Auteur: R&eacute;gis Clouard
+</address>
+<!---------------------------------- -->
+</body>
+</html>

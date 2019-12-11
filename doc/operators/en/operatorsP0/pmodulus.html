@@ -1,0 +1,108 @@
+<html>
+<head>
+<title>PANDORE OPERATORS</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>pmodulus</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Computes modulus between 2 images.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>pmodulus</b> [-m mask] [<i>im_in1</i>|-] [<i>im_in2</i>|-] [<i>im_out</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p><b>pmodulus</b> computes the modulus between 2 images
+considered as a unique complex image.</p>
+
+<p>The modulus between 2 images is calculated as follows:</p>
+<pre>
+   pixel(im_out) = sqrt(pixel(im_in1)*pixel(im_in1) + pixel(im_in2)*pixel(im_in2))
+</pre>
+
+<!---------------------------------- -->
+<h3>Inputs</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_in1</i>: a grayscale or a color image.
+<li><i>im_in2</i>: a grayscale or a color image.
+</ul>
+
+<!---------------------------------- -->
+<h3>Outputs</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_out</i>: a float image.
+</ul>
+
+<!---------------------------------- -->
+<h3>Result</h3>
+<!---------------------------------- -->
+<p>Returns SUCCESS or FAILURE.</p>
+
+<!---------------------------------- -->
+<h3>Examples</h3>
+<!---------------------------------- -->
+<p>Converts an image of a square from the spatial domain to
+the frequency domain and reciprocally:</p>
+<pre>
+   pshapedesign 256 256 0 2 20 0 square.pan
+   pshapedesign 256 256 0 0  0 0 empty.pan
+   pfft square.pan empty.pan real.pan imaginary.pan
+   pmodulus real.pan imaginary.pan modulus.pan
+   pphase real.pan imaginary.pan phase.pan
+   pifft real.pan imaginary.pan square1.pan empty1.pan
+   plineartransform 0 0 255 square1.pan square2.pan
+   pim2uc square2.pan newsquare.pan
+</pre>
+
+<!---------------------------------- -->
+<h3>See also</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#frequency">Frequency</a>,
+<a href="./pphase.html">pphase</a>
+
+<!---------------------------------- -->
+<h3>C++ Prototype</h3>
+<!---------------------------------- -->
+<tt>
+Errc PModulus( const Img2duc &amp;im_in1, const Img2duc &amp;im_in2, Img2duc &amp;im_out );
+</tt>
+
+<!---------------------------------- -->
+<h3>Version fran&ccedil;aise</h3>
+<!---------------------------------- -->
+<p>Calcul du module entre deux images.</p>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Author: R&eacute;gis Clouard
+</address>
+<!---------------------------------- -->
+
+</body>
+</html>

@@ -1,0 +1,122 @@
+<html>
+<head>
+<title>OPERATEURS PANDORE</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>pgradneumann</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Calcul du gradient d'une image par diff&eacute;rences finies
+d&eacute;centr&eacute;es &agrave; droite avec conditions aux bords de Neumann.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>pgradneumann</b> [<i>-m mask</i>] [<i>im_in</i>|-] [<i>im_out1</i>|-] [<i>im_out2</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p>L'op&eacute;rateur <b>pgradneumann</b> calcule la d&eacute;riv&eacute;e premi&egrave;re
+de l'image d'entr&eacute;e <i>im_in</i>.
+Le r&eacute;sultat est deux images de gris, o&ugrave; <i>im_out1</i> est
+la d&eacute;riv&eacute;e le long de l'axe x et <i>im_out2</i> est la d&eacute;riv&eacute;e
+le long de l'axe y:
+<pre>
+ im_out1(i,j) = im_in(i+1,j)-im_in(i,j),
+ im_out2(i,j) = im_in(i,j+1)-im_in(i,j), avec im_out1(n-1) = 0 et im_out2(n-1) = 0.
+</pre>
+
+<!---------------------------------- -->
+<h3>Entr&eacute;es</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_in</i>: une image 2D. 
+</ul>
+
+<!---------------------------------- -->
+<h3>Sorties</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_out1</i>: une image de m&ecirc;me type que  im_in. 
+<li><i>im_out2</i>: une image de m&ecirc;me type que  im_in. 
+</ul>
+
+<!---------------------------------- -->
+<h3>R&eacute;sultat</h3>
+<!---------------------------------- -->
+<p>Retourne SUCCESS ou FAILURE.</p>
+
+<!---------------------------------- -->
+<h3>Exemples</h3>
+<!---------------------------------- -->
+<p>Impl&eacute;mente le calcul du gradient
+et de la divergence avec les condition aux
+bords de Neumann, telle que fa&ccedil;on
+que l'une est l'adjoint de l'autre,
+i.e. &lt;grad x,u> = &lt;-div u,x>.
+Le script v&eacute;rifie l'identit&eacute; de deux images.</p>
+<pre>
+protation 0 180 tangram.pan tangram1.pan
+pgradneumann tangram.pan gim1_y.pan gim1_x.pan
+pgradneumann tangram1.pan gim2_y.pan gim2_x.pan
+
+# Compute &lt; grad im1, grad im2>. 
+pmult gim1_y.pan gim2_y.pan | psumvalue - s1.pan
+sumvaly=`pstatus`
+pmult gim1_x.pan gim2_x.pan | psumvalue - s2.pan
+sumvalx=`pstatus`
+
+innerproduct1=`echo "$sumvaly+$sumvalx" | bc -l`
+
+# Compute &lt;-div grad im1,im2>.
+pdivneumann gim1_y.pan gim1_x.pan | pmultcst -1 - divim1.pan
+pim2sf tangram1.pan t.pan
+pmult divim1.pan t.pan | psumvalue - /dev/null
+innerproduct2=`pstatus`
+
+echo $innerproduct1
+echo $innerproduct2
+</pre>
+
+<!---------------------------------- -->
+<h3>Voir aussi</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#edgedetection">Edge detection</a>,
+<a href="./pdivneumman.html">pdivneumann</a>
+
+
+<!---------------------------------- -->
+<h3>Prototype C++</h3>
+<!---------------------------------- -->
+<tt>
+Errc Errc PGradNeumann( const Img2d&lt;U> &amp;im_in, Img2d&lt;U> &amp;im_out1, Img2d&lt;U> &amp;im_out2 );
+</tt>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Auteur: Jalal Fadili
+</address>
+<!---------------------------------- -->
+</body>
+</html>

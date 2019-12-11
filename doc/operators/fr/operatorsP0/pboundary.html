@@ -1,0 +1,118 @@
+<html>
+<head>
+<title>PANDORE OPERATORS</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></TD>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></TD></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>pboundary</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Localisation des points de fronti&egrave;re des r&eacute;gions.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>pboundary</b> <i>connexite</i> [<i>-m mask</i>] [<i>im_in</i>|-] [<i>im_out</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p>L'op&eacute;rateur <b>pboundary</b> construit une image binaire
+form&eacute;e par les points de fronti&egrave;re entre des r&eacute;gions
+de valeurs de pixel ou de label diff&eacute;rentes.</p>
+
+<p>Un point appartient &agrave; une fronti&egrave;re lorsqu'au moins un
+des voisins n'a pas la m&ecirc;me valeur de label ou de pixel que lui.
+Dans le cas d'une carte de r&eacute;gions, la r&eacute;gion de label=0 n'est pas
+consid&eacute;r&eacute;e comme une  r&eacute;gion et n'a donc pas de fronti&egrave;re propre.</p>
+
+<p>Une fronti&egrave;re est forc&eacute;ment un contour ferm&eacute;.</p>
+
+<p>La fronti&egrave;re entre 2 r&eacute;gions non nulles
+ne pouvant &ecirc;tre mise entre 2 pixels, celle-ci est
+doubl&eacute;e sur chacune des r&eacute;gions. Ceci fait que
+la fronti&egrave;re entre 2 r&eacute;gions non nulles a une taille de 2 pixels.</p>
+
+<p>Les fronti&egrave;res de l'image de sortie <i>im_out</i> sont marqu&eacute;es
+par des pixels de valeur 255 reposant sur un fond de valeur &eacute;gal &agrave; 0.
+L'image de sortie est forc&eacute;ment de type Uchar (Img2duc ou Img3duc).</p>
+
+<p>Pour les graphes, les sommets ayant 0 ou 1 voisin sont
+consid&eacute;r&eacute;s comme des points de bordures et donc deviennent des
+points de fronti&egrave;res dans l'image de sortie.</p>
+
+<!---------------------------------- -->
+<h3>Param&egrave;tres</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>connexite</i> d&eacute;finit la notion de voisinage:
+4, 8 pour le 2D,  ou 6 ou 26 pour le 3D.<br>
+Ce param&egrave;tre est ignor&eacute; pour les graphes.
+</ul>
+
+<!---------------------------------- -->
+<h3>Entr&eacute;es</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_in</i>: une image de niveaux de gris ou une carte de r&eacute;gions.
+</ul>
+
+<!---------------------------------- -->
+<h3>Sorties</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_out</i>: une image binaire.
+</ul>
+
+<!---------------------------------- -->
+<h3>R&eacute;sultat</h3>
+<!---------------------------------- -->
+<p>Retourne SUCCESS ou FAILURE.</p>
+
+<!---------------------------------- -->
+<h3>Exemples</h3>
+<!---------------------------------- -->
+<p>Localise les fronti&egrave;res des r&eacute;gions de la carte a.pan
+(ajoute une fronti&egrave;re sur le bord) :</p>
+<pre>
+   pboundary 8 a.pan b.pan
+   psetborder 1 1 1 1 0 0 255 b.pan c.pan
+</pre>
+
+<h3>Voir aussi</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#region">R&eacute;gion</a>
+
+<!---------------------------------- -->
+<h3>Prototype C++</h3>
+<!---------------------------------- -->
+<tt>
+Errc PBoundary( const Reg2d &amp;im_in, Img2duc &amp;im_out, int connexite );
+</tt>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Auteur: R&eacute;gis Clouard
+</address>
+<!---------------------------------- -->
+</body>
+</html>

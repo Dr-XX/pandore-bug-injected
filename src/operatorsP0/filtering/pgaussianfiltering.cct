@@ -1,0 +1,357 @@
+/* -*- mode: c++; c-basic-offset: 3 -*-
+ *
+ * Copyright (c), GREYC.
+ * All rights reserved
+ *
+ * You may use this file under the terms of the BSD license as follows:
+ *
+ * "Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are
+ * met:
+ *   * Redistributions of source code must retain the above copyright
+ *     notice, this list of conditions and the following disclaimer.
+ *   * Redistributions in binary form must reproduce the above copyright
+ *     notice, this list of conditions and the following disclaimer in
+ *     the documentation and/or other materials provided with the
+ *     distribution.
+ *   * Neither the name of the GREYC, nor the name of its
+ *     contributors may be used to endorse or promote products
+ *     derived from this software without specific prior written
+ *     permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, 
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, 
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
+ *
+ * 
+ * For more information, refer to:
+ * https://clouard.users.greyc.fr/Pandore
+ */
+
+/**
+ * @author Régis Clouard - 1996-02-19
+ * @author Régis Clouard - 2006-02-09 (add color and multispectral images)
+ */
+
+#include <math.h>
+#include <pandore.h>
+using namespace pandore;
+
+/**
+ * @file pgaussianfiltering.cpp
+ * Filtering image with gaussian filter.
+ *
+ * Calcul du masque gaussien a partir de la taille du filtrage.
+ * Calcul recursif suivant les lignes puis les colonnes
+ * de l'image gradient resultant de la convolution
+ * du masque par l'image source.
+ * Taille du filtre =  (6*sigma)
+ */
+
+#define	SCALE	50.0	// Used for normalization
+
+template < typename T >
+Errc PGaussianFiltering1D( const Imx3d<T> &ims, Imx3d<T> &imd, float sigma ) {
+   const int halfsize = (int)ceil(sigma * 3.0);
+
+   if (halfsize < 1) {
+      std::cerr << "Error pgaussianfiltering: bad parameter value: "<<sigma<< std::endl;
+      return FAILURE;
+   }
+   
+   // Calcul du masque gaussien en fonction de la taille.
+   Double somme = 0.0;
+   const int size = halfsize * 2 + 1;
+   double *filter = new double[size];
+   for (int i = 0; i < size; i++) {
+      double s = SCALE * exp(-((Double)(i - halfsize) * (i - halfsize)
+			       / (2.0 * sigma * sigma)));
+      somme += s;
+      filter[i] = s;
+   }
+   
+   // Rows filtering
+   for (int b = 0; b < ims.Bands(); b++) {
+      // Left border
+      for (int x = 0; x < halfsize; x++) {
+	 double s = 0.0;
+	 for (int k = 0; k < halfsize + 1 - x; k++) {
+	    s += (double)ims(b, 0, 0, x) * filter[k];
+	 }
+	 for (int k = halfsize + 1 - x; k < size; k++) {
+	    s += (double)ims(b, 0, 0, x + k - halfsize) * filter[k];
+	 }
+	 imd(b, 0, 0, x) = (T)(s / somme);
+      }
+      // General case
+      for (int x = halfsize; x < ims.Width() - halfsize; x++) {
+	 double s = 0.0;
+	 for (int k = 0; k < size; k++) {
+	    s += (double)ims(b, 0, 0, x + k - halfsize) * filter[k];
+	 }
+	 imd(b, 0, 0, x) = (T)(s / somme);
+      }
+      // Right border
+      for (int x = ims.Width() - halfsize; x < ims.Width(); x++) {
+	 double s = 0.0;
+	 int l = 1 + x + halfsize - ims.Width();
+	 for (int k = 0; k < size - l; k++) {
+	    s += (double)ims(b, 0, 0, x + k - halfsize) * filter[k];
+	 }
+	 for (int k = size - l; k < size; k++) {
+	    s += (double)ims(b, 0, 0, x) * filter[k];
+	 }
+	 imd(b, 0, 0, x) = (T)(s / somme);
+      }
+   }
+   delete[] filter;
+   return SUCCESS;
+}
+
+template < typename T >
+Errc PGaussianFiltering2D( const Imx3d<T> &ims, Imx3d<T> &imd, float sigma ) {
+   const int halfsize = (int)ceil(sigma * 3.0);
+
+   if (halfsize < 1) {
+      std::cerr << "Error pgaussianfiltering: bad parameter value: "<<sigma<< std::endl;
+      return FAILURE;
+   }
+   
+   // Calcul du masque gaussien en fonction de la taille.
+   Double somme = 0.0;
+   const int size = halfsize * 2 + 1;
+   double *filter = new double[size];
+   for (int i = 0; i < size; i++) {
+      double s= SCALE * exp(-((Double)(i - halfsize) * (i - halfsize)
+			      / (2.0 * sigma * sigma)));
+      somme += s;
+      filter[i] = s;
+   }
+   
+   Imx2dsf imi(ims.Props());	// Intermediate image
+   
+   // Rows filtering
+   for (int b = 0; b < ims.Bands(); b++) {
+      for (int y = 0; y < ims.Height(); y++) {
+	 // Left border
+	 for (int x = 0; x < halfsize; x++) {
+	    double s = 0.0;
+	    for (int k = 0; k < halfsize + 1 - x; k++) {
+	       s += (double)ims(b, 0, y, x) * filter[k];
+	    }
+	    for (int k = halfsize + 1 - x; k < size; k++) {
+	       s += (double)ims(b, 0, y, x + k - halfsize) * filter[k];
+	    }
+	    imi(b, y, x) = (float)(s / somme);
+	 }
+	 // General case
+	 for (int x = halfsize; x < ims.Width() - halfsize; x++) {
+	    double s = 0.0;
+	    for (int k = 0; k < size; k++) {
+	       s += (double)ims(b, 0, y, x+k-halfsize) * filter[k];
+	    }
+	    imi(b, y, x) = (float)(s / somme);
+	 }
+	 // Right border
+	 for (int x = ims.Width() - halfsize; x < ims.Width(); x++) {
+	    double s = 0.0;
+	    int l = 1 + x + halfsize - ims.Width();
+	    for (int k = 0; k < size - l; k++) {
+	       s += (double)ims(b, 0, y, x + k - halfsize) * filter[k];
+	    }
+	    for (int k = size - l; k < size; k++) {
+	       s += (double)ims(b, 0, y, x) * filter[k];
+	    }
+	    imi(b, y, x) = (float)(s / somme);
+	 }
+      }
+      
+      // Columns filtering
+      for (int x = 0; x < imi.Width(); x++) {
+	 // Upper border
+	 for (int y = 0; y < halfsize; y++) {
+	    double s = 0.0;
+	    for (int k = 0; k < halfsize + 1 - y; k++) {
+	       s += (double)imi(b, y, x) * filter[k];
+	    }
+	    for (int k=halfsize+1-y; k<size; k++) {
+	       s += (double)imi(b, y+k-halfsize, x) * filter[k];
+	    }
+	    imd(b, 0, y, x) = (T)(s / somme);
+	 }
+	 // General case
+	 for (int y = halfsize; y < imi.Height() - halfsize; y++) {
+	    double s = 0.0;
+	    for (int k = 0; k < size; k++) {
+	       s += imi(b, y + k - halfsize, x) * filter[k];
+	    }
+	    imd(b, 0, y, x) = (T)(s / somme);
+	 }
+	 // Lower border
+	 for (int y = imi.Height() - halfsize; y < imi.Height(); y++) {
+	    double s = 0.0;
+	    int l = 1 + y + halfsize - imi.Height();
+	    for (int k = 0; k <size - l; k++) {
+	       s += (double)imi(b, y+k-halfsize, x) * filter[k];
+	    }
+	    for (int k = size - l; k < size; k++) {
+	       s += (double)imi(b, y, x) * filter[k];
+	    }
+	    imd(b, 0, y, x) = (T)(s / somme);
+	 }
+      }
+   }
+   delete[] filter;
+   return SUCCESS;
+}
+
+template < typename T >
+Errc PGaussianFiltering3D( const Imx3d<T> &ims, Imx3d<T> &imd, float sigma ) {
+   const int halfsize = (int)ceil(sigma * 3.0);
+   
+   if (halfsize < 1) {
+      std::cerr << "Error pgaussianfiltering: bad parameter value: "<<sigma<< std::endl;
+      return FAILURE;
+   }
+
+   // Calcul du masque gaussien en fonction de la size.
+   const int size = halfsize * 2 + 1;
+   double *filter= new double[size];
+   double somme = 0.0;
+   for (int i = 0; i < size; i++) {
+      double s = SCALE * exp(-((double)(i - halfsize) * (i - halfsize)
+			       / (2.0 * sigma * sigma)));
+      somme += s;
+      filter[i] = s;
+   }
+
+   Imx3dsf imi1(ims.Props());	// Image intermediaire
+   Imx3dsf imi2(ims.Props());	// Image intermediaire
+
+   for (int b = 0;  b < ims.Bands(); b++) {
+      // Filtrage largeur.
+      // Gestion des bords en coupant.
+      for (int z = 0; z < ims.Depth(); z++) {
+	 for (int y = 0; y < ims.Height(); y++) {
+	    for (int x = 0; x < ims.Width(); x++) {
+	       double s = 0.0;
+	       for (int k = 0; k < size; k++) {
+		  int x1 = x + k - halfsize ;
+		  if (x1 >= 0 && x1 < ims.Width()) {
+		     s += (double)ims(b, z, y, x1) * filter[k];
+		  }
+	       }
+	       imi1(b, z, y, x)  = (float)(s / somme);
+	    }
+	 }
+      }
+      // Filtrage profondeur.
+      // Gestion des bords en coupant.
+      for (int z = 0; z < imi1.Depth(); z++) {
+	 for (int y = 0; y < imi1.Height(); y++) {
+	    for (int x = 0; x < imi1.Width(); x++) {
+	       double s = 0.0;
+	       for (int k = 0; k < size; k++) {
+		  int y1 = y + k - halfsize;
+		  if (y1 >= 0 && y1 < imi1.Height()) {
+		     s += (double)imi1(b, z, y1, x) * filter[k];
+		  }
+	       }
+	       imi2(b, z, y, x)  = (float)(s / somme);
+	    }
+	 }
+      }
+      
+      // Filtrage profondeur.
+      // Gestion des bords en coupant.
+      for (int z = 0; z < imi2.Depth(); z++) {
+	 for (int y = 0; y < imi2.Height(); y++) {
+	    for (int x = 0; x < imi2.Width(); x++) {
+	       double s = 0.0;
+	       for (int k = 0; k < size; k++) {
+		  int z1 = z + k - halfsize;
+		  if (z1 >= 0 && z1 < imi2.Depth()) {
+		     s += (double)imi2(b, z1, y, x) * filter[k];
+		  }
+	       }
+	       imd(b, z, y, x) = (T)(s / somme);
+	    }
+	 }
+      }
+   }
+   delete[] filter;
+   return SUCCESS;
+}
+
+##begin PGaussianFiltering1D < TIN >
+Errc PGaussianFiltering( const TIN &ims, TIN &imd, float sigma ) {
+   return PGaussianFiltering1D( ims, imd, sigma );
+}
+
+## append loadcases
+   if (objs[0]->Type() == Po_$TIN) {
+      TIN* const ims = (TIN*)objs[0];
+      objd[0] = new TIN(ims->Props());
+      TIN * const imd = (TIN*)objd[0];
+      
+      result = PGaussianFiltering(*ims, *imd, (Float)atof(parv[0]));
+      goto end;
+   }
+## end
+##end
+
+##begin PGaussianFiltering2D < TIN >
+Errc PGaussianFiltering( const TIN &ims, TIN &imd, float sigma ) {
+   return PGaussianFiltering2D( ims, imd, sigma );
+}
+
+## append loadcases
+   if (objs[0]->Type() == Po_$TIN) {
+      TIN* const ims = (TIN*)objs[0];
+      objd[0] = new TIN(ims->Props());
+      TIN * const imd = (TIN*)objd[0];
+      
+      result = PGaussianFiltering(*ims, *imd, (Float)atof(parv[0]));
+      goto end;
+   }
+## end
+##end
+
+##begin PGaussianFiltering3D < TIN >
+Errc PGaussianFiltering( const TIN &ims, TIN &imd, float sigma ) {
+   return PGaussianFiltering3D( ims, imd, sigma );
+}
+
+## append loadcases
+   if (objs[0]->Type() == Po_$TIN) {
+      TIN* const ims = (TIN*)objs[0];
+      objd[0] = new TIN(ims->Props());
+      TIN * const imd = (TIN*)objd[0];
+      
+      result = PGaussianFiltering(*ims, *imd, (Float)atof(parv[0]));
+      goto end;
+   }
+## end
+##end
+
+##forall(PGaussianFiltering1D, /Img1d/)
+##forall(PGaussianFiltering2D, /Im.2d/)
+##forall(PGaussianFiltering3D, /Im.3d/)
+
+#ifdef MAIN
+#define USAGE	"usage: %s sigma [-m mask] [im_in|-] [im_out|-]"
+#define PARC	1
+#define FINC	1
+#define FOUTC	1
+#define MASK	2
+
+##main(PARC, FINC, FOUTC, MASK, USAGE)
+#endif

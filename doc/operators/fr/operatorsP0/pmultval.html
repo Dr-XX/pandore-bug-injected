@@ -1,0 +1,108 @@
+<html>
+<head>
+<title>OPERATEURS PANDORE</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>pmultval</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Multiplication d'une image par des constantes stock&eacute;es dans une collection. 
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>pmultval</b> [<i>-m mask</i>] [<i>col_in</i>|-] [<i>im_in</i>|-] [<i>im_out</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p>L'op&eacute;rateur <b>pmultval</b> calcule l'image
+<i>im_out</i> par multiplication des valeurs de pixels
+de l'image <i>im_in</i> par les valeur stockes dans
+la collection  <i>col_in</i>. La premi&egrave;re valeur de  la collection est
+utilis&eacute;e pour multiplier tous les pixels de la premi&egrave;re bande,
+la seconde &agrave; tous les pixels
+de la seconde bande, etc.
+
+<p>Il y a &eacute;cr&eacute;tage du r&eacute;sultat si la valeur r&eacute;sultante
+est sup&eacute;rieure &agrave; la valeur maximale du type de l'image.
+La formule de calcul est la suivante :</p>
+<pre>
+   val = pixel(im_in) * col_in;
+   if (val &gt; MAX) pixel(im_out) = MAX;
+   else if (val &lt; MIN) pixel(im_out) = MIN;
+   else pixel(im_out) = val;
+</pre>
+
+<!---------------------------------- -->
+<h3>Entr&eacute;es</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>col_in</i>: une  collection avec autant de  valeurs r&eacute;elles que
+de nombre de bandes pour l'image d'entr&eacute;e (p. ex. 3 pour une image couleur). 
+<li><i>im_in</i>: une image.
+</ul>
+
+<!---------------------------------- -->
+<h3>Sorties</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_out</i>: un objet du m&ecirc;me type que <i>im_in</i>.
+</ul>
+
+<!---------------------------------- -->
+<h3>R&eacute;sultat</h3>
+<!---------------------------------- -->
+<p>Retourne SUCCESS ou FAILURE.</p>
+
+<!---------------------------------- -->
+<h3>Exemples</h3>
+<!---------------------------------- -->
+<p>Multiplie tangram.pan sa valeur moyenne:</p>
+<pre>
+   pmeanvalue tangram.pan a.pan
+   pmultval a.pan tangram.pan b.pan
+</pre>
+
+<a href="http://www.greyc.ensicaen.fr/~regis/Pantheon/casebase/illumination-correction">Autres exemples</a>
+
+<!---------------------------------- -->
+<h3>Voir aussi</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#arithmetic">Arithmetique</a>
+
+<!---------------------------------- -->
+<h3>Prototype C++</h3>
+<!---------------------------------- -->
+<tt>
+Errc PMultVal( const Collection &amp;col_in, const Img2duc &amp;im_in, Img2duc &amp;im_out );
+</tt>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Auteur: R&eacute;gis Clouard
+</address>
+<!---------------------------------- -->
+
+</body>
+</html>

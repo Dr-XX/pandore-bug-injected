@@ -1,0 +1,157 @@
+<html>
+<head>
+<title>PANDORE OPERATORS</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>pgradient</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Computes the gradient magnitude and direction.
+				   
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>pgradient</b> <i>halfsize</i> [<i>-m mask</i>] [<i>im_in</i>|-] [<i>im_out1</i>|-] [<i>im_out2</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p><b>pgradient</b> computes the first derivative of the input image
+<i>im_in</i>.
+The result is two grayscale images, where each <i>im_out1</i>'s pixel is set to
+the magnitude value of the gradient at this point and each <i>im_out2</i>'s pixel
+is set to the direction of the gradient.
+
+<p>The gradient magnitude value reflects the amount of grayscale variation
+in this point. The more is the variation the greater is the value.
+The magnitude is the maximum between x derivative and y derivative (+ z derivative in 3D).
+The variation is computed inside a given neighborhood space size
+specified by the parameter <i>halfsize</i>.</p>
+
+<p>The direction is the atan(dy/dx) follows by a discretization
+to get values in the freeman codes.
+So the output image is set with values from [0..7] in 2D
+and [0..25] in 3D.</p>
+
+<p>Freeman codes are:</p>
+<pre>
+   2D:            3D:
+                  z-1:		   z:		    z+1:
+ 1 2 3           2  3  4	10 11 12	 19 20 21
+ 0   4           1  0  5	9     22	 18 13 14
+ 7 6 5           8  7  6	25 24 23	 17 16 15
+</pre>
+
+<p>The derivative is computed by convolution with the kernel
+in all directions and the magnitude is set with the maximum value:</p>
+<pre>
+-1, 0, 1
+</pre>
+
+<p>For color images, the Di Zenzo algorithm is used. It is based on the
+calculus of the eigen-values of the matrix:</p>
+<pre>
+  | p t |
+  | t q |
+o&ugrave; p=gxR*gxR+gxG*gxG+gxB*gxB
+o&ugrave; q=gyRy*gyR+gyG*gyG+gyB*gyB
+o&ugrave; t=gxR*gyR+gxG*gyG+gxB*gyB
+</pre>
+
+<p>The gradient magnitude is given by:</p>
+<pre>
+magnitude=sqrt(lambda1 + lambda2)
+with lambda1=1/2 * (p+q + sqrt((p-q)*(p-q)-4*t*t)) 
+     lambad2=1/2 * (p+q - sqrt((p-q)*(p-q)-4*tt)) 
+</pre>
+
+<p>and direction is given by:</p>
+<pre>
+direction = 1/2 *arctan (2*t / (p-q))
+</pre>
+<p>followed by a discretization according to Freeman encoding.</p>
+
+<!---------------------------------- -->
+<h3>Parameters</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>halfsize</i> specifies the half size of the convolution kernel.
+</ul>
+
+<!---------------------------------- -->
+<h3>Inputs</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_in</i>: an image.
+</ul>
+
+<!---------------------------------- -->
+<h3>Outputs</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_out1</i>: an image of the same type as im_in.
+<li><i>im_out2</i>: a Uchar image.
+</ul>
+
+<!---------------------------------- -->
+<h3>Result</h3>
+<!---------------------------------- -->
+<p>Returns SUCCESS or FAILURE.</p>
+
+<!---------------------------------- -->
+<h3>Examples</h3>
+<!---------------------------------- -->
+<p>Performs an edge detection based on hysteresis threshold:</p>
+<pre>
+   pgradient 1 tangram.pan i1.pan i2.pan
+   pbinarization 30 1e30 i1.pan i3.pan
+   pbinarization 60 1e30 i1.pan i4.pan
+   pgeodesicdilation 1 1 -1 i4.pan i3.pan i4.pan
+   psuperimposition 1 tangram.pan i4.pan out.pan
+</pre>
+
+<!---------------------------------- -->
+<h3>See also</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#edgedetection">Edge detection</a>
+
+<!---------------------------------- -->
+<h3>C++ prototype</h3>
+<!---------------------------------- -->
+<tt>
+Errc PGradient( const Img2duc &amp;im_in, Img2duc &amp;im_out1, Img2duc &amp;im_out2, int halfsize );
+</tt>
+
+
+<!---------------------------------- -->
+<h3>Version fran&ccedil;aise</h3>
+<!---------------------------------- -->
+<p>Calcul du module et de la direction du gradient par convolution.</p>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Author: R&eacute;gis Clouard
+</address>
+<!---------------------------------- -->
+</body>
+</html>

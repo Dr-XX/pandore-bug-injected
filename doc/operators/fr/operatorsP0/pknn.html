@@ -1,0 +1,144 @@
+<html>
+<head>
+<title>OPERATEURS PANDORE</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>pknn</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+ Classification selon les K plus proches voisins.</p>
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>pknn</b> <i>attr_base</i> <i>attr_in</i> <i>attr_out</i> <i>k</i> [<i>col_base</i>|-] [<i>col_in</i>|-] [<i>col_out</i>|-]
+</tt>
+ 
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p>L'op&eacute;pateur <tt>pknn</tt> effectue une classification selon les K
+plus proches voisins.  Un individu est class&eacute; selon la classe
+majoritaire parmi ses K plus proches voisins de l'espace d'apprentissage.</p>
+
+<p>La mesure de distance entre deux objets xi and xj
+utilise la distance euclidienne :</p>
+<pre>
+    D<sub>ij</sub> = [ SUM<sub>{d=1;n}</sub> (xid - xjd)<sup>2</sup> ]<sup>1/2</sup>
+</pre>
+<p>o&ugrave; xid est la caract&eacute;ristique d de l'objet i
+et xjd est la caract&eacute;ristique d for de l'object j.</p>
+
+<!---------------------------------- -->
+<h3>Param&egrave;tres</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>attr_base</i> est le nom de base des vecteurs de caract&eacute;ristiques
+ des individus d&eacute;j&agrave; class&eacute;s. Les n caract&eacute;ristiques
+    de chaque individu sont stock&eacute;es sous forme de tableaux
+    <tt>attr_base.1</tt>, <tt>attr_base.2</tt>, ...,
+    <tt>attr_base.n</tt>, tous de m&ecirc;me type.  Le tableau
+    <tt>attr_base.C</tt> doit contenir les num&eacute;ros de classe de chaque
+    individu.  Si ce tableau est absent, la classe du i-&egrave;me
+    individu est i.
+<li><i>attr_in</i> est le nom de base des vecteurs de caract&eacute;ristiques
+&agrave;  classer.  Les caract&eacute;ristiques de chaque individu doivent 
+    se trouver dans les tableaux <tt>attr_in.1</tt>, <tt>attr_in.2</tt>, 
+    ..., <tt>attr_in.n</tt>.
+<li><i>attr_out</i> est le nom du vecteur  d'Ulong  qui contient
+les classes d&eacute;termin&eacute;es pour chaque individu de <tt>col_in</tt>.
+<li><tt>k</tt> est le nombre de voisins &agrave; consid&eacute;rer 
+    pour la classification.
+</ul>
+
+<!---------------------------------- -->
+<h3>Entr&eacute;es</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>col_base</i>: une collection contenant les param&egrave;tres de la classification.
+<li><i>col_in</i>: une collection &agrave; classer.
+</ul>
+
+<!---------------------------------- -->
+<h3>Sorties</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>col_out</i>: une collection.
+</ul>
+
+<!---------------------------------- -->
+<h3>R&eacute;sultat</h3>
+<!---------------------------------- -->
+<p>Retourne SUCCESS ou FAILURE.</p>
+
+<!---------------------------------- -->
+<h3>Exemples</h3>
+<!---------------------------------- -->
+<p>Classification des bonbons de l'image jellybean.pan &agrave; partir d'un &eacute;chantillon des diff&eacute;rents types de bonbons stock&eacute;s dans le dossier 'base' (Unix version):</p>
+<pre>
+# Learning
+   classes=1;
+   for i in base/*.pan
+   do
+      pim2array ind $i /tmp/tmp1 
+      parraysize ind.1 /tmp/tmp1
+      size=`pstatus`
+      pcreatearray ind.C Ushort $size $classes | pcolcatenateitem /tmp/tmp1 - i-01.pan
+      if [ -f base.pan ]
+      then pcolcatenateitem i-01.pan base.pan base.pan
+      else cp i-01.pan base.pan
+      fi
+      classes=`expr $classes + 1`
+   done 
+
+# Classification
+   pproperty 0 jellybeans.pan
+   ncol=`pstatus`
+   pproperty 1 jellybeans.pan
+   nrow=`pstatus`
+
+   pim2array ind jellybeans.pan | pknn ind ind ind 10 base.pan - | parray2im $ncol $nrow 0 ind | pim2rg - out.pan
+</pre>
+
+<!---------------------------------- -->
+<h3>Voir aussi</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#classification">Classification</a>
+
+<!---------------------------------- -->
+<h3>Prototype C++</h3>
+<!---------------------------------- -->
+<tt>
+Errc PKnn(const std::string &amp;a_base,  const Collection &amp;c_base,
+          const std::string &amp;a_in,    const Collection &amp;c_in,
+          const std::string &amp;a_out,         Collection &amp;c_out,
+          int K);
+</tt>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Auteur: Alexandre Duret-Lutz
+</address>
+<!---------------------------------- -->
+</body>
+</html>

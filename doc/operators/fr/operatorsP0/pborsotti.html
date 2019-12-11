@@ -1,0 +1,135 @@
+<html>
+<head>
+<title>OPERATEURS PANDORE</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff"><center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>pborsotti</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Calcul du crit&egrave;re de qualit&eacute; bas&eacute; sur le nombre, l'aire et la variance des r&eacute;gions.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>pborsotti</b> [<i>-m mask</i>] [<i>rg_in</i>|-] [<i>im_in</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p>L'op&eacute;rateur <b>pborsotti</b> calcule un crit&egrave;re de
+qualit&eacute; pour l'&eacute;valuation d'une segmentation d'une image
+de niveaux de gris, de couleur ou multispectrale tel que d&eacute;fini
+par M. Borsotti<sup>*</sup>.<p>
+
+<p>La mesure est d&eacute;finie &agrave; partir de trois crit&egrave;res :</p>
+<ul>
+<li>les regions doivent &ecirc;tre uniformes et homog&egrave;nes ;
+<li>l'int&eacute;rieur des regions doit &ecirc;tre simple sans trop de petits trous ;
+<li>les r&eacute;gions adjacentes doivent pr&eacute;sent&eacute;es des valeurs diff&eacute;rentes
+pour des caract&eacute;ristiques d'uniformit&eacute;.
+</ul>
+
+<p>La mesure est calcul&eacute;e comme suit :</p>
+<pre>
+F(I) = (1/(1000*A)) * sqrt(N) * sum<sub>R</sub> [ (ei<sup>2</sup> / (1+log(Ai)) + (R(Ai)/ Ai)<sup>2</sup>)]
+</pre>
+where 
+<ul> 
+   <li>A est la surface totale des r&eacute;gions.
+   <li>Ai est la surface de la r&eacute;gion i.
+   <li>N est le nombre de r&eacute;gions.
+   <li>R(Ai) est le nombre de r&eacute;gions qui ont la m&ecirc;me surface que Ai.
+   <li>ei est d&eacute;fini comme la somme des distances euclidiennes entre le
+vecteur couleur du pixel de la r&eacute;gion i et le vecteur couleur
+attribu&eacute;e &agrave; la r&eacute;gion i.
+</ul>
+
+<p>L'&eacute;quation pr&eacute;c&eacute;dente est compos&eacute;e de trois termes :</p>
+<ol>
+<li>un facteur de normalization qui prend en compte la taille de l'image ;
+<li>un facteur de p&eacute;nalization pour un sous-segmentation ;
+<li>la somme est compos&eacute;e de deux partie :
+<ul>
+<li>une p&eacute;nalisation pour les petites r&eacute;gions et les r&eacute;gions h&eacute;t&eacute;rog&egrave;nes ;
+<li>une p&eacute;nalisation pour les r&eacute;gions de petite taille (sur-segmentation).
+</ul>
+</ol>
+
+<p>Plus la valeur est petite, meilleure est la segmentation.</p>
+
+<p><b>Attention:</b> Les r&eacute;gions de label=0 ne sont pas 
+prises en compte pour la mesure.</p>
+
+<!---------------------------------- -->
+<h3>Entr&eacute;es</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>rg_in</i>: une carte de r&eacute;gion.
+<li><i>im_in</i>: une image.
+</ul>
+
+<!---------------------------------- -->
+<h3>R&eacute;sultat</h3>
+<!---------------------------------- -->
+<p>Retourne un r&eacute;el positif.<br>
+(Utiliser <code>pstatus</code> pour r&eacute;cup&eacute;rer cette valeur).</p>
+
+<!---------------------------------- -->
+<h3>Exemples</h3>
+<!---------------------------------- -->
+<p>Calcule la valeur du crit&egrave;re de Borsotti pour une simple
+segmentation par binarisation:</p>
+<pre>
+   pbinarization 80 1e30 tangram.pan i1.pan
+   plabeling 8 i1.pan i2.pan
+   pborsotti i2.pan tangram.pan
+   pstatus
+</pre>
+
+<!---------------------------------- -->
+<h3>Voir aussi</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#evaluation">Evaluation</a>
+
+<!---------------------------------- -->
+<h3>Prototype C++</h3>
+<!---------------------------------- -->
+<tt>
+Errc PBorsotti( const Reg2d &amp;rg_in, const Imc2duc &amp;im_in );
+</tt>
+
+<!---------------------------------- -->
+<h3>Reference</h3>
+<!---------------------------------- -->
+<p><sup>*</sup>M. Borsotti, P. Campadelli, R. Schettini,
+"Quantitative evaluation of color image segmentation results",
+<i>Pattern Recoginition Letters</i>,
+19:741-747, 1998.</p>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Auteur: R&eacute;gis Clouard
+</address>
+<!---------------------------------- -->
+
+</body>
+</html>

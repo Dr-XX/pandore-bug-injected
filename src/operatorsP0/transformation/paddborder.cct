@@ -1,0 +1,143 @@
+/* -*- c-basic-offset: 3; mode: c++ -*-
+ *
+ * Copyright (c), GREYC.
+ * All rights reserved
+ *
+ * You may use this file under the terms of the BSD license as follows:
+ *
+ * "Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are
+ * met:
+ *   * Redistributions of source code must retain the above copyright
+ *     notice, this list of conditions and the following disclaimer.
+ *   * Redistributions in binary form must reproduce the above copyright
+ *     notice, this list of conditions and the following disclaimer in
+ *     the documentation and/or other materials provided with the
+ *     distribution.
+ *   * Neither the name of the GREYC, nor the name of its
+ *     contributors may be used to endorse or promote products
+ *     derived from this software without specific prior written
+ *     permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, 
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, 
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
+ *
+ * 
+ * For more information, refer to:
+ * https://clouard.users.greyc.fr/Pandore
+ */
+
+/**
+ * @author Regis Clouard - 2003-01-08
+ * @author Regis Clouard - cd (add shrink border)
+ */
+
+#define _USE_MATH_DEFINES
+#include <cmath>
+#include <pandore.h>
+using namespace pandore;
+
+/**
+ * @file paddborder.cpp
+ * Resize image.
+ */
+template <typename T>
+Errc PAddBorder( const Imx3d<T> &ims, Imx3d<T> &imd, int ll, int , int hu, int , int df, int ) {
+   Point3d p, q;
+
+   for ( int b = 0; b < imd.Bands(); b++) {
+      for ( p.z = 0; p.z < imd.Depth(); p.z++) {
+	 for ( p.y = 0; p.y < imd.Height(); p.y++) {
+	    for ( p.x = 0; p.x < imd.Width(); p.x++) {
+	       q.x = p.x - ll;
+	       q.y = p.y - hu;
+	       q.z = p.z - df;
+	       if (ims.Hold(q)) {
+		  imd[b][p] = ims[b][q];
+	       } else {
+		  imd[b][p] = 0;
+	       }
+	    }
+	 }
+      }
+   }
+   return SUCCESS;
+}
+
+##begin PAddBorder2D < TYPE >
+## append loadcases
+   if (objs[0]->Type() == Po_$TYPE) {
+      TYPE* const ims = (TYPE*)objs[0];
+      const int ll = atoi(parv[0]);
+      const int lr = atoi(parv[1]);
+ 
+      const int hu = atoi(parv[2]);
+      const int hb = atoi(parv[3]);
+
+      PobjectProps props = ims->Props();
+      props.ncol = ims->Width() + ll + lr;
+      props.nrow = ims->Height() + hu + hb;
+
+      objd[0] = new TYPE(props);
+      TYPE* const imd = (TYPE*)objd[0];
+      
+      result = PAddBorder(*ims, *imd, ll, lr, hu, hb, 0, 0);
+      goto end;
+   }
+## end
+##end
+
+##begin PAddBorder3D < TYPE >
+## append loadcases
+   if (objs[0]->Type() == Po_$TYPE) {
+      TYPE* const ims = (TYPE*)objs[0];
+      const int ll = atoi(parv[0]);
+      const int lr = atoi(parv[1]);
+ 
+      const int hu = atoi(parv[2]);
+      const int hb = atoi(parv[3]);
+
+      const int df = atoi(parv[4]);
+      const int de = atoi(parv[5]);
+
+      PobjectProps props = ims->Props();
+      props.ndep = ims->Depth() + df + de;
+      props.nrow = ims->Height() + hu + hb;
+      props.ncol = ims->Width() + ll + lr;
+
+      objd[0] = new TYPE(props);
+      TYPE* const imd = (TYPE*)objd[0];
+
+      result = PAddBorder(*ims, *imd, ll, lr,  hu, hb, df, de);
+      goto end;
+   }
+## end
+##end
+
+##forall(PAddBorder2D, /Img2d/)
+##forall(PAddBorder3D, /Img3d/)
+##forall(PAddBorder2D, /Imc2d/)
+##forall(PAddBorder3D, /Imc3d/)
+##forall(PAddBorder2D, /Imx2d/)
+##forall(PAddBorder3D, /Imx3d/)
+##forall(PAddBorder2D, /Reg2d/)
+##forall(PAddBorder3D, /Reg3d/)
+
+#ifdef MAIN
+#define	USAGE	"usage: %s widthl widthr heightu heightd depthf depthb [-m mask] [im_in|-] [im_out|-]"
+#define	PARC	6
+#define	FINC	1
+#define	FOUTC	1
+#define	MASK	2
+
+##main(PARC, FINC, FOUTC, MASK, USAGE)
+#endif

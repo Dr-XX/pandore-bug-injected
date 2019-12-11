@@ -1,0 +1,96 @@
+<html>
+<head>
+<title>OPERATEURS PANDORE</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>prgb2rngnbn</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Changement d'espace couleur de RGB vers RGB normalis&eacute;.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>prgb2rngnbn</b> [<i>-m mask</i>] [<i>im_in</i>|-] [<i>im_out</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p>L'op&eacute;rateur <b>prgbrngnbn</b> permet de passer de l'espace
+couleur RGB &agrave; l'espace couleur RGB normalis&eacute;.</p>
+<p>Chaque valeur de couleur est divis&eacute;e par la somme
+des valeurs des trois couleurs.</p>
+<p>L'op&eacute;rateur consiste pour chaque pixel:</p>
+<pre>
+rouge(im_out)=rouge(im_in)/(rouge(im_in)+vert(im_in)+bleu(im_in))
+vert(im_out)=vert(im_in)/(rouge(im_in)+vert(im_in)+bleu(im_in))
+bleu(im_out)=bleu(im_in)/(rouge(im_in)+vert(im_in)+bleu(im_in))
+</pre>
+
+<!---------------------------------- -->
+<h3>Entr&eacute;es</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_in</i>: les images couleur RGB.
+</ul>
+
+<!---------------------------------- -->
+<h3>Sorties</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_out</i>: une image couleur RNGNBN.
+</ul>
+
+<!---------------------------------- -->
+<h3>R&eacute;sultat</h3>
+<!---------------------------------- -->
+<p>Retourne SUCCESS ou FAILURE.</p>
+
+<!---------------------------------- -->
+<h3>Exemples</h3>
+<!---------------------------------- -->
+<p></p>
+<pre>
+   prgb2rngnbn parrot.pan a.pan
+</pre>
+
+<!---------------------------------- -->
+<h3>Voir aussi</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#color">Color</a>
+
+<!---------------------------------- -->
+<h3>Prototype C++</h3>
+<!---------------------------------- -->
+<tt>
+Errc PRGB2RNGNBN( const Imc2duc &amp;im_in, Imc2dsf &amp;im_out );
+</tt>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Auteur: Olivier Lezoray
+</address>
+<!---------------------------------- -->
+
+</body>
+</html>

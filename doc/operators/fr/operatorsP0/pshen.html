@@ -1,0 +1,113 @@
+<html>
+<head>
+<title>OPERATEURS PANDORE</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>pshen</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+D&eacute;tection et localisation des contours de Shen-Castan.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>pshen</b> <i>strenght</i> [<i>-m mask</i>] [<i>im_in</i>|-] [<i>im_out</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p>L'op&eacute;rateur <b>pshen</b> permet de localiser les contours de
+l'image <i>im_in</i>. L'image de sortie <i>im_out</i> est construite
+avec les valeurs d'amplitude maximales dans la direction
+du gradient. Le reste est mis &agrave; 0.</p>
+
+<p>La valeur d'amplitude du gradient en un point refl&egrave;te
+la variation de niveau de gris observ&eacute; dans l'image
+<i>im_in</i> en ce point. Plus cette
+valeur est &eacute;l&eacute;v&eacute;e plus cette variation est forte.</p>
+
+<p>L'extraction se fait en trois &eacute;tapes:</p>
+<ol>
+<li>lissage ;
+<li>calcul du gradient en&nbsp; chaque point de l'image ;
+<li>extraction des maxima locaux avec ajustement des niveaux.
+</ol>
+
+<!---------------------------------- -->
+<h3>Param&egrave;tres</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>strength</i> donne l'intensit&eacute; du lissage associ&eacute;
+&agrave; la d&eacute;tection du gradient. Les valeurs sont typiquement
+dans l'intervalle [0..10]. Plus la valeur est faible,
+plus le lissage est fort et donc moins il y aura de contours.
+Une valeur de 0 correspond &agrave; un lissage total de l'image
+(donc il ne reste plus de gradient).
+Une valeur typique est 1.
+</ul>
+
+<!---------------------------------- -->
+<h3>Entr&eacute;es</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_in</i>: une image.
+</ul>
+
+<!---------------------------------- -->
+<h3>Sorties</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_out</i>: une image du m&ecirc;me type que l'image im_in.
+</ul>
+
+<!---------------------------------- -->
+<h3>R&eacute;sultat</h3>
+<!---------------------------------- -->
+<p>Retourne SUCCESS ou FAILURE.</p>
+
+<!---------------------------------- -->
+<h3>Voir aussi</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#edgedetection">D&eacute;tection de contours</a>
+
+<!---------------------------------- -->
+<h3>Exemples</h3>
+<!---------------------------------- -->
+<p>D&eacute;tection de contours dans l'image tangram.pan:</p>
+<pre>
+   pshen 1 tangram.pan a.pan
+   pbinarization 10 1e30 a.pan b.pan
+</pre>
+
+<!---------------------------------- -->
+<h3>Prototype C++</h3>
+<!---------------------------------- -->
+<tt>Errc PShen( const Img2duc &amp;im_in, Img2duc &amp;im_out, float strenght );</tt>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Auteur: Carlotti &amp; Joguet
+</address>
+<!---------------------------------- -->
+</body>
+</html>

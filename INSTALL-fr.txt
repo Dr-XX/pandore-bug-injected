@@ -1,0 +1,157 @@
+              INSTALLATION DE PANDORE SOUS UNIX/LINUX/MACOS X/CYGWIN/MINGW
+
+1. PREREQUIS
+
+L'installation complète de la bibliothèque Pandore nécessite de manière:
+
+  a. obligatoire:
+
+   - un compilateur C++ intégrant les templates.
+
+  b. recommandée:
+
+   - l'API Qt version >= 4.0.0 pour les opérateurs de visualisation.
+
+   - à defaut, les API X11 et Motif pour les opérateurs de visualisation.
+     Neanmoins, la dernière version des opérateurs de visualisation utilise
+     la version 4 de Qt (www.trolltech.com).
+
+     Sans ces deux API les opérateurs 'pvisu' et 'pdraw' ne peuvent pas
+     fonctionner. Néanmoins, le reste des opérateurs fonctionnent normalement,
+     et il est alors nécessaire de trouver d'autres programmes de visualisation
+     des images. Les opérateurs de passerelle ppan2tiff, ppan2bmp et autres
+     permettent convertir une image Pandore en image tiff ou bmp.
+
+  c. optionnelle:
+
+    - un interpréteur Perl. Sans cet interpréteur il n'est pas possible de
+      profiter du préprocesseur permettant la généricité des types lors de la
+      programmation de nouveaux opérateurs.
+
+
+2. DÉCOMPRESSION DU LOGICIEL
+
+  a. Copier le fichier pandore6.x.x-unix.tgz dans le dossier destination
+     (ex: /usr/local/pantheon).
+
+  b. Décompresser puis détarer le fichier (Dans le cas d'une mise à jour les
+     nouveaux fichiers remplacent ainsi les anciens.)
+
+     gunzip pandore6.x.x-unix.tgz
+     tar xvf pandore6.x.x-unix.tar
+
+     ou directement
+
+     tar xvfz pandore6.x.x-unix.tgz (ou gtar xvfz pandore6.x.x-unix.tgz)
+
+     Ceci a pour effet de créer le dossier Pandore/ et d'y déposer tous les
+     fichiers associés.
+
+
+3. SIMPLE COMPILATION
+
+  La plus simple facon de compiler la bibliothèque est d'exécuter les deux
+  commandes suivantes :
+
+    ./configure
+    make (or make -j6)
+    make install
+
+  Si la compilation s'est exécutée correctement, elle a permis de créer :
+  - la "library" libpandore.so (ou libpandore.dylib sour MacOS X)  dans le
+    dossier ./lib,
+  - l'ensemble des exécutables des opérateurs dans le dossier ./bin
+  - et un fichier './pandore' qui permet de lancer Pandore.
+
+  Pour vérifier la bonne installation, exécuter la séquence d'opérateurs
+  suivante sous l'interpréteur Shell:
+
+    pandore
+    pversion
+
+  puis, pour vérifier la bonne installation des opérateurs de visualisation,
+  exécuter la séquence d'opérateurs suivante sous l'interpréteur Shell:
+
+    pbmp2pan examples/tangram.bmp /tmp/tangram.pan
+    pstatus
+    pvisu /tmp/tangram.pan
+
+  la commande 'pstatus' doit afficher le texte "SUCCESS".
+
+  Une fois parfaitement la bibliothèque installée, la commande suivante permet
+  de supprimer les fichiers devenus inutiles
+
+    make clean
+
+
+4. COMPILATION AVANCEE
+
+  Si la compilation précédente ne s'est pas déroulée correctement, il est 
+  possible de modifier la configuration,
+
+  a- soit par l'ajout d'arguments lors de l'appel de configure:
+
+   --help:	affiche la liste des options de configure.
+
+   --static:	ajoute la version statique de la bibliothèque Pandore (libpandore.a)
+
+   --bindir=DIR:  permet d'installer le script Shell pandore dans le dossier
+                'DIR' (mais ne copie ni les exécutables, ni les includes, ni la
+                 library)
+		(e.g.: configure --bindir=/usr/local/bin)
+	
+   --prefix=DIR:  permet d'installer le script Shell pandore dans le dossier
+                'DIR/bin' (mais ne copie ni les	exécutables, ni les includes,
+                ni la library)
+		(e.g.: configure --prefix=/usr/local)
+	
+   --with-qmake=PATH	chemin vers la command qmake.
+
+   --with-x11-includes=PATH: permet de spécifier le dossier où se trouve les
+                includes X11 nécessaires à la compilation de l'opérateur pvisu
+                (pour la version Motif uniquement).
+
+   --with-x11-libraries=PATH: permet de spécifier le dossier où se trouve les
+                "libraries" X11 : libX11, libXt, libXp, libXext nécessaires
+		à la compilation de l'opérateur pvisu (pour la version Motif).
+
+   --with-motif-includes=PATH: permet de spécifier le dossier où se trouve les
+                includes motif nécessaires à la compilation de l'opérateur
+		pvisu (pour la version Motif).
+
+   --with-motif-libraries=PATH: permet de spécifier le dossier où se trouve la
+                "library" motif libXm nécessaire à la compilation de 
+		l'opérateur pvisu (pour la version Motif).
+
+  b- soit en modifiant directement les valeurs des variables de configuration
+     dans le code du fichier ./configure:
+
+   * PERL, avec le chemin vers l'interpréteur Perl d'une Version >= 5.0;
+     (Rem: En l'absence d'interpréteur PERL la capacité d'écriture des
+     programmes sera bridée, et ne pourra bénéficier du préprocesseur qui\
+     permet la généricité des types).
+
+   * MAKE, avec le chemin vers la commande make;
+
+   * CXX, avec le chemin vers le compilateur c++.
+
+   * CFLAGS: Les options particulières pour le compilateur (par exemple
+     -Wall pour l'affichage des Warnings).
+
+   * X11INCLUDEPATH: le chemin vers les includes X11.
+
+   * X11LIBPATH: le chemin vers les libraries X11.
+
+   * MOTIFLIBPATH: le chemin vers les includes Motif.
+
+   * MOTIFINCLUDEPATH: le chemin vers les libraries Motif.
+
+5. COMPLÈTE RECOMPILATION
+
+  Pour réinstaller la bibliothèque, il suffit d'exécuter la séquence de
+  commandes suivantes:
+
+        make distclean
+	./configure
+	make
+	make install

@@ -1,0 +1,183 @@
+<html>
+<head>
+<title>PANDORE OPERATORS</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff"><center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>pranksegmentationalgorithmsfromfolders</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Image segmentation algorithms ranking based on discrepancy measures between segmentation results and reference segmentations (full).
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>pranksegmentationalgorithmsfromfolders</b> <i>matching_algorithm_id</i> <i>matching_threshold</i>  <i>acceptable_error1</i> <i>priority1</i> <i>acceptable_error2</i> <i>priority2</i> <i>acceptable_error3</i> <i>priority3</i> <i>acceptable_error4</i> <i>priority4</i> <i>acceptable_error5</i> <i>priority5</i> <i>segmentation_result_path</i> <i>reference_segmentation_path</i> [<i>col_out1</i>|-] [<i>col_out2</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<H3>Description</H3>
+<!---------------------------------- -->
+<p>The operator <b>pranksegmentationalgorithmsfromfolders</b> ranks several segmentation algorithms
+according to their performances.
+Performances are evaluated by discrepancy measures between segmentation results and ground truths.</p>
+
+<p>Performance is calculated from 10 discrepancy measures between segmentations and the corresponding ground truth. Five discrepancy indicators are evaluated and for each
+indicator two measures are calculated with value between 0 and 1:</p>
+
+<ul>
+<li><b>Indicator 1</b>: Detection accuracy. The two measured errors are: 
+<ul>
+	<li>Recall error accounts for proportion of false negative regions.
+	<li>Precision error accounts for proportion of false positive regions.
+</ul>
+<li><b>Indicator 2</b>: Fragmentation consistency. The two measured errors are: 
+<UL>
+	<li>Under-segmentation error accounts
+	for proportion of regions grouped into a single segment. 
+	<li>Over-segmentation error accounts
+	for proportion of segments grouped into a single region. 
+</ul>
+<li><b>Indicator 3</b>: boundary precision. The two measured errors are: 
+<ul>
+	<li>Pixel deficit error accounts for
+	proportion of missed pixels in correctly detected regions. 
+	<li>Pixel excess error accounts for
+	proportion of false pixels added to correctly detected region. 
+</ul>
+<li><b>Indicator 4</b>: Shape fidelity. The two measured errors are: 
+<ul>
+	<li>Omission shape error accounts for distance of deleted shape to true shape. 
+	<li>Commission error accounts for distance of added shape to true shape. 
+</ul>
+<li><b>Indicator 5</b>: Topology preservation. The two measured errors are: 
+<ul>
+	<li>Hole addition error accounts for the proportion of false holes. 
+	<li>Hole detection error accounts for the proportion of missed holes. 
+</ul>
+</ul>
+
+<p>For each indicator <i>i</i>, the most acceptable error between the two
+should be specified by the way of the parameter
+<i>acceptable_error<sub>i</sub></i>. (See section "Parameters")</p>
+
+<p>The results are stored in two collections.
+The first collection <i>col_out1</i> contains the value of each performance indicator for each algorithm.
+The second collection <i>col_out2</i> contains the rank of each algorithm.</p>
+
+<!---------------------------------- -->
+<H3>Parameters</H3>
+<!---------------------------------- -->
+<ul>
+<li><i>-v</i> : verbose mode
+
+<li><i>matching_algorithm_id</i>: the index of the matching algorithm to be used:
+<ul>
+<li>0: for 1-n and n-1 matching.
+A segment in the segmentation result can merge several regions in the reference segmentation (under-segmentation), and
+a region in the reference segmentation can be split into several segments in the segmentation result (over-segmentation).
+However, a segment or a region cannot be both part of over-segmentation and under-segmentation.
+<li>1: for 1-1 matching. A segment can only detect one region at the most, and a region can only be
+detected by one segment at the most.
+</ul>
+<li><i>matching_threshold</i>: minimum proportion of overlapping area between a region and a segment to accept a detection.
+The value is in the interval [0,1] where value <i>x</i> corresponds to (<i>x</i>*100)% of overlapping.
+
+<li><i>acceptable_error1</i>, <i>acceptable_error2</i>, <i>acceptable_error3</i>, <i>acceptable_error4</i>, <i>acceptable_error5</i>:
+the value indicates the preferences :
+<ol>
+<li>Both errors are acceptable (no penalty).
+<li>Both errors are undesirable.
+<li>Prefer error1 to error2.
+<li>Prefer error2 to error1.
+<li>Do not penalize error1.
+<li>Do not penalize error2.
+<li>Prohibit error1.
+<li>Prohibit error2.
+</ol>
+
+<li><i>priority1</i>, <i>priority2</i>, <i>priority3</i>, <i>priority4</i>, <i>priority5</i>:
+The relative priority of the related indicator.
+It is an integer between 1 and 5, where ties are possible. The less the priority value, the higher the importance.
+
+<li><i>segmentation_result_path</i>: path to segmentation results folder. This folder can be organized
+into subfolders.
+
+<li><i>reference_segmentation_path</i>: path to reference segmentation folder.
+The folder is divided in as much as subfolders as they are expertises.
+Each subfolder is organized in the same way as each subfolder of <i>segmentation_result_path</i>.
+</ul>
+
+<!---------------------------------- -->
+<h3>Outputs</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>col_out1</i>: a collection with indicator values of each algorithm.
+<li><i>col_out2</i>: a collection with the rank of each algorithm.
+</ul>
+
+<!---------------------------------- -->
+<h3>Result</h3>
+<!---------------------------------- -->
+<p>Returns SUCCESS or FAILURE.</p>
+
+<!---------------------------------- -->
+<h3>Examples</h3>
+<!---------------------------------- -->
+<p>Rank all the algorithms from their segmentation results stored in subfolders of folder 'resultimages'.
+Priority between indicators is: first detection accuracy, second fragmentation consistency, third shape fidelity, fourth boundary precision and finally fith topology preservation:</p>
+<pre>
+pranksegmentationalgorithmsfromfolders 0 0.5 4 1 5 2 4 4 2 3 1 5 resultimages groundtruths indicators.pan rank.pan
+</pre>
+
+<!---------------------------------- -->
+<h3>See also</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#evaluation">Evaluation</a>,
+<a href="./passessdetectionaccuracy.html">passessdetectionaccuracy</a>,
+<a href="./passessfragmentationconsistency.html">passessfragmentationconsistency</a>,
+<a href="./passessboundaryprecision.html">passessboundaryprecision</a>,
+<a href="./passessshapefidelity.html">passessshapefidelity</a>,
+<a href="./passesstopologypreservation.html">passesstopologypreservation</a>,
+<a href="./passesssegmentationalgorithm.html">passesssegmentationalgorithm</a>,
+<a href="./pranksegmentationalgorithms.html">pranksegmentationalgorithms</a>
+
+<!---------------------------------- -->
+<h3>Prototype C++</h3>
+<!---------------------------------- -->
+<tt>
+Errc PRankSegmentationAlgorithmsFromFolders( int matching_algorithm_id, float matching_threshold,
+					int acceptable_error1, int priority1,
+					int acceptable_error2, int priority2,
+					int acceptable_error3, int priority3,
+					int acceptable_error4, int priority4,
+					int acceptable_error5, int priority5,
+					std::string segmentation_result_path, std::string ground_truth_path,
+					Collection &amp; cold1, Collection &amp; cold2,
+					bool verbose );
+</tt>
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Author: R&eacute;gis Clouard
+</address>
+<!---------------------------------- -->
+
+</body>
+</html>

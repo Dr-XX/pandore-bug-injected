@@ -1,0 +1,98 @@
+/* -*- mode: c++; c-basic-offset: 3 -*-
+ *
+ * Copyright (c), GREYC.
+ * All rights reserved
+ *
+ * You may use this file under the terms of the BSD license as follows:
+ *
+ * "Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are
+ * met:
+ *   * Redistributions of source code must retain the above copyright
+ *     notice, this list of conditions and the following disclaimer.
+ *   * Redistributions in binary form must reproduce the above copyright
+ *     notice, this list of conditions and the following disclaimer in
+ *     the documentation and/or other materials provided with the
+ *     distribution.
+ *   * Neither the name of the GREYC, nor the name of its
+ *     contributors may be used to endorse or promote products
+ *     derived from this software without specific prior written
+ *     permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
+ *
+ * 
+ * For more information, refer to:
+ * https://clouard.users.greyc.fr/Pandore
+ */
+
+/**
+ * @author Régis Clouard - 1997-21-07
+ */
+
+#include <pandore.h>
+using namespace pandore;
+
+/**
+ * @file pnonmaximasuppression.cpp
+ * A non-maxima suppression method for edge detection.
+ * Suppress each point that one of its neigbours in the direction
+ * the gradient is greather than it.
+ */
+
+##begin PNonMaximaSuppression < TIN1, TIN2, LOOPP, POINT, VOISL>
+Errc PNonMaximaSuppression( const TIN1 &imsa, const TIN2 &imsd, TIN1 &imd) {
+   POINT p;
+   
+   imd.Frame(imsa,1); // Border kept the same initial values.
+   
+##LOOPP(imsa,p)
+   {
+      int k = (imsd[p]+0) % VOISL; // Orthogonal directions.
+      int l = (imsd[p]+(VOISL/2)) % VOISL;
+      
+      if (((imsa.Hold(p+v$VOISL[k])) && (imsa[p]<imsa[p+v$VOISL[k]])) ||
+	  ((imsa.Hold(p+v$VOISL[l])) && (imsa[p]<imsa[p+v$VOISL[l]])))
+	 imd[p] = 0;
+      else
+	 imd[p] = imsa[p];
+   }
+   
+   return SUCCESS;
+}
+
+## append loadcases
+   if ((objs[0]->Type() == Po_$TIN1) && (objs[1]->Type() == Po_$TIN2)) {
+      TIN1* const ims1=(TIN1*)objs[0];
+      TIN2* const ims2=(TIN2*)objs[1];
+      objd[0]=new TIN1(ims1->Props());
+      TIN1* const imd=(TIN1*)objd[0];
+      
+      result=PNonMaximaSuppression(*ims1,*ims2,*imd);
+      goto end;
+   }
+## end
+##end
+
+##forall(PNonMaximaSuppression,/Img2d/,/Img2duc/)
+##forall(PNonMaximaSuppression,/Img3d/,/Img3duc/)
+
+#ifdef MAIN
+#define USAGE	"usage: %s [-m mask] [im_amp|-] [im_dir|-] [im_out|-]"
+#define PARC	0
+#define FINC	2
+#define FOUTC	1
+#define MASK	1 // Masking and unmasking.
+
+##main(PARC,FINC,FOUTC,MASK,USAGE)
+#endif

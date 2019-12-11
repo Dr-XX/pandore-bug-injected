@@ -1,0 +1,140 @@
+<html>
+<head>
+<title>OPERATEURS PANDORE</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>pppm2pan</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Conversion d'un fichier de format PPM (Portable PixMap), PGM (Portable
+GrayMap) ou PBM (Portable BitMap) en un fichier Pandore. 
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>pppm2pan</b> <i>im_in</i> [<i>im_out</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p>L'op&eacute;rateur <b>pppm2pan</b> permet de transformer
+une image de format PPM au format Pandore.</p>
+
+<p>Un fichier PPM consiste en 2 parties, un ent&ecirc;te et les donn&eacute;es:</p>
+<ul>
+<li>L'ent&ecirc;te consiste en 3 parties d&eacute;limit&eacute;es par un retour chariot
+ou par une fin de ligne (bien que la norme ne r&eacute;clame que des espaces):
+<ul>
+<li>La premi&egrave;re ligne contient le magic number.
+ <ul>
+ <li>P1: pour une image binaire avec les donn&eacute;es en ASCII.
+ <li>P2: pour une image en niveaux de gris avec les donn&eacute;es en ASCII.
+ <li>P4: pour une image binaire avec les donn&eacute;es en binaire.
+ <li>P5: pour une image en niveaux de gris avec les donn&eacute;es en binaire.
+ <li>P3: pour une image couleur avec les donn&eacute;es en ASCII.
+ <li>P6: pour une image couleur avec les donn&eacute;es en binaire.
+</ul>
+<li>La seconde ligne donne le nombre de colonnes puis le  nombre de lignes en ASCII.
+<li>La derni&egrave;re partie donne le nombre de couleurs maximales utilis&eacute;es.
+</ul>
+<p>Chaque ligne peut contenir un commentaire introduit par #.</p>
+<li>Le format des donn&eacute;es d&eacute;pend du magic number. Dans le cas:
+Attention une ligne ne peut contenir plus de 70 caract&egrave;res.
+<ul>
+<li>P2:  les pixels  sont cod&eacute;s  en  ASCII sous  la forme  d'un
+nombre entier 0 (blanc) ou 1 (noir)
+<li>P2: les pixels sont cod&eacute;s en ASCII sous la forme d'un nombre entier (le niveau de gris).
+<li>P4: les pixels sont cod&eacute;s en binaire (o : blanc, 1 : noir). 
+<li>P5: les pixels sont cod&eacute;s en binaire sous la forme d'un nombre entier (le niveau de gris).
+<li>P3: les pixels sont cod&eacute;s en ASCII sous la forme de trois nombres cons&eacute;cutifs (Rouge Vert Bleu).
+<li>P6: les pixels sont cod&eacute;s en binaire sous la forme de 3 octets cons&eacute;cutifs (Rouge Vert Bleu).
+</ul>
+</ul>
+
+<p>Exemple:</p>
+<pre>
+P2
+#Image en niveaux de gris
+#de 5 colones et de 4 lignes.
+5 4
+255
+1 2 3 4 5
+1 2 3 4 5
+1 2 3 4 5
+1 2 3 4 5
+</pre>
+
+<p><b>Astuce</b>:  Le format ppm permet de construire facilement
+une image &agrave; partir d'une matrice de valeurs cod&eacute;es par exemple en ascii.
+Il suffit de rajouter un entete ppm au fichier de donn&eacute;es.</p>
+
+<!---------------------------------- -->
+<h3>Entr&eacute;es</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_in</i>: un fichier PPM, PGM ou PBM.
+</ul>
+
+<!---------------------------------- -->
+<h3>Sorties</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_out</i>: une image 2D.
+</ul>
+
+<!---------------------------------- -->
+<h3>R&eacute;sultat</h3>
+<!---------------------------------- -->
+<p>Retourne SUCCESS ou FAILURE.</p>
+
+<!---------------------------------- -->
+<h3>Exemples</h3>
+<!---------------------------------- -->
+<ul>
+<li>Convertit une image ppm en image pandore, puis l'affiche
+<pre>
+   pppm2pan image.ppm image.pan
+   pvisu image.pan
+</pre>
+</il>
+
+<!---------------------------------- -->
+<h3>Voir aussi</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#conversion">Conversion</a>,
+<a href="./ppan2ppm.html">ppan2ppm</a>
+
+<!---------------------------------- -->
+<h3>Prototype C++</h3>
+<!---------------------------------- -->
+<tt>
+Errc PPPM2Pan( const char* filename, Pobject **obj_out );
+</tt>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Auteur: R&eacute;gis Clouard
+</address>
+<!---------------------------------- -->
+</body>
+</html>

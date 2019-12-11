@@ -1,0 +1,126 @@
+<html>
+<head>
+<title>OPERATEURS PANDORE</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff"><center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>pcontourextensionconic</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Extension des points terminaux dans la direction du contour par une forme conique.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>pcontourextensionconic</b> <i>longueur</i> [<i>-m mask</i>] [<i>im_in</i>|-] [<i>im_out</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p>L'op&eacute;rateur <b>pcontourextensionconic</b> consiste
+&agrave; &eacute;tendre tous les points
+terminaux des contours de l'image avec un c&ocirc;ne
+dont l'axe est de taille <i>longueur</i>
+dans la direction de poursuite du contour. (<i>Les contours touchant
+le bord de l'image ne sont pas &eacute;tendus</i>).</p>
+
+<p>L'extension des points terminaux est faite avec un c&ocirc;ne 
+de la taille <i>longueur</i> dans le sens du contour.
+Par exemple, le contour 2D sur la gauche est &eacute;tendu par le contour sur la droite
+de <i>longueur</i>=3 :</p>
+<pre>
+                        x
+                       xx
+                      xxx
+    xxxx    ->   xxxxxxxx
+                      xxx
+                       xx
+                        x
+</pre>
+
+<p>Un contour est une chaîne de pixels non nuls reposant sur un fond nul.
+Un point du contour est <b>terminal</b> lorsqu'il n'a qu'<b>un seul voisin</b>.
+Il peut &ecirc;tre alors utile de faire pr&eacute;c&eacute;der cet op&eacute;rateur
+d'op&eacute;rateurs d'amincissement des contours qui garantissent
+la 8-connexit&eacute; (ou la 26-connexit&eacute; en  3D).</p>
+
+<!---------------------------------- -->
+<h3>Param&eagrave;tre</h3>
+<!---------------------------------- -->
+<ul>
+<li>La <i>longueur</i> est la longueur en pixels de
+l'axe du c&ocirc;ne &agrave; ajouter dans le sens du contour.
+Une longueur de 0 correspond &agrave; aucune extension.
+</ul>
+
+<!---------------------------------- -->
+<h3>Entr&eacute;es</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_in</i>: une image d'octets 2D ou 3D.
+</ul>
+
+<!---------------------------------- -->
+<h3>Sorties</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_out</i>: une image d'octets 2D ou 3D.
+</ul>
+
+<!---------------------------------- -->
+<h3>R&eacute;sultat</h3>
+<!---------------------------------- -->
+<p>Le nombre de points terminaux &eacute;tendus.</p>
+
+<!---------------------------------- -->
+<h3>Exemples</h3>
+<!---------------------------------- -->
+<p>Ferme les contours obtenus par une simple
+d&eacute;tection de contours par extension des contours :</p>
+<pre>
+   psobel tangram.pan b.pan
+   pbinarization 55 1e30 b.pan c.pan
+   pskeletonization c.pan d.pan 
+   ppostthinning d.pan e.pan
+   pcontourextensionconic 3 e.pan f.pan
+   plabeling 8 f.pan out.pan
+</pre>
+
+<!---------------------------------- -->
+<h3>Voir aussi</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#contour">Contour</a>
+
+<!---------------------------------- -->
+<h3>Prototype C++</h3>
+<!---------------------------------- -->
+<tt>
+Errc PContourExtensionConic( cont Img2duc &amp;im_in, Img2duc &amp;im_out, int longueur );
+</tt>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Auteur: Arnaud Renouf
+</address>
+<!---------------------------------- -->
+
+</body>
+</html>

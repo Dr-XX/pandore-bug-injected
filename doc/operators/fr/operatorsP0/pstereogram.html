@@ -1,0 +1,108 @@
+<html>
+<head>
+<title>OPERATEURS PANDORE</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>pstereogram</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Construction d'une image st&eacute;r&eacute;ogramme couleur.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>pstereogram</b> [<i>im_in1</i>|-] [<i>im_im2</i>|-] [<i>im_out</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p>L'op&eacute;rateur <b>pstereogram</b> construit une image de st&eacute;r&eacute;gramme
+(faux 3D) &agrave; partir d'une image profondeur <i>im_in1</i> et
+d'un motif <i>im_in2</i>.</p>
+
+<p>Un st&eacute;r&eacute;ogramme est une image dans laquelle des informations
+st&eacute;r&eacute;oscopiques sont cod&eacute;es.
+Pour regarder un st&eacute;r&eacute;ogramme, il faut consid&eacute;rer que le
+plan focal se trouve derri&egrave;re l'image.</p>
+
+<p>Le motif est r&eacute;p&eacute;r&eacute; avec d&eacute;formation
+dans l'image destination de telle mani&egrave;re &agrave; &eacute;pouser les formes
+de l'image de profondeur.</p>
+
+<p>L'image de profondeur est une image de niveaux de gris,
+o&ugrave; la valeur de niveau de gris d'un pixel indique la profondeur
+du point correspondant.</p>
+
+<p>L'image motif est une image couleur de petite taille. Cette image
+sera utilis&eacute;e comme motif de base de l'image &agrave; construire.</p>
+
+<!---------------------------------- -->
+<h3>Entr&eacute;es</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_in1</i>: a 2D gray level image (Img2duc).
+<li><i>im_in2</i>: a 2D color image (Imc2duc).
+</ul>
+
+<!---------------------------------- -->
+<h3>Sorties</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_out</i>: a 2D color image (Imc2duc).
+</ul>
+
+<!---------------------------------- -->
+<h3>R&eacute;sultat</h3>
+<!---------------------------------- -->
+<p>Retourne SUCCESS ou FAILURE.</p>
+
+<!---------------------------------- -->
+<h3>Exemples</h3>
+<!---------------------------------- -->
+<p>Construit l'image c.pan &agrave; partir de l'image de profondeur a.pan
+et l'image de motif b.pan. a.pan est construit &agrave; partir de l'image 3D
+a3d.pan:</p>
+<pre>
+   pgraylevel2depth 50 a3d.pan a.pan
+   pstereogram a.pan b.pan c.pan
+</pre>
+
+<!---------------------------------- -->
+<h3>Voir aussi</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#miscellaneous">Exotique</a>
+
+<!---------------------------------- -->
+<h3>Prototype C++</h3>
+<!---------------------------------- -->
+<tt>
+Errc PStereogram( const Img2duc &amp;imp, const Imc2duc &amp;imt, Imc2duc &amp;im_out );
+</tt>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Auteur: R&eacute;gis Clouard
+</address>
+<!---------------------------------- -->
+</body>
+</html>

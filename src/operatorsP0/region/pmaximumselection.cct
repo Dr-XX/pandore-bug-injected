@@ -1,0 +1,208 @@
+/* -*- c-basic-offset: 3; mode: c++ -*-
+ *
+ * Copyright (c), GREYC.
+ * All rights reserved
+ *
+ * You may use this file under the terms of the BSD license as follows:
+ *
+ * "Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are
+ * met:
+ *   * Redistributions of source code must retain the above copyright
+ *     notice, this list of conditions and the following disclaimer.
+ *   * Redistributions in binary form must reproduce the above copyright
+ *     notice, this list of conditions and the following disclaimer in
+ *     the documentation and/or other materials provided with the
+ *     distribution.
+ *   * Neither the name of the GREYC, nor the name of its
+ *     contributors may be used to endorse or promote products
+ *     derived from this software without specific prior written
+ *     permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
+ *
+ * 
+ * For more information, refer to:
+ * https://clouard.users.greyc.fr/Pandore
+ */
+
+/**
+ * @author Régis Clouard - 1997-21-07
+ * @author Regis Clouard - 2006-06-02 (relation =3 and -3).
+*/
+
+#include <pandore.h>
+using namespace pandore;
+
+/**
+ * @file pmaximumselection.cpp
+ * Selectionne les regions en fonction de leur maximum interne.
+ */
+
+struct attrs_maximum {
+   float maximum;
+   bool acceptee;
+};
+
+
+##begin MAXIMUM < TIN0, TIN1, LOOPP, POINT >
+/*
+ * Fonction qui calcule les valeurs maximimales interieures
+ * de chacune des regions.
+ */
+Errc PMaximumSelection( const TIN0 &rgs, const TIN1 &ims, struct attrs_maximum *regions ) {
+   POINT p;
+   int r;
+   
+   // Calcul des valeurs pour chacunes des regions.
+##LOOPP(rgs,p)
+   {
+      if ((r=rgs[p])>0 && ((float)ims[p]>regions[r].maximum))
+	 regions[r].maximum=(float)ims[p];
+   }
+   
+   return SUCCESS;
+}
+
+/*
+ * Selectionne les regions ayant un maximum de niveaux de gris
+ * <= si relation=-2, < si relation=-1, > si relation=1, >= si relation=2
+ * a la valeur fournie.
+ */
+Errc PMaximumSelection( const TIN0 &rgs, const TIN1 &ims, TIN0 &rgd, int relation, float threshold ) {
+   struct attrs_maximum *regions;
+   Ulong nreg=0,r;
+   
+   // Initialisation.
+   regions = (struct attrs_maximum*)calloc(rgs.Labels()+1,sizeof(struct attrs_maximum));
+   for (r=1;r<=rgs.Labels();r++)
+      regions[r].maximum=(float)Limits<float>::min();
+   
+   PMaximumSelection(rgs,ims,regions);
+  
+   Float temp;
+   // Selection des regions
+   if (relation <= -3) {
+      temp=regions[1].maximum;
+      for (r=2;r<=rgs.Labels();r++)
+	 if (regions[r].maximum<temp)
+	    temp=regions[r].maximum;
+      for (r=1;r<=rgs.Labels();r++)
+	 if (regions[r].maximum==temp) {
+	    regions[r].acceptee=true;
+	    ++nreg;
+	 } else
+	    regions[r].acceptee=false;
+   } else if (relation >= 3) {
+      temp=regions[1].maximum;
+      for (r=2;r<=rgs.Labels();r++)
+	 if (regions[r].maximum>temp)
+	    temp=regions[r].maximum;
+      for (r=1;r<=rgs.Labels();r++)
+	 if (regions[r].maximum==temp) {
+	    regions[r].acceptee=true;
+	    ++nreg;
+	 } else
+	    regions[r].acceptee=false;
+   } else if (relation == 2) {
+      for (r=1;r<=rgs.Labels();r++) {
+	 if (regions[r].maximum>=threshold) {
+	    regions[r].acceptee=true;
+	    ++nreg;
+	 } else {
+	    regions[r].acceptee=false;
+	 }
+      }
+   } else if (relation == 1) {
+      for (r=1;r<=rgs.Labels();r++) {
+	 if (regions[r].maximum>threshold) {
+	    regions[r].acceptee=true;
+	    ++nreg;
+	 } else {
+	    regions[r].acceptee=false;
+	 }
+      }
+   } else if (relation == 0) {
+      for (r=1;r<=rgs.Labels();r++) {
+	 if (regions[r].maximum == threshold) {
+	    regions[r].acceptee=true;
+	    ++nreg;
+	 } else {
+	    regions[r].acceptee=false;
+	 }
+      }
+   } else if (relation == -1) {
+      for (r=1;r<=rgs.Labels();r++) {
+	 if (regions[r].maximum < threshold) {
+	    regions[r].acceptee=true;
+	    ++nreg;
+	 } else {
+	    regions[r].acceptee=false;
+	 }
+      }
+   } else /* if (relation == -2) */ {
+      for (r=1;r<=rgs.Labels();r++) {
+	 if (regions[r].maximum <= threshold) {
+	    regions[r].acceptee=true;
+	    ++nreg;
+	 } else {
+	    regions[r].acceptee=false;
+	 }
+      }
+   }
+  
+   // Construction de la carte de sortie.
+   POINT p;
+##LOOPP(rgs,p)
+   {
+      if (regions[rgs[p]].acceptee) {
+	 rgd[p] = rgs[p];
+      } else {
+	 rgd[p] = 0;
+      }
+   }
+   
+   rgd.Labels(rgs.Labels());
+   free(regions);
+   return nreg;
+}
+
+##append loadcases
+// verifier toutes les entrees
+   if (objs[0]->Type()==Po_$TIN0 && objs[1]->Type()==Po_$TIN1) {
+      TIN0* const rgs=(TIN0*)objs[0];
+      TIN1* const ims=(TIN1*)objs[1];
+      objd[0]=new TIN0(rgs->Size());
+      TIN0* const rgd=(TIN0*)objd[0];
+      
+      result=PMaximumSelection(*rgs,*ims,*rgd,atoi(parv[0]),(float)atof(parv[1]));
+      goto end;
+   }
+## end
+##end
+
+##forall(MAXIMUM, /Reg2d/, /Img2d/)
+##forall(MAXIMUM, /Reg3d/, /Img3d/)
+
+#ifdef MAIN
+/*
+ * Modify only the following constants, and the operator switches.
+ */
+#define	USAGE	"usage: %s relation threshold [-m mask] [rg_in|-] [ims_in|-] [rg_out|-]"
+#define	PARC	2
+#define	FINC	2
+#define	FOUTC	1
+#define	MASK	2
+
+##main(PARC,FINC,FOUTC,MASK,USAGE)
+#endif

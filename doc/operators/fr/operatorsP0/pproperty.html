@@ -1,0 +1,118 @@
+<html>
+<head>
+<title>OPERATEURS PANDORE</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>pproperty</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Retourne la valeur d'une propri&eacute;t&eacute; d'un objet Pandore.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>pproperty</b> <i>property_index</i> [<i>im_in</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p>L'op&eacute;rateur <b>pproperty</b> permet de retourner la valeur
+de la propri&eacute;t&eacute; <i>property_index</i> de l'objet Pandore <i>im_in</i>.
+La valeur est ensuite r&eacute;cup&eacute;rable (et affichable) par
+l'op&eacute;rateur <i>pstatus</i>.</p>
+
+<!---------------------------------- -->
+<h3>Param&egrave;tres</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>property_index</i> est un entier de l'intervalle [0-4]
+avec la convention suivante:</p>
+<ul>
+<li>0 : Le nombre de colonnes d'une image, carte de r&eacute;gions ou graphe.
+<li>1 : Le nombre de lignes d'une image, carte de r&eacute;gions ou graphe.
+<li>2 : Le nombre de plans d'une image, carte de r&eacute;gions ou graphe.
+<li>3 : Le nombre de bandes d'une image  ou<br>
+le nombre de labels dans une carte de r&eacute;gion ou<br>
+le nombre de noeuds pour les graphes (size).
+<li>4 : Le num&eacute;ro de l'espace couleur d'une image couleur parmi:<br>
+[0: RGB; 1: XYZ; 2: LUV; 3: LAB; 4: HSL; 5: AST; 6: I1I2I3; 7: LCH;
+8: WRY; 9: RNGNBN; 10: YCBCR; 11: YCH1CH; 12: YIQ; 13: YUV].
+</ul>
+</ul>
+
+<!---------------------------------- -->
+<h3>Entr&eacute;es</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_in</i>: un fichier Pandore.
+</ul>
+
+<!---------------------------------- -->
+<h3>R&eacute;sultat</h3>
+<!---------------------------------- -->
+<p>Retourne la valeur de la propri&eacute;t&eacute; s&eacute;lectionn&eacute;e
+ou FAILURE.</p>
+
+<!---------------------------------- -->
+<h3>Exemples</h3>
+<!---------------------------------- -->
+<ul>
+<li>Unix/Linux/MACOS : Construit une nouvelle image avec les m&ecirc;mes dimensions
+que l'image tangram.pan qui contient un disque blanc de rayon 10 pixels :
+<pre>
+   pproperty 0 tangram.pan; w=`pstatus`
+   pproperty 1 tangram.pan; h=`pstatus`
+   pshapedesign $w $h 0 1 50 50 a.pan
+</pre>
+<li>MsDos : Construit une nouvelle image avec les m&ecirc;mes dimensions
+que l'image tangram.pan qui contient un disque blanc de rayon 10 pixels :
+<pre>
+   pproperty 0 tangram.pan
+   call pstatus
+   call pset w 
+   pproperty 1 tangram.pan
+   call pstatus
+   call pset h
+   pshapedesign $w $h 0 1 50 50 a.pan
+</pre>
+</ul>
+
+<!---------------------------------- -->
+<h3>Voir aussi</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#information">Information</a>
+
+<!---------------------------------- -->
+<h3>Prototype C++</h3>
+<!---------------------------------- -->
+<tt>
+Errc PProperty( const Img2duc &amp;img, int property_index );
+</tt>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Auteur: R&eacute;gis Clouard
+</address>
+<!---------------------------------- -->
+</body>
+</html>

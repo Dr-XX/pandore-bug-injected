@@ -1,0 +1,106 @@
+<html>
+<head>
+<title>PANDORE OPERATORS</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>pfuzzyclustering</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Performs pixel clustering onimage using fuzzy k-means algorithm. 
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>pfuzzyclustering</b> <i>nbclass</i> <i>fuzzy_degree</i> [<i>-m mask</i>] [<i>im_in</i>|-] [<i>rg_out</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p><b>fuzzyclustering</b> classifies the input image pixels
+into <i>nbclass</i> number of clusters.
+The method uses the fuzzy k-mean algorithm.</p>
+
+<p>The result is region map <i>rg_out</i>.</p>
+
+<!---------------------------------- -->
+<h3>Parameters</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>nbclass</i> is the number of cluster. Is is a positive value.</p>
+
+<li><i>fuzzy_degree</i> specifies the fuzzy degree of the classification.
+It is a real value from [1..2] where 1 corresponds to no fuzzy.
+</ul>
+
+<!---------------------------------- -->
+<h3>Inputs</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_in</i>: an image.
+</ul>
+
+<!---------------------------------- -->
+<h3>Outputs</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>rg_out</i>: a region map.
+</ul>
+
+<!---------------------------------- -->
+<h3>Result</h3>
+<!---------------------------------- -->
+<p>Returns SUCCESS or FAILURE.</p>
+
+<!---------------------------------- -->
+<h3>Examples</h3>
+<!---------------------------------- -->
+<p>Segments the tangram pieces:</p>
+<pre>
+   pfuzzyclustering 2 1.5 tangram.pan out.pan
+</pre>
+
+<!---------------------------------- -->
+<h3>See also</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#thresholding">Thresholding</a>
+
+<!---------------------------------- -->
+<h3>C++ prototype</h3>
+<!---------------------------------- -->
+<tt>
+Errc PFuzzyClustering( const Img2duc &amp;im_in, Reg2d &amp;rg_out, int nbclass, float fuzzy_degree );
+</tt>
+
+<!---------------------------------- -->
+<h3>Version fran&ccedil;aise</h3>
+<!---------------------------------- -->
+<p>Classification des pixels d'une image par la m&eacute;thode des k moyennes floues.</p>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Author: Jalal Fadili
+</address>
+<!---------------------------------- -->
+
+</body>
+</html>

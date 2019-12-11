@@ -1,0 +1,117 @@
+<html>
+<head>
+<title>PANDORE OPERATORS</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>pstatus</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Prints out the value returned by the last executed operator.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>pstatus</b>
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p><b>pstatus</b> displays the value returned
+by the last execution of Pandore operator.
+
+<p>Each Pandore operator returns a value after its execution.
+This value is operator dependent and can be of
+the following types:</p>
+<ul>
+<li>an integer;
+<li>a real;
+<li>a character;
+<li>a string
+<li>SUCCESS / FAILURE.
+</ul>
+
+<p>Such a value can then be used to test the completeness
+of an operator execution or be used as parameter value
+for another operator.
+<ul>
+<li>For example, on UNIX/LINUX/MACOS system:
+<pre>
+   plabeling 8 a.pan b.pan
+   a=`pstatus`
+   echo "Number of regions=%a%"
+</pre>
+
+<li>For example, on MsDos it is necessary to use the 'pset' command
+to set a variable with the status value:</p>
+<pre>
+   plabeling 8 a.pan b.pan
+   call pstatus
+   call pset a
+   echo "Number of regions=%a%"
+</pre>
+</ul>
+
+<!---------------------------------- -->
+<h3>Result</h3>
+<!---------------------------------- -->
+</p>No result value.</p>
+
+<!---------------------------------- -->
+<h3>Examples</h3>
+<!---------------------------------- -->
+<ul>
+<li>Unix/Linux/MACOS: Display the number of regions
+which resulted in a segmentation process based on
+interclass variance maximization:
+<pre>
+   pvariancebinarization examples/tangram.pan a.pan
+   plabeling 8 a.pan b.pan
+   a=`pstatus`
+   echo "Number of regions=$a"
+</pre>
+
+<li>MsDos: Display the number of regions
+which resulted in a segmentation process based on
+interclass variance maximization:
+<pre>
+   pvariancebinarization examples/tangram.pan a.pan
+   plabeling 8 a.pan b.pan
+   call pstatus
+   call pset a
+   echo "Number of regions=%a%"
+</pre>
+</ul>
+
+<!---------------------------------- -->
+<h3>See also</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#information">Information</a>, 
+<a href="./psetstatus">psetstatus</a>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Author: R&eacute;gis Clouard
+</address>
+<!---------------------------------- -->
+</body>
+</html>

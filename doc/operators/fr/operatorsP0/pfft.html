@@ -1,0 +1,156 @@
+<html>
+<head>
+<title>PANDORE OPERATORS</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>pfft</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Calcul de la Transform&eacute;e de Fourier Rapide d'une image.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>pfft</b> [-m mask] [<i>im_in1</i>|-] [<i>im_in2</i>|-] [<i>im_out1</i>|-] [<i>im_out2</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p>L'op&eacute;rateur <b>pfft</b> permet de calculer la transform&eacute;e
+de Fourier d'une image complexe. Les images d'entr&eacute;e sont:</p>
+<ul>
+<li><i>im_in1</i> est la partie r&eacute;elle de l'image.
+<li><i>im_in2</i> est la partie imaginaire de l'image.
+Si cette image n'existe pas, il faut construire une image vide (cd. psetcst).
+</ul>
+
+<p>Les images de sortie sont de type r&eacute;el:</p>
+<ul>
+<li><i>im_out1</i> est la partie r&eacute;elle de la transform&eacute;e.
+<li><i>im_out2</i> est la partie imaginaire de la transform&eacute;e.
+</ul>
+
+<p>La taille des images de sortie <i>im_out1</i> et <i>im_out1</i> est
+calcul&eacute;e comme &eacute;tant la puissance de 2 la plus proche
+de la taille des images d'entr&eacute;e <i>im_in2</i> et <i>im_in2</i>.</p>
+
+<p>La transform&eacute;e permet de passer d'une repr&eacute;sentation de l'image dans le domaine
+spatial &agrave; une repr&eacute;sentation dans le domaine fr&eacute;quentiel.</p>
+<ul>
+<li>Domaine spatial: Le domaine spatial est le domaine classique
+o&ugrave; chaque valeur en (x,y) correspond &agrave; la valeur d'intensit&eacute;
+de la position (x',y') correspondante dans la sc&egrave;ne observ&eacute;e.
+La distance entre deux pixels
+correspond &agrave; une distance r&eacute;elle dans la sc&egrave;ne.
+
+<li>Domaine fr&eacute;quentiel:
+Le domaine fr&eacute;quentiel est un espace o&ugrave; chaque valeur de l'image &agrave; la
+position F repr&eacute;sente une quantit&eacute; telle que les valeurs d'intensit&eacute;
+dans l'image I varient sur une distance sp&eacute;cifique relative &agrave; F.
+Par exemple, supposons qu'il y ait la valeur 20 au point qui repr&eacute;sente
+la fr&eacute;quence 0.1 (soit 1 p&eacute;riode tous les 10 pixels), cela signifie que
+dans le domaine spatial de l'image correspondant, la valeur d'intensit&eacute;
+varie du sombre au clair puis au sombre sur une distance de 10 pixels,
+et que le contraste entre le sombre et le clair est de 40 niveaux de
+gris (2 fois 20).
+</ul>
+
+<p>La transform&eacute;e de Fourier repr&eacute;sente le degr&eacute; de ressemblance entre
+l'image vue comme une fonction f et les fonctions cosinus et sinus &egrave;
+diff&eacute;rentes fr&eacute;quences. Chaque point repr&eacute;sente une fr&eacute;quence particuli&egrave;re
+dans le domaine spatiale de l'image.</p>
+<pre>
+si N est le nombre de pixels total de l'image.
+F(u,v) = 1/(N*N) * Sigma(x){Sigma(y){ I(x,y)*exp(-i2PI((u*i)/N+(v*i)/N))}}
+</pre>
+
+<p>L'&eacute;quation peut &ecirc;tre interpr&eacute;t&eacute;e comme suit:<br>
+La valeur du point (u,v) est obtenue par la multiplication de l'image
+spatiale avec la fonction de base correspondante, puis addition du r&eacute;sultat.
+Les fonctions de base sont des sinus et des cosinus avec des fr&eacute;quences
+croissantes. F(0,0) repr&eacute;sente la composante discr&egrave;te de la moyenne de
+l'intensit&eacute;, F(N-1,N-1) repr&eacute;sente la plus grande fr&eacute;quence.</p>
+
+<p>Nous ne consid&eacute;rons ici que la transform&eacute;e discr&egrave;te et donc toutes
+les fr&eacute;quences ne sont pas prises en compte. Le nombre de fr&eacute;quences
+consid&eacute;r&eacute;es d&eacute;pend donc de la taille de l'image.
+L'image de sortie <i>im_out</i> a ici la m&ecirc;me taille que l'image
+d'entr&eacute;e <i>im_in</i>.</p>
+
+<!---------------------------------- -->
+<h3>Entr&eacute;es</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_in1</i>: une image de niveaux de gris (la partie r&eacute;elle de la transformation).
+<li><i>im_in2</i>: une image de niveaux de gris (la partie imaginaire de la transformation).
+</ul>
+
+<!---------------------------------- -->
+<h3>Sorties</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_out1</i>: une image de niveaux de gris (la partie r&eacute;elle de la transformation).
+<li><i>im_out2</i>: une image de niveaux de gris (la partie imaginaire de la transformation).
+</ul>
+
+<!---------------------------------- -->
+<h3>R&eacute;sultat</h3>
+<!---------------------------------- -->
+<p>Retourne SUCCESS ou FAILURE.</p>
+
+<!---------------------------------- -->
+<h3>Exemples</h3>
+<!---------------------------------- -->
+<p>Calcule l'amplitude de la transform&eacute;e de Fourier
+de l'image tangram.pan.
+La partie imaginaire (i1.pan) est nulle.
+(Uitiliser la transformation log de pvisu
+pour visualiser le r&eacute;sultat out.pan.):</p>
+<pre>
+   psetcst 0 tangram.pan i1.pan
+   pfft tangram.pan i1.pan i2.pan i3.pan
+   pfftshift i2.pan i3.pan i4.pan i5.pan
+   pmodulus i4.pan i5.pan out.pan
+</pre>
+
+<!---------------------------------- -->
+<h3>Voir aussi</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#frequency">Domaine Fr&eacute;quentiel</a>,
+<a href="./pifft.html">pifft</a>,
+<a href="./pfftshift.html">pfftshift</a>
+
+<!---------------------------------- -->
+<h3>Prototype C++</h3>
+<!---------------------------------- -->
+<tt>
+Errc PFFT( const Img2duc &amp;im_in1, const Img2duc &amp;im_in2, Img2dsf &amp;im_out1, Img2dsf &amp;im_out2 );
+</tt>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Auteur: Herissay &amp; Berthet 
+</address>
+<!---------------------------------- -->
+</body>
+</html>

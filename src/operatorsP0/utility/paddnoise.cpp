@@ -1,0 +1,521 @@
+/* -*- c-basic-offset: 3; mode: c++ -*-
+ *
+ * Copyright (c), GREYC.
+ * All rights reserved
+ *
+ * You may use this file under the terms of the BSD license as follows:
+ *
+ * "Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are
+ * met:
+ *   * Redistributions of source code must retain the above copyright
+ *     notice, this list of conditions and the following disclaimer.
+ *   * Redistributions in binary form must reproduce the above copyright
+ *     notice, this list of conditions and the following disclaimer in
+ *     the documentation and/or other materials provided with the
+ *     distribution.
+ *   * Neither the name of the GREYC, nor the name of its
+ *     contributors may be used to endorse or promote products
+ *     derived from this software without specific prior written
+ *     permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, 
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, 
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
+ *
+ * 
+ * For more information, refer to:
+ * https://clouard.users.greyc.fr/Pandore
+ */
+
+/**
+ * @author Régis Clouard - 1997-21-07
+ */
+
+#define _USE_MATH_DEFINES
+#include <cmath>
+#include <time.h>
+#include <pandore.h>
+using namespace pandore;
+
+/**
+ * @file paddnoise.cpp
+ * Generates noise in one image.
+ *	moyenne  : mean.
+ *	sigma	 : standard deviation.
+ *	ddp 	 : probility density of the noise:
+ *	           1 gaussian
+ *		   2 exponential
+ *		   3 uniform
+ *		   4 triangular
+ */
+
+#if defined _WIN32 || defined WIN32
+unsigned short *seed48( unsigned short seed16v[3] ) {
+   srand(seed16v[0]);
+   return seed16v;
+}
+
+double drand48( void ) {
+   return (double)rand()/RAND_MAX;
+}
+#endif
+
+/**
+ * Generates gaussian noise for one line.
+ * Method of "Box Muller".
+ * Let u1, u2 be uniformly distibuted on the interval [0..1[
+ * @param bruit		the array of noise data.
+ * @param moyenne	the mean of the noise.
+ * @param sigma		the standard deviation of the noise.
+ * @param taille	the size of the noise array.
+ */
+static void Bruit_Gauss( Float *bruit, Float moyenne, Float sigma, int taille ) {
+   double u1, u2, z0;
+   register int i;
+   
+   for (i=0 ; i<taille ; i++) {
+      while((u1 = drand48()) == 0.0) ;
+      u2 = drand48();
+      
+      z0=sqrt(-2.0*log(u1))*cos(2.0*M_PI*u2);
+      bruit[i] = (float)(sigma * z0 + moyenne);
+   }
+}
+
+/**
+ * Generates exponential noise for one line.
+ * Let u1, u2 be uniformly distibuted on the interval [0..1[
+ * @param bruit		the array of noise data.
+ * @param moyenne	the mean of the noise.
+ * @param sigma		the standard deviation of the noise.
+ * @param taille	the size of the noise array.
+ */
+static void Bruit_Expo( Float *bruit, Float moyenne, Float sigma, int taille ) {
+   double u1, z0;
+   register int i;
+   
+   for (i=0 ;i<taille ; i++) {
+      while ((u1=drand48())==0.0) ;
+      
+      z0=-1.0*log(u1);
+      bruit[i]= (float)(sigma * z0 + moyenne);
+   }
+}
+
+/**
+ * Generates uniform noise for one line.
+ * Let u1, u2 be uniformly distibuted on the interval [0..1[
+ * @param bruit		the array of noise data.
+ * @param moyenne	the mean of the noise.
+ * @param sigma		the variance of the noise.
+ * @param taille	the size of the noise array.
+ */
+static void Bruit_Unif( Float *bruit, Float moyenne, Float sigma, int taille ) {
+   double u1, z0;
+   register int i;
+   
+   for (i=0 ;i<taille ; i++) {
+      u1=drand48();
+      
+      z0=(u1-0.5)*sqrt(12.0); 
+      bruit[i] = (float)(sigma * z0 + moyenne);
+   }
+}
+
+/**
+ * Generates trianglar noise for one line.
+ * Let u1, u2 be uniformly distibuted on the interval [0..1[
+ * @param bruit		the array of noise data.
+ * @param moyenne	the mean of the noise.
+ * @param sigma		the standard deviation of the noise.
+ * @param taille	the size of the noise array.
+ */
+static void Bruit_Trig( Float *bruit, Float moyenne, Float sigma, int taille ) {
+   double u1, u2, z0, z1;
+   register int i;
+  
+  for (i=0 ;i<taille ; i++) {
+    u1=drand48();
+    u2=drand48();
+    
+    z0=(u1-0.5)*sqrt(12.0);  
+    z1=(u2-0.5)*sqrt(12.0);  
+    bruit[i] = (float)(sigma * (z0+z1) + moyenne);
+  }
+}
+
+// /**
+//  * Generation d'un bruit poissonien pour une ligne.
+//  * Let u1, u2 be uniformly distibuted on the interval [0..1[
+//  * @param sigma		the standard deviation of the noise.
+//  */
+// static void Bruit_Poisson( Float *bruit, Float moyenne, Float sigma, int taille ) {
+//    double u1, u2, z0;
+//    register int i;
+  
+//   for (i=0 ;i<taille ; i++) {
+//     u1=drand48();
+//     u2=drand48();
+    
+//     z0=(u1+u2-1.0)*sqrt(6.0);  
+//     bruit[i] = (float)(sigma * z0 + moyenne);
+//   }
+// }
+
+template <typename T1, typename T2>
+Errc PAddNoise( const Imx3d<T1> &ims, Imx3d<T2> &imd, int ddp, Float moyenne, Float sigma ) {
+   float *bruit, *br; // Image de flottants.
+   unsigned short init1[3];
+   int taille;
+   T1* ps;
+   T2* pd;
+   taille = ims.VectorSize();
+   
+   // Reservation memoire */
+   if (!(bruit=(Float*)calloc(taille, sizeof(Float)))) {
+      std::cerr<<"Error paddnoise: cannot allocate memory."<<std::endl;
+      return FAILURE;
+   }
+
+   // Initialisation du generateur aleatoire systeme*/
+   init1[0] = (Ushort)time(0);
+   (void)seed48(init1); 
+   
+   for (int b = 0; b < ims.Bands(); b++) {
+      switch (ddp) {
+      case 1 : // Bruit additif
+	 Bruit_Gauss(bruit, moyenne, sigma, taille);
+	 br = bruit;
+
+	 for (ps = ims.Vector(b); ps < ims.Vector(b) + ims.VectorSize();) {
+	    *(br++) += (Float)*(ps++);
+	 }
+	 break;
+	 
+      case 2 :
+	 Bruit_Expo(bruit, moyenne, sigma, taille);
+	 br = bruit;
+	 for (ps=ims.Vector(b); ps<ims.Vector(b)+ims.VectorSize();) {
+	    *(br++) += (Float)*(ps++);
+	 }
+	 break;
+	 
+      case 3 :
+	 Bruit_Unif(bruit, moyenne, sigma, taille);
+	 br = bruit;
+	 for (ps=ims.Vector(b);ps<ims.Vector(b)+ims.VectorSize();) {
+	    *(br++) += (Float)*(ps++);
+	 }
+	 break;
+	 
+      case 4 : 
+	 Bruit_Trig(bruit, moyenne, sigma, taille);
+	 br = bruit;
+	 for (ps=ims.Vector(b);ps<ims.Vector(b)+ims.VectorSize();) {
+	    *(br++) += (Float)*(ps++);
+	 }
+	 break;
+
+      case 11 : // bruit multiplicatif
+	 Bruit_Gauss(bruit, moyenne, sigma, taille);
+	 br = bruit;
+	 for (ps=ims.Vector(b);ps<ims.Vector(b)+ims.VectorSize();) {
+	    *(br++) *= (Float)*(ps++);
+	 }
+	 break;
+	 
+      case 12 :
+	 Bruit_Expo(bruit, moyenne, sigma, taille);
+	 br = bruit;
+	 for (ps=ims.Vector(b);ps<ims.Vector(b)+ims.VectorSize();) {
+	    *(br++) *= (Float)*(ps++);
+	 }
+	 break;
+	 
+      case 13 :
+	 Bruit_Unif(bruit, moyenne, sigma, taille);
+	 br = bruit;
+	 for (ps=ims.Vector(b);ps<ims.Vector(b)+ims.VectorSize();) {
+	    *(br++) *= (Float)*(ps++);
+	 }
+	 break;
+	 
+      case 14 :
+	 Bruit_Trig(bruit, moyenne, sigma, taille);
+	 br = bruit;
+	 for (ps=ims.Vector(b);ps<ims.Vector(b)+ims.VectorSize();) {
+	    *(br++) *= (Float)*(ps++);
+	 }
+	 break;
+	 
+      default:
+	 std::cerr<< "Error paddnoise: Bad law: "<<ddp<<std::endl;
+	 return FAILURE;
+      }
+      
+      // Ecretage.
+      br = bruit;
+      for (pd=imd.Vector(b);pd<imd.Vector(b)+imd.VectorSize();pd++) {
+	 *pd = (float)*(br++);;
+      }
+   }
+   return SUCCESS;
+}
+
+
+
+#ifdef MAIN
+#define USAGE	"usage: %s law mean standarddeviation [-m mask] [im_in|-] [im_out|-]"
+#define PARC	3
+#define FINC	1
+#define FOUTC	1
+#define MASK	1 // Masking + Unmasking.
+
+int main( int argc, char *argv[] ) {
+   Errc result;                // The result code of the execution.
+   Pobject* mask;              // The region map.
+   Pobject* objin[FINC + 1];   // The input objects.
+   Pobject* objs[FINC + 1];    // The source objects masked.
+   Pobject* objout[FOUTC + 1]; // The output object.
+   Pobject* objd[FOUTC + 1];   // The result object of the execution.
+   char* parv[PARC + 1];       // The input parameters.
+
+   ReadArgs(argc, argv, PARC, FINC, FOUTC, &mask, objin, objs, objout, objd, parv, USAGE, MASK); 
+   if (objs[0]->Type() == Po_Img2duc) {
+      Img2duc* const ims=(Img2duc*)objs[0];
+      objd[0]=new Img2dsf(ims->Props());
+      Img2dsf* const imd=(Img2dsf*)objd[0];
+      
+      result=PAddNoise(*ims, *imd, atoi(parv[0]), (Float)atof(parv[1]), (Float)atof(parv[2]));
+      goto end;
+   }
+   if (objs[0]->Type() == Po_Img2duc) {
+      Img2duc* const ims=(Img2duc*)objs[0];
+      objd[0]=new Imc2dsf(ims->Props());
+      Imc2dsf* const imd=(Imc2dsf*)objd[0];
+      
+      result=PAddNoise(*ims, *imd, atoi(parv[0]), (Float)atof(parv[1]), (Float)atof(parv[2]));
+      goto end;
+   }
+   if (objs[0]->Type() == Po_Img2duc) {
+      Img2duc* const ims=(Img2duc*)objs[0];
+      objd[0]=new Imx2dsf(ims->Props());
+      Imx2dsf* const imd=(Imx2dsf*)objd[0];
+      
+      result=PAddNoise(*ims, *imd, atoi(parv[0]), (Float)atof(parv[1]), (Float)atof(parv[2]));
+      goto end;
+   }
+   if (objs[0]->Type() == Po_Img2dsl) {
+      Img2dsl* const ims=(Img2dsl*)objs[0];
+      objd[0]=new Img2dsf(ims->Props());
+      Img2dsf* const imd=(Img2dsf*)objd[0];
+      
+      result=PAddNoise(*ims, *imd, atoi(parv[0]), (Float)atof(parv[1]), (Float)atof(parv[2]));
+      goto end;
+   }
+   if (objs[0]->Type() == Po_Img2dsl) {
+      Img2dsl* const ims=(Img2dsl*)objs[0];
+      objd[0]=new Imc2dsf(ims->Props());
+      Imc2dsf* const imd=(Imc2dsf*)objd[0];
+      
+      result=PAddNoise(*ims, *imd, atoi(parv[0]), (Float)atof(parv[1]), (Float)atof(parv[2]));
+      goto end;
+   }
+   if (objs[0]->Type() == Po_Img2dsl) {
+      Img2dsl* const ims=(Img2dsl*)objs[0];
+      objd[0]=new Imx2dsf(ims->Props());
+      Imx2dsf* const imd=(Imx2dsf*)objd[0];
+      
+      result=PAddNoise(*ims, *imd, atoi(parv[0]), (Float)atof(parv[1]), (Float)atof(parv[2]));
+      goto end;
+   }
+   if (objs[0]->Type() == Po_Img2dsf) {
+      Img2dsf* const ims=(Img2dsf*)objs[0];
+      objd[0]=new Img2dsf(ims->Props());
+      Img2dsf* const imd=(Img2dsf*)objd[0];
+      
+      result=PAddNoise(*ims, *imd, atoi(parv[0]), (Float)atof(parv[1]), (Float)atof(parv[2]));
+      goto end;
+   }
+   if (objs[0]->Type() == Po_Img2dsf) {
+      Img2dsf* const ims=(Img2dsf*)objs[0];
+      objd[0]=new Imc2dsf(ims->Props());
+      Imc2dsf* const imd=(Imc2dsf*)objd[0];
+      
+      result=PAddNoise(*ims, *imd, atoi(parv[0]), (Float)atof(parv[1]), (Float)atof(parv[2]));
+      goto end;
+   }
+   if (objs[0]->Type() == Po_Img2dsf) {
+      Img2dsf* const ims=(Img2dsf*)objs[0];
+      objd[0]=new Imx2dsf(ims->Props());
+      Imx2dsf* const imd=(Imx2dsf*)objd[0];
+      
+      result=PAddNoise(*ims, *imd, atoi(parv[0]), (Float)atof(parv[1]), (Float)atof(parv[2]));
+      goto end;
+   }
+   if (objs[0]->Type() == Po_Imc2duc) {
+      Imc2duc* const ims=(Imc2duc*)objs[0];
+      objd[0]=new Img2dsf(ims->Props());
+      Img2dsf* const imd=(Img2dsf*)objd[0];
+      
+      result=PAddNoise(*ims, *imd, atoi(parv[0]), (Float)atof(parv[1]), (Float)atof(parv[2]));
+      goto end;
+   }
+   if (objs[0]->Type() == Po_Imc2duc) {
+      Imc2duc* const ims=(Imc2duc*)objs[0];
+      objd[0]=new Imc2dsf(ims->Props());
+      Imc2dsf* const imd=(Imc2dsf*)objd[0];
+      
+      result=PAddNoise(*ims, *imd, atoi(parv[0]), (Float)atof(parv[1]), (Float)atof(parv[2]));
+      goto end;
+   }
+   if (objs[0]->Type() == Po_Imc2duc) {
+      Imc2duc* const ims=(Imc2duc*)objs[0];
+      objd[0]=new Imx2dsf(ims->Props());
+      Imx2dsf* const imd=(Imx2dsf*)objd[0];
+      
+      result=PAddNoise(*ims, *imd, atoi(parv[0]), (Float)atof(parv[1]), (Float)atof(parv[2]));
+      goto end;
+   }
+   if (objs[0]->Type() == Po_Imc2dsl) {
+      Imc2dsl* const ims=(Imc2dsl*)objs[0];
+      objd[0]=new Img2dsf(ims->Props());
+      Img2dsf* const imd=(Img2dsf*)objd[0];
+      
+      result=PAddNoise(*ims, *imd, atoi(parv[0]), (Float)atof(parv[1]), (Float)atof(parv[2]));
+      goto end;
+   }
+   if (objs[0]->Type() == Po_Imc2dsl) {
+      Imc2dsl* const ims=(Imc2dsl*)objs[0];
+      objd[0]=new Imc2dsf(ims->Props());
+      Imc2dsf* const imd=(Imc2dsf*)objd[0];
+      
+      result=PAddNoise(*ims, *imd, atoi(parv[0]), (Float)atof(parv[1]), (Float)atof(parv[2]));
+      goto end;
+   }
+   if (objs[0]->Type() == Po_Imc2dsl) {
+      Imc2dsl* const ims=(Imc2dsl*)objs[0];
+      objd[0]=new Imx2dsf(ims->Props());
+      Imx2dsf* const imd=(Imx2dsf*)objd[0];
+      
+      result=PAddNoise(*ims, *imd, atoi(parv[0]), (Float)atof(parv[1]), (Float)atof(parv[2]));
+      goto end;
+   }
+   if (objs[0]->Type() == Po_Imc2dsf) {
+      Imc2dsf* const ims=(Imc2dsf*)objs[0];
+      objd[0]=new Img2dsf(ims->Props());
+      Img2dsf* const imd=(Img2dsf*)objd[0];
+      
+      result=PAddNoise(*ims, *imd, atoi(parv[0]), (Float)atof(parv[1]), (Float)atof(parv[2]));
+      goto end;
+   }
+   if (objs[0]->Type() == Po_Imc2dsf) {
+      Imc2dsf* const ims=(Imc2dsf*)objs[0];
+      objd[0]=new Imc2dsf(ims->Props());
+      Imc2dsf* const imd=(Imc2dsf*)objd[0];
+      
+      result=PAddNoise(*ims, *imd, atoi(parv[0]), (Float)atof(parv[1]), (Float)atof(parv[2]));
+      goto end;
+   }
+   if (objs[0]->Type() == Po_Imc2dsf) {
+      Imc2dsf* const ims=(Imc2dsf*)objs[0];
+      objd[0]=new Imx2dsf(ims->Props());
+      Imx2dsf* const imd=(Imx2dsf*)objd[0];
+      
+      result=PAddNoise(*ims, *imd, atoi(parv[0]), (Float)atof(parv[1]), (Float)atof(parv[2]));
+      goto end;
+   }
+   if (objs[0]->Type() == Po_Imx2duc) {
+      Imx2duc* const ims=(Imx2duc*)objs[0];
+      objd[0]=new Img2dsf(ims->Props());
+      Img2dsf* const imd=(Img2dsf*)objd[0];
+      
+      result=PAddNoise(*ims, *imd, atoi(parv[0]), (Float)atof(parv[1]), (Float)atof(parv[2]));
+      goto end;
+   }
+   if (objs[0]->Type() == Po_Imx2duc) {
+      Imx2duc* const ims=(Imx2duc*)objs[0];
+      objd[0]=new Imc2dsf(ims->Props());
+      Imc2dsf* const imd=(Imc2dsf*)objd[0];
+      
+      result=PAddNoise(*ims, *imd, atoi(parv[0]), (Float)atof(parv[1]), (Float)atof(parv[2]));
+      goto end;
+   }
+   if (objs[0]->Type() == Po_Imx2duc) {
+      Imx2duc* const ims=(Imx2duc*)objs[0];
+      objd[0]=new Imx2dsf(ims->Props());
+      Imx2dsf* const imd=(Imx2dsf*)objd[0];
+      
+      result=PAddNoise(*ims, *imd, atoi(parv[0]), (Float)atof(parv[1]), (Float)atof(parv[2]));
+      goto end;
+   }
+   if (objs[0]->Type() == Po_Imx2dsl) {
+      Imx2dsl* const ims=(Imx2dsl*)objs[0];
+      objd[0]=new Img2dsf(ims->Props());
+      Img2dsf* const imd=(Img2dsf*)objd[0];
+      
+      result=PAddNoise(*ims, *imd, atoi(parv[0]), (Float)atof(parv[1]), (Float)atof(parv[2]));
+      goto end;
+   }
+   if (objs[0]->Type() == Po_Imx2dsl) {
+      Imx2dsl* const ims=(Imx2dsl*)objs[0];
+      objd[0]=new Imc2dsf(ims->Props());
+      Imc2dsf* const imd=(Imc2dsf*)objd[0];
+      
+      result=PAddNoise(*ims, *imd, atoi(parv[0]), (Float)atof(parv[1]), (Float)atof(parv[2]));
+      goto end;
+   }
+   if (objs[0]->Type() == Po_Imx2dsl) {
+      Imx2dsl* const ims=(Imx2dsl*)objs[0];
+      objd[0]=new Imx2dsf(ims->Props());
+      Imx2dsf* const imd=(Imx2dsf*)objd[0];
+      
+      result=PAddNoise(*ims, *imd, atoi(parv[0]), (Float)atof(parv[1]), (Float)atof(parv[2]));
+      goto end;
+   }
+   if (objs[0]->Type() == Po_Imx2dsf) {
+      Imx2dsf* const ims=(Imx2dsf*)objs[0];
+      objd[0]=new Img2dsf(ims->Props());
+      Img2dsf* const imd=(Img2dsf*)objd[0];
+      
+      result=PAddNoise(*ims, *imd, atoi(parv[0]), (Float)atof(parv[1]), (Float)atof(parv[2]));
+      goto end;
+   }
+   if (objs[0]->Type() == Po_Imx2dsf) {
+      Imx2dsf* const ims=(Imx2dsf*)objs[0];
+      objd[0]=new Imc2dsf(ims->Props());
+      Imc2dsf* const imd=(Imc2dsf*)objd[0];
+      
+      result=PAddNoise(*ims, *imd, atoi(parv[0]), (Float)atof(parv[1]), (Float)atof(parv[2]));
+      goto end;
+   }
+   if (objs[0]->Type() == Po_Imx2dsf) {
+      Imx2dsf* const ims=(Imx2dsf*)objs[0];
+      objd[0]=new Imx2dsf(ims->Props());
+      Imx2dsf* const imd=(Imx2dsf*)objd[0];
+      
+      result=PAddNoise(*ims, *imd, atoi(parv[0]), (Float)atof(parv[1]), (Float)atof(parv[2]));
+      goto end;
+   }
+  {
+     PrintErrorFormat(objin, FINC, argv); 
+     result = FAILURE; 
+  }	
+
+end:
+  if (result) {
+	WriteArgs(argc, argv, PARC, FINC, FOUTC, &mask, objin, objs, objout, objd, MASK); 
+  }
+  Exit(result); 
+  return 0; 
+}
+#endif

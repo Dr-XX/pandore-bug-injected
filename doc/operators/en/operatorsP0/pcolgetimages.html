@@ -1,0 +1,114 @@
+<html>
+<head>
+<title>PANDORE OPERATORS</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>pcolgetimages</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Extracts images from collection.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>pcolgetimages</b> [<i>col_in</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p><b>pcolgetimages</b> extracts all images
+from the specified collection <i>col_in</i>.
+Each image is saved in a file named from the related
+name into the collection suffixed by ".pan".</p>
+
+<p>For example, if the command: "pfile col.pan" returns :</p>
+<pre>
+Creator   : pandore
+Date      : 2005/04/13
+Type      : Collection (Bundle of elements)
+Number of elements : 3
+        attr       (8 elements)   Array:Ulong
+        image2d    (1 element)    Pobject:Img2duc
+        image3d    (1 element)    Pobject:Img3duc
+</pre>
+<p>then the command "pcolgetimages col.pan" builds :</p>
+
+<pre>
+image2d.pan
+image3d.pan
+</pre>
+
+<p>Operator <a href="./pcolgetobject.html">pcolgetobject</a> can be used to get only one image
+from the input collection.</p>
+
+<!---------------------------------- -->
+<h3>Inputs</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>col_in</i>: a collection.
+</ul>
+
+<!---------------------------------- -->
+<h3>Result</h3>
+<!---------------------------------- -->
+<p>Returns SUCCESS or FAILURE if at least one
+image cannot be saved.</p>
+
+<!---------------------------------- -->
+<h3>Examples</h3>
+<!---------------------------------- -->
+<p>Catenates the 2 collections c1.pan and c2.pan in
+the collection col.pan and then extracts the two
+images in file foo.pan and bar.pan:</p>
+<pre>
+   pobject2col foo tangram.pan c1.pan
+   pobject2col bar parrot.pan c2.pan
+   pcolcatenateitem c1.pan c2.pan col.pan
+   pcolgetimages col.pan
+</pre>
+
+<!---------------------------------- -->
+<h3>See also</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#collection">Collection</a>,
+<a href="./pcolgetobject.html">pcolgetobject</a>
+
+<!---------------------------------- -->
+<h3>C++ prototype</h3>
+<!---------------------------------- -->
+<tt>
+Errc ColGetImages( const Collection &amp;col_in ) ;
+</tt>
+ 
+<!---------------------------------- -->
+<h3>Version fran&ccedil;aise</h3>
+<!---------------------------------- -->
+<p>Extraction des images d'une collection.</p>
+		      
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Author: Nicolas Briand
+</address>
+<!---------------------------------- -->
+</body>
+</html>

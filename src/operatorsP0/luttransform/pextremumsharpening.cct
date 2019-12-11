@@ -1,0 +1,150 @@
+/* -*- c-basic-offset: 3; mode: c++ -*-
+ *
+ * Copyright (c), GREYC.
+ * All rights reserved
+ *
+ * You may use this file under the terms of the BSD license as follows:
+ *
+ * "Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are
+ * met:
+ *   * Redistributions of source code must retain the above copyright
+ *     notice, this list of conditions and the following disclaimer.
+ *   * Redistributions in binary form must reproduce the above copyright
+ *     notice, this list of conditions and the following disclaimer in
+ *     the documentation and/or other materials provided with the
+ *     distribution.
+ *   * Neither the name of the GREYC, nor the name of its
+ *     contributors may be used to endorse or promote products
+ *     derived from this software without specific prior written
+ *     permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
+ *
+ * 
+ * For more information, refer to:
+ * https://clouard.users.greyc.fr/Pandore
+ */
+
+/**
+ * @author Régis Clouard - 2006-02-10
+ */
+
+#include <pandore.h>
+using namespace pandore;
+
+/**
+ * @file pextremumsharpening.cpp
+ * @brief Extremun sharpening is for sharpening an image.
+ * Let W be the neighborhood of pixel p, f(p) the origina image
+ * and g(p) the result image.
+ * zmin = min {f(p+w) / w in W }
+ * zmax = max {f(p+w) / w in W }
+ * g(pd)m=zmin if (f(p)-zmin < zmax-f(p)
+ *        zmax otherwise.
+ */
+template <typename T>
+Errc PExtremumsharpening( const Imx2d<T> &ims, Imx2d<T> &imd ) {
+   Point2d p;
+   
+   imd.Frame(ims,1);
+   for (int b=0; b<ims.Bands(); b++) {
+      for (p.y=1;p.y<ims.Height()-1;p.y++) {
+	 for (p.x=1;p.x<ims.Width()-1;p.x++) {
+	    T max=ims[b][p+v8[0]];
+	    T min=ims[b][p+v8[0]];
+	    for (int v=1; v<8; v++) {
+	       if (max < ims[b][p+v8[v]]) {
+		  max=ims[b][p+v8[v]];
+	       }
+	       if (min > ims[b][p+v8[v]]) {
+		  min=ims[b][p+v8[v]];
+	       }
+	    }
+	    if (ims[b][p] - min < max - ims[b][p]) {
+	       imd[b][p]=min;
+	    } else {
+	       imd[b][p]=max;
+	    }
+	 }
+      }
+   }
+   return SUCCESS;
+}
+
+##begin PExtremumSharpening2D < TIN >
+## append loadcases
+   if (objs[0]->Type()==Po_$TIN) {
+      TIN* const ims=(TIN*)objs[0];
+      objd[0]=new TIN(ims->Props());
+      TIN* const imd=(TIN*)objd[0];
+      
+      result=PExtremumsharpening(*ims,*imd);
+      goto end;
+   }
+## end
+##end
+
+template <typename T>
+Errc PExtremumsharpening( const Imx3d<T> &ims, Imx3d<T> &imd ) {
+   Point3d p;
+   
+   imd.Frame(ims,1);
+   for (int b=0; b<ims.Bands(); b++) {
+      for (p.z=1;p.z<ims.Depth()-1;p.z++) {
+	 for (p.y=1;p.y<ims.Height()-1;p.y++) {
+	    for (p.x=1;p.x<ims.Width()-1;p.x++) {
+	       T max=ims[b][p+v26[0]];
+	       T min=ims[b][p+v26[0]];
+	       for (int v=1; v<26; v++) {
+		  if (max < ims[b][p+v26[v]]) max=ims[b][p+v26[v]];
+		  if (min > ims[b][p+v26[v]]) min=ims[b][p+v26[v]];
+	       }
+	       if (ims[b][p] - min < max - ims[b][p]) {
+		  imd[b][p]=min;
+	       } else {
+		  imd[b][p]=max;
+	       }
+	    }
+	 }
+      }
+   }
+   return SUCCESS;
+}
+
+##begin PExtremumSharpening3D < TIN >
+## append loadcases
+   if (objs[0]->Type()==Po_$TIN) {
+      TIN* const ims=(TIN*)objs[0];
+      objd[0]=new TIN(ims->Props());
+      TIN* const imd=(TIN*)objd[0];
+      
+      result=PExtremumsharpening(*ims,*imd);
+      goto end;
+   }
+## end
+##end
+
+##forall(PExtremumSharpening2D,/Im.[2]/)
+##forall(PExtremumSharpening3D,/Im.[3]/)
+
+#ifdef MAIN
+#define	USAGE	"usage: %s [-m mask] [im_in|-] [im_out|-]"
+#define	PARC	0
+#define	FINC	1
+#define	FOUTC	1
+#define	MASK	3
+
+##main(PARC,FINC,FOUTC,MASK,USAGE)
+
+#endif

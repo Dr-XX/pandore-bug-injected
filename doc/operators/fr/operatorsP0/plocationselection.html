@@ -1,0 +1,105 @@
+<html>
+<head>
+<title>PANDORE OPERATORS</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>plocationselection</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+S&eacute;lection de r&eacute;gions sur leur valeur de compacit&eacute;.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>plocationselection</b> <i>relation</i> <i>xmin</i> <i>ymin</i> <i>zmin</i> <i>xmax</i> <i>ymax</i> <i>zmax</i> [<i>-m mask</i>] [<i>rg_in</i>|-] [<i>rg_out</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p>L'op&eacute;rateur <b>plocationselection</b>
+permet de s&eacute;lectionner les r&eacute;gions &agrave; partir de leur coordonn&eacute;es.
+Les param&egrave;tres d&eacute;finissent le parall&egrave;l&eacute;pide de s&eacute;lection. Si la valeur
+du param&egrave;tre <i>relation</i> est positive alors
+les r&eacute;gions qui sont compl&egrave;tement &agrave; l'int&eacute;rieur du parall&egrave;l&eacute;pide sont s&eacute;lectionn&eacute;es.
+Si la valeur est n&eacute;gative, les r&eacute;gions non compl&egrave;tement &agrave; l'int&eacute;rieur
+sont s&eacute;lectionn&eacute;es.</p>
+
+<p>Attention, il n'y a pas de re&eacute;tiquetage ds r&eacute;gions.</p>
+
+<!---------------------------------- -->
+<h3>Param&egrave;tres</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>relation</i> est une valeur positive ou n&eacute;gative. Si la valeur est positive,
+les r&eacute;gions &agrave; l'int&eacute;rieur du parall&egrave;l&eacute;pide donn&eacute;e sont gard&eacute;es. Si la valeur est n&eacute;gative,
+les r&eacute;gions &agrave; l'ext&eacute;rieur sont conserv&eacute;es dans le r&eacute;sultat.
+</ul>
+
+<!---------------------------------- -->
+<h3>Entr&eacute;es</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>rg_in</i>: une carte de r&eacute;gions
+</ul>
+
+<!---------------------------------- -->
+<h3>Sorties</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>rg_out</i>: une carte de r&eacute;gions
+</ul>
+
+<!---------------------------------- -->
+<h3>R&eacute;sultat</h3>
+<!---------------------------------- -->
+<p>Retourne le nombre de r&eacute;gions ainsi s&eacute;lectionn&eacute;es.</p>
+
+<!---------------------------------- -->
+<h3>Exemples</h3>
+<!---------------------------------- -->
+<p>S&eacute;lectionne les r&eacute;gions de l'image <i>tangram.pan</i> &agrave; l'int&eacute;rieur du rectangle (10,0, 238, 228):</p>
+<pre>
+pbinarization 112 256 examples/tangram.pan b.pan
+plabeling 8 b.pan r.pan
+plocationselection -1 0 10 0 238 228 0 r.pan v.pan
+</pre>
+
+<!---------------------------------- -->
+<h3>Voir aussi</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#region">R&eacute;gion</a>
+
+<!---------------------------------- -->
+<h3>Prototype C++</h3>
+<!---------------------------------- -->
+<tt>
+Errc PLocationSelection( const Reg2d &amp;rg_in, Reg2d &amp;rg_out, int relation, int xmin, int ymin, int xmax, int ymax);
+</tt>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Auteur: R&eacute;gis Clouard
+</address>
+<!---------------------------------- -->
+</body>
+</html>

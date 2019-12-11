@@ -1,0 +1,113 @@
+<html>
+<head>
+<title>PANDORE OPERATORS</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>plabelmerging</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Merges two regions from label value.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>plabelmerging</b> <i>label1</i> <i>label2</i> [<i>rg_in</i>|-] [<i>gr_in</i>|-] [<i>rg_out</i>|-] [<i>gr_out</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p><b>plabelmerging</b> merges two regions specified
+by their label value. The regions of the output region map <i>rg_out</i>
+keep the same label than the regions in the input region
+map <i>rg_in</i>.
+The output graph <i>gr_out</i> is updated with the new node
+that results from the merging of the two nodes and also
+the list of neighbors. The new seed is located
+at the center of mass of the new region.</p>
+
+<!---------------------------------- -->
+<h3>Parameters</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>label1</i> is the label of the first region in the input region map <i>rg_in</i>.
+It is an integer from 1 to maximum label value.
+<li><i>label2</i> is the label of the second region in the input region map <i>rg_in</i>.
+It is an integer from 1 to maximum label value.
+</ul>
+
+<!---------------------------------- -->
+<h3>Inputs</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>rg_in</i>: a region map.
+<li><i>gr_in</i>: a graph.
+</ul>
+
+<!---------------------------------- -->
+<h3>Outputs</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>rg_out</i>: a region map.
+<li><i>gr_out</i>: a graph.
+</ul>
+
+<!---------------------------------- -->
+<h3>Result</h3>
+<!---------------------------------- -->
+<p>Returns SUCCESS or FAILURE.</p>
+
+<!---------------------------------- -->
+<h3>Examples</h3>
+<!---------------------------------- -->
+<p>Segments the tangram.pan with a quadtree technique
+and then merges label 1 and 2:</p>
+<pre>
+  puniformityquadtree 0.9 tangram.pan a.pan
+  prg2gr a.pan b.pan
+  plabelmerging  1 2 a.pan b.pan out1.pan out2.pan
+</pre>
+
+<!---------------------------------- -->
+<h3>See also</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#segmentation">Segmentation</a>
+
+<!---------------------------------- -->
+<h3>C++ prototype</h3>
+<!---------------------------------- -->
+<tt>
+Errc PLabelMerging( const Reg2d &amp;rg_in, cconst Graph2d &amp;gr_in, Reg2d &amp;rg_out Graph2d &amp;gr_out, int label1, int label2 );
+</tt>
+
+<!---------------------------------- -->
+<h3>Version fran&ccedil;aise</h3>
+<!---------------------------------- -->
+<p>Fusion nominative de 2 r&eacute;gions.</p>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Author: R&eacute;gis Clouard
+</address>
+<!---------------------------------- -->
+</body>
+</html>

@@ -1,0 +1,98 @@
+<html>
+<head>
+<title>PANDORE OPERATORS</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>prelabelingwithgraph</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Renum&eacute;rotation des r&eacute;gions d'une carte et des sommets du graphe associ&eacute;.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>prelabelingwithgraph</b> [<i>rg_in</i>|-] [<i>gr_in</i>|-] [<i>rg_out</i>|-] [<i>gr_out</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p>L'op&eacute;rateur <b>prelabelingwithgraph</b> proc&egrave;de &agrave; une renum&eacute;rotation
+des r&eacute;gions de <i>rg_in</i> et des sommets du graphe associ&eacute;.
+Chacune des r&eacute;gions de <i>rg_in</i> se voit affect&eacute; d'un nouveau num&eacute;ro
+dans <i>rg_out</i>, tel que tous les num&eacute;ros entre 1 et n soient utilis&eacute;s. Les num&eacute;ros
+de sommets correspondants sont renum&eacute;rot&eacute;s de la m&ecirc;me fa&ccedil;on dans <i>gr_out</i>
+en gardant la correspondance num&eacute;ro de sommet = num&eacute;ro de r&eacute;gion.</p>
+
+<p><i>Remarque: Pour renum&eacute;roter une carte de r&eacute;gions sans le graphe
+de voisinage associ&eacute;, il faut utiliser <b>plabeling</b></i>.</p>
+
+<!---------------------------------- -->
+<h3>Entr&eacute;es</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>rg_in</i>: une carte de r&eacute;gions
+<li><i>gr_in</i>: un graphe
+</ul>
+
+<!---------------------------------- -->
+<h3>Sorties</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>rg_in</i>: une carte de r&eacute;gions
+<li><i>gr_out</i>: un graphe
+</ul>
+
+<!---------------------------------- -->
+<h3>R&eacute;sultat</h3>
+<!---------------------------------- -->
+<p>Retourne le nombre de r&eacute;gions de la carte de sortie.</p>
+
+<!---------------------------------- -->
+<h3>Exemples</h3>
+<!---------------------------------- -->
+<p>Relabelise les r&eacute;gions de la carte rin.pan
+et met &agrave; jour les arcs entre les noeuds du graphe g.pan:</p>
+<pre>
+   relabelingwithgraph rin.pan g.pan rut.pn
+</pre>
+
+<!---------------------------------- -->
+<h3>Voir aussi</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#region">R&eacute;gion</a>
+
+<!---------------------------------- -->
+<h3>Prototype C++</h3>
+<!---------------------------------- -->
+<tt>
+Errc PRelabelingWithGraph( const Reg2d &amp;rg_in, Graph2d &amp;gr_in, Reg2d &amp;rg_out, Graph2d &amp;gr_out );
+</tt>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Auteur: R&eacute;gis Clouard
+</address>
+<!---------------------------------- -->
+
+</body>
+</html>

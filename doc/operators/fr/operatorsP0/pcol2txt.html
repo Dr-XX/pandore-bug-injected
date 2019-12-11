@@ -1,0 +1,100 @@
+<html>
+<head>
+<title>OPERATEURS PANDORE</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>pcol2txt</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Conversion d'une collection en un fichier texte.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>pcol2txt</b> [<i>col_in</i>|-] [<i>file_out</i>]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p>L'op&eacute;rateur <b>pcol2txt</b> permet de convertir le contenu
+d'une collection contenant des valeurs et des tableaux en un fichier texte.
+
+Le nom du fichier texte
+<i>file_out</i> est optionnel. S'il est omis, le contenu de
+la collection s'affiche sur la sortie standard.</p>
+
+<p><i>Remarque</i>: les valeurs de type Char ou Uchar sont consid&eacute;r&eacute;es
+comme des entiers courts. Ceci fait que les chaînes de caract&egrave;res
+(de type Array:Char) sont affich&eacute;es dans le fichier texte sous la forme de leur
+code ASCII (A=65, B=66, ...).
+</p> 
+
+<!---------------------------------- -->
+<h3>Entr&eacute;es</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>col_in</i>: les fichiers collection.
+</ul>
+
+<!---------------------------------- -->
+<h3>Sorties</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>file_out</i>: un fichier texte.
+</ul>
+
+<!---------------------------------- -->
+<h3>R&eacute;sultat</h3>
+<!---------------------------------- -->
+<p>Retourne SUCCESS ou FAILURE.</p>
+
+<!---------------------------------- -->
+<h3>Exemples</h3>
+<!---------------------------------- -->
+<p>Affiche le contenu de la collection col.pan :</p>
+<pre>
+  pobject2col foo tangram.pan col.pan
+  pcolsetvalue foo Float 10.5 col.pan col.pan
+  pfile col.pan
+  pcol2txt col.pan
+</pre>
+
+<!---------------------------------- -->
+<h3>Voir aussi</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#collection">Collection</a>
+
+<!---------------------------------- -->
+<h3>Prototype C++</h3>
+<!---------------------------------- -->
+<tt>
+Errc PCol2Txt( const Collection &amp;col_in_out, FILE *fd );
+</tt>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Auteur: Alexandre Duret-Lutz
+</address>
+<!---------------------------------- -->
+</body>
+</html>

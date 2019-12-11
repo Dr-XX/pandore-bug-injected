@@ -1,0 +1,99 @@
+<html>
+<head>
+<title>OPERATEURS PANDORE</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>pcolgetvalue</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Extraction de la valeur d'un  num&eacute;rique dans une collection.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>pcolgetvalue</b> <i>name</i> [<i>col_in</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3> 
+<!---------------------------------- -->
+<p>L'op&eacute;rateur <b>pcolgetvalue</b> permet de r&eacute;cup&eacute;rer
+dans la valeur de sortie la valeur de l'attribut num&eacute;rique
+nomm&eacute; <i>nom_attribut</i> dans la collection <i>col_in</i>.</p>
+
+<p>La valeur de sortie est ensuite r&eacute;cup&eacute;rable
+par l'op&eacute;rateur <b>pstatus</b>.
+
+<!---------------------------------- -->
+<h3>Param&egrave;tres</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>name</i> est un identificateur
+alphab&eacute;tique sans accent, sans espace et sans ponctuation.
+</ul>
+
+<!---------------------------------- -->
+<h3>Entr&eacute;es</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>col_in</i>: une collection.
+</ul>
+
+<!---------------------------------- -->
+<h3>R&eacute;sultat</h3>
+<!---------------------------------- -->
+<p>Retourne la valeur num&eacute;rique de l'attribut
+ou FAILURE.</p>
+
+<!---------------------------------- -->
+<h3>Exemples</h3>
+<!---------------------------------- -->
+<p>Ajoute la valeur r&eacute;elle 10.5 dans la collection col.pan
+avec le nom "foo" puis v&eacute;rifie si la valeur 
+est dans la collection :</p>
+<pre>
+  pobject2col image tangram.pan col.pan
+  pcolsetvalue foo Float 10.5 col.pan col.pan
+  pfile col.pan 
+  pcolgetvalue foo col.pan 
+  pstatus
+</pre>
+
+<!---------------------------------- -->
+<h3>Voir aussi</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#collection">Collection</a>
+
+<!---------------------------------- -->
+<h3>Prototype C++</h3>
+<!---------------------------------- -->
+<tt>
+Errc PColGetValue( const std::String name, Collection &amp;col_in );
+</tt>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Auteur: R&eacute;gis Clouard
+</address>
+<!---------------------------------- -->
+</body>
+</html>

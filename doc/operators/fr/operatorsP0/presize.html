@@ -1,0 +1,106 @@
+<html>
+<head>
+<title>OPERATEURS PANDORE</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center><hr>
+
+<!---------------------------------- -->
+<h1>presize</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Ajustement de la taille d'une image en fonction d'une taille souhait&eacute;e.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>presize</b> <i>largeur</i> <i>hauteur</i> <i>profondeur</i> [<i>-m mask</i>] [<i>im_in</i>|-] [<i>im_out</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p>L'op&eacute;rateur <b>presize</b> permet de r&eacute;duire ou d'augmenter la taille
+de l'image <i>im_in</i> par r&eacute;duction ou interpolation
+lin&eacute;aire en X,Y ou Z. L'image est r&eacute;duite ou agrandie de telle
+fa&ccedil;on qu'elle ait la taille (hauteur x largeur) en fin de 
+r&eacute;duction ou de l'interpolation.</p>
+
+<p>Parce que la r&eacute;duction peut provoquer des pertes d'informations
+telles que des points isol&eacute;s, des lignes ... et  l'aggrandissement
+des effets de pav&eacute;s, il est g&eacute;n&eacute;galement n&eacute;cessaire d'accompagner
+cet op&eacute;rateur de lissage avant pour la r&eacute;duction
+ou apr&eacute;s pour l'agrandissement.</p>
+
+<!---------------------------------- -->
+<h3>Param&egrave;tres</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>profondeur</i>,<i>hauteur</i>, <i>largeur</i> sont des valeurs enti&egrave;res.
+La profondeur doit &ecirc;tre donn&eacute;e pour une image 2D, mais
+elle est ignor&eacute;e.
+</ul>
+
+<!---------------------------------- -->
+<h3>Entr&eacute;es</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_in</i>: une image ou une carte de r&eacute;gions.
+</ul>
+
+<!---------------------------------- -->
+<h3>Sorties</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_out</i>: une image de m&ecirc;me type que l'image d'entr&eacute;e ou une carte de r&eacute;gions.
+</ul>
+
+<!---------------------------------- -->
+<h3>R&eacute;sultat</h3>
+<!---------------------------------- -->
+<p>Retourne SUCCESS ou FAILURE.</p>
+
+<!---------------------------------- -->
+<h3>Exemples</h3>
+<!---------------------------------- -->
+<p>Retaille l'image tangram.pan pour l'agrandir &agrave; 512x256:</p>
+<pre>
+   pmeanfiltering 1 tangram.pan a.pan
+   presize 512 256 0 a.pan b.pan
+</pre>
+
+<!---------------------------------- -->
+<h3>Voir aussi</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#transformation">Transformation</a>
+
+<!---------------------------------- -->
+<h3>Prototype C++</h3>
+<!---------------------------------- -->
+<tt>
+Errc PResize( const Img2duc &amp;im_in, Img2duc &amp;im_out, int largeur, int hauteur );
+</tt>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Auteur: R&eacute;gis Clouard
+</address>
+<!---------------------------------- -->
+
+</body>
+</html>

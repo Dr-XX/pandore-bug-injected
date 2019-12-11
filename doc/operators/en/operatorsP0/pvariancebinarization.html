@@ -1,0 +1,131 @@
+<html>
+<head>
+<title>PANDORE OPERATORS</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>pvariancebinarization</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Performs binarization on image using interclass variance criterion.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>pvariancebinarization</b> [<i>-m mask</i>] [<i>im_in</i>|-] [<i>im_out</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p><b>pvariancebinarization</b> classifies pixels of the input image <i>im_in</i>
+into 2 clusters. The threshold value is determined
+as the gray level value that maximizes the interclass variance
+(according to Otsu's algorithm)</p>
+
+<p>The principle of the algorithm is as follows:<br>
+Let h be the histogram of the gray levels, pi the probability
+of the gray level i and N the total number of pixels:</p>
+<pre>
+   pi=h[i]/N
+</pre>
+
+<p>To classify the pixel into 2 clusters C0 and C1 with the threshold t:
+<br>Let p(c) and p(c1) the probabilities for a pixel x to belong
+respectively to the class C0 and C1:</p>
+<pre>
+   p(C0) = SUM(i=0;s){ pi }
+   p(C1) = SUM(i=s+1;N){ pi }
+</pre>
+
+<p>The means for each class C0 and C1 are:</p>
+<pre>
+   M0 = SUM(i=0;s){ pi/p(C0) }
+   M1 = SUM(i=s+1;N){ pi/p(C1) }
+</pre>
+
+<p>The total mean for the input image is:</p>
+<pre>
+   Mt = SUM(i=0;N){ i.pi }
+</pre>
+
+<p>The optimal threshold t maximizes the interclass variance V(t):</p>
+<pre>
+   V(t) = SUM(i=1;2) { P(Ci).(Mi-Mt).(Mi-Mt) }
+</pre>
+
+<!---------------------------------- -->
+<h3>Inputs</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_in</i>: a grayscale image of bytes (Img2duc, Img3duc).
+</ul>
+
+<!---------------------------------- -->
+<h3>Outputs</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_out</i>: a grayscale image of bytes (Img2duc, Img3duc).
+</ul>
+
+<!---------------------------------- -->
+<h3>Result</h3>
+<!---------------------------------- -->
+<p>Returns the threshold value..</p>
+
+<!---------------------------------- -->
+<h3>Examples</h3>
+<!---------------------------------- -->
+<p>Segments the tangram pieces:</p>
+<pre>
+   pvariancebinarization tangram.pan a.pan
+</pre>
+
+<!---------------------------------- -->
+<h3>See also</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#thresholding">Thresholding</a>
+
+<!---------------------------------- -->
+<h3>C++ prototype</h3>
+<!---------------------------------- -->
+<tt>
+Errc PVarianceBinarization( const Img2duc &amp;im_in, Img2duc &amp;im_out );
+</tt>
+
+<!---------------------------------- -->
+<h3>Version fran&ccedil;aise</h3>
+<!---------------------------------- -->
+<p>Binarisation de l'image par analyse de la variance interclasse.</p>
+
+<!---------------------------------- -->
+<h3>Reference</h3>
+<!---------------------------------- -->
+<p>N. Otsu, "A threshold selection method from grey scale histogram",
+<i>IEEE Trans. on Syst. Man and Cyber.</i>, vol 1, pp 62-66, 1979.</p>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Author: R&eacute;gis Clouard
+</address>
+<!---------------------------------- -->
+</body>
+</html>

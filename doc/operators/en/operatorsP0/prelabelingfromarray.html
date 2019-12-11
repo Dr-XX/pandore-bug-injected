@@ -1,0 +1,106 @@
+<html>
+<head>
+<title>PANDORE OPERATORS</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>prelabelingfromarray</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Relabels regions from label array.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>prelabelingfromarray</b> <i>name</i> [<i>col_in</i>|-] [<i>rg_in</i>|-] [<i>rg_out</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p><b>prelabelingfromarray</b> relabels region of the input region map
+<i>rg_in</i> from the values of the array named <i>name</i> given in the input
+collection <i>col_in</i>.</p>
+
+<p>The label of the input region <i>x &gt; 0</i> is set with the new
+label <i>name[x-1]</i>. If the array <i>name</i> has less value than
+the label values then the remainder regions are discarded from the result region
+map. The region 0 is not relabeled.</p>
+
+<!---------------------------------- -->
+<h3>Inputs</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>col_in</i>: a collection.
+<li><i>rg_in</i>: a region map.
+</ul>
+
+<!---------------------------------- -->
+<h3>Outputs</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>rg_out</i>: a region map.
+</ul>
+
+<!---------------------------------- -->
+<h3>Parameters</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>name</i> specifies the name of the array in the collection.
+</ul>
+
+<!---------------------------------- -->
+<h3>Result</h3>
+<!---------------------------------- -->
+<p>Returns the maximum label value of the output region map.</p>
+
+<!---------------------------------- -->
+<h3>Examples</h3>
+<!---------------------------------- -->
+<p>Relabels regions from the vector foo in the collection col.pan:</p>
+<pre>
+   prelabelingfromarray foo col.pan rin.pn rout.pan
+</pre>
+
+<!---------------------------------- -->
+<h3>See also</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#region">Region</a>
+
+<!---------------------------------- -->
+<h3>C++ prototype</h3>
+<!---------------------------------- -->
+<tt>
+Errc PRelabelingFromArray( const std::string &amp;name, const Collection &amp;in, const Reg2d &amp;reg_in, Reg2d &amp;reg_out );
+</tt>
+
+<!---------------------------------- -->
+<h3>Version fran&ccedil;aise</h3>
+<!---------------------------------- -->
+<p>Relabelisation d'une carte de r&eacute;gions &agrave; partir des valeurs d'un vecteur d'etiquettes.</p>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Author: Alexandre Duret-Lutz
+</address>
+<!---------------------------------- -->
+</body>
+</html>

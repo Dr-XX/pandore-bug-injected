@@ -1,0 +1,134 @@
+<html>
+<head>
+<title>OPERATEURS PANDORE</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>pharris</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+D&eacute;tection de points d'int&eacute;r&ecirc;t selon l'algorithme de Harris-Stephens.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>pharris</b> <i>sigma</i> <i>kappa</i> [<i>-m mask</i>] [<i>im_in</i>|-] [<i>im_out</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p>L'op&eacute;rateur <b>pharris</b> permet de d&eacute;tecter les points d'int&eacute;r&ecirc;t
+dans l'image d'entr&eacute;e <i>im_in</i>.
+Les points d'int&eacute;r&ecirc;t sont soit des coins en L,
+des jonctions en T, des jonctions en Y ou des points de forte variation de
+texture. Ils correspondent &agrave; des doubles discontinuit&eacute;s  de la fonction
+d'intensit&eacute; provoqu&eacute;es par des discontinuit&eacute;s de la fonction r&eacute;flectance
+ou de profondeur.</p>
+
+<p>Le principe de l'algorithme est de calculer une matrice de covariance C(x,y):</p>
+<pre>
+     | Ixx Ixy |
+   C=|         |
+     | Ixy Iyy |
+</pre>
+
+<p>o&ugrave; Ixx, Iyy et Ixy sont respectivement la somme des valeurs carr&eacute;es de gradient en X, en Y
+et en X et Y dans un voisinage (2*halsize+1)x(2*halfsize+1) autour du pixel (x,y).<br>
+Si la plus petite valeur propre de cette matrice au point p est positive
+alors ce point est consid&eacute;r&eacute; comme un point d'int&eacute;r&ecirc;t.</p>
+
+<p>Pour &eacute;viter de calculer les valeurs propres, Harris propose de calculer
+la fonction de r&eacute;ponse R(x,y) pour chaque pixel par:</p>
+<pre>
+   R=Ixx*Iyy-Ixy*Ixy - kappa * (Ixx+Iyy) * (Ixx+Iyy)
+</pre>
+<p>puis de rechercher les maxima locaux de la fonction R.</p>
+
+<p>Pratiquement, pour chaque pixel q dans le voisinage de p,
+le gradient est [Ix,Iy], C est la matrice de covariance de tous les vecteurs
+gradients dans le voisinage de p.
+Les valeurs propres representent le grand axe et
+le petit axe de l'ellipse approximant la distribution des vecteurs gradient.</p>
+
+<p>L'image de sortie <i>im_out</i> est une image de float qui
+code pour chaque pixel, la force de la r&eacute;ponse.</p>
+
+<!---------------------------------- -->
+<h3>Param&egrave;tres</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>sigma</i> est l'&eacute;art-type de la gaussienne, et donne aussi
+la taille de la zone de recherche du maximum local (largeur=6*sigma). Une valeur
+typique appartient &agrave; [1..3].
+<li><i>kappa</i> est un facteur de pond&eacute;ration maximum pour que R soit positif.
+La valeur estim&eacute;e par Harris est de 0.04.
+</ul>
+
+<!---------------------------------- -->
+<h3>Entr&eacute;es</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_in</i>: une image d'intensit&eacute; 2D.
+</ul>
+
+<!---------------------------------- -->
+<h3>Sorties</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_dest</i>: une image de float.
+</ul>
+
+<!---------------------------------- -->
+<h3>R&eacute;sultat</h3>
+<!---------------------------------- -->
+<p>Retourne SUCCESS ou FAILURE.</p>
+
+<!---------------------------------- -->
+<h3>Exemples</h3>
+<!---------------------------------- -->
+<p>Extrait les coins de l'image tangram.pan et superimposes 
+les coins dans l'image initiale.</p>
+<pre>
+   pharris 2 0.04 tangram.pan a.pan
+   pbinarization 1e4 1e30 a.pan b.pan
+   padd b.pan tangram.pan out.pan
+</pre>
+
+<!---------------------------------- -->
+<h3>Voir aussi</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#pointsofinterest">Points d'int&eacute;r&ecirc;t</a>
+
+<!---------------------------------- -->
+<h3>Prototype C++</h3>
+<!---------------------------------- -->
+<tt>
+Errc PHarris( const Img2duc &amp;im_in, Img2dsf &amp;im_out, float sigma, float kappa );
+</tt>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Auteur: R&eacute;gis Clouard
+</address>
+<!---------------------------------- -->
+</body>
+</html>

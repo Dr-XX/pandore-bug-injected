@@ -1,0 +1,791 @@
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="keywords" content="image processing, library of operators">
+  <title>PANDORE: Operator Index</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+<body background="#ffffff">
+
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<h1>Index des op&eacute;rateurs</h1>
+<hr>
+<a name=conversion><b>Conversion de format de fichiers</b></a>
+<p>Conversion entre formats d'image (gif, bmp, tiff, png, jpeg, pandore, etc).</p>
+<ul>
+<li><a href="./operatorsP0/pany2pan.html">pany2pan</a> - Conversion d'une image d'un format connu (GIF, BMP, etc) en image Pandore.
+<li><a href="./operatorsP0/pbmp2pan.html">pbmp2pan</a> - Conversion d'une image BMP en image Pandore.
+<li><a href="./operatorsP0/ppan2bmp.html">ppan2bmp</a> - Conversion d'une image  Pandore en image BMP.
+<li><a href="./operatorsP0/pjpeg2pan.html">pjpeg2pan</a> - Conversion d'une image JPEG en image Pandore.
+<li><a href="./operatorsP0/ppan2jpeg.html">ppan2jpeg</a> - Conversion d'une image Pandore en image JPEG.
+<li><a href="./operatorsP0/ppng2pan.html">ppng2pan</a> - Conversion d'une image PNG en image Pandore.
+<li><a href="./operatorsP0/ppan2png.html">ppan2png</a> - Conversion d'une image Pandore en image PNF.
+<li><a href="./operatorsP0/pgif2pan.html">pgif2pan</a> - Conversion d'une image GIF en image Pandore.
+<li><a href="./operatorsP0/ppan2gif.html">ppan2gif</a> - Conversion d'une image Pandore en image GIF.
+
+<li><a href="./operatorsP0/ppan2ppm.html">ppan2ppm</a> - Conversion d'une image Pandore en image PPM (ascii).
+<li><a href="./operatorsP0/pppm2pan.html">pppm2pan</a> - Conversion d'une image PPM, PGM ou PBM en image Pandore. 
+<li><a href="./operatorsP0/ptiff2pan.html">ptiff2pan</a> - Conversion d'une image TIFF en image Pandore.
+<li><a href="./operatorsP0/ppan2tiff.html">ppan2tiff</a> - Conversion d'une image Pandore en image TIFF.
+
+<li><a href="./operatorsP0/pvff2pan.html">pvff2pan</a> - Conversion d'une image VFF en image Pandore.
+
+<li><a href="./operatorsP0/ppan2vff.html">ppan2vff</a> - Conversion d'une image Pandore en image VFF (Sunvision). 
+<li><a href="./operatorsP0/ppan2pan.html">ppan2pan</a> - Conversion d'une image  Pandore en image Pandore.
+<li><a href="./operatorsP0/pras2pan.html">pras2pan</a> - Conversion d'une image Sun raster en image Pandore.
+<li><a href="./operatorsP0/praw2pan.html">praw2pan</a> - Conversion d'une image raw image (binaire) en image Pandore.
+<li><a href="./operatorsP0/ppan2raw.html">ppan2raw</a> - Conversion d'une image Pandore rn image raw (binaire).
+<li><a href="./operatorsP0/ppan2ps.html">ppan2ps</a> - Conversion d'une image Pandore en fichier Encapsulted PostScript.
+<li><a href="./operatorsP0/ppan2txt.html">ppan2txt</a> - Conversion d'une image Pandore en fichier texte.
+<li><a href="./operatorsP0/ptxt2pan.html">ptxt2pan</a> - Conversion d'un fichier texte en image Pandore.
+<li><a href="./operatorsP0/pyuv2pan.html">pyuv2pan</a> - Conversion d'une s&eacute;quence d'image YUV en image Pandore.
+<li><a href="./operatorsP0/pfits2pan.html">pfits2pan</a> - Conversion d'une image FITS (Flexible Image Transport System) en image Pandore.
+<li><a href="./operatorsP0/ppan2fits.html">ppan2fits</a> - Conversion d'une image Pandore en niveaux de gris en image FITS (Flexible Image Transport System).
+<li><a href="./operatorsP0/pparrec2pan.html">pparrec2pan</a> - Conversion PAR/REC format image file (Philips Medical System) to Pandore image file.
+<li><a href="./operatorsP0/panalyze2pan.html">panalyze2pan</a> - Conversion d'une image Pandore en image ANALYZE 7.5.
+<li><a href="./operatorsP0/ppan2analyze.html">ppan2analyze</a> - Conversion d'une image ANALYZE 7.5 en une image Pandore.
+
+<li><a href="./operatorsP0/ppan2d23d.html">ppan2d23d</a> - Conversion d'une s&eacute;rie d'images Pandore 2D en une image Pandore 3D.
+<li><a href="./operatorsP0/ppan3d22d.html">ppan3d22d</a> - Conversion d'une image Pandore 3D en une s&eacute;rie d'images Pandore 2D Pandore.
+</ul>
+
+<hr>
+<a name=casting><b>Conversion de type Pandore</b></a>
+<p>Conversions de format d'objet Pandore: image de float en image de char, image couleur en image de niveaux de gris, etc.</p>
+<ul>
+<li><a href="./operatorsP0/parray2im.html">parray2im</a> - Conversion d'une matrice de pixels en image.
+<li><a href="./operatorsP0/pim2array.html">pim2array</a> - Conversion d'une image en matrice de pixels.
+
+<li><a href="./operatorsP0/prg2im.html">prg2im</a> - Conversion d'une carte de r&eacute;gions en image de long sign&eacute;.
+<li><a href="./operatorsP0/prg2imc.html">prg2imc</a> - Conversion d'une carte de r&eacute;gions en image couleur &eacute;quivalente.
+<li><a href="./operatorsP0/pim2rg.html">pim2rg</a> - Conversion d'une image de niveaux de gris en carte de r&eacute;gions.
+
+<li><a href="./operatorsP0/pgr2im.html">pgr2im</a> - Conversion d'une graphe en image de floats.
+
+<li><a href="./operatorsP0/prg2gr.html">prg2gr</a> - Conversion d'une carte de r&eacute;gions en graphe.
+<li><a href="./operatorsP0/pgr2rg.html">pgr2rg</a> - Conversion d'un graphe en carte de r&eacute;gions.
+
+<li><a href="./operatorsP0/pim2sf.html">pim2sf</a> - Conversion d'une image en image de floats.
+<li><a href="./operatorsP0/pim2uc.html">pim2uc</a> - Conversion d'une image en image de unsigned char.
+<li><a href="./operatorsP0/pim2sl.html">pim2sl</a> - Conversion d'une image en image de signed long.
+
+<li><a href="./operatorsP0/pim2d23d.html">pim2d23d</a> - Conversion d'une image ou d'une carte de r&eacute;gions 2D en image ou carte de r&eacute;gions 3D &agrave; 1 plan.
+<li><a href="./operatorsP0/pim3d22d.html">pim3d22d</a> - Conversion d'une image ou d'une carte de r&eacute;gions 3D &agrave; 1 plan en image ou carte de r&eacute;gions 2D.
+
+<li><a href="./operatorsP0/pimc2img.html">pimc2img</a> - Conversion d'une image couleur en image de niveaux de gris.
+<li><a href="./operatorsP0/pimc2imx.html">pimc2imx</a> - Cr&eacute;ation d'une image multispectrale en image couleur.
+
+<li><a href="./operatorsP0/pimg2imc.html">pimg2imc</a> - Conversion d'une image en niveaux de gris en image color.
+<li><a href="./operatorsP0/pimg2imx.html">pimg2imx</a> - Conversion d'une image en niveaux de gris en image multispectrale.
+
+<li><a href="./operatorsP0/pimgs2imc.html">pimgs2imc</a> - Cr&eacute;ation d'une image couleur &agrave; partir de 3 images de niveaux de gris.
+<li><a href="./operatorsP0/pimgs2imx.html">pimgs2imx</a> - Cr&eacute;ation dune image multispectrale &agrave; partir de plusieurs images de niveaux de gris.
+
+<li><a href="./operatorsP0/pimx2img.html">pimx2img</a> - Conversion d'une bande d'une image multispectrale en image de niveaux de gris.
+<li><a href="./operatorsP0/pimx2imc.html">pimx2imc</a> - Conversion d'une image multispectral en image couleur.
+</ul>
+
+<hr> 
+<a name=color><b>Conversion d'espace couleur</b></a>
+<p>Conversions d'espace couleur d'une image couleur: rgb en hsl, rgb en yuv, etc.</p>
+<ul>
+<li><a href="./operatorsP0/phsi2rgb.html">phsi2rgb</a> - Conversion d'une image HSI en image RGB.
+<li><a href="./operatorsP0/phsl2rgb.html">phsl2rgb</a> - Conversion d'une image HSL en image RGB.
+<li><a href="./operatorsP0/phsv2rgb.html">phsv2rgb</a> - Conversion d'une image HSV en image RGB.
+<li><a href="./operatorsP0/plab2lch.html">plab2lch</a> - Conversion d'une image Lab en image LCH.
+<li><a href="./operatorsP0/pluv2lch.html">pluv2lch</a> - Conversion d'une image L*u*v en image LCH.
+<li><a href="./operatorsP0/prgb2pca.html">prgb2pca</a> - Conversion d'une image rgb en image de composantes principales.
+<li><a href="./operatorsP0/prgb2ast.html">prgb2ast</a> - Conversion d'une image rgb en image AST.
+<li><a href="./operatorsP0/prgb2cmyk.html">prgb2cmyk</a> - Conversion d'une image RGB en image de type Cyan-Magenta-Yellow-Key.
+<li><a href="./operatorsP0/pcmyk2rgb.html">pcmyk2rgb</a> - Conversion d'une image couleur de type Cyan-Magenta-Yellow-Key en RGB. 
+<li><a href="./operatorsP0/prgb2gray.html">prgb2gray</a> - Conversion d'une image RGB en image de niveaux de gris.
+<li><a href="./operatorsP0/prgb2hsi.html">prgb2hsi</a> - Conversion d'une image RGB en image HSI.
+<li><a href="./operatorsP0/prgb2hsl.html">prgb2hsl</a> - Conversion d'une image RGB en image HSL.
+<li><a href="./operatorsP0/prgb2hsv.html">prgb2hsv</a> - Conversion d'une image RGB en image HSV.
+<li><a href="./operatorsP0/prgb2i1i2i3.html">prgb2i1i2i3</a> - Conversion d'une image RGB en image (i1,i2,i3).
+<li><a href="./operatorsP0/prgb2wry.html">prgb2wry</a> - Conversion d'une image RGB en image (wb,rg,yb).
+<li><a href="./operatorsP0/prgb2xyz.html">prgb2xyz</a> - Conversion d'une image RGB en image XYZ.
+<li><a href="./operatorsP0/prgb2rngnbn.html">prgb2rngnbn</a> - Conversion d'une image RGB en image RGB normalis&eacute;e.
+<li><a href="./operatorsP0/prgb2ycbcr.html">prgb2ycbcr</a> - Conversion d'une image RGB en image YCbCr.
+<li><a href="./operatorsP0/prgb2ych1ch2.html">prgb2ych1ch2</a> - Conversion d'une image RGB en image YCh1Ch2.
+<li><a href="./operatorsP0/prgb2yiq.html">prgb2yiq</a> - Conversion d'une image RGB en image YIQ.
+<li><a href="./operatorsP0/prgb2yuv.html">prgb2yuv</a> - Conversion d'une image RGB en image YUV. 
+<li><a href="./operatorsP0/pyuv2rgb.html">pyuv2rgb</a> - Conversion d'une image YUV en image RGB. 
+<li><a href="./operatorsP0/pxyz2lab.html">pxyz2lab</a> - Conversion d'une image XYZ en imagex Lab.
+<li><a href="./operatorsP0/pxyz2luv.html">pxyz2luv</a> - Conversion d'une image XYZ en image L*u*v.
+<li><a href="./operatorsP0/pxyz2rgb.html">pxyz2rgb</a> - Conversion d'une image XYZ en image RGB.
+<li><a href="./operatorsP0/pgray2bw.html">pgray2bw</a> - Conversion d'une image en niveaux de gris en image noir et blanc.
+<li><a href="./operatorsP0/y.html">pgray2falsecolor</a> - Conversion d'une image en niveaux de gris en fausses couleurs.
+</ul> 
+
+<hr>
+<a name=arithmetic><b>Arithm&eacute;tique</b></a>
+<p>Op&eacute;rations arithm&eacute;tiques binaires et unaires de base sur les images, les cartes de r&eacute;gions et les graphes.</p>
+<ul>
+<li><a href="./operatorsP0/padd.html">padd</a> - Addition de 2 images.
+<li><a href="./operatorsP0/pdif.html">pdif</a> - Diff&eacute;rence de 2 images. Diff&eacute;rence sym&eacute;trique entre 2 cartes de r&eacute;gions.
+<li><a href="./operatorsP0/psub.html">psub</a> - Soustraction de 2 images. Diff&eacute;rence non sym&eacute;trique entre 2 cartes de r&eacute;gions.
+<li><a href="./operatorsP0/pmult.html">pmult</a> - Multiplication de 2 images.
+<li><a href="./operatorsP0/pdiv.html">pdiv</a> - Division de 2 images.
+<li><a href="./operatorsP0/pmean.html">pmean</a> - Moyennage de 2 images.
+<li><a href="./operatorsP0/pblend.html">pblend</a> - Pond&eacute;ration enre deux images ou graphes.
+<li><a href="./operatorsP0/ppow.html">ppow</a> - Puissance ni&egrave;me d'une image.
+<li><a href="./operatorsP0/psqrt.html">psqrt</a> - Racine carr&eacute;e d'une image.
+<li><a href="./operatorsP0/pexp.html">pexp</a> - Exponentiel d'une image.
+<li><a href="./operatorsP0/plog.html">plog</a> - Logarithme n&eacute;p&eacute;rien d'une image.
+<li><a href="./operatorsP0/pmax.html">pmax</a> - Maximum entre pixels de 2 images.
+<li><a href="./operatorsP0/pmin.html">pmin</a> - Minimum entre pixels de 2 images.
+<li><a href="./operatorsP0/pabs.html">pabs</a> - Valeur absolue d'une image.
+<li><a href="./operatorsP0/pround.html">pround</a> - Arrondi d'une image de r&eacute;els.
+<li><a href="./operatorsP0/pclipvalues.html">pclipvalues</a> - Ecr&eacute;tage de valeurs de pixel.
+<li><a href="./operatorsP0/pnormalization.html">pnormalization</a> - Normalisation d'une image.
+<li><a href="./operatorsP0/pconvolution.html">pconvolution</a> - Convolution d'une image par un noyau.
+
+<li><a href="./operatorsP0/psetcst.html">psetcst</a> - Affectation d'une valeur &agrave; une image.
+<li><a href="./operatorsP0/pdivcst.html">pdivcst</a> - Division d'une image ou d'une carte de r&eacute;gions par une constante.
+<li><a href="./operatorsP0/pmultcst.html">pmultcst</a> - Multiplication d'une image par une constante.
+<li><a href="./operatorsP0/paddcst.html">paddcst</a> - Addition d'une image par une constante.
+<li><a href="./operatorsP0/paddval.html">paddval</a>  - Addition d'une
+image avec des constantes stock&eacute;es dans une collection. 
+<li><a href="./operatorsP0/psubval.html">psubval</a>  - Soustraction d'une
+image avec des constantes stock&eacute;es dans une collection. 
+<li><a href="./operatorsP0/pmultval.html">pmultval</a>  - Multiplication d'une
+image par des constantes stock&eacute;es dans une collection. 
+<li><a href="./operatorsP0/pdivval.html">pdivval</a>  - Division d'une
+image par des constantes stock&eacute;es dans une collection. 
+<li><a href="./operatorsP0/plipadd.html">plipadd</a> - Addition de 2 images selon le mod&egrave;le LIP.
+<li><a href="./operatorsP0/plipsub.html">plipsub</a> - Soustraction de 2 images selon le mod&egrave;le LIP.
+<li><a href="./operatorsP0/plipmultcst.html">plipmultcst</a> - Multiplication d'une image par une constante selon le mod&egrave;le LIP.
+<li><a href="./operatorsP0/pintegralimage.html">pintegralimage</a> - Calcule l'image int&eacute;grale.
+<li><a href="./operatorsP0/psquareintegralimage.html">psquareintegralimage</a> - Calcule l'image int&eacute;grale carr&eacute;e.
+</ul>
+
+<hr>
+<a name=logic><b>Logique</b></a>
+<p>Op&eacute;rations logiques de type binaire (bit &agrave; bit) et bool&eacute;ennes entre images
+et graphes et les op&eacute;rations ensemblistes entre cartes de r&eacute;gions.</p>
+<ul>
+<li><a href="./operatorsP0/pand.html">pand</a> - Et binaire entre 2 objets. Intersection entre 2 cartes de r&eacute;gions.
+<li><a href="./operatorsP0/por.html">por</a> - Ou binaire entre 2 objets. Union entre 2 cartes de r&eacute;gions.
+<li><a href="./operatorsP0/pxor.html">pxor</a> - Ou exclusif binaire entre 2 objets. Diff&eacute;rence sym&eacute;trique entre 2 cartes de r&eacute;gions.
+<li><a href="./operatorsP0/pinverse.html">pinverse</a> - Inversion logique des valeurs d'un objet. Inversion des num&eacute;ros de labels d'une carte de r&eacute;gions.
+<li><a href="./operatorsP0/pnot.html">pnot</a> - N&eacute;gation logique des valeurs de pixel d'une image. Compl&eacute;mentaire d'une carte de r&eacute;gions.
+<li><a href="./operatorsP0/pmask.html">pmask</a> - Masquage d'un objet par un autre.
+</ul> 
+
+<hr>
+<a name=transformation><b>Transformation g&eacute;om&eacute;trique</b></a>
+<p>Transformations g&eacute;om&eacute;triques du contenu des images: rotation, projection, sym&eacute;trie, zoom, etc.</p>
+<ul>
+<li><a href="./operatorsP0/paddborder.html">paddborder</a> - Agrandissement d'une image en lui ajoutant un bord.
+<li><a href="./operatorsP0/pmaxprojection.html">pmaxprojection</a> - Projection orthogonale sur un axe d'une image selon les maxima.
+<li><a href="./operatorsP0/pmeanprojection.html">pmeanprojection</a> - Projection orthogonale sur un axe d'une image selon la moyenne.
+<li><a href="./operatorsP0/pextrude1d22d.html">pextrude1d22d</a> - Propagation
+  d'une valeur le long d'un axe.
+<li><a href="./operatorsP0/pflip.html">pflip</a> - Construction du sym&eacute;trique d'une image.
+<li><a href="./operatorsP0/protation.html">protation</a> - Construction de la rotation de contenu d'une image selon un axe.
+<li><a href="./operatorsP0/ptranslation.html">ptranslation</a> - Construction du translat&eacute; d'une image.
+<li><a href="./operatorsP0/pscrolling.html">pscrolling</a> - Construction de l'enroul&eacute; d'une image.
+<li><a href="./operatorsP0/ptransposition.html">ptransposition</a> - Construction du transpos&eacute; d'une image selon un axe.
+<li><a href="./operatorsP0/presize.html">presize</a> - Ajustement de la taille d'une image &agrave; une nouvelle taille.
+<li><a href="./operatorsP0/prescale.html">prescale</a> - Augmentation ou r&eacute;duction de la taille d'une image, d'une carte de r&eacute;gion ou d'un graphe.
+<li><a href="./operatorsP0/plinearrescale.html">plinearrescale</a> - Augmentation ou r&eacute;duction de la taille d'une image par interpolation bilin&eacute;aire.
+<li><a href="./operatorsP0/pbicubicrescale.html">pbicubicrescale</a> - Augmentation ou r&eacute;duction de la taille d'une image par interpolation bicubique.
+<li><a href="./operatorsP0/pbellrescale.html">pbellcrescale</a> - Retaille d'une image par l'algorithme de Bell.
+<li><a href="./operatorsP0/phermiterescale.html">phermiterescale</a> - Retaille d'une image par l'algorithme de Hermite.
+<li><a href="./operatorsP0/planczosrescale.html">planczosrescale</a> - Retaille d'une image par l'algorithme de Lanczos.
+<li><a href="./operatorsP0/pmitchellrescale.html">pmitchellrescale</a> -  Retaille d'une image par l'algorithme de Mitchell.
+</ul>
+
+<hr>
+<a name=utility><b>Utilitaire image</b></a>
+<p>Op&eacute;rations diverses de manipulation des images: g&eacute;n&eacute;ration de bruit, extraction, insertion, etc.</p>
+<ul>
+<li><a href="./operatorsP0/psetpixel.html">psetpixel</a> - Affecte une valeur particuli&egrave;re &agrave; un pixel donn&eacute;.
+<li><a href="./operatorsP0/ppixelvalue.html">ppixelvalue</a> - Affichage de la valeur d'un pixel d'une image ou d'un noeud d'un graphe donn&eacute;.
+<li><a href="./operatorsP0/paddnoise.html">paddnoise</a> - G&eacute;n&eacute;ration de bruit al&eacute;atoire sur une image.
+<li><a href="./operatorsP0/pcliparea.html">pcliparea</a> - S&eacute;lection d'une zone d'image, de carte de r&eacute;gion ou de graphe.
+<li><a href="./operatorsP0/pcopyborder.html">pcopyborder</a> - Copie le bord d'une image vers une autre.
+<li><a href="./operatorsP0/psetborder.html">psetborder</a> - Affectation d'une valeur sur le bord d'une image.
+<li><a href="./operatorsP0/pextractsubimage.html">pextractsubimage</a> - Extraction d'une sous-image d'une image.
+<li><a href="./operatorsP0/pinsertsubimage.html">pinsertsubimage</a> - Insertion d'une image dans une autre image.
+<li><a href="./operatorsP0/pnewimage.html">pnewimage</a> - Cr&eacute;ation d'une nouvelle image.
+<li><a href="./operatorsP0/pshapedesign.html">pshapedesign</a> - Cr&eacute;ation d'une image vierge ou contenant une forme synth&eacute;tique pr&eacute;d&eacute;finie.
+<li><a href="./operatorsP0/pmergeimages.html">pmergeimages</a> - Regroupement de 4 sous-images en une seule.
+<li><a href="./operatorsP0/psplitimage.html">psplitimage</a> - Eclatement d'une image en 4 sous-images.
+
+<li><a href="./operatorsP0/pgraylevel2depth.html">pgraylevel2depth</a> - Conversion d'une image 2D de niveaux de gris en image 3D de niveaux.
+<li><a href="./operatorsP0/pdepth2graylevel.html">pdepth2graylevel</a> - Conversion d'une image 3D en image 2D de niveaux de gris.
+
+<li><a href="./operatorsP0/paddslice.html">paddslice</a> - Ajout d'un plan dans une image 3D.
+<li><a href="./operatorsP0/premoveslice.html">premoveslice</a> - Suppression d'un plan dans une image 3D.
+
+<li><a        href="./operatorsP0/pgetband.html">pgetband</a>        -
+  R&eacute;cup&eacute;ration une bande dans une image multispectrale (ou couleur).
+<li><a        href="./operatorsP0/psetband.html">psetband</a>        -
+  Remplacer une bande d'une image multispectrale (ou couleur).
+<li><a href="./operatorsP0/pgetslice.html">pgetslice</a> - R&eacute;cup&eacute;ration d'un plan dans une image 3D.
+<li><a href="./operatorsP0/psetslice.html">psetlice</a> - Remplacement d'un plan dans une image 3D.
+
+<li><a href="./operatorsP0/pgetwindowaroundpoints.html">pgetwindowaroundpoints</a> - Extraction des pixels dans la fen&ecirc;tres autour de points sp&eacute;cifi&eacute;s.
+</ul>
+
+<hr>
+<a name=luttransform><b>Transformation de lut</b></a>
+<p>Op&eacute;rations de transformation de la table des couleurs pour l'am&eacute;lioration d'images.</p>
+<ul>
+<li><a href="./operatorsP0/pextremumsharpening.html">pextremumsharpening</a> - Rehaussement du contraste par utilisation des valeurs extr&eacute;males.
+
+<li><a href="./operatorsP0/plineartransform.html">plineartransform</a> - Transformation lin&eacute;aire des niveaux de gris.
+<li><a href="./operatorsP0/plogtransform.html">plogtransform</a> - Transformations des niveaux de gris par loi logarithmique ou exponentielle.
+<li><a href="./operatorsP0/ppowerlawtransform.html">ppowerlawtransform</a> - Transformation des niveaux de gris par une loi de puissance.
+
+<li><a href="./operatorsP0/phistogramequalization.html">phistogramequalization</a> - Rehaussement de contraste par &eacute;galisation d'histogramme.
+<li><a href="./operatorsP0/phistogramspecification.html">phistogramspecification</a> - Rehaussement de contraste par sp&eacute;cification d'histogramme.
+</ul>
+
+<hr>
+<a name=filtering><b>Filtrage spatial</b></a>
+<p>Op&eacute;rations de filtrage spatial lin&eacute;aire et non lin&eacute;aire.</p>
+<ul>
+<li><a href="./operatorsP0/pvariancefiltering.html">pvariancefiltering</a> - Filtrage d'une image par variance.
+
+<li><a href="./operatorsP0/pmedianfiltering.html">pmedianfiltering</a> - Lissage d'une image par m&eacute;dian standard s&eacute;parable.
+<li><a href="./operatorsP0/pmeanfiltering.html">pmeanfiltering</a> - Lissage d'une image par un filtre moyenneur lin&eacute;aire.
+
+<li><a href="./operatorsP0/pnonlocalmedianfiltering.html">pnonlocalmedianfiltering</a> - Filtrage m&eacute;dian non local.
+<li><a href="./operatorsP0/pnonlocalmeanfiltering.html">pnonlocalmeanfiltering</a> - Filtrage moyenneur non local.
+
+<li><a href="./operatorsP0/pgaussianfiltering.html">pgaussianfiltering</a> - Lissage d'une image par une gaussienne.
+<li><a href="./operatorsP0/pexponentialfiltering.html">pexponentialfiltering</a> - Lissage par une exponentielle sym&eacute;trique.
+
+<li><a href="./operatorsP0/padaptivemeanfiltering.html">padaptivemeanfiltering</a> - Lissage d'une image pr&eacute;servant les contours.
+
+<li><a href="./operatorsP0/pderichesmoothing.html">pderichesmoothing</a> - Lissage de Deriche.
+<li><a href="./operatorsP0/pshensmoothing.html">pshensmoothing</a> - Lissage de Shen-Castan.
+
+<li><a href="./operatorsP0/pmalikperonafiltering.html">pmalikperonafiltering</a> - Lissage d'une image par diffusion non lin&eacute;aire selon l'algorithme de Malik-Peronna.
+<li><a href="./operatorsP0/pmcmfiltering.html">pmcmfiltering</a> - Lissage par diffusion par courbure moyenne.
+
+<li><a href="./operatorsP0/pnagaofiltering.html">pnagaofiltering</a> - Lissage par maximum d'homog&eacute;n&eacute;it&eacute; selon le masque de Nagao.
+<li><a href="./operatorsP0/poutrangefiltering.html">poutrangefiltering</a> - Lissage par filtre adaptatif bas&eacute; sur le choix des voisins.
+<li><a href="./operatorsP0/psigmafiltering.html">psigmafiltering</a> -  Lissage par filtre adaptatif bas&eacute; sur le choix des voisins.
+
+<li><a href="./operatorsP0/psnnfiltering.html">psnnfiltering</a> - Lissage par filtre adaptatif : Symetric Nearest Neighbourghood.
+
+<li><a href="./operatorsP0/ppeergroupfiltering.html">ppeergroupfiltering</a> - Lissage d'une image couleur par Peer Group Filtering.
+
+<li><a href="./operatorsP0/pdenoisePDE.html">pdenoisePDE</a> - R&eacute;gularisation d'images multivalu&eacute;es par lissage anisotrope bas&eacute; EDP.
+<li><a href="./operatorsP0/psharp.html">psharp</a> - Rehaussement du contraste par convolution.
+</ul>
+
+<hr>
+<a name=surfacefitting><b>Approximation de surface</b></a>
+<p>Op&eacute;rations d'approximation du contenu d'une image par une surface.</p>
+<ul>
+<li><a href="./operatorsP0/plinearregression.html">plinearregression</a>
+  - Calcul de l'approximation du fond d'une image en utilisant la regression lin&eacute;aire.
+<li><a href="./operatorsP0/ppolynomialfitting.html">ppolynomialfitting</a>
+  - Calcul de l'approximation du fond d'une image en utilisant une approximation polynomiale.
+<li><a href="./operatorsP0/plegendrepolynomialfitting.html">plegendrepolynomialfitting</a>
+  - Calcul de l'approximation du fond d'une image en utilisant une approximation par polyn&ocirc;mes de Legendre.
+</ul>
+
+<hr>
+<a name=interpolation><b>Interpolation</b></a>
+<p>Op&eacute;rations d'interpolation de pixels manquants.</p>
+<ul>
+<li><a href="./operatorsP0/plinearinterpolation.html">plinearinterpolation</a>
+- Remplacement de pixels manquants par interpolation lin&eacute;aire des voisins.
+</ul>
+
+<hr>
+<a name=frequency><b>Domaine fr&eacute;quentiel</b></a>
+<p>Les op&eacute;rateurs fr&eacute;quentiel permettent de passer du domaine spatial au domaine
+fr&eacute;quentiel et vice et versa et de manipuler le contenu sous sa forme fr&eacute;quentielle.
+Complex images are represented by two images.</p>
+<ul>
+
+<li><a href="./operatorsP0/pfft.html">pfft</a> - Calcul de la Transform&eacute;e de Fourier Rapide d'une image.
+<li><a href="./operatorsP0/pifft.html">pifft</a> - Transform&eacute;e de Fourier Rapide Inverse d'une image.
+<li><a href="./operatorsP0/pbutterworthfilter.html">pbutterworthfilter</a> - G&eacute;n&egrave;re un filtre passe-bas, passe-haut, coupe-bande ou passe-bande de Butterworth.
+<li><a href="./operatorsP0/pgaussianfilter.html">pgaussianfilter</a> - G&eacute;n&egrave;re un filtre Gaussien passe-bas, passe-haut, coupe-bande ou passe-bande.
+
+<li><a href="./operatorsP0/pmodulus.html">pmodulus</a> - Calcul du module entre deux images.
+<li><a href="./operatorsP0/pphase.html">pphase</a> - Calcul de la phase entre deux images.
+
+<li><a href="./operatorsP0/pfftconvolution.html">pfftconvolution</a> - Convolution d'une image par un noyau.
+<li><a href="./operatorsP0/pfftdeconvolution.html">pfftdeconvolution</a> - D&eacute;convolution d'une image par un noyau.
+<li><a href="./operatorsP0/pfftcorrelation.html">pfftcorrelation</a> - Corr&eacute;lation entre deux images.
+
+<li><a href="./operatorsP0/pfftshift.html">pfftshift</a> - Permutation des 4 sous-images de la transform&eacute;e de Fourier.
+
+<li><a href="./operatorsP0/pqmf.html">pqmf</a> - G&eacute;n&eacute;ration d'un filtre QMF pour la transform&eacute;e en ondelette.
+<li><a href="./operatorsP0/pdwt.html">pdwt</a> - Calcul de la transform&eacute;e en ondelettes dyadiques biorthogonales d'une image.
+<li><a href="./operatorsP0/pidwt.html">pidwt</a> - Reconstruction d'une image d&eacute;compos&eacute;e en ondelettes dyadiques biorthogonales.
+<li><a href="./operatorsP0/psetsubband.html">psetsubband</a> - Insertion d'une sous-bande dans une image de DWT.
+<li><a href="./operatorsP0/pgetsubband.html">pgetsubband</a> - Extraction d'une sous-bande d'une image de DWT.
+</ul>
+
+<hr>
+<a name=morphology><b>Morphologie math&eacute;matique</b></a>
+<p>Les op&eacute;rateurs morphologiques sont des op&eacute;rateurs
+vari&eacute;s bas&eacute;s sur l'utilisation d'un &eacute;l&eacute;ment
+structurant et des op&eacute;rations ensemblistes de type
+&eacute;rosion/dilatation.</p>
+<ul>
+<li><a href="./operatorsP0/pdilation.html">pdilation</a> - Dilatation des points de plus fort contraste d'une image.
+<li><a href="./operatorsP0/perosion.html">perosion</a> - Erosion des points de plus fort contraste d'une image.
+
+<li><a href="./operatorsP0/pnonlocaldilation.html">pnonlocaldilation</a> -
+  Dilatation par r&eacute;gularisation non locale du laplacien.
+<li><a href="./operatorsP0/pnonlocalerosion.html">pnonlocalerosion</a> -
+  Erosion par r&eacute;gularisation non locale du laplacien.
+
+<li><a href="./operatorsP0/psedesign.html">psedesign</a> - G&eacute;n&eacute;ration d'un &eacute;l&eacute;ment structurant pr&eacute;d&eacute;fini.
+
+<li><a href="./operatorsP0/psedilation.html">psedilation</a> - Dilatation des points de fort contraste d'une image &agrave; partir d'un &eacute;l&eacute;ment structurant donn&eacute;.
+<li><a href="./operatorsP0/pseerosion.html">pseerosion</a> - Erosion des points de fort contraste d'une image &agrave; partir d'un &eacute;l&eacute;ment structurant donn&eacute;.
+
+<li><a href="./operatorsP0/plineardilation.html">plineardilation</a> - Dilatation des points de plus fort contraste d'une image avec un &eacute;l&eacute;ment structurant lin&eacute;aire.
+<li><a href="./operatorsP0/plinearerosion.html">plinearerosion</a> - Erosion des points de plus fort contraste d'une image avec un &eacute;l&eacute;ment structurant lin&eacute;aire.
+
+<li><a href="./operatorsP0/pgeodesicdilation.html">pgeodesicdilation</a> - Dilatation g&eacute;od&eacute;sique des points de plus fort contraste de l'image.
+<li><a href="./operatorsP0/pgeodesicerosion.html">pgeodesicerosion</a> - Erosion g&eacute;od&eacute;sique des points de plus fort contraste de l'image.
+
+<li><a href="./operatorsP0/pdilationreconstruction.html">pdilationreconstruction</a> - Reconstruction morphologique par dilatation.
+<li><a href="./operatorsP0/perosionreconstruction.html">perosionreconstruction</a> - Reconstruction morphologique par &eacute;rosion.
+
+<li><a href="./operatorsP0/pareaopening.html">pareaopening</a> - Ouverture a&eacute;rolaire (tueur de surface claire).
+<li><a href="./operatorsP0/pareaclosing.html">pareaclosing</a> - Fermeture a&eacute;rolaire (tueur de surface sombre). 
+
+<li><a href="./operatorsP0/pwatershed.html">pwatershed</a> - Ligne de partage des eaux.
+
+<li><a href="./operatorsP0/phitormiss.html">phitormiss</a> - Transformation de
+  type tout ou rien.
+<li><a href="./operatorsP0/pskeletonization.html">pskeletonization</a> - Squelettisation d'objets binaires 2D.
+<li><a href="./operatorsP0/phomotopicskeletonization.html">phomotopicskeletonization</a> - Squelettisation homotopique d'objets binaires 3D.
+</ul> 
+
+<hr>
+<a name=pointsofinterest><b>D&eacute;tection des points d'int&eacute;r&ecirc;t</b></a>
+<p>D&eacute;tection de points d'int&eacute;r&ecirc;t points de jonctions ou coins.</p>
+<ul>
+<li><a href="./operatorsP0/pharris.html">pharris</a> - D&eacute;tection de points d'int&eacute;r&ecirc;t selon l'algorithme de Harris-Stephens.
+<li><a href="./operatorsP0/psusan.html">psusan</a> - D&eacute;tection de points d'int&eacute;r&ecirc;t selon l'algorithme SUSAN.
+</ul>
+
+<hr>
+<a name=edgedetection><b>D&eacute;tection de contours</b></a>
+<p>D&eacute;tection et localisation de contours dans les images.</p>
+<ul>
+<li><a    href="./operatorsP0/pgradneumann.html">pgradneumann</a>    -
+Calcul    du   gradient   d'une    image   par    diff&eacute;rences   finies
+d&eacute;centr&eacute;es &agrave; droite avec conditions aux bords de Neumann. 
+<li><a href="./operatorsP0/pdivneumann.html">pdivneumann</a> - 
+Calcul de la divergence par diff&eacute;rence finies d&eacute;centr&eacute; &agrave; gauche. 
+<li><a href="./operatorsP0/pgradient.html">pgradient</a> - Calcul du module et de la direction du gradient par convolution.
+<li><a href="./operatorsP0/plaplacian.html">plaplacian</a> - calcul du Laplacien d'une image par convolution.
+
+<li><a href="./operatorsP0/pprewitt.html">pprewitt</a> - Module du gradient de Prewitt.
+<li><a href="./operatorsP0/proberts.html">proberts</a> - Module du gradient de Roberts.
+<li><a href="./operatorsP0/psobel.html">psobel</a> - Module du gradient de Sobel.
+
+<li><a href="./operatorsP0/pderiche.html">pderiche</a> - D&eacute;tection et localisation des contours de Deriche.<li><a href="./operatorsP0/pshen.html">pshen</a> - D&eacute;tection et localisation des contours de Shen-Castan.
+
+<li><a href="./operatorsP0/pgradientthreshold.html">pgradientthreshold</a> - Estimation du bruit dans une image d'amplitude du gradient.
+<li><a href="./operatorsP0/pnonmaximasuppression.html">pnonmaximasuppression</a> - Suppression des points non maxima dans une image d'amplitude de gradient.
+<li><a href="./operatorsP0/pzerocross.html">pzerocross</a> - Localisation des changements de signe des valeurs de pixels.
+</ul>
+
+<hr>
+<a name=contour><b>Traitement de contours</b></a>
+<p>Les contours sont des chaînes de pixels non nuls reposant sur un fond nul. Ils sont connect&eacute;s les uns aux autres selon la 8 (en 2D) ou la 26 (en 3D) connexit&eacute;. Les images de contours sont des images de uchar (Img2duc).</p>
+<ul>
+<li><a href="./operatorsP0/pdistance.html">pdistance</a> - Calcul d'une image de distance euclidienne aux contours.
+<li><a href="./operatorsP0/pdistance1.html">pdistance1</a> - Calcul d'une image de distance quelconque aux contours.
+
+<li><a href="./operatorsP0/pcontourextensionrect.html">pcontourextensionrect</a> - Extension des points terminaux dans la direction du contour.
+<li><a href="./operatorsP0/pcontourextensionconic.html">pcontourextensionconic</a> - Extension des points terminaux dans la direction du contour par une forme conique.
+<li><a href="./operatorsP0/pblindedgeclosing.html">pblindedgeclosing</a> - Fermeture de contours par poursuite de contours.
+<li><a href="./operatorsP0/pedgedirection.html">pedgedirection</a> - Calcul la direction des contours.
+<li><a href="./operatorsP0/pedgeclosing.html">pedgeclosing</a> - Fermeture de contours par poursuite du gradient.
+<li><a href="./operatorsP0/phoughlines.html">phoughlines</a> - D&eacute;tection et localisation des segments de droite dans une image de contours par la transform&eacute;e de Hough.
+<li><a href="./operatorsP0/ppostthinning.html">ppostthinning</a> - Suppression des points de contours qui ne garantissent pas la 8 connexit&eacute; ou 26 connexit&eacute;).
+
+<li><a href="./operatorsP0/pelliptisoidalapproximation.html">pelliptisoidalapproximation</a> - Approximation ellipsoïdale d'un ensemble de points ou des contours d'une image.
+<li><a href="./operatorsP0/ppolygonalapproximation.html">ppolygonalapproximation</a> - Approximation polygonale des contours d'une image.
+
+<li><a href="./operatorsP0/pbarbremoval.html">pbarbremoval</a> - Suppression des barbules sur leur longueur.
+
+<li><a href="./operatorsP0/pcontourselection.html">pcontourselection</a> - S&eacute;lection des chaînes de contours isol&eacute;es sur leur longueur.
+<li><a href="./operatorsP0/pclosedcontourselection.html">pclosedcontourselection</a> - S&eacute;lection des chaînes de contours ferm&eacute;es sur leur longueur.
+<li><a href="./operatorsP0/popencontourselection.html">popencontourselection</a> - S&eacute;lection de chaînes de contours ouvertes sur leur longueur.
+</ul> 
+
+<hr>
+<a name="thresholding"><b>Seuillage</b></a>
+<p>Segmentation d'image par classification des pixels.</p>
+<ul>
+
+<li><a href="./operatorsP0/pbinarization.html">pbinarization</a> - Seuillage binaire d'une image à partir d'une valeur de seuil.
+<li><a href="./operatorsP0/padaptivemeanbinarization.html">padaptivemeanbinarization</a> - Binarisation de l'image par adaptation locale bas&eacute;e sur la moyenne.
+<li><a href="./operatorsP0/pcorrelationbinarization.html">pcorrelationbinarization</a> - Binarisation de l'image par maximisation de la corr&eacute;lation interclasse.
+<li><a href="./operatorsP0/pentropybinarization.html">pentropybinarization</a> - Binarisation de l'image par maximisation de l'entropie interclasse.
+<li><a href="./operatorsP0/pniblackbinarization.html">pniblackbinarization</a> - Binarisation de l'image bas&eacute;e sur le contraste local selon la m&eacute;thode de W. Niblack am&eacute;lior&eacute;e par J. Sauvola.
+<li><a href="./operatorsP0/pvariancebinarization.html">pvariancebinarization</a> - Binarisation de l'image par analyse de la variance interclasse selon l'algorithme de Otsu.
+<li><a href="./operatorsP0/pmassbinarization.html">pmassbinarization</a> - Binarisation d'une image bas&eacute; sur le pourcentage de niveaux de gris.
+<li><a href="./operatorsP0/pcontrastbinarization.html">pcontrastbinarization</a> - Binarisation d'une image par analyse du contraste aux frontières.
+
+<li><a href="./operatorsP0/pthresholding.html">pthresholding</a> - Seuillage d'une image, une carte de r&eacute;gions ou un graphe à partir d'une valeur de seuil.
+<li><a href="./operatorsP0/pcontrastthresholding.html">pcontrastthresholding</a> - Multi-seuillage de l'image par analyse du contraste aux fronti&egrave;res.
+<li><a href="./operatorsP0/phistothresholding.html">phistothresholding</a> - Multi-seuillage d'une image de niveaux de gris par une ligne de partage des eaux de son histogramme.
+<li><a href="./operatorsP0/pfuzzyclustering.html">pfuzzyclustering</a> - Multi-seuillage d'une image par la m&eacute;thode des k moyennes floues.
+<li><a href="./operatorsP0/pentropythresholding.html">pentropythresholding</a> - Multi-seuillage d'une image par analyse de l'entropie des r&eacute;gions.
+<li><a href="./operatorsP0/pchanda.html">pchanda</a> - Multi-seuillage d'une image par analyse de la matrice de co-occurences selon Chanda.
+<li><a href="./operatorsP0/pderavi.html">pderavi</a> - Multi-seuillage d'une mage par analyse de la matrice de co-occurences selon Deravi.
+<li><a href="./operatorsP0/pfisher.html">pfisher</a> - Multi-seuillage d'une image par partionnement de l'histogramme des niveaux de gris.
+<li><a href="./operatorsP0/pweszka.html">pweszka</a> - Multi-seuillage d'une image par analyse de la matrice de co-occurences selon Weszka.
+</ul>
+
+<hr>
+<a name=segmentation><b>Segmentation</b></a>
+<p>Op&eacute;rations de segmentation d'images de pixels en carte de r&eacute;gions.</p>
+<ul>
+<li><a href="./operatorsP0/pboundarylabeling.html">pboundarylabeling</a> - Etiquetage en r&eacute;gions d'une image de contours ferm&eacute;s.
+<li><a href="./operatorsP0/plabeling.html">plabeling</a> - Etiquetage des r&eacute;gions homog&egrave;nes d'une image.
+
+<li><a href="./operatorsP0/pcontrastquadtree.html">pcontrastquadtree</a> - Segmentation d'une image par quadtree (octree) selon le contraste.
+<li><a href="./operatorsP0/pcontrast1quadtree.html">pcontrast1quadtree</a> - Segmentation d'une image par quadtree (octree) selon le contraste
+<li><a href="./operatorsP0/pedgebasedragpruning.html">pedgebasedragpruning</a> - 
+S&eacute;paration dans le graphe d'adjacence de r&eacute;gions s&eacute;par&eacute;es par un point de contour. 
+<li><a href="./operatorsP0/pentropyquadtree.html">pentropyquadtree</a> - Segmentation d'une image par quadtree (octree) selon l'entropie.
+<li><a href="./operatorsP0/puniformityquadtree.html">puniformityquadtree</a> - Segmentation d'une image par quadtree (ou octree) selon l'uniformit&eacute;.
+<li><a href="./operatorsP0/pvariancequadtree.html">pvariancequadtree</a> - Segmentation d'une image par quadtree selon la variance.
+
+<li><a href="./operatorsP0/pcontrastaggregation.html">pcontrastaggregation</a> - Croissance des r&eacute;gions d'une carte selon le contraste int&eacute;rieur.
+<li><a href="./operatorsP0/pmeanaggregation.html">pmeanaggregation</a> - Croissance des r&eacute;gions d'une carte selon la moyenne int&eacute;rieure.
+<li><a href="./operatorsP0/pgaussaggregation.html">pgaussaggregation</a> - Croissance des r&eacute;gions d'une carte selon une distribution gaussienne.
+
+<li><a href="./operatorsP0/pvarianceaggregation.html">pvarianceaggregation</a> - Croissance des r&eacute;gions d'une carte selon la variance int&eacute;rieure.
+
+<li><a href="./operatorsP0/pcontrastmerging.html">pcontrastmerging</a> - Fusion prioritaire de r&eacute;gions selon le crit&egrave;re du contraste.
+<li><a href="./operatorsP0/pentropymerging.html">pentropymerging</a> - Fusion prioritaire de r&eacute;gions selon le crit&egrave;re de l'entropie.
+
+<li><a href="./operatorsP0/pmeanmerging.html">pmeanmerging</a> - Fusion prioritaire de r&eacute;gions selon la diff&eacute;rence de moyennes int&eacute;rieures.
+<li><a href="./operatorsP0/pmumfordshahmerging.html">pmumfordshahmerging</a> - Fusion prioritaire de r&eacute;gions selon la variation d'&eacute;nergie de Mumford Shah.
+<li><a href="./operatorsP0/puniformitymerging.html">puniformitymerging</a> - Fusion prioritaire de r&eacute;gions selon le crit&egrave;re d'uniformit&eacute;.
+<li><a href="./operatorsP0/pvariancemerging.html">pvariancemerging</a> - Fusion prioritaire de r&eacute;gions selon le crit&egrave;re de la variance.
+<li><a href="./operatorsP0/pboundarymerging.html">pboundarymerging</a> -  Fusion prioritaire de r&eacute;gions selon le contraste aux fronti&egrave;res.
+
+<li><a href="./operatorsP0/phistomerging.html">phistomerging</a> - Fusion prioritaire de r&eacute;gions selon la corr&eacute;lation d'histogramme.
+
+<li><a href="./operatorsP0/plabelmerging.html">plabelmerging</a> - Fusion nominative de 2 r&eacute;gions.
+<li><a href="./operatorsP0/pinnermerging.html">pinnermerging</a> - Fusion de r&eacute;gions englob&eacute;es dans d'autres r&eacute;gions.
+<li><a href="./operatorsP0/pinnermostmerging.html">pinnermostmerging</a> - Fusion de r&eacute;gions avec la r&eacute;gion voisine la plus englobante.
+<li><a href="./operatorsP0/pvoronoi.html">pvoronoi</a> - Calcul de la partition de Vorono&iuml;.
+
+<li><a href="./operatorsP0/pcolorquantization.html">pcolorquantization</a> - R&eacute;duction du nombre de couleurs utilis&eacute;es pour coder une image.
+<li><a href="./operatorsP0/pgraphbasedsegmentation.html">pgraphbasedsegmentation</a> - Segmentation d'images couleur par l'analyse des fronti&egrave;res des r&eacute;gions.
+<li><a href="./operatorsP0/pmeanshiftsegmentation.html">pmeanshiftsegmentation</a> - Classification des pixels d'une image par l'algorithme Mean-Shift.
+<li><a href="./operatorsP0/psimplelineariterativeclustering.html">psimplelineariterativeclustering</a> - Segmentation d'une image couleur en superpixels.
+<li><a href="./operatorsP0/pseedplacement.html">pseedplacement</a> - Placement de germes de r&eacute;gions sur une grille r&eacute;guli&egrave;re.
+<li><a href="./operatorsP0/psuperpixelsegmentation.html">psuperpixelsegmentation</a> - Segmentation d'une image couleur en superpixels.
+</ul>
+
+<hr>
+<a name=region><b>Traitement de r&eacute;gion</b></a>
+<p>Op&eacute;rations sur carte de r&eacute;gions telles que la s&eacute;lection de r&eacute;gion ou l'&eacute;tiquetage.</p>
+<ul>
+<li><a href="./operatorsP0/pboundaryregularization.html">pboundaryregularization</a> - R&eacute;gularisation des fronti&egrave;res des r&eacute;gions.
+<li><a href="./operatorsP0/pfillhole.html">pfillhole</a> - Bouchage des trous dans les r&eacute;gions.
+<li><a href="./operatorsP0/pholeselection.html">pholeselection</a> - S&eacute;lection des trous dans les r&eacute;gions.
+<li><a href="./operatorsP0/pconvexhull.html">pconvexhull</a> - Calcul de l'enveloppe convexe des r&eacute;gions.
+<li><a href="./operatorsP0/pboundary.html">pboundary</a> - Localisation des points de fronti&egrave;re des r&eacute;gions.
+<li><a href="./operatorsP0/pboundingbox.html">pboundingbox</a> - Calcul du rectangle exinscrit des r&eacute;gions.
+<li><a href="./operatorsP0/pcenterofmass.html">pcenterofmass</a> - Localisation des centres de gravit&eacute; de r&eacute;gions.
+
+<li><a href="./operatorsP0/plabelselection.html">plabelselection</a> - S&eacute;lection d'une r&eacute;gion par son num&eacute;ro de label.
+<li><a href="./operatorsP0/plabelsselection.html">plabelsselection</a> - S&eacute;lection des r&eacute;gions sp&eacute;cifi&eacute;es par une autre carte de r&eacute;gions.
+
+<li><a href="./operatorsP0/pinnerselection.html">pinnerselection</a> - S&eacute;lection des r&eacute;gions englob&eacute;es dans une autre r&eacute;gion.
+<li><a href="./operatorsP0/poutborderselection.html">poutborderselection</a> - S&eacute;lection des r&eacute;gions qui ne touchent pas le bord de l'image.
+<li><a href="./operatorsP0/plocationselection.html">plocationselection</a> - S&eacute;lection des r&eacute;gions &agrave; partir de leur position.
+
+<li><a href="./operatorsP0/penergyselection.html">penergyselection</a> - S&eacute;lection de r&eacute;gions sur leur valeur d'&eacute;nergie int&eacute;rieure.
+<li><a href="./operatorsP0/pmaximumselection.html">pmaximumselection</a> - S&eacute;lection de r&eacute;gions sur leur valeur de maximum int&eacute;rieur.
+<li><a href="./operatorsP0/pminimumselection.html">pminimumselection</a> - S&eacute;lection de r&eacute;gions sur leur valeur de minimum int&eacute;rieur.
+<li><a href="./operatorsP0/pmeanselection.html">pmeanselection</a> - S&eacute;lection de r&eacute;gions sur leur valeur de moyenne int&eacute;rieure.
+<li><a href="./operatorsP0/pvarianceselection.html">pvarianceselection</a> - S&eacute;lection de r&eacute;gions sur leur valeur de variance.
+
+<li><a href="./operatorsP0/pcompactnessselection.html">pcompactnessselection</a> - S&eacute;lection de r&eacute;gions sur leur valeur de compacit&eacute;.
+<li><a href="./operatorsP0/pconvexityselection.html">pconvexityselection</a> - S&eacute;lection de r&eacute;gions sur leur valeur de convexit&eacute;.
+<li><a href="./operatorsP0/pdensityselection.html">pdensityselection</a> - S&eacute;lection de r&eacute;gions sur le facteur de densit&eacute;.
+<li><a href="./operatorsP0/pelongationselection.html">pelongationselection</a> - S&eacute;lection de r&eacute;gions sur leur valeur d'&eacute;longation.
+<li><a href="./operatorsP0/peulernumberselection.html">peulernumberselection</a> - S&eacute;lection de r&eacute;gions sur leur valeur de nombre d'Euler.
+<li><a href="./operatorsP0/peccentricityselection.html">peccentricityselection</a> - S&eacute;lection de r&eacute;gions sur leur valeur d'excentricit&eacute;.
+<li><a href="./operatorsP0/porientationselection.html">porientationselection</a> - S&eacute;lection de r&eacute;gions sur leur valeur d'orientation.
+<li><a href="./operatorsP0/pperimeterselection.html">pperimeterselection</a> - S&eacute;lection de r&eacute;gions sur leur valeur de p&eacute;rim&egrave;tre.
+<li><a href="./operatorsP0/prectangularityselection.html">prectangularityselection</a> - S&eacute;lection de r&eacute;gions sur leur valeur de rectangularit&eacute;.
+<li><a href="./operatorsP0/psphericityselection.html">psphericityselection</a> - S&eacute;lection de r&eacute;gions sur leur valeur de sph&eacute;ricit&eacute;.
+<li><a href="./operatorsP0/psizeselection.html">psizeselection</a> - S&eacute;lection de r&eacute;gions sur leur valeur de taille.
+<li><a href="./operatorsP0/pareaselection.html">pareaselection</a> - S&eacute;lection de r&eacute;gions sur leur valeur de surface.
+
+<li><a href="./operatorsP0/pvolumeselection.html">pvolumeselection</a> - S&eacute;lection de r&eacute;gions sur leur valeur de volume.
+
+<li><a href="./operatorsP0/prelabelingfromarray.html">prelabelingfromarray</a> - Relabelisation d'une carte de r&eacute;gions &agrave; partir des valeurs d'un vecteur d'etiquettes.
+<li><a href="./operatorsP0/prelabelingwithgraph.html">prelabelingwithgraph</a> - Renum&eacute;rotation des r&eacute;gions d'une carte et des sommets du graphe associ&eacute;.
+</ul> 
+
+<hr>
+<a name=regionfeaturesextraction><b>Extraction de caract&eacute;ristiques r&eacute;gion</b></a><br>
+<p>Extrait des mesures de caract&eacute;ristiques topologique, g&eacute;om&eacute;trique et photom&eacute;trique des r&eacute;gions d'une carte donn&eacute;e.</p>
+<ul>
+<li><a href="./operatorsP0/pareadisorderfactor.html">pareadisorderfactor</a> - Calcul du d&eacute;sordre surfacique d'une carte de r&eacute;gions.
+<li><a href="./operatorsP0/pregioncompactness.html">pregioncompactness</a> - Calcul de la compacit&eacute; des r&eacute;gions.
+<li><a href="./operatorsP0/pregionconvexity.html">pregionconvexity</a> - Calcul de la convexit&eacute; des r&eacute;gions.
+<li><a href="./operatorsP0/pregiondensity.html">pregiondensity</a> - Calcul de la densit&eacute; des r&eacute;gions.
+<li><a href="./operatorsP0/pregionelongation.html">pregionelongation</a> - Calcul de l'&eacute;longation des r&eacute;gions.
+<li><a href="./operatorsP0/pregionenergy.html">pregionenergy</a> - Calcul de l'&eacute;nergie des r&eacute;gions.
+<li><a href="./operatorsP0/pregioneulernumber.html">pregioneulernumber</a> - Calcul du nombre d'Euler des r&eacute;gions.
+<li><a href="./operatorsP0/pregioneccentricity.html">pregioneccentricity</a> - Calcul de l'excentricit&eacute; des r&eacute;gions.
+<li><a href="./operatorsP0/pregionmaximum.html">pregionmaximum</a> - Calcul de la valeur maximale des r&eacute;gions.
+<li><a href="./operatorsP0/pregionminimum.html">pregionminimum</a> - Calcul de la valeur minimale des r&eacute;gions.
+
+<li><a href="./operatorsP0/pregionmean.html">pregionmean</a> - Calcul de la moyenne des r&eacute;gions.
+<li><a href="./operatorsP0/pregionorientation.html">pregionorientation</a> - Calcul de l'orientation des r&eacute;gions.
+<li><a href="./operatorsP0/pregionperimeter.html">pregionperimeter</a> - Calcul du p&eacute;rim&egrave;tre des r&eacute;gions.
+<li><a href="./operatorsP0/pregionrectangularity.html">pregionrectangularity</a> - Calcul de la rectangularit&eacute; des r&eacute;gions.
+
+<li><a href="./operatorsP0/pregionsphericity.html">pregionsphericity</a> - Calcul de la sph&eacute;ricit&eacute; des r&eacute;gions.
+<li><a href="./operatorsP0/pregionvariance.html">pregionvariance</a> - Calcul de la variance des r&eacute;gions.
+<li><a href="./operatorsP0/pregionarea.html">pregionarea</a> - Calcul de la surface des r&eacute;gions.
+<li><a href="./operatorsP0/pregionvolume.html">pregionvolume</a> - Calcul du volume des r&eacute;gions.
+<li><a href="./operatorsP0/pregionwidth.html">pregionwidth</a> - Calcul de la largeur des r&eacute;gions.
+<li><a href="./operatorsP0/pregionheight.html">pregionheight</a> - Calcul de la hauteur des r&eacute;gions.
+<li><a href="./operatorsP0/pregiondepth.html">pregiondepth</a> - Calcul de la profondeur des r&eacute;gions.
+</ul> 
+
+<hr>
+<a name=imagefeaturesextraction><b>Extraction de caract&eacute;ristiques image</b></a>
+<p>Extraction de caract&eacute;ristiques statistiques sur ou entre images.</p>
+<ul>
+<li><a href="./operatorsP0/plocalextrema.html">plocalextrema</a> - Localisation des points constituant un extr&eacute;ma dans au moins direction.
+<li><a href="./operatorsP0/plocalmaxima.html">plocalmaxima</a> - Localisation des points constituant un maximum local.
+<li><a href="./operatorsP0/plocalminima.html">plocalminima</a> - Localisation des points constituant un minimum local.
+<li><a href="./operatorsP0/pregionalminima.html">pregionalminima</a> - Localisation des points constituant un minimum r&eacute;gional.
+<li><a href="./operatorsP0/pregionalmaxima.html">pregionalmaxima</a> - Localisation des points constituant un maximum r&eacute;gional.
+
+<li><a href="./operatorsP0/pcontrastvalue.html">pcontrastvalue</a> - Calcul du contraste global d'une image ou d'un graphe.
+<li><a href="./operatorsP0/pcontrast1value.html">pcontrast1value</a> - Calcul du contraste global d'une image ou d'un graphe.
+<li><a href="./operatorsP0/penergyvalue.html">penergyvalue</a> - Calcul de l'&eacute;nergie d'une image (d'un graphe ou d'une carte de r&eacute;gions).
+<li><a href="./operatorsP0/pentropyvalue.html">pentropyvalue</a> - Calcul de l'entropie d'une image (d'un graphe ou d'une carte de r&eacute;gions).
+<li><a href="./operatorsP0/psumvalue.html">psumvalue</a> - Calcul de la somme des valeurs de pixels (ou de sommets).
+<li><a href="./operatorsP0/pvariancevalue.html">pvariancevalue</a> - Calcul de la variance des valeurs de pixels (ou de sommets).
+
+<li><a href="./operatorsP0/pmaximumvalue.html">pmaximumvalue</a> - Recherche la valeur de pixel maximum dans une image (un graphe ou une carte de r&eacute;gions).
+<li><a href="./operatorsP0/pminimumvalue.html">pminimumvalue</a> - Recherche la valeur de pixel minimum dans une image (un graphe ou une carte de r&eacute;gions).
+<li><a href="./operatorsP0/pmeanvalue.html">pmeanvalue</a> - Calcul du niveaux de gris moyen d'une image (un graphe ou une carte de r&eacute;gions).
+<li><a href="./operatorsP0/pmedianvalue.html">pmedianvalue</a> - Recherche de la valeur m&eacute;diane d'une image.
+<li><a href="./operatorsP0/pmodevalue.html">pmodevalue</a> - Retourne la valeur de pixel la plus nombreuse dans une image (un graphe ou une carte de r&eacute;gions).
+
+<li><a href="./operatorsP0/pvaluenumber.html">pvaluenumber</a> - Comptage du nombre de pixels (ou de sommets) non nuls dans une image.
+<li><a href="./operatorsP0/pvalueclassnumber.html">pvalueclassnumber</a> - Comptage du nombre de valeurs diff&eacute;rentes dans une image ou un graphe.
+<li><a href="./operatorsP0/pvaluerank.html">pvaluerank</a> - D&eacute;termination de la i&egrave;me valeur d'une image.
+
+<li><a href="./operatorsP0/phistogram.html">phistogram</a> - Cr&eacute;ation d'un histogramme &agrave; partir d'une image.
+</ul>
+
+<hr>
+<a name=evaluation><b>Evaluation</b></a>
+<p>Mesures de la qualit&eacute; d'un traitement d'images avec ou sans r&eacute;f&eacute;rence.</p>
+<ul>
+<li><a href="./operatorsP0/passessdetectionaccuracy.html">passessdetectionaccuracy</a> - &Eacute;valuation de la pr&eacute;cision de la d&eacute;tection des r&eacute;gions d'un r&eacute;sultat de segmentation par comparaison avec une segmentation de r&eacute;f&eacute;rence.
+<li><a href="./operatorsP0/passessfragmentationconsistency.html">passessfragmentationconsistency</a> - &Eacute;valuation de la coh&eacute;rence de la fragmentation des r&eacute;gions d'un r&eacute;sultat de segmentation par comparaison avec une segmentation de r&eacute;f&eacute;rence.
+<li><a href="./operatorsP0/passessboundaryprecision.html">passessboundaryprecision</a> - &Eacute;valuation de la pr&eacute;cision de la localisation des fronti&egrave;res des r&eacute;gions d'un r&eacute;sultat de segmentation par comparaison avec une segmentation de r&eacute;f&eacute;rence.
+<li><a href="./operatorsP0/passessshapefidelity.html">passessshapefidelity</a> - 
+&Eacute;valuation de la fid&eacute;lit&eacute; de la forme des r&eacute;gions d'un r&eacute;sultat de segmentation par comparaison avec une segmentation de r&eacute;f&eacute;rence.
+<li><a href="./operatorsP0/passesstopologypreservation.html">passesstopologypreservation</a> - &Eacute;valuation de la pr&eacute;servation de la topologie des r&eacute;gions d'un r&eacute;sultat de segmentation par comparaison avec une segmentation de r&eacute;f&eacute;rence.
+
+<li><a href="./operatorsP0/passesssegmentationalgorithm.html">passesssegmentationalgorithm</a> - &Eacute;valuation des performances d'un algorithme de segmentation bas&eacute;e sur des mesures de dissimilarit&eacute; entre des r&eacute;sultats de segmentation et des segmentations de r&eacute;f&eacute;rence.
+
+<li><a href="./operatorsP0/pranksegmentationalgorithms.html">pranksegmentationalgorithms</a> - Classement d'algorithmes de segmentation &agrave; partir de mesures de dissimilarit&eacute; entre des r&eacute;sultats de segmentation et des segmentations de r&eacute;f&eacute;rence.
+<li><a href="./operatorsP0/pranksegmentationalgorithmsfromfolders.html">pranksegmentationalgorithmsfromfolders</a> - Classement d'algorithmes de segmentation &agrave; partir de mesures de dissimilarit&eacute; entre des r&eacute;sultats de segmentation et des segmentations de r&eacute;f&eacute;rence (complet).
+<li><a href="./operatorsP0/pdisplayperformancevalues.html">pdisplayperformancevalues</a> - Affichage d&eacute;taill&eacute; des erreurs de segmentation calcul&eacute;es par l'op&eacute;rateur 'passesssegmentationalgorithm'.
+
+
+<li><a href="./operatorsP0/pvinet.html">pvinet</a> - Calcul de la mesure de dissimilarit&eacute; entre 2 cartes de r&eacute;gions bas&eacute; sur le nombre de pixels mal segment&eacute;s.
+
+<li><a href="./operatorsP0/pborsotti.html">pborsotti</a> - Calcul du crit&egrave;re de qualit&eacute; bas&eacute; sur le nombre, l'aire et la variance des r&eacute;gions.
+<li><a href="./operatorsP0/pzeboudj.html">pzeboudj</a> - Calcul du crit&egrave;re de qualit&eacute; bas&eacute; sur la mesure de contraste inter et intra-regions.
+<li><a href="./operatorsP0/pinterregioncontrast.html">pinterregioncontrast</a> - Calcul du crit&egrave;re de qualit&eacute; bas&eacute; sur une mesure d'uniformit&eacute; inter-r&eacute;gions.
+<li><a href="./operatorsP0/pintraregionuniformity.html">pintraregionuniformity</a> - Calcul du crit&egrave;re de qualit&eacute; bas&eacute; sur une mesure d'uniformit&eacute; intra-r&eacute;gions.
+<li><a href="./operatorsP0/pmse.html">pmse</a> - Calcul de l'erreur quadratique moyenne.
+<li><a href="./operatorsP0/ppsnr.html">ppsnr</a> - Calcul du rapport signal sur bruit en cr&ecirc;tes.
+<li><a href="./operatorsP0/psnr.html">psnr</a> - Calcul du rapport signal sur bruit.
+</ul>
+
+<hr>
+<a name=motion><b>Mouvement</b></a>
+<p>Op&eacute;rations de reconstruction du mouvement &agrave; partir d'images ou de s&eacute;quences d'images.</p>
+<ul>
+<li><a href="./operatorsP0/pblockmatching.html">pblockmatching</a> - Estimation du mouvement entre deux images par mise en correspondance de blocs.
+<li><a href="./operatorsP0/pplotquiver.html">pplotquiver</a> - Dessin d'un champ de vecteurs 2D &agrave; partir d'une image 2D multi-spectrale &agrave; deux composantes.
+<li><a href="./operatorsP0/pregistrationPDE.html">pregistrationPDE</a> - Estimation du champ de d&eacute;placement entre deux images.
+</ul>
+
+<hr>
+<a name=reconstruction><b>Reconstruction</b></a>
+<p>Op&eacute;ration de reconstruction de surface et d'orientation.</P>
+<ul>
+<li><a href="./operatorsP0/pgetquadrangle.html">pgetquadrangle</a> - S&eacute;lection du meilleur quadrilatère parmi un ensemble de lignes.
+<li><a href="./operatorsP0/pquadrangle2rectangle.html">pquadrangle2rectangle</a> - Corrige la distortion g&eacute;om&eacute;trique du contenu d'une image pour passer de la repr&eacute;sentation d'un quadrilatère à un rectangle.
+<li><a href="./operatorsP0/pskewanglecorrection.html">pskewanglecorrection</a> - D&eacute;tecte une d&eacute;viation du contenu de l'image puis rectifie l'image.
+</ul>
+
+<hr>
+<a name=templatematching><b>Reconnaissance de Formes</b></a>
+<p>Op&eacute;rations de reconnaissance des formes.</P>
+<ul>
+<li><a href="./operatorsP0/pcrosscorrelation.html">pcrosscorrelation</a> - Correlation d'une image par un noyau.
+</ul>
+
+<hr>
+<a name=collection><b>Collection</b></a>
+<p>Les op&eacute;rateurs de collection manipulent la composition des collections.
+Une collection regroupe des &eacute;l&eacute;ments h&eacute;t&eacute;rog&egrave;nes (e.g., valeur, tableau, image, graphe)
+dans une structure unique.</p>
+<ul>
+<li><a href="./operatorsP0/pcolcatenateitem.html">pcolcatenateitem</a> - Concat&eacute;nation de 2 collections.
+<li><a href="./operatorsP0/pcolremoveitem.html">pcolremoveitem</a> - Suppression d'un  dans une collection.
+<li><a href="./operatorsP0/pcolrenameitem.html">pcolrenameitem</a> - Changement de nom d'un  d'une collection.
+
+<li><a href="./operatorsP0/pcolgetvalue.html">pcolgetvalue</a> - Extraction d'une valeur num&eacute;rique dans une collection.
+<li><a href="./operatorsP0/pcolsetvalue.html">pcolsetvalue</a> - Ajout d'une valeur num&eacute;rique dans une collection.
+<li><a href="./operatorsP0/pcolgetimages.html">pcolgetimages</a> - Extraction des images d'une collection.
+<li><a href="./operatorsP0/pcolgetobject.html">pcolgetobject</a> - Extraction d'un objet Pandore &agrave; partir d'une collection.
+<li><a href="./operatorsP0/pcolsetobject.html">pcolsetobject</a> - Ajout d'un objet Pandore dans une collection.
+
+<li><a href="./operatorsP0/pobject2col.html">pobject2col</a> - Cr&eacute;ation d'une collection &agrave; partir d'un objet Pandore.
+
+<li><a href="./operatorsP0/pcol2csv.html">pcol2csv</a> - Conversion d'une collection en fichier texte au format csv.
+<li><a href="./operatorsP0/pcol2txt.html">pcol2txt</a> - Conversion d'une collection en fichier texte.
+<li><a href="./operatorsP0/ptxt2col.html">ptxt2col</a> - Construction d'une collection &agrave; partir d'un fichier texte.
+</ul> 
+
+<hr>
+<a name=array><b>Vecteurs</b></a>
+<p>D&eacute;finit quelques op&eacute;rateurs sur les vecteurs stock&eacute;s dans les collections.</p>
+<ul>
+<li><a href="./operatorsP0/pcreatearray.html">pcreatearray</a> - Cr&eacute;ation d'une collection contenant un vecteur vierge.
+<li><a href="./operatorsP0/parray2array.html">parray2array</a> - Conversion du type d'une vecteur dans une collection.
+<li><a href="./operatorsP0/parraygetvalue.html">parraygetvalue</a> - Extraction de la valeur d'un  d'un vecteur dans une collection.
+
+<li><a href="./operatorsP0/parraysize.html">parraysize</a> - Retourne la taille d'un vecteur dans une collection.
+<li><a href="./operatorsP0/parrayargmax.html">parrayargmax</a> - Extraction des valeurs maxima entre plusieurs tableaux.
+<li><a href="./operatorsP0/parraycovarmat.html">parraycovarmat</a> - Calcul de la matrice de covariance associ&eacute;e &agrave; un ensemble d'&eacute;l&eacute;ments.
+<li><a href="./operatorsP0/parraymean.html">parraymean</a> - Calcul des moyennes des valeurs de vecteurs.
+<li><a href="./operatorsP0/parraymedian.html">parraymedian</a> - Calcul de la valeur m&eacute;diane des valeurs de vecteurs.
+<li><a href="./operatorsP0/parraymode.html">parraymode</a> - Calcul de la valeur la plus fr&eacute;quente dans un vecteur.
+
+<li><a href="./operatorsP0/parrayeuclideannorm.html">parrayeuclideannorm</a> - Calcul de la norme euclidienne de vecteurs.
+<li><a href="./operatorsP0/parraynorm.html">parraynorm</a> - Normalisation des valeurs d'un vecteur entre 0 et 1.
+<li><a href="./operatorsP0/parraysnorm.html">parraysnorm</a> - Normalisation des valeurs de plusieurs vecteurs entre 0 et 1.
+<li><a href="./operatorsP0/parraysmin.html">parraysmin</a> - Calcul des valeurs minimales de chaque tableau dans une collection.
+<li><a href="./operatorsP0/parraysmax.html">parraysmax</a> - Calcul des valeurs maximales de chaque tableau dans une collection.
+<li><a href="./operatorsP0/parraysmean.html">parraysmean</a> - Calcul des valeurs moyennes de chaque tableau dans une collection.
+<li><a href="./operatorsP0/pcorrelationcoefficient.html">pcorrelationcoefficient</a> - Calcul du coefficient de correlation entre deux vecteurs.
+</ul>
+
+<hr>
+<a name=graph><b>Graphe</b></a>
+<p>Op&eacute;rations sur graphes. Un graphe est un ensemble de sommets
+reli&eacute; par des arcs. Un noeud r&eacute;f&eacute;rence par indice
+un objet (par exemple une r&eacute;gions) dans un tableau d'objets.</p>
+<ul>
+<li><a href="./operatorsP0/pbetagraph.html">pbetagraph</a> - Construction du b&eacute;ta-graphe d'un graphe.
+<li><a href="./operatorsP0/psig.html">psig</a> - Construction de la sph&egrave;re d'influence d'un graphe.
+<li><a href="./operatorsP0/pmst.html">pmst</a> - Construction de l'arbre de recouvrement minimal d'un graphe.
+
+<li><a href="./operatorsP0/pdelaunay.html">pdelaunay</a> - Construction du graphe de Delaunay discret.
+
+<li><a href="./operatorsP0/pgraphpruning.html">pgraphpruning</a> - Suppression des arcs nuls et des sommets isol&eacute;s.
+<li><a href="./operatorsP0/pedgecutting.html">pedgecutting</a> - Suppression des ar&ecirc;tes d'un graphe sur leur value.
+<li><a href="./operatorsP0/pleafcutting.html">pleafcutting</a> - Suppression des feuilles d'un graphe.
+
+<li><a href="./operatorsP0/pgraphneighbours.html">pgraphneighbours</a> - Valuation des sommets d'un graphe avec le nombre de sommets voisins.
+
+<li><a href="./operatorsP0/pgraphvisu.html">pgraphvisu</a> - Visualisation des valeurs des sommets et des arcs d'un graphe.
+<li><a href="./operatorsP0/pedgevisu.html">pedgevisu</a> - Visualisation des poids des ar&ecirc;tes d'un graphe dans une image.
+<li><a href="./operatorsP0/pnodevisu.html">pnodevisu</a> - Visualisation des valeurs des sommets d'un graphe dans une image.
+
+<li><a href="./operatorsP0/pnodedisc.html">pnodedisc</a> - Visualisation des valeurs des noeuds d'un graphe.
+</ul>
+
+<hr>
+<a name=classification><b>Classification d'objets</b></a><br>
+<p>Op&eacute;ration de classification d'objets. Les objets peuvent &ecirc;tre
+n'importe quoi comme des pixels ou des r&eacute;gions.
+<ul>
+<li><a href="./operatorsP0/pgaussclassification.html">pgaussclassification</a> - Classification selon un mod&egrave;le gaussien.
+<li><a href="./operatorsP0/pkmeans.html">pkmeans</a> - Classification automatique selon les K-moyennes.
+<li><a href="./operatorsP0/pknn.html">pknn</a> - Classification selon les K plus proches voisins.
+</ul> 
+
+<hr>
+<a name=visualization><b>Visualisation</b></a><br>
+<p>Utilitaires d'affichage graphique ou textuel du contenu des objets Pandore.</p>
+<ul>
+<li><a href="./operatorsP0/pvisu.html">pvisu</a> - Affichage d'un fichier image de type Pandore.
+<li><a href="./operatorsP0/pdraw.html">pdraw</a> - Interface de dessin sur une image.
+<li><a href="./operatorsP0/pcontentsdisplay.html">pcontentsdisplay</a> - Affichage du contenu d'un objet Pandore.
+
+<li><a href="./operatorsP0/pplot1d.html">pplot1d</a> - Construction d'une image 2D couleur &agrave; partir d'une image 1D.
+<li><a href="./operatorsP0/pcolorcube.html">pcolorcube</a> - Visualisation de la r&eacute;cartition des couleurs d'une image dans un cube (repr&eacute;sentant l'espace couleur).
+<li><a href="./operatorsP0/pcolorize.html">pcolorize</a> - Colorisation des r&eacute;gions &agrave; partir de leur valeur moyenne.
+<li><a href="./operatorsP0/psuperimposition.html">psuperimposition</a> -
+  Surimposition de
+contours sur une image.
+</ul> 
+
+<hr>
+<a name=information><b>Information</b></a><br>
+<p>Utilitaires d'affichage des propri&eacute;t&eacute;s des objets Pandore.</p>
+<ul>
+<li><a href="./operatorsP0/pproperty.html">pproperty</a> - R&eacute;cup&eacute;ration de la valeur d'une propri&eacute;t&eacute; d'un objet Pandore.
+<li><a href="./operatorsP0/pfile.html">pfile</a> - Pr&eacute;sentation des caract&eacute;ristiques d'un fichier Pandore.
+<li><a href="./operatorsP0/psetstatus.html">psetstatus</a> - Affectation d'une valeur au statut courant.
+<li><a href="./operatorsP0/pstatus.html">pstatus</a> - Affichage de la valeur retourn&eacute;e par la derni&egrave;re ex&eacute;cution d'un op&eacute;rateur Pandore.
+<li><a href="./operatorsP0/pmanfr.html">pmanfr</a> - Affichage en ligne de la documentation française associ&eacute;e &agrave; un op&eacute;rateur.
+<li><a href="./operatorsP0/pversion.html">pversion</a> - Affichage du num&eacute;ro de version de la distribution Pandore.
+</ul>
+
+<hr>
+<a name=miscellaneous><b>Exotique</b></a>
+<p>Op&eacute;ration sur images ne relevant pas directement du traitement d'images.</p>
+<ul>
+<li><a href="./operatorsP0/prds.html">prds</a> - Construction d'un Random Dot Stereogram (st&eacute;r&eacute;ogramme sans motif).
+<li><a href="./operatorsP0/pstereogram.html">pstereogram</a> - Construction d'une image de st&eacute;r&eacute;ogramme couleur.
+<li><a href="./operatorsP0/psubsampling.html">psubsampling</a> - Sous-&eacute;chantillonnage d'une image.
+</ul>
+
+<hr>
+<center>
+<font size=1><a href="https://www.greyc.fr/node/36">&Eacute;quipe Image - Laboratoire GREYC</a><br>
+UMR CNRS 6072 - Ensicaen &amp; Universit&eacute; de Caen, France<br>
+Last modified: <!--#config timefmt="%A, %d %B %Y" -->
+		<!--#echo var="last_modified" -->
+</font>
+</center>
+
+</body>
+</html>

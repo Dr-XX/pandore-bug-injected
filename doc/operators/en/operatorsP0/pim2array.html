@@ -1,0 +1,106 @@
+<html>
+<head>
+<title>PANDORE OPERATORS</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff"><center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>pim2array</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Converts image to pixel array.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>pim2array</b> <i>name</i> [<i>im_in</i>|-] [<i>col_out</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p><b>pim2array</b> builds the collection
+<i>col_out</i> with the array named <i>name</i>
+that contains the pixels of the input image <i>im_in</i>.</p>
+
+<p>For the color image, the collection contains three arrays
+named <i>name.1</i>, <i>name.2</i> et <i>name.3</i> that
+contains respectively the pixels of the
+three bands red, green and blue.</p>
+
+<!---------------------------------- -->
+<h3>Parameters</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>name</i> is the name of the array in the collection.
+</ul>
+
+<!---------------------------------- -->
+<h3>Inputs</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_in</i>: an image.
+</ul>
+
+<!---------------------------------- -->
+<h3>Outputs</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>col_out</i>: a collection.
+</ul>
+
+<!---------------------------------- -->
+<h3>Result</h3>
+<!---------------------------------- -->
+<p>Returns SUCCESS or FAILURE.</p>
+
+<!---------------------------------- -->
+<h3>Examples</h3>
+<!---------------------------------- -->
+<p>Converts the image tangram.pan to the vector foo
+in the collection col.pan:</p>
+<pre>
+   pim2array foo tangram.pan col.pan
+</pre>
+
+<!---------------------------------- -->
+<h3>See also</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#casting">Casting</a>,
+<a href="parray2im.html">parray2im</a>
+
+<!---------------------------------- -->
+<h3>C++ prototype</h3>
+<!---------------------------------- -->
+<tt>
+Errc PIm2Array( const Img2duc &amp;im_in, Collection &amp;cd,std::string name );
+</tt>
+
+<!---------------------------------- -->
+<h3>Version fran&ccedil;aise</h3>
+<!---------------------------------- -->
+<p>Conversion d'une image en un vecteur dans une collection.</p>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Author: Alexandre Duret-Lutz
+</address>
+<!---------------------------------- -->
+</body>
+</html>

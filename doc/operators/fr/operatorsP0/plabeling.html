@@ -1,0 +1,126 @@
+<html>
+<head>
+<title>OPERATEURS PANDORE</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>plabeling</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Etiquetage des r&eacute;gions homog&egrave;nes d'une image.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>plabeling</b> <i>connexity</i> [<i>-m mask</i>] [<i>im_in</i>|-] [<i>rg_out</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p>L'op&eacute;rateur <b>plabeling</b> consiste &agrave; marquer avec un m&ecirc;me label
+un ensemble de pixels connexes
+de <i>im_in</i> ayant exactement la m&ecirc;me valeur de niveau de gris.</p>
+
+<p>Un pixel P1 et un pixel P2 auront la m&ecirc;me valeur de label:<p>
+<ul>
+<li>si P1 est dans le voisinage de P2 (selon la connexit&eacute; choisie)<br>
+<li>et si valeur(P1) = valeur(P2).
+</ul>
+
+<p>Une r&eacute;gion de la carte de r&eacute;gions <i>rg_out</i> est d&eacute;finie par une ensemble
+de pixels ayant exactement le m&ecirc;me label. Chaque r&eacute;gion re&ccedil;oit
+un num&eacute;ro de label unique et minimal mais non nul.
+Les valeurs de label sont attribu&eacute;es au hasard:
+La premi&egrave;re r&eacute;gion form&eacute;e re&ccedil;oit le num&eacute;ro 1, la suivante 2 etc.
+Il n'y a pas de trou dans la num&eacute;rotation, toutes les r&eacute;gions
+entre 1 et le nombre de labels sont attribu&eacute;es.</p>
+
+<p>Si <i>im_in</i> est une carte de r&eacute;gions, alors <b>plabeling</b> permet
+de renum&eacute;roter la carte de r&eacute;gions, pour minimiser le nombre de labels
+en comblant les trous dans la num&eacute;rotation.</p>
+
+<p>Remarque: le label 0 &agrave; une s&eacute;mantique particuli&egrave;re dans Pandore. Une r&eacute;gion
+de label 0 est consid&eacute;r&eacute;e comme une non-r&eacute;gion.</p>
+
+<!---------------------------------- -->
+<h3>Param&egrave;tres</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>connexity</i> d&eacute;finit la notion de voisinage.
+Les valeurs possibles sont:
+<ul>
+<li>8 ou 4 voisinage en 2D;
+<li>6 ou 26 voisinage en 3D.
+</ul>
+</ul>
+
+<!---------------------------------- -->
+<h3>Entr&eacute;es</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_in</i>: une image de niveaux de gris, une carte de r&eacute;gions ou un graphe.
+</ul>
+
+<!---------------------------------- -->
+<h3>Sorties</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>rg_out</i>: une carte de r&eacute;gions ou un graphe.
+</ul>
+
+<!---------------------------------- -->
+<h3>Exemples</h3>
+<!---------------------------------- -->
+<p>Squelette par zone d'influence (le skiz).</p>
+<pre>
+   pbinarization 100 1e30 tangram.pan i1.pan
+   pdistance i1.pan i2.pan
+   plabeling 8 i1.pan i3.pan
+   pwatershed i3.pan i2.pan i4.pan
+   pboundary 8 i4.pan out.pan
+</pre>
+
+<!---------------------------------- -->
+<h3>R&eacute;sultat</h3>
+<!---------------------------------- -->
+<p>Retourne le nombre de r&eacute;gions construites<br>
+ou FAILURE en cas d'erreur.</p>
+
+<!---------------------------------- -->
+<h3>Voir aussi</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#segmentation">Segmentation</a>
+
+<!---------------------------------- -->
+<h3>Prototype C++</h3>
+<!---------------------------------- -->
+<tt>
+Errc PLabeling( const Img2duc &amp;im_in, Reg2d &amp;rg_out, int connexity );
+</tt>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Auteur: R&eacute;gis Clouard
+</address>
+<!---------------------------------- -->
+</body>
+</html>

@@ -1,0 +1,135 @@
+<html>
+<head>
+<title>PANDORE OPERATORS</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>pweszka</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Performs multi-thresholding on image using Weszka algorithm.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>pweszka</b> <i>length</i> [<i>-m mask</i>] [<i>im_in</i>|-] [<i>im_out</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p><b>pweszka</b> classifies the input image pixels
+into a small number of clusters according to their value.
+Every pixel p of the input image is assigned to a cluster
+identified by the related threshold value:
+<pre>
+   if threshold[k-1]&lt;im_out[p]&lt;=threshold[k].
+   then im_out[p]=threshold[k]
+</pre>
+
+<p>The last threshold is equal to 255.</p>
+
+<p>The number of clusters and the value of the thresholds are determined from the
+Weszka algorithm. It is based on the measure of the busyness ratio.
+For each gray level i the busyness ratio is:</p>
+<pre>
+   busyness(i) = SUM(SUM(Tkl)) + SUM(SUM(Tpq))
+</pre>
+<p>with k in [0..i], l in [i+1..N-1], p in [i+1..N-1] and q in [0..i].</p>
+
+<p>The co-occurrence matrix Tkl contains the number of times the gray level 
+k is a neighbor of the gray level l considering the neighborhood
+Nxy={ (x,y+1), (x,y-1), (x-1,y), (x+1,y) }.</p>
+
+<p>Then the thresholds are located as regional minima of the busyness function.
+The minima are searched in the space of <i>length</i> gray levels
+around the gray level i.</p>
+
+<p><b>Notice</b>: This operator can only work on
+grayscale image of bytes.</p>
+
+<!---------------------------------- -->
+<h3>Parameters</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>length</i> defined the length of the
+search space of the regional minima. It is defined in gray level unit.
+The greater is the length, the less there are thresholds.
+A typical value is 10.
+</ul>
+
+<!---------------------------------- -->
+<h3>Inputs</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_in</i>: a grayscale image of bytes (Img2duc, Img3duc).
+</ul>
+
+<!---------------------------------- -->
+<h3>Outputs</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_out</i>: a grayscale image of bytes (Img2duc, Img3duc).
+</ul>
+
+<!---------------------------------- -->
+<h3>Result</h3>
+<!---------------------------------- -->
+<p>Returns the number of thresholds.</p>
+
+<!---------------------------------- -->
+<h3>Examples</h3>
+<!---------------------------------- -->
+<p>Segments tangram.pan and displays the number of thresholds:</p>
+<pre>
+   pweszka 10 tangram.pan out.pan
+   pstatus
+</pre>
+
+<!---------------------------------- -->
+<h3>See also</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#thresholding">Thresholding</a>
+
+<!---------------------------------- -->
+<h3>C++ prototype</h3>
+<!---------------------------------- -->
+<tt>
+Errc PWeszka( const Img2duc &amp;im_in, Img2duc &amp;im_out, int length );
+</tt>
+
+<!---------------------------------- -->
+<h3>Version fran&ccedil;aise</h3>
+<!---------------------------------- -->
+<p>Multiseuillage de l'image par analyse de la matrice de co-occurence selon Weszka.</p>
+
+<!---------------------------------- -->
+<h3>Reference</h3>
+<!---------------------------------- -->
+<p>J.S. Weszka, "Survey of threshold selection techniques", <i>Computer Graphics and Image Processing</i>, Vol.7, pp. 259-265, 1978.</p>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Author: R&eacute;gis Clouard
+</address>
+<!---------------------------------- -->
+</body>
+</html>

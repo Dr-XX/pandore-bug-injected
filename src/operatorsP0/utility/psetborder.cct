@@ -1,0 +1,362 @@
+/* -*- c-basic-offset: 3; mode: c++ -*-
+ *
+ * Copyright (c), GREYC.
+ * All rights reserved
+ *
+ * You may use this file under the terms of the BSD license as follows:
+ *
+ * "Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are
+ * met:
+ *   * Redistributions of source code must retain the above copyright
+ *     notice, this list of conditions and the following disclaimer.
+ *   * Redistributions in binary form must reproduce the above copyright
+ *     notice, this list of conditions and the following disclaimer in
+ *     the documentation and/or other materials provided with the
+ *     distribution.
+ *   * Neither the name of the GREYC, nor the name of its
+ *     contributors may be used to endorse or promote products
+ *     derived from this software without specific prior written
+ *     permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
+ *
+ * 
+ * For more information, refer to:
+ * https://clouard.users.greyc.fr/Pandore
+ */
+
+/**
+ * @author Régis Clouard - 1997-07-23
+ */
+
+#include <pandore.h>
+using namespace pandore;
+
+/**
+ * @file psetborder.cpp
+ * Sets the border valuea to val with dimension (l,h,w).
+ */
+
+##begin SETBORDER2D(TYPE)
+Errc PSetBorder( const TYPE &ims, TYPE &imd, Long ll, Long lr, Long hu, Long hd, TYPE::ValueType val ) {
+   register int x,y;
+   
+   if (lr>ims.Width() || ll>ims.Width() || hu>ims.Height() || hd>ims.Height() ||
+       lr<0 || ll<0 || hu<0 || hd<0)
+      return FAILURE;
+   
+   imd = ims;
+   
+   for (x=0; x<imd.Width(); x++) {
+      for (y=0; y<hd; y++)
+	 imd[y][x] = val;
+      for (y=0; y<hu; y++)
+	 imd[ims.Height()-y-1][x] = val;
+   }
+
+   for (y=0; y<imd.Height(); y++) {
+      for (x=0; x<ll; x++)
+	 imd[y][x] = val;
+      for (x=0; x<lr; x++)
+	 imd[y][ims.Width()-1-x] = val;
+   }
+   
+   return SUCCESS;
+}
+
+## append loadcases
+   if (objs[0]->Type() == Po_$TYPE) {
+      TYPE* const ims=(TYPE*)objs[0];
+      objd[0]=new TYPE(ims->Size());
+      TYPE* const imd=(TYPE*)objd[0];
+      result=PSetBorder(*ims,*imd,atol(parv[0]),atol(parv[1]),
+		     atol(parv[2]),atol(parv[3]),
+		     (TYPE::ValueType)atof(parv[6]));
+      goto end;
+   }
+
+## end
+##end 
+
+##begin SETBORDERR2D(TYPE)
+Errc PSetBorder( const TYPE &ims, TYPE &imd, Long ll, Long lr, Long hu, Long hd, TYPE::ValueType val ) {
+   register int x,y;
+   
+   if (lr>ims.Width() || ll>ims.Width() || hu>ims.Height() || hd>ims.Height() ||
+       lr<0 || ll<0 || hu<0 || hd<0)
+      return FAILURE;
+   
+   imd = ims;
+   
+   for (x=0; x<imd.Width(); x++) {
+      for (y=0; y<hd; y++)
+	 imd(y,x) = val;
+      for (y=0; y<hu; y++)
+	 imd(ims.Height()-y-1,x) = val;
+   }
+
+   for (y=0; y<imd.Height(); y++) {
+      for (x=0; x<ll; x++)
+	 imd(y,x) = val;
+      for (x=0; x<lr; x++)
+	 imd(y,ims.Width()-1-x) = val;
+   }
+   if (val>ims.Labels()) {
+      imd.Labels(val);
+   } else {
+      imd.Labels(ims.Labels());
+   }
+   return SUCCESS;
+}
+
+## append loadcases
+   if (objs[0]->Type() == Po_$TYPE) {
+      TYPE* const ims=(TYPE*)objs[0];
+      objd[0]=new TYPE(ims->Size());
+      TYPE* const imd=(TYPE*)objd[0];
+      result=PSetBorder(*ims,*imd,atol(parv[0]),atol(parv[1]),
+		     atol(parv[2]),atol(parv[3]),
+		     (TYPE::ValueType)atof(parv[6]));
+      goto end;
+   }
+
+## end
+##end 
+
+##begin SETBORDER2Dx(TYPE)
+Errc PSetBorder( const TYPE &ims, TYPE &imd, Long ll, Long lr, Long hu, Long hd, TYPE::ValueType val ) {
+   register int x,y,b;
+   
+   if (lr>ims.Width()/2 || ll>ims.Width()/2 || hu>ims.Height()/2 || hd>ims.Height()/2 ||
+       lr<0 || ll<0 || hu<0 || hd<0)
+      return FAILURE;
+   
+   imd = ims;
+
+   for (x=0; x<imd.Width(); x++) {
+      for (y=0; y<hu; y++)
+	 for (b=0;b<imd.Bands();b++)
+	    imd[b][y][x] = val;
+      for (y=0; y<hd; y++)
+	 for (b=0;b<imd.Bands();b++)
+	    imd[b][ims.Height()-y-1][x] = val;
+   }
+
+   for (y=0; y<imd.Height(); y++) {
+      for (x=0; x<ll; x++)
+	 for (b=0;b<imd.Bands();b++)
+	    imd[b][y][x] = val;
+      for (x=0; x<lr; x++)
+	 for (b=0;b<imd.Bands();b++)
+	    imd[b][y][ims.Width()-1-x] = val;
+   }
+
+   return SUCCESS;
+}
+## append loadcases
+   if (objs[0]->Type() == Po_$TYPE) {
+      TYPE* const ims=(TYPE*)objs[0];
+      objd[0]=new TYPE(ims->Bands(),ims->Size());
+      TYPE* const imd=(TYPE*)objd[0];
+      result=PSetBorder(*ims,*imd,atol(parv[0]),atol(parv[1]),
+		     atol(parv[2]),atol(parv[3]),
+		     (TYPE::ValueType)atof(parv[6]));
+      goto end;
+   }
+
+## end
+##end 
+
+
+##begin SETBORDER3D(TYPE)
+Errc PSetBorder( const TYPE &ims, TYPE &imd, Long ll, Long lr, Long hu, Long hd, Long df, Long db, TYPE::ValueType val ) {
+   register int	x,y,z;
+
+   if (lr>ims.Width() || ll>ims.Width() || hu>ims.Height() || hd>ims.Height() || df>ims.Depth() || db>ims.Depth() ||
+       lr<0 || ll<0 || hu<0 || hd<0 || df<0 || db<0)
+      return FAILURE;
+   
+   imd = ims;
+   for (y=0; y<imd.Height(); y++)
+      for (x=0; x<imd.Width(); x++) {
+	 for (z=0; z<df; z++)
+	    imd[z][y][x] = val;
+	 for (z=0; z<db; z++)
+	    imd[imd.Depth()-1-z][y][x] = val;
+      }
+   for (z=0; z<imd.Depth(); z++)
+      for (x=0; x<imd.Width(); x++) {
+	 for (y=0; y<hu; y++) 
+	    imd[z][y][x] = val;
+	 for (y=0; y<hd; y++) 
+	    imd[z][imd.Height()-1-y][x] = val;
+      }
+   for (z=0; z<imd.Depth(); z++)
+      for (y=0; y<imd.Height(); y++) {
+	 for (x=0; x<ll; x++)
+	    imd[z][y][x] = val;
+	 for (x=0; x<lr; x++)
+	    imd[z][y][imd.Width()-1-x] = val;
+      }
+   return SUCCESS;
+}
+## append loadcases
+   if (objs[0]->Type() == Po_$TYPE) {
+      TYPE* const ims=(TYPE*)objs[0];
+      objd[0]=new TYPE(ims->Size());
+      TYPE* const imd=(TYPE*)objd[0];
+      result=PSetBorder(*ims,*imd,atol(parv[0]),atol(parv[2]),
+		     atol(parv[2]),atol(parv[3]),
+		     atol(parv[4]),atol(parv[5]),
+		     (TYPE::ValueType)atof(parv[6]));
+      goto end;
+   }
+## end 
+##end 
+
+
+##begin SETBORDER3Dx(TYPE)
+Errc PSetBorder( const TYPE &ims, TYPE &imd, Long ll, Long lr, Long hu, Long hd, Long df, Long db, TYPE::ValueType val ) {
+   register int	x,y,z,b;
+
+   if (lr>ims.Width() || ll>ims.Width() || hu>ims.Height() || hd>ims.Height() || df>ims.Depth() || db>ims.Depth() ||
+       lr<0 || ll<0 || hu<0 || hd<0 || df<0 || db<0)
+      return FAILURE;
+   
+   imd = ims;
+   for (y=0; y<imd.Height(); y++)
+      for (x=0; x<imd.Width(); x++) {
+	 for (z=0; z<df; z++)
+	    for (b=0;b<imd.Bands();b++)
+	       imd[b][z][y][x] = val;
+	 for (z=0; z<db; z++)
+	    for (b=0;b<imd.Bands();b++)
+	       imd[b][imd.Depth()-1-z][y][x] = val;
+      }
+   
+   for (z=0; z<imd.Depth(); z++)
+      for (x=0; x<imd.Width(); x++) {
+	 for (y=0; y<hu; y++)
+	    for (b=0;b<imd.Bands();b++)
+	       imd[b][z][y][x] = val;
+	 for (y=0; y<hd; y++)
+	    for (b=0;b<imd.Bands();b++)
+	       imd[b][z][imd.Height()-1-y][x] = val;
+      }
+   
+   for (z=0; z<imd.Depth(); z++)
+      for (y=0; y<imd.Height(); y++) {
+	 for (x=0; x<ll; x++)
+	    for (b=0;b<imd.Bands();b++)
+	       imd[b][z][y][x] = val;
+	 for (x=0; x<lr; x++)
+	    for (b=0;b<imd.Bands();b++)
+	       imd[b][z][y][imd.Width()-1-x] = val;
+      }
+   return SUCCESS;
+}
+
+## append loadcases
+   if (objs[0]->Type() == Po_$TYPE) {
+      TYPE* const ims=(TYPE*)objs[0];
+      objd[0]=new TYPE(ims->Bands(),ims->Size());
+      TYPE* const imd=(TYPE*)objd[0];
+      result=PSetBorder(*ims,*imd,(Long)atoi(parv[0]),(Long)atoi(parv[1]),
+		     (Long)atoi(parv[2]),(Long)atoi(parv[3]),
+		     (Long)atoi(parv[4]),(Long)atoi(parv[5]),
+		     (TYPE::ValueType)atoi(parv[6]));
+      goto end;
+   }
+## end 
+##end 
+
+##begin SETBORDERR3D(TYPE)
+Errc PSetBorder( const TYPE &ims, TYPE &imd, Long ll, Long lr, Long hu, Long hd, Long df, Long db, TYPE::ValueType val ) {
+   register int	x,y,z;
+
+   if (lr>ims.Width() || ll>ims.Width() || hu>ims.Height() || hd>ims.Height() || df>ims.Depth() || db>ims.Depth() ||
+       lr<0 || ll<0 || hu<0 || hd<0 || df<0 || db<0) {
+      return FAILURE;
+   }
+   imd = ims;
+   for (y=0; y<imd.Height(); y++) {
+      for (x=0; x<imd.Width(); x++) {
+	 for (z=0; z<df; z++) {
+	    imd(z,y,x) = val;
+	 }
+	 for (z=0; z<db; z++) {
+	    imd(imd.Depth()-1-z,y,x) = val;
+	 }
+      }
+   }
+   for (z=0; z<imd.Depth(); z++) {
+      for (x=0; x<imd.Width(); x++) {
+	 for (y=0; y<hu; y++) {
+	    imd(z,y,x) = val;
+	 }
+	 for (y=0; y<hd; y++) {
+	    imd(z,imd.Height()-1-y,x) = val;
+	 }
+      }
+   }
+   for (z=0; z<imd.Depth(); z++) {
+      for (y=0; y<imd.Height(); y++) {
+	 for (x=0; x<ll; x++) {
+	    imd(z,y,x) = val;
+	 }
+	 for (x=0; x<lr; x++) {
+	    imd(z,y,imd.Width()-1-x) = val;
+	 }
+      }
+   }
+   if (val > ims.Labels()) {
+      imd.Labels(val);
+   } else {
+      imd.Labels(ims.Labels());
+   }
+   return SUCCESS;
+}
+
+## append loadcases
+   if (objs[0]->Type() == Po_$TYPE) {
+      TYPE* const ims=(TYPE*)objs[0];
+      objd[0]=new TYPE(ims->Size());
+      TYPE* const imd=(TYPE*)objd[0];
+      result=PSetBorder(*ims,*imd,(Long)atoi(parv[0]),(Long)atoi(parv[1]),
+		     (Long)atoi(parv[2]),(Long)atoi(parv[3]),
+		     (Long)atoi(parv[4]),(Long)atoi(parv[5]),
+		     (TYPE::ValueType)atoi(parv[6]));
+      goto end;
+   }
+## end 
+##end 
+
+##forall(SETBORDER2D,/Img2d/)
+##forall(SETBORDER2Dx,/Im[cx]2d/)
+##forall(SETBORDERR2D,/Reg2d/)
+
+##forall(SETBORDER3D,/Img3d/)
+##forall(SETBORDER3Dx,/Im[cx]3d/)
+##forall(SETBORDERR3D,/Reg3d/)
+
+#ifdef MAIN
+#define	USAGE	"usage: %s widthr widthl heightu heightb depthf depthb value [im_in|-] [im_out|-]"
+#define	PARC	7
+#define	FINC	1
+#define	FOUTC	1
+#define	MASK	0
+
+##main(PARC,FINC,FOUTC,MASK,USAGE)
+
+#endif

@@ -1,0 +1,106 @@
+<html>
+<head>
+<title>OPERATEURS PANDORE</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff"><center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>pcolgetimages</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Extraction des images d'une collection.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>pcol2images</b> [<i>col_in</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p>L'o&eacute;perateur <b>pcolgetimages</b> extrait toutes
+les images de la collection d'entr&eacute;e <i>col_in</i>.
+Chaque image est sauv&eacute;e dans le fichier nomm&eacute;
+&agrave; partir du nom dans la collection
+suffix&eacute;e ".pan".</p>
+
+<p>Par exemple, si la commande "pfile col.pan" retourne :</p>
+<pre>
+Creator   : pandore
+Date      : 2005/04/13
+Type      : Collection (Bundle of elements)
+Number of elements : 3
+        attr       (8 elements)   Array:Ulong
+        image2d    (1 element)    Pobject:Img2duc
+        image3d    (1 element)    Pobject:Img3duc
+</pre>
+<p>alors la commande "pcolgetimages col.pan" construit :</P>
+<pre>
+image2d.pan
+image3d.pan
+</pre>
+
+<p>L'op&eacute;rateur <a href="./pcolgetobject.html">pcolgetobject</a> 
+peut &ecirc;tre utilis&eacute; pour extraire une seule image d'une collection.</P>
+
+<!---------------------------------- -->
+<h3>Entr&eacute;es</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>col_in</i>: une collection.
+</ul>
+
+<!---------------------------------- -->
+<h3>R&eacute;sultat</h3>
+<!---------------------------------- -->
+<p>Retourne SUCCESS ou FAILURE si au moins
+une image ne peut pas &ecirc;tre sauv&eacute;e.</p>
+
+<!---------------------------------- -->
+<h3>Exemples</h3>
+<!---------------------------------- -->
+<p>Ajoute les 2 images tangram.pan et femme.pan dans une collection
+puis extrait ces images dans deux autres fichiers :</P>
+<pre>
+pobject2col image1 tangram.pan c1.pan
+pobject2col image1 femme.pan c2.pan
+concateneattribut c1.pan c2.pan col.pan
+pcol2images col.pan
+</pre>
+
+<!---------------------------------- -->
+<h3>Voir aussi</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#collection">Collection</a>
+
+<!---------------------------------- -->
+<h3>Prototype C++</h3>
+<!---------------------------------- -->
+<tt>
+Errc PColGetImages( Collection &amp;col_in );
+</tt>
+		      
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Auteur: Nicolas Briand
+</address>
+<!---------------------------------- -->
+</body>
+</html>

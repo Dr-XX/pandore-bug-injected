@@ -1,0 +1,107 @@
+<html>
+<head>
+<title>PANDORE OPERATORS</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>pinnermostmerging</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Performs inner-most region merging.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>pmostinnermostmerging</b> [<i>-m mask</i>] [<i>rg_in1</i>|-] [<i>rg_in2</i>|-] [<i>rg_out</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p><b>pinnermostmerging</b>
+merges regions of input region map
+<i>rg_in1</i> to regions of input region map <i>rg_in2</i>
+if <i>rg_in2</i> regions are inner-most <i>rg_in1</i> regions.</p>
+
+<p>Inner region in <i>rg_in2</i> is merged with the
+including region of input region map <i>rg_in</i> that has the longest
+common boundary points with the inner region other than region 0.
+Regions of region map <i>rg_in2</i> that have no neighbor
+in the region map <i>rg_in1</i> 
+are not kept in the output region map <i>rg_out</i>.</p>
+
+<!---------------------------------- -->
+<h3>Inputs</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>rg_in</i>: a region map.
+<li><i>gr_in</i>: a region map with the regions to be merged.
+</ul>
+
+<!---------------------------------- -->
+<h3>Outputs</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>rg_out</i>: a region map.
+</ul>
+
+<!---------------------------------- -->
+<h3>Result</h3>
+<!---------------------------------- -->
+<p>Returns the number of merged regionß.</p>
+
+<!---------------------------------- -->
+<h3>Examples</h3>
+<!---------------------------------- -->
+<p>Segments tangram.pan and then merges inner regions:</p>
+<pre>
+    pbinarization 96 1e30 tangram.pan a.pan
+    plabeling 8 a.pan b.pan
+    pfillhole b.pan c.pan
+    pdif b.pan c.pan d.pan
+    plabeling 8 d.pan e.pan
+    pinnermostmerging b.pan e.pan out.pan
+</pre>
+
+<!---------------------------------- -->
+<h3>See also</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#segmentation">Segmentation</a>
+
+<!---------------------------------- -->
+<h3>C++ prototype</h3>
+<!---------------------------------- -->
+<tt>
+Errc PMostInneMostMerging( const Reg2d &amp;rg_in1, const Reg2d &amp;rg_in2, Reg2d &amp;rg_out );
+</tt>
+
+<!---------------------------------- -->
+<h3>Version fran&ccedil;aise</h3>
+<!---------------------------------- -->
+<p>Fusion de r&eacute;gions avec la région voisine la plus englobante.</p>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Author: R&eacute;gis Clouard
+</address>
+<!---------------------------------- -->
+</body>
+</html>

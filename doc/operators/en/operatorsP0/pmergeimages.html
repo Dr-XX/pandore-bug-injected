@@ -1,0 +1,121 @@
+<html>
+<head>
+<title>PANDORE OPERATORS</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff"><center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>pmergeimages</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Merges 4 images into one image.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>pmergeimages</b> [<i>im_in1</i>|-] [<i>im_in2</i>|-] [<i>im_in3</i>|-] [<i>im_in4</i>|-] [<i>im_out</i>| -]
+</tt> 
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p><b>pmergeimages</b> merges the four input images
+<i>im_in1</i>, <i>im_in2</i>, <i>im_in3</i>, <i>im_in4</i> to build
+the output image <i>im_out</i>. They are merged as follows:</p>
+<pre>
+    [im_in1][im_in2]
+    [im_in3][im_in4] 
+</pre>
+
+<p>The input images are supposed to be of the same type.
+They size must be compatible:</p>
+<ul>
+<li><i>im_in1</i> width = <i>im_in3</i> width;
+<li><i>im_in2</i> width = <i>im_in4</i> width;
+<li><i>im_in1</i> height = <i>im_in2</i> height;
+<li><i>im_in3</i> height = <i>im_in4</i> height;
+</ul>
+
+<p>The size of the output image 
+is (<i>im_in1</i> +  <i>im_in2</i>) width  and
+(<i>im_in1</i> +  <i>im_in3</i>) height.</p>
+
+<!---------------------------------- -->
+<h3>Inputs</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_in1</i>, <i>im_in2</i>, <i>im_in3</i>, <i>im_in4</i>: 2D images
+of the same type and with compatible size.
+</ul>
+
+<!---------------------------------- -->
+<h3>Outputs</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_out</i>: a 2D image.
+</ul>
+
+<!---------------------------------- -->
+<h3>Result</h3>
+<!---------------------------------- -->
+<p>Returns SUCCESS or FAILURE.</p>
+
+<!---------------------------------- -->
+<h3>Examples</h3>
+<!---------------------------------- -->
+<p>Builds a synthetic image to illustrate the Gibbs phenomenon in wavelets analysis.</p>
+<pre>
+   pshapedesign 256 256 0 2 150 150 a.pan
+   pqmf daubechies 4 b.pan
+   pdwt 1 a.pan b.pan c.pan
+   psplitimage c.pan d1.pan d2.pan d3.pan d4.pan
+   pthresholding 20 400 d2.pan e2.pan
+   pthresholding 20 400 d3.pan e3.pan
+   pthresholding 20 400 d4.pan e4.pan
+   pmergeimages d1.pan e2.pan e3.pan e4.pan f.pan
+   pidwt 1 f.pan b.pan out.pan
+</pre>
+
+<!---------------------------------- -->
+<h3>See also</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#utility">Utility</a>,
+<a href="./psplitimage.html">psplitimage</a>
+
+<!---------------------------------- -->
+<h3>C++ prototype</h3>
+<!---------------------------------- -->
+<tt>
+Errc PPsplitImage( const Img2dsd &amp;im_in1, const Img2dsd &amp;im_in2, const Img2dsd &amp;im_in3, const Img2dsd &amp;im_in4, Img2dsd &amp;im_out );
+</tt> 
+
+<!---------------------------------- -->
+<h3>Version fran&ccedil;aise</h3>
+<!---------------------------------- -->
+<p>Regroupement de 4 sous-images en une seule.</p>
+
+<hr>
+<p>
+
+<!---------------------------------- -->
+<address>
+Author: Ludovic Soltys 
+</address>
+<!---------------------------------- -->
+
+</body>
+</html>

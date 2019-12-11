@@ -1,0 +1,157 @@
+<html>
+<head>
+<title>PANDORE OPERATORS</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>paddnoise</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Adds artificial noise to image.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>paddnoise</b> <i>law</i> <i>mean</i> <i>std_dev</i> [<i>-m mask</i>] [<i>im_in</i>|-] [<i>im_out</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p><b>paddnoise</b> adds artificial noise to the input image <i>im_in</i>.
+Several distribution laws exist either additive or multiplicative
+and can be chosen from the parameter <i>law</i>.
+The output image <i>im_out</i> is built as follows:</p>
+<ul>
+<li>additive law: im_out = im_in + im_noise;
+<li>multiplicative law: im_out = im_in * im_noise;
+</ul>
+<p>where <tt>im_noise</tt> is a noise image built from the specified
+distribution law.</p>
+
+<p>Let u1 and u2 be two random variables uniformly
+distributed on the space [0..1]. The noise value
+for pixel p is computed as follows:
+</p>
+<ul>
+<li>gaussian law (Box Muller algorithm):
+<pre>
+  z0=sqrt(-2.0*log(u1))*cos(2.0*M_PI*u2);
+  im_noise[p] = std_dev*z0 + mean;
+</pre>
+
+<li>exponential law (inversion method):
+<pre>
+  z0=-1.0*log(u1);
+  im_noise[p]= std_dev*z0 + mean;
+</pre>
+
+<li>uniform law (rem : std_dev = (max-min)/sqrt(12)):
+<pre>
+  z0=(u1-0.5)*sqrt(12.0);
+  im_noise[p] = std_dev*z0 + mean;
+</pre>
+
+<li>triangular law:
+<pre>
+  z0=(u1+u2-1.0)*sqrt(6.0);  
+  im_noise[p] = std_dev*z0 + mean;
+</pre>
+</ul>
+
+<!---------------------------------- -->
+<h3>Parameters</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>law</i> is an integer which specifies the distribution law:
+  <ul>
+  <li>1: additive gaussian noise.
+  <li>2: additive exponential noise.
+  <li>3: additive uniform noise.
+  <li>4: additive triangular noise.
+
+  <li>11: multiplicative gaussian noise.
+  <li>12: multiplicative exponential noise.
+  <li>13: multiplicative uniform noise.
+  <li>14: multiplicative triangular noise.
+  </ul>
+
+<li><i>mean</i> is a real which defines the mean of the distribution.
+<li><i>std_dev</i> is a real which defines the standard deviation
+of the distribution.
+</ul>
+
+<!---------------------------------- -->
+<h3>Inputs</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_in</i>: an image.
+</ul>
+
+<!---------------------------------- -->
+<h3>Outputs</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_out</i>: an image of the same type as <i>im_in</i>.
+</ul>
+
+<!---------------------------------- -->
+<h3>Result</h3>
+<!---------------------------------- -->
+<p>Returns SUCCESS or FAILURE in case of bad parameter values.</p>
+
+<!---------------------------------- -->
+<h3>Examples</h3>
+<!---------------------------------- -->
+<p>Adds gaussian noise with mean 0 and standard deviation 1.5
+to tangram.pan image and then computes the PSNR for the
+meanfilter smoothing operator:</p>
+<pre>
+   paddnoise 1 0 1.5 tangram.pan a.pan
+   pmeanfilter 2 a.pan i1.pan
+   ppsnr 255 tangram.pan i1.pan
+   pstatus
+</pre>
+
+<!---------------------------------- -->
+<h3>See also</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#utility">Utility</a>
+
+<!---------------------------------- -->
+<h3>C++ prototype</h3>
+<!---------------------------------- -->
+<tt>
+Errc PAddNoise( const Img2duc &amp;im_in, Img2duc &amp;im_out, int law, Float mean, Float std_dev );
+</tt>
+
+<!---------------------------------- -->
+<h3>Version fran&ccedil;aise</h3>
+<!---------------------------------- -->
+<p>G&eacute;nération de bruit aléatoire sur une image.</p>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Author: R&eacute;gis Clouard
+</address>
+<!---------------------------------- -->
+</body>
+</html>

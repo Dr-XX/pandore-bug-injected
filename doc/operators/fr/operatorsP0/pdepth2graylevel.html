@@ -1,0 +1,110 @@
+<html>
+<head>
+<title>PANDORE OPERATORS</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>pdepth2graylevel</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Construction d'une image de niveau de gris 2D &agrave; partir d'une image 3D.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>pdepth2graylevel</b> <i>threshold</i> [<i>-m mask </i>] [<i>im_in</i>|-] [<i>im_out</i>|-] 
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p>L'op&eacute;rateur <b>pdepth2graylevel</b> construit une image 2D &agrave; partir
+d'une image 3D, o&ugrave; les profondeurs de l'image 3D <i>im_in</i>
+sont converties en valeur de niveaux de gris dans l'image 2D <i>im_out</i>.
+La profondeur est d&eacute;finie comme le plan du premier pixel
+ayant une valeur  &gt; <i>threshold</i>. Le premier plan est suppos&eacute;
+&ecirc;tre &agrave; la profondeur 0.</P>
+
+<p>L'algorithme est le suivant:</p>
+<pre>
+  for (z=0; z< depth(im_in); z++)
+      if (im_in[z][y][x] &gt; threshold ) then im-out[p.y][p.x] = p.z;
+</pre>
+
+<!---------------------------------- -->
+<h3>Param&egrave;tres</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>threshold</i> d&eacute;finit la couleur maximum de transparence.
+Chaque pixel de valeur &le; <i>threshold</i> est consid&eacute;r&eacute;e
+comme une couleur transparente.
+</ul>
+
+<!---------------------------------- -->
+<h3>Entr&eacute;es</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_in</i>: une image de niveaux de gris 3D de Uchar.
+
+</ul>
+
+<!---------------------------------- -->
+<h3>Sorties</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_out</i>: une image 2D de Slong (Img2dsl).
+</ul>
+
+<!---------------------------------- -->
+<h3>R&eacute;sultat</h3>
+<!---------------------------------- -->
+<p>Retourne SUCCESS ou FAILURE.</p>
+
+<!---------------------------------- -->
+<h3>Exemples</h3>
+<!---------------------------------- -->
+<p>Construit un Random Dot Stereogram &agrave; partir de l'image cyto3d.pan:</p>
+<pre>
+   pdepth2graylevel 50 cyto3d.pan i0.pan
+   pmultcst 10 i0.pan i1.pan
+   prds i1.pan rds_out.pan
+</pre>
+
+<!---------------------------------- -->
+<h3>Voir aussi</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#utility">Utilitaire</a>,
+<a href="./pgraylevel2depth.html">pgraylevel2depth</a>
+
+<!---------------------------------- -->
+<h3>Prototype C++</h3>
+<!---------------------------------- -->
+<tt>
+Errc PDepth2Graylevel( const Img3duc &amp;im_in, Img2dsl &amp;im_out, long threshold );
+</tt>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Auteur: Jean-Marie Janik
+</address>
+<!---------------------------------- -->
+</body>
+</html>

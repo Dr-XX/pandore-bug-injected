@@ -1,0 +1,120 @@
+<html>
+<head>
+<title>PANDORE OPERATORS</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>pentropyvalue</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Calcul de l'entropie d'une image ou d'un graphe.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>pentropyvalue</b> [<i>im_in</i>|-] [<i>col_out</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p>L'op&eacute;rateur <b>pentropyvalue</b> permet de calculer
+l'entropie totale d'une image ou d'une graphe.</p>
+
+<p>L'entropie au sens de Shannon mesure la qualit&eacute; d'information 
+port&eacute;e par l'image <i>im_in</i>.
+Plus un pixel est rare, plus il est porteur d'information et
+plus l'entropie est grande (i.e., le d&eacute;sordre est important).</p>
+
+<p>La mesure d'entropie est faite selon la formule:</p>
+<pre>
+   entropie= - SOMME { Pi * log2(Pi) }
+   o&ugrave; Pi est la probabilit&eacute; d'apparition du niveau de gris i.
+   (Pi est calcul&eacute; &agrave; partir de l'histogramme normalis&eacute;).
+</pre>
+
+<p>Les valeurs d'entropie de chaque bande sont stock&eacute;es
+dans la collection <i>col_out</i>.</p>
+<p>Les valeurs moyennes de chaque bande sont stock&eacute;es
+dans la collection <i>col_out</i>.</p>
+
+<p>Remarque: Cet op&eacute;rateur ne  fonctionne pas sur les images de
+r&eacute;els parce que dans  ce cas la probabilit&eacute; d'apparition
+d'un pixel est pratiquement de 1/N. Il faut alors normaliser l'image avec
+d'autres op&eacute;rateurs pour la convertir en image d'entiers.</p>
+
+<!---------------------------------- -->
+<h3>Entr&eacute;es</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_in</i>: une image ou un graphe.
+</ul>
+
+<!---------------------------------- -->
+<h3>Sorties</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>col_out</i>: une collection de valeurs r&eacute;elles.
+</ul>
+
+<!---------------------------------- -->
+<h3>R&eacute;sultat</h3>
+<!---------------------------------- -->
+<p>Retourne la valeur d'entropie globale.<br>
+La valeur est accessible par la commande <b>pstatus</b>.</p>
+
+<!---------------------------------- -->
+<h3>Exemples</h3>
+<!---------------------------------- -->
+<p>Mesure l'entropie globale de l'image tangram.pan (version Unix):</p>
+<pre>
+   pentropyvalue tangram.pan col.pan
+   var=`pstatus`
+   echo "Entropie = $val"
+</pre>
+
+<p>Mesure l'entropie globale de l'image tangram.pan (version MsDos):</p>
+<pre>
+   pentropyvalue tangram.pan col.pan
+   call pstatus
+   call pset var
+   echo Entropie = %val%
+</pre>
+
+<!---------------------------------- -->
+<h3>Voir aussi</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#imagefeaturesextraction">Caract&eacute;risation image</a>
+
+<!---------------------------------- -->
+<h3>Prototype C++</h3>
+<!---------------------------------- -->
+<tt>
+Errc PEntropyValue( const Img2duc &amp;im_in, Collection &amp; col_out );
+</tt>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Auteur: R&eacute;gis Clouard
+</address>
+<!---------------------------------- -->
+</body>
+</html>

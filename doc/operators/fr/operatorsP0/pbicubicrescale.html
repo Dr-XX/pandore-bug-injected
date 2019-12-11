@@ -1,0 +1,122 @@
+<html>
+<head>
+<title>OPERATEURS PANDORE</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>pbicubicrescale</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Augmentation ou r&eacute;duction de la taille d'une image par interpolation bicubique.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>pbicubicrescale</b> <i>rescalex</i> <i>rescaley</i> <i>rescaleyz</i> [<i>im_in</i>|-] [<i>im_out</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p>L'op&eacute;rateur <b>pbicubicrescale</b> permet l'agrandissement ou la r&eacute;duction de
+la taille d'une image par un facteur
+<i>rescalex</i> selon l'axe x,
+<i>rescaley</i> selon l'axe y et
+<i>rescalez</i> selon l'axe z (pour les images 3D).
+L'image est agrandie selon un axe si le facteur de rescale est &gt; 1 et
+r&eacute;duite si le facteur de rescale est &gt;0 et &lt;1.</p>
+
+<p>Cette version utilise l'interpolation bicubique.
+Pour l'interpolation bicubique, la valeur du pixel de sortie
+est une moyenne pond&eacute;r&eacute;e des pixels dans le voisinage 4-4 autour du pixel.</p>
+
+<p>Cet op&eacute;rateur n&eacute;cessite un temps d'ex&eacute;cution tr&egrave;s long.</p>
+<p>Pour retailler une carte de r&eacute;gions ou un graphe, il faut utiliser
+l'op&eacute;rateur <a href="./prescale.html">prescale</a>.</p>
+
+<!---------------------------------- -->
+<h3>Param&egrave;tres</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>rescalex</i>, <i>rescaley</i>, <i>rescalez</i>
+sont des r&eacute;els positifs correspondant aux facteurs d'agrandissement.<br>
+Si les rescales sont &gt; 1 alors il s'agit 
+d'un agrandissement, s'ils sont &lt; 1 alors
+il s'agit d'une r&eacute;duction.<br>
+(<i>rescalez</i> est ignor&eacute; puisque l'op&eacute;rateur ne fonctionne
+que pour les images 2D.)
+</ul>
+
+<!---------------------------------- -->
+<h3>Entr&eacute;es</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_in</i>: une image 2D.
+</ul>
+
+<!---------------------------------- -->
+<h3>Sorties</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_out</i>: une image du m&ecirc;me type que l'image d'entr&eacute;e.
+</ul>
+
+<!---------------------------------- -->
+<h3>R&eacute;sultat</h3>
+<!---------------------------------- -->
+<p>Retourne SUCCESS ou FAILURE.</p>
+
+<!---------------------------------- -->
+<h3>Exemples</h3>
+<!---------------------------------- -->
+<ul>
+<p>Agrandissement de l'image d'un facteur 2 :</p>
+<pre>
+   pbicubicrescale 2 2 0 tangram.pan a.pan
+</pre>
+<p>R&eacute;duction de l'image d'un facteur 2 :</p>
+<pre>
+   pbicubicrescale 0.5 0.5 0 tangram.pan a.pan
+</pre>
+</ul>
+
+<!---------------------------------- -->
+<h3>Voir aussi</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#transformation">Transformation</a>,
+<a href="./plinearrescale.html">plinearrescale</a>,
+<a href="./prescale.html">prescale</a>
+
+<!---------------------------------- -->
+<h3>Prototype C++</h3>
+<!---------------------------------- -->
+<tt>
+Errc PBicubicRescale( const Img2duc &amp;im_in, Img2duc &amp;im_out, float rescaley, float rescalex );
+</tt>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Auteur: R&eacute;gis Clouard
+</address>
+<!---------------------------------- -->
+
+</body>
+</html>

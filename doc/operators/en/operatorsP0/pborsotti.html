@@ -1,0 +1,137 @@
+<html>
+<head>
+<title>PANDORE OPERATORS</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff"><center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>pborsotti</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Computes the goodness measure based on the number, area and variance of regions.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>pborsotti</b> [<i>-m mask</i>] [<i>rg_in</i>|-] [<i>im_in</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p><b>pborsotti</b> computes a goodness measure for quantitative evaluation
+of gray levels, color and multispectral image segmentation results as defined
+by M. Borsotti<sup>*</sup>.<p>
+
+<p>The measure is defined from three criteria:</p>
+<ul>
+<li>regions must be uniform and homogeneous;
+<li>the region's interiors must be simple, without too many small holes;
+<li>adjacent regions must present significantly different values for uniform characteristics.
+</ul>
+
+<p>The measure is computed as follows:</p>
+<pre>
+F(I) = (1/(1000*A)) * sqrt(N) * sum<sub>R</sub> [ (ei<sup>2</sup> / (1+log(Ai)) + (R(Ai)/ Ai)<sup>2</sup>)]
+</pre>
+where 
+<ul> 
+   <li>A is the total area of regions.
+   <li>Ai is the area of the region i.
+   <li>N is the number of regions.
+   <li>R(Ai) is the number of regions that have the same area than Ai.
+   <li>ei is defined as the sum of euclidean distances between the color vectors
+      of the pixel of the region i and the color vector attributed to region i.
+</ul>
+
+<p>The previous equation is composed of three terms:</p>
+<ol>
+<li>a normalization factor that takes into account the size of the image;
+<li>a penalization factor for under-segmented regions;
+<li>the sum is composed of two parts:
+<ul>
+<li>penalization for small regions or heterogeneous of the regions;
+<li>penalization for region with the same size (over-segmentation).
+</ul>
+</ol>
+
+<p>The smaller the value of the Borsotti's measure is, the better the segmentation
+result should be.</p>
+
+<p><b>Caution:</b> Regions with label=0 are not considered for computing.</p>
+
+<!---------------------------------- -->
+<h3>Inputs</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>rg_in</i>: a region map.
+<li><i>im_in</i>: an image.
+</ul>
+
+<!---------------------------------- -->
+<h3>Result</h3>
+<!---------------------------------- -->
+<p>Returns a positive real value.<br>
+(Use <code>pstatus</code> to get this value).</p>
+
+<!---------------------------------- -->
+<h3>Examples</h3>
+<!---------------------------------- -->
+<p>Computes the borsotti measure for
+a simple binarization segmentation process:</p>
+<pre>
+   pbinarization 80 1e30 tangram.pan i1.pan
+   plabeling 8 i1.pan i2.pan
+   pborsotti i2.pan tangram.pan
+   pstatus
+</pre>
+
+<!---------------------------------- -->
+<h3>See also</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#evaluation">Evaluation</a>
+
+<!---------------------------------- -->
+<h3>C++ prototype</h3>
+<!---------------------------------- -->
+<tt>
+Errc PBorsotti( const Reg2d &amp;rg_in, const Imc2duc &amp;im_in );
+</tt>
+
+<!---------------------------------- -->
+<h3>Version fran&ccedil;aise</h3>
+<!---------------------------------- -->
+<p>Calcul du crit&egrave;re de qualit&eacute; basé sur le nombre, l'aire et la variance des régions.</p>
+
+<!---------------------------------- -->
+<h3>Reference</h3>
+<!---------------------------------- -->
+<p><sup>*</sup>M. Borsotti, P. Campadelli, R. Schettini,
+"Quantitative evaluation of color image segmentation results",
+<i>Pattern Recoginition Letters</i>,
+19:741-747, 1998.</p>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Author: R&eacute;gis Clouard
+</address>
+<!---------------------------------- -->
+
+</body>
+</html>

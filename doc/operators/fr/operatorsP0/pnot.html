@@ -1,0 +1,112 @@
+<html>
+<head>
+<title>OPERATEURS PANDORE</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>pnot</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+N&eacute;gation logique d'image ou de graphe et compl&eacute;mentaire d'une carte de r&eacute;gions.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>pnot</b> [<i>-m mask</i>] [<i>im_in</i>|-] [<i>im_out</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p>L'o&eacute;rateur <b>pnot</b> effectue la n&eacute;gation logique
+de l'image d'entr&eacute;e.</p>
+
+<p>Pour les images, la n&eacute;gation utilise l'op&eacute;rateur C '!'.
+Si un pixel est sup&eacute;rieur &agrave; 0
+alors sa valeur devient 0 sinon sa valeur devient 1.</p>
+<pre>
+   pixel(im_out) = ! pixel(im_in)
+</pre>
+
+<p>Pour les images couleur ou multispectrale, la n&eacute;gation
+est appliqu&eacute;e sur chaque bande s&eacute;par&eacute;ment.</p>
+
+<p>Pour les graphes, la n&eacute;gation utilise l'op&eacute;rateur C '!'
+et est appliqu&eacute;e sur les valeurs de noeud.</p>
+
+<p>Pour les cartes de r&eacute;gions, <b>pnot</b> correspond
+au compl&eacute;mentaire des r&eacute;gions.
+Les r&eacute;gions avec un label &gt; 0 deviennent la r&eacute;gion de label=0
+sinon la r&eacute;gion 0 devient la r&eacute;gion de label=1.
+En sortie les r&eacute;gions ne sont plus n&eacute;cessairement connexes.</p>
+
+<!---------------------------------- -->
+<h3>Entr&eacute;es</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_in</i>: une image, un graphe ou une carte de r&eacute;gions.
+</ul>
+
+<!---------------------------------- -->
+<h3>Sorties</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_out</i>: un objet du m&ecirc;me type que l'entr&eacute;e.
+</ul>
+
+<!---------------------------------- -->
+<h3>R&eacute;sultat</h3>
+<!---------------------------------- -->
+<p>Retourne SUCCESS ou FAILURE.
+<br>
+Pour les cartes de r&eacute;gions, retourne la valeur de label maximale (0 or 1).</p>
+
+<!---------------------------------- -->
+<h3>Exemples</h3>
+<!---------------------------------- -->
+<ul>
+<li>S&eacute;lectionne le fond de l'image tangram :
+<pre>
+  pbinarization 100 1e30 examples/tangram.pan a.pan
+  plabeling 8 a.pan b.pan
+  pnot b.pan c.pan
+</pre>
+</ul>
+
+<!---------------------------------- -->
+<h3>Voir aussi</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#logic">Logique</a>
+
+<!---------------------------------- -->
+<h3>Prototype C++</h3>
+<!---------------------------------- -->
+<tt>
+Errc PNot( const Img2duc &amp;im_in, Img2duc &amp;im_out );
+</tt>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Auteur: R&eacute;gis Clouard
+</address>
+<!---------------------------------- -->
+</body>
+</html>

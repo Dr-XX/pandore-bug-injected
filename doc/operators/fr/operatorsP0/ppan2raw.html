@@ -1,0 +1,97 @@
+<html>
+<head>
+<title>OPERATEURS PANDORE</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>ppan2raw</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Conversion d'un fichier image Pandore en un fichier image sans ent&ecirc;te.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>ppan2raw</b> [<i>im_in</i>|-] [<i>file_out</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p>L'op&eacute;rateur <b>ppan2raw</b> permet de transformer une image au format
+Pandore en une image sans ent&ecirc;te (Format RAW). Les fichiers sont des fichiers
+avec des don&eacute;es binaires :</p>
+<ul>
+<li>Les pixels sont &eacute;crits les uns derri&egrave;re les autres selon leur taille.
+<li>Pour les images 2D, les donn&eacute;es sont fournies par ordre des lignes:
+d'abord tous les pixels de la ligne 0, puis de la ligne 1...
+<li>Pour les images 3D, les donn&eacute;es sont fournies par ordre des plans,
+d'abord tous les pixels du plan 0, puis du plan1 ...
+<li>Pour les images couleur, les donn&eacute;es sont fournies par ordre des bandes,
+d'abord tous les pixels de la bande Rouge, puis Verte puis Bleue.
+</ul>
+
+<!---------------------------------- -->
+<h3>Entr&eacute;es</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_in</i>: une image Pandore.
+</ul>
+
+<!---------------------------------- -->
+<h3>Sorties</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>file_out</i>: un fichier binaire.
+</ul>
+
+<!---------------------------------- -->
+<h3>R&eacute;sultat</h3>
+<!---------------------------------- -->
+<p>Retourne SUCCESS ou FAILURE.</p>
+
+<!---------------------------------- -->
+<h3>Exemples</h3>
+<!---------------------------------- -->
+<pre>
+   ppan2raw tangram.pan tangram.raw
+</pre>
+
+<!---------------------------------- -->
+<h3>Voir aussi</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#conversion">Conversion</a>,
+<a href="./praw2pan.html">praw2pan</a>
+
+<!---------------------------------- -->
+<h3>Prototype C++</h3>
+<!---------------------------------- -->
+<tt>
+Errc Raw2Pan( const Img2duc  &amp;im_in, char *filename );
+</tt>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Auteur: R&eacute;gis Clouard
+</address>
+<!---------------------------------- -->
+</body>
+</html>

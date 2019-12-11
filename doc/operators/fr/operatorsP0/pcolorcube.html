@@ -1,0 +1,105 @@
+<html>
+<head>
+<title>OPERATEURS PANDORE</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>pcolorcube</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Visualisation de la r&eacute;partition des couleurs d'une image dans un cube (repr&eacute;sentant l'espace couleur).
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>cubecouleurs</b>  <i>x</i> <i>y</i> <i>z</i> [<i>-m mask</i>] [<i>im_in</i>|-] [<i>im_out</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p>L'op&eacute;rateur <b>pcolorcube</b> permet de
+cr&eacute;er une image synth&eacute;tique couleur
+pour visualiser sous la forme d'un cube RVB la r&eacute;partition des
+couleurs de l'image couleur <i>im_in</i>.</p>
+
+<p>Le cube est vu en 2D selon la position d'un observateur
+donn&eacute;es par les coordonn&eacute;es <i>x</i>,<i>y</i>,<i>z</i> par rapport
+&agrave; l'origine du cube.</p>
+
+<p>L'axe principal de r&eacute;partition des donn&eacute;es
+appara&icirc;t sous la forme d'une droite de couleur blanche.</p>
+
+<!---------------------------------- -->
+<h3>Param&egrave;tres</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>x</i>,<i>y</i> et <i>z</i>
+sp&eacute;cifient la position de l'observateur par
+rapport &agrave; l'origine du rep&egrave;re du cube.
+</ul>
+
+<!---------------------------------- -->
+<h3>Entr&eacute;es</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_in</i>: une image couleur.
+</ul>
+
+<!---------------------------------- -->
+<h3>Sorties</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_out</i>: une image de m&ecirc;me type que l'image d'entr&eacute;e.
+</ul>
+
+<!---------------------------------- -->
+<h3>R&eacute;sultat</h3>
+<!---------------------------------- -->
+<p>Retourne SUCCESS ou FAILURE.</p>
+
+<!---------------------------------- -->
+<h3>Exemples</h3>
+<!---------------------------------- -->
+<p>Affiche le cube couleur de l'image parrot.pan:</P>
+<pre>
+   pcolorcube 0 0 0 parrot.pan a.pan
+</pre>
+
+<!---------------------------------- -->
+<h3>Voir aussi</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#visualization">Visualisation</a>
+
+<!---------------------------------- -->
+<h3>Prototype C++</h3>
+<!---------------------------------- -->
+<tt>
+Errc PCubeCouleurs( const Imc2duc &amp;im_in, Imc2duc &amp;im_out, int x, int y, int z );
+</tt>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Auteur: Olivier Lezoray
+</address>
+<!---------------------------------- -->
+</body>
+</html>

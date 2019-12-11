@@ -1,0 +1,115 @@
+<html>
+<head>
+<title>OPERATEURS PANDORE</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>ptxt2pan</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Conversion d'une liste de points dans un fichier texte en une image.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>ptxt2pan</b> <i>type</i> <i>width</i> <i>height</i> <i>depth</i> <i>file_in</i> [<i>im_out</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p>L'op&eacute;rateur <b>ptxt2pan</b> op&eacute;rateur permet de fabriquer une image de taille (l colonnes, h lignes, p plans)
+et d'y placer les points contenus dans le fichier <i>file_in</i>.
+Le fichier de description <i>file_in</i>doit avoir la structure suivante:</p>
+<pre>
+	valeur x y (z)
+</pre>
+<p>La ligne pr&eacute;c&eacute;dente place la valeur aux coordonn&eacute;es (z,y,x).
+Cette disposition des coordonn&eacute;es permet 
+d'&eacute;liminer <i>z</i> (s'il existe) pour construire une image 2D,
+&agrave; partir d'un fichier 3D.</p>
+
+<!---------------------------------- -->
+<h3>Param&egrave;tres</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>type</i> d&eacute;finit le type d'image &agrave; construire:</p>
+<ul>
+<li>0 : Img2duc
+<li>1 : Img2dsl
+<li>2 : Img2dsf
+<li>3 : Img3duc
+<li>4 : Img3dsl
+<li>5 : Img3dsf
+</ul>
+
+<li><i>width</i>, <i>height</i> et <i>depth</i> sp&eacute;cifient respectivement
+le nombre de colonnes, de lignes et de plans de la future image.</p>
+</ul>
+
+<!---------------------------------- -->
+<h3>Entr&eacute;es</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>file_in</i>: un fichier texte au bon format.
+</ul>
+
+<!---------------------------------- -->
+<h3>Sorties</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_out</i>: une image.
+</ul>
+
+<!---------------------------------- -->
+<h3>R&eacute;sultat</h3>
+<!---------------------------------- -->
+<p>Retourne SUCCESS ou FAILURE.</p>
+
+<!---------------------------------- -->
+<h3>Exemples</h3>
+<!---------------------------------- -->
+<p>Construit une image 2D d'octets de taille 256x256 avec les
+pixels donn&eacute;s dans le fichier image.txt :</p>
+<pre>
+   ptxt2pan 0 256 256 0 image.txt image.pan
+</pre>
+
+<!---------------------------------- -->
+<h3>Voir aussi</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#conversion">Conversion</a>,
+<a href="./ppan2txt.html">ppan2txt</a>
+
+<!---------------------------------- -->
+<h3>Prototype C++</h3>
+<!---------------------------------- -->
+<tt>
+Errc PTxt2pan( const Img3duc &amp;im_out, char *nom, Long depth, Long height, Long width );
+</tt>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Auteur: Fran&ccedil;ois Angot
+</address>
+<!---------------------------------- -->
+</body>
+</html>

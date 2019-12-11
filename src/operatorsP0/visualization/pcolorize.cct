@@ -1,0 +1,288 @@
+/* -*- c-basic-offset: 3; mode: c++ -*-
+ *
+ * Copyright (c), GREYC.
+ * All rights reserved
+ *
+ * You may use this file under the terms of the BSD license as follows:
+ *
+ * "Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are
+ * met:
+ *   * Redistributions of source code must retain the above copyright
+ *     notice, this list of conditions and the following disclaimer.
+ *   * Redistributions in binary form must reproduce the above copyright
+ *     notice, this list of conditions and the following disclaimer in
+ *     the documentation and/or other materials provided with the
+ *     distribution.
+ *   * Neither the name of the GREYC, nor the name of its
+ *     contributors may be used to endorse or promote products
+ *     derived from this software without specific prior written
+ *     permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
+ *
+ * 
+ * For more information, refer to:
+ * https://clouard.users.greyc.fr/Pandore
+ */
+
+/**
+ * @author Olivier Lezoray - 1997-07-04
+ */
+
+#include <pandore.h>
+using namespace pandore;
+
+/**
+ * @file pcolorize.cpp
+ * Replace the label of a region
+ * by the average value of that region in the associated image.
+ */
+
+##begin PColorize2d < TIN, LOOP, VARS, ACC >
+Errc PColorize( const TIN &ims, Reg2d &rgs, TIN &imd ) {
+  int x, y, i;
+  int indice;
+  int NbreRegions = rgs.Labels();
+  Float **valeurs;
+
+  valeurs=(float**)malloc((NbreRegions+1)*sizeof(float*));
+  for (i = 0;i < NbreRegions + 1; i++) {
+     valeurs[i] = (float*)calloc(2,sizeof(float));
+  }
+  // Compute region average
+  for (y=0;y<ims.Height();y++) {
+     for (x=0;x<ims.Width();x++) {
+	indice=(int)rgs[y][x];
+	valeurs[indice][0]++;
+	valeurs[indice][1]+=ims[y][x];
+     }
+  }
+  for (i=0;i<NbreRegions+1;i++) {
+     if (valeurs[i][0]!=0.F) {
+	valeurs[i][1]/=valeurs[i][0];
+     } else {
+	valeurs[i][1]=0.F;
+     }
+  }
+  for (y=0;y<ims.Height();y++) {
+     for (x=0;x<ims.Width();x++) {
+	indice=(int)rgs[y][x];
+	imd[y][x]=(TIN::ValueType)valeurs[indice][1];
+     }
+  }
+  for (i=0;i<NbreRegions+1;i++) {
+     free(valeurs[i]);
+  }
+  free(valeurs);
+  
+  return SUCCESS;
+}
+
+## append loadcases
+   if ((objs[0]->Type() == Po_$TIN) && (objs[1]->Type() == Po_Reg2d)) {
+     TIN* const ims=(TIN*)objs[0];
+     Reg2d*   const ims1=(Reg2d*)objs[1];
+     objd[0]=new TIN(ims->Size());
+     TIN* const imd=(TIN*)objd[0];
+     
+     result=PColorize(*ims,*ims1,*imd);
+     goto end;
+   }
+## end
+##end 
+
+##begin PColorize2dc <TIN, LOOP, VARS, ACC >
+Errc PColorize( const TIN &ims, Reg2d &rgs, TIN &imd ) {
+  int x,y,i,j,indice;
+  int NbreRegions=rgs.Labels();
+  Float **valeurs;
+
+  valeurs=(float**)malloc((NbreRegions+1)*sizeof(float*));
+  for (i=0;i<NbreRegions+1;i++)
+    valeurs[i]=(float*)calloc(4,sizeof(float));
+
+  // Compute average.
+  for (y=0;y<ims.Height();y++) {
+    for (x=0;x<ims.Width();x++) {
+      indice=(int)rgs[y][x];
+      valeurs[indice][0]++;
+      valeurs[indice][1]+=ims.X[y][x];
+      valeurs[indice][2]+=ims.Y[y][x];
+      valeurs[indice][3]+=ims.Z[y][x];
+    }
+  }
+  for (i=0;i<NbreRegions+1;i++) {
+     for (j=1;j<4;j++) {
+	if (valeurs[i][0]!=0.F) {
+	   valeurs[i][j]/=valeurs[i][0];
+	} else {
+	   valeurs[i][j]=0.F;
+	}
+     }
+  }
+  for (y=0;y<ims.Height();y++) {
+    for (x=0;x<ims.Width();x++) {
+	indice=(int)rgs[y][x];
+	imd.X[y][x]=(TIN::ValueType)valeurs[indice][1];
+	imd.Y[y][x]=(TIN::ValueType)valeurs[indice][2];
+	imd.Z[y][x]=(TIN::ValueType)valeurs[indice][3];
+      }
+  }
+  for (i=0;i<NbreRegions+1;i++) {
+    free(valeurs[i]);
+  }
+  free(valeurs);
+
+  return SUCCESS;
+}
+
+## append loadcases
+   if ((objs[0]->Type() == Po_$TIN) && (objs[1]->Type() == Po_Reg2d)) {
+     TIN* const ims=(TIN*)objs[0];
+     Reg2d* const ims1=(Reg2d*)objs[1];
+     objd[0]=new TIN(ims->Size());
+     TIN* const imd=(TIN*)objd[0];
+     
+     result=PColorize(*ims,*ims1,*imd);
+     goto end;
+   }
+## end
+##end 
+
+##begin PColorize3d <TIN, LOOP, VARS, ACC >
+Errc PColorize( const TIN &ims, Reg3d &rgs, TIN &imd ) {
+  int x,y,z,i,indice;
+  int NbreRegions=rgs.Labels();
+  Float **valeurs;
+
+  valeurs=(float**)malloc((NbreRegions+1)*sizeof(float*));
+  for (i=0;i<NbreRegions+1;i++)
+    valeurs[i]=(float*)calloc(2,sizeof(float));
+
+  // Compute region average
+  for (z=0;z<ims.Depth();z++) {
+     for (y=0;y<ims.Height();y++) {
+	for (x=0;x<ims.Width();x++) {
+	   indice=(int)rgs[z][y][x];
+	   valeurs[indice][0]++;
+	   valeurs[indice][1]+=ims[z][y][x];
+	}
+     }
+  }
+  for (i=0;i<NbreRegions+1;i++) {
+     if (valeurs[i][0]!=0.F) {
+	valeurs[i][1]/=valeurs[i][0];
+     } else {
+	valeurs[i][1]=0.F;
+     }
+  }
+      
+  for (z=0;z<ims.Depth();z++) {
+     for (y=0;y<ims.Height();y++) {
+	for (x=0;x<ims.Width();x++) {
+	   indice=(int)rgs[z][y][x];
+	   imd[z][y][x]=(TIN::ValueType)valeurs[indice][1];
+	}
+     }
+  }
+  for (i=0;i<NbreRegions+1;i++) {
+    free(valeurs[i]);
+  }
+  free(valeurs);
+  
+  return SUCCESS;
+}
+
+## append loadcases
+   if ((objs[0]->Type() == Po_$TIN) && (objs[1]->Type() == Po_Reg3d)) {
+     TIN* const ims=(TIN*)objs[0];
+     Reg3d*   const ims1=(Reg3d*)objs[1];
+     objd[0]=new TIN(ims->Size());
+     TIN* const imd=(TIN*)objd[0];
+     
+     result=PColorize(*ims,*ims1,*imd);
+     goto end;
+   }
+## end
+##end 
+
+##begin PColorize3dc <TIN, LOOP, VARS, ACC >
+Errc PColorize( const TIN &ims, Reg3d &rgs, TIN &imd ) {
+  int x,y,z,i,indice;
+  int NbreRegions=rgs.Labels();
+  Float **valeurs;
+
+  valeurs=(float**)malloc((NbreRegions+1)*sizeof(float*));
+  for (i=0;i<NbreRegions+1;i++)
+    valeurs[i]=(float*)calloc(4,sizeof(float));
+
+  // Compute region average
+  for (z=0;z<ims.Depth();z++) {
+     for (y=0;y<ims.Height();y++) {
+	for (x=0;x<ims.Width();x++) {
+	   indice=(int)rgs[z][y][x];
+	   valeurs[indice][0]++;
+	   valeurs[indice][1]+=ims.X[z][y][x];
+	   valeurs[indice][2]+=ims.Y[z][y][x];
+	   valeurs[indice][3]+=ims.Z[z][y][x];
+	}
+     }
+  }
+  for (i=0;i<NbreRegions+1;i++) {
+     if (valeurs[i][0]!=0.F) {
+	valeurs[i][1]/=valeurs[i][0];
+     } else {
+	valeurs[i][1]=0.F;
+     }
+  }
+  for (z=0;z<ims.Depth();z++) {
+     for (y=0;y<ims.Height();y++) {
+	for (x=0;x<ims.Width();x++) {
+	   indice=(int)rgs[z][y][x];
+	   imd.X[z][y][x]=(TIN::ValueType)valeurs[indice][1];
+	   imd.Y[z][y][x]=(TIN::ValueType)valeurs[indice][2];
+	   imd.Z[z][y][x]=(TIN::ValueType)valeurs[indice][3];
+	}
+     }
+  }
+  return SUCCESS;
+}
+
+## append loadcases
+   if ((objs[0]->Type() == Po_$TIN) && (objs[1]->Type() == Po_Reg3d)) {
+     TIN* const ims = (TIN*)objs[0];
+     Reg3d* const ims1 = (Reg3d*)objs[1];
+     objd[0] = new TIN(ims->Size());
+     TIN* const imd = (TIN*)objd[0];
+     
+     result = PColorize(*ims,*ims1,*imd);
+     goto end;
+   }
+## end
+##end 
+
+##forall(PColorize2d, /Img2d/)
+##forall(PColorize2dc, /Imc2d/)
+##forall(PColorize3d, /Img3d/)
+##forall(PColorize3dc, /Imc3d/)
+
+#ifdef MAIN
+#define	USAGE	"usage: %s [-m mask] [im_in|-] [rg_in] [im_out|-]"
+#define	PARC	0
+#define	FINC	2
+#define	FOUTC	1
+#define	MASK	2
+
+##main(PARC, FINC, FOUTC, MASK, USAGE)
+#endif

@@ -1,0 +1,125 @@
+<html>
+<head>
+<title>PANDORE OPERATORS</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center><hr>
+
+<!---------------------------------- -->
+<h1>pcolorquantization</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Reduction of the number of colors used to encode an image.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>pcolorquantization</b> <i>color_number</i> <i>color_space</i> [-m mask] [<i>im_in</i>|-] [<i>im_out</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+
+<p>Color quantization aims to reduce the number of color used to encode
+the color image <i>im_in</i> so as to minimize the  visual sensation difference.
+The output image <i>im_out</i> is a color image with
+the specified number of colors or less.</p>
+
+<p>The algorithm is based on the minimization of the global quadratic
+error after reassignment of the colors:</p>
+<pre>
+Error = sum_{ij} ||c(i,j) - c'(i,j)||^2
+</pre>
+<p>where c(i,j) is the color of the pixel (i,j) in the original image
+and c'(i,j) is the color of quantized image.
+Pixel color depends on the color space.</p>
+
+<p>This operator is often used as preprocessing before
+segmentation.</p>
+
+<!---------------------------------- -->
+<h3>Parameters</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>color_number</i>: defines the number of expected colors. This
+an integer &gt; 0.
+
+<li><i>color_space</i>:  a value between [0,6] that specify the
+most appropriate color space of the transformation:
+<ol start="0">
+<li>R, G, B space.
+<li>I1, I2, I3 space.
+<li>H1, H2, H3 space.
+<li>L, u, v space.
+<li>Y, I, Q space.
+<li>Eigen values space.
+<li>K1, K2, K3 space.
+</ol>
+</ul>
+
+
+<!---------------------------------- -->
+<h3>Inputs</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_in</i>: a color image.
+</ul>
+
+<!---------------------------------- -->
+<h3>Outputs</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>rg_out</i>: a color image.
+</ul>
+
+<!---------------------------------- -->
+<h3>Result</h3>
+<!---------------------------------- -->
+<p>Returns the number of colors used or FAILURE.</p>
+
+<!---------------------------------- -->
+<h3>Examples</h3>
+<!---------------------------------- -->
+<p>Reduce to 10 the number of colors used by the image butterfly
+and extract the regions:</p>
+<pre>
+   pcolorquantization 10 0 examples/butterfly.pan b.pan
+   pim2rg bpan out.pan
+</pre>
+
+<!---------------------------------- -->
+<h3>See also</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#segmentation">Segmentation</a>
+
+<!---------------------------------- -->
+<h3>C++ prototype</h3>
+<!---------------------------------- -->
+<tt>
+Errc PColorQuantization( const Img2duc &amp;im_in1, const Img2duc &amp;im_in2,
+Img2duc &amp;im_out, int colorNumber, int colorSpace );
+</tt>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Author: Luc Brun
+</address>
+<!---------------------------------- -->
+</body>
+</html>

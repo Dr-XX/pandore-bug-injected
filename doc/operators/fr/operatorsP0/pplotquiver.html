@@ -1,0 +1,123 @@
+<html>
+<head>
+<title>OPERATEURS PANDORE</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>pplotquiver</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Dessine un champ de vecteurs 2D &agrave; partir d'une image 2D
+multispectrale &agrave; deux composantes.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>pplotquiver</b> <i>dimx</i> <i>dimy</i> <i>sampling</i> <i>factor</i> [<i>im_in</i>|-] [<i>im_out</i>|-]
+
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p>Cet op&eacute;rateur permet de dessiner un champ de vecteurs 2D &agrave; partir d'une image 2D
+multispectrale &agrave; deux bandes.</p>
+<p>La premiere bande de l'image multispectrale contient la composante x du vecteur
+et la seconde la composante y. Cet image multispectrale peut &ecirc;tre cr&eacute;&eacute;e avec l'op&eacute;rateur:
+<a href="./pregistrationPDE.html">pregistrationPDE</a></p>
+
+<!---------------------------------- -->
+<h3>Param&egrave;tres</h3>
+<!---------------------------------- -->
+<p>Les param&egrave;tres de l'op&eacute;rateur contr&ocirc;lent le type de rendu :
+<ul>
+<li><i>dimx</i> : D&eacute;finit la largeur de l'image du rendu.
+<li><i>dimy</i> : D&eacute;finit la hauteur de l'image du rendu.
+<li><i>sampling</i> : D&eacute;finit l'intervalle (en pixels) entre deux trac&eacute;s de vecteurs
+cons&eacute;cutifs.
+<li><i>factor</i> : D&eacute;finit un facteur multiplicatif appliqu&eacute; &agrave; la longueur des vecteurs.
+Si la valeur est n&eacute;gative, elle correspond &agrave; un pourcentage de la longueur
+maximum rencontr&eacute;e dans l'image de vecteurs d'entr&eacute;e.
+</ul>
+</p>
+
+<!---------------------------------- -->
+<h3>Entr&eacute;es</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_in</i>: une image multispectrale 2D avec au moins 2 bandes.</ul>
+
+<!---------------------------------- -->
+<h3>Sorties</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_out</i>: une image 2D de Uchar (Img2duc).
+</ul>
+
+<!---------------------------------- -->
+<h3>R&eacute;sultat</h3>
+<!---------------------------------- -->
+<p>Retourne SUCCESS ou FAILURE.</p>
+
+<!---------------------------------- -->
+<h3>Exemple</h3>
+<!---------------------------------- -->
+<ul>
+<li>Produit une translation horizontale de l'image "tangram.pan" 
+puis affiche les vecteurs de d&eacute;placements
+<pre>
+   translation 0 10 tangram.pan tangram1.pan
+   pregistrationPDE 0.1 0.9 tangram.pan tangram1.pan a.pan
+   pplotquiver 800 800 10 -20 a.pan| visu
+</pre>
+</ul>
+
+<!---------------------------------- -->
+<h3>Voir aussi</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#motion">Mouvement</a>
+
+<!---------------------------------- -->
+<h3>Prototype C++</h3>
+<!---------------------------------- -->
+<tt>
+Errc PPlotQuiver(Imx2d &amp;ims,Img2duc &amp;imd,Short sampling,Float factor);<br>
+</tt>
+
+<!---------------------------------- -->
+<h3>Avertissement</h3>
+<!---------------------------------- -->
+<p><font color="red">Ce module est soumis &agrave; la licence 
+<a href="http://www.cecill.info/licences/Licence_CeCILL_V1.1-US.html">CeCiLL</a>, et ne
+peut pas &ecirc;tre utilis&eacute; dans une application commerciale sous une licence propri&eacute;taire.
+En particulier, il utilise les fonctionnalit&eacute;s de la biblioth&egrave;que
+<a href="http://cimg.sourceforge.net">CImg</a>, soumise &eacute;galement &agrave; la licence
+<a href="http://www.cecill.info/licences/Licence_CeCILL_V1.1-US.html">CeCiLL</a>.</p></font>
+
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Auteur: D. Tschumperl&eacute;
+</address>
+<!---------------------------------- -->
+
+</body>
+</html>

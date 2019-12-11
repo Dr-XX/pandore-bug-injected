@@ -1,0 +1,115 @@
+<html>
+<head>
+<title>PANDORE OPERATORS</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+<body background="#ffffff">
+
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>pnonlocalerosion</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Performs a non local erosion with laplacian regularization on image.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>pnonlocalerosion</b> sigma number_of_iterations connectivity [<i>im_in</i>|-] [<i>im_out</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p>Performs a non local erosion on image <i>im_in</i>.
+Let $f$ be <i>im_in</i>, this algorithm performs iteratively
+<i>number_of_iterations</i> times:
+<br>
+$ f(u)^{t+1} = f^t(u) + \min_{v ~ u}(w(u, v) \min(f^t(v) - f^t(u), 0))$
+
+<br>
+with $u$ a pixel location, $v$ a neighbor of $u$,
+$w(u, v)$ the weight between $u$ and $v$ (which can be a similarity
+measure, a distance, etc.).
+</p>
+
+<p>Here we use the exponential similarity measure:
+$w(u,v)=\exp{ -distance(f(u), f(v))^2 / sigma^2 }$.
+If you use $w(u, v) = 1$, you get the typical erosion operator.
+</p>
+
+<!---------------------------------- -->
+<h3>Parameters</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>sigma</i>: sigma used for the similarity measure.
+<li><i>number_of_iterations</i>: number of iterations.
+<li><i>connectivity</i>: neighborhood, can be 4 or 8.
+</ul>
+
+<!---------------------------------- -->
+<h3>Inputs</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_in</i>: a 2D image.
+</ul>
+
+<!---------------------------------- -->
+<h3>Outputs</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_out</i>: an image of the same type as the input image.
+</ul>
+
+<!---------------------------------- -->
+<h3>Result</h3>
+<!---------------------------------- -->
+<p>Returns SUCCESS or FAILURE.</p>
+
+<!---------------------------------- -->
+<h3>Examples</h3>
+<!---------------------------------- -->
+<ul>
+<li>Apply a  non local erosion to tangram.pan,
+with 8-connexity neighborhood, 10 iterations, and sigma = 15.
+<pre>
+pnonlocalerosion 15 10 8 tangram.pan out.pan
+</pre>
+</ul>
+
+<!---------------------------------- -->
+<h3>See also</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#morphology">Morphology</a>
+
+<!---------------------------------- -->
+<h3>C++ prototype</h3>
+<!---------------------------------- -->
+<tt>
+Errc PNonLocalErosion( const Img2duc &amp; ims, Img2duc &amp; imd, float sigma, int  nbIter, int ngbIdx );
+</tt>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Author: Matthieu Toutain
+</address>
+<!---------------------------------- -->
+</p>
+
+</body>
+</html>

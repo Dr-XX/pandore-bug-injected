@@ -1,0 +1,108 @@
+<html>
+<head>
+<title>OPERATEURS PANDORE</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>pvisu</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Affichage d'un fichier de type Pandore, png, jpeg ou bmp.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>pvisu</b> [<i>options</i>] [<i>-m mask</i>] [<i>im_in</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p>L'op&eacute;rateur <b>pvisu</b> permet d'afficher
+le contenu d'un fichier au format Pandore, png, jpeg ou bmp.
+Tous les types de fichier Pandore sont visualisables :</p>
+<ul>
+<li>les images,
+<li>les cartes de r&eacute;gions,
+<li>les graphes,
+<li>et les collections.
+</ul>
+
+<p>Pour dessiner des lignes ou des points, il faut utiliser 
+l'op&eacute;rateur <a href="./pdraw.html">pdraw</a>.</p>
+
+<!---------------------------------- -->
+<h3>Entr&eacute;es</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_in</i>: une image, une carte de r&eacute;gions, un graphe ou une collection.
+</ul>
+
+<!---------------------------------- -->
+<h3>Param&egrave;tres</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>-nofork</i> permet de rendre pvisu bloquant jusqu'&agrave; sa fin.
+<pre>
+   pvisu -nofork tangram.pan
+</pre>
+<li>toutes les options QT (voir documentation Qt). Par exemple:
+<pre>
+   pvisu -style -nofork motif tangram.pan
+</pre>
+</ul>
+
+<!---------------------------------- -->
+<h3>R&eacute;sultat</h3>
+<!---------------------------------- -->
+<p>Retourne le num&eacute;ro du processus (PID) ou FAILURE.</p>
+
+<!---------------------------------- -->
+<h3>Exemples</h3>
+<!---------------------------------- -->
+<ul>
+<li>Visualisation de l'image tangram.pan :
+<pre>
+   pvisu tangram.pan
+</pre>
+<li>Visualisation du contenu du centre de l'image tangram.pan
+(size 50x50) :
+<pre>
+   pshapedesign 256 256 0 1 50 50 a.pan
+   pim2rg a.pan m.pan
+   pmask examples/tangram.pan m.pan | pvisu 
+</pre>
+</ul>
+
+<!---------------------------------- -->
+<h3>Voir aussi</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#visualization">Visualisation</a>,
+<a href="./pdraw.html">pdraw</a>,
+<a href="./pdraw.html">pcontentsdisplay</a>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Auteur: R&eacute;gis Clouard
+</address>
+<!---------------------------------- -->
+</body>
+</html>

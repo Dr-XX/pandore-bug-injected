@@ -1,0 +1,127 @@
+<html>
+<head>
+<title>OPERATEURS PANDORE</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>pthresholding</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Seuillage d'une image selon la valeur de pixel.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>pthresholding</b> <i>seuilb</i> <i>seuilh</i> [<i>-m mask</i>] [<i>im_in</i>|-] [<i>im_out</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p>L'op&eacute;rateur <b>pthresholding</b> consiste uniquement &agrave; mettre &agrave; 0,
+toutes les valeurs de pixel inf&eacute;rieures strictement au <i>seuilb</i>
+ou sup&eacute;rieures strictement au <i>seuilh</i> et &agrave; conserver
+les valeurs de pixel comprises entre ces deux seuils.</p>
+<pre>
+   if im_in[p] &ge; low and im_in[p] &le; high
+   then im_out[p]=im_in[p];
+   else im_out[p]=0;
+</pre>
+
+<p>Si <i>high</i> est inf&eacute;rieur &agrave; <i>low</i>
+alors <b>pthresholding</b> effectue le seuillage
+&agrave; l'envers:</p>
+<pre>
+   if im_in[p] &lt; high or im_in[p] &gt; low
+   then im_out[p]=im_in[p];
+   else im_out[p]=0;
+</pre>
+
+<p>Pour les carte de r&eacute;gions, le seuillage consiste
+&agrave; s&eacute;lectionner les r&eacute;gions de valeur de label 
+sup&eacute;rieure ou &eacute;gale au <i>seuilb</i>
+ou sup&eacute;rieure ou &eacute;gale au <i>seuilh</i>.
+Il n'y a pas de r&eacute;&eacute;tiquetage des labels
+de la carte de sortie <i>im_out</i>.</p>
+
+<p>L'image de sortie <i>im_out</i> est du m&ecirc;me type
+que celle d'entr&eacute;e <i>im_in</i>.</p>
+
+<!---------------------------------- -->
+<h3>Param&egrave;tres</h3>
+<!---------------------------------- -->
+<ul>
+<li>Le <i>seuilb</i> et le <i>seuilb</i>
+sont des valeurs de niveaux de gris (ou couleur) appartenant aux valeurs
+support&eacute;es par le type de l'image
+(ex: Img2duc [0..255], Img2dsl [-2147483648..+2147483648]).</p>
+
+<p><i>Astuce</i>: Si <i>seuilh</i> est sup&eacute;rieur &agrave; la valeur maximale
+du type des pixels alors c'est la valeur maximale
+qui est utilis&eacute;e. (ex: 255 pour Img2duc, +2147483648 pour Img2dsl).</p>
+</ul>
+
+<!---------------------------------- -->
+<h3>Entr&eacute;es</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_in</i>: une image, une carte de r&eacute;gions ou un graphe.
+</ul>
+
+<!---------------------------------- -->
+<h3>Sorties</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_out</i>: un objet du m&ecirc;me type que l'entr&eacute;e.
+</ul>
+
+<!---------------------------------- -->
+<h3>R&eacute;sultat</h3>
+<!---------------------------------- -->
+<p>Retourne SUCCESS ou FAILURE en cas de mauvais param&eacute;trage.</p>
+
+<!---------------------------------- -->
+<h3>Exemples</h3>
+<!---------------------------------- -->
+<p>S&eacute;lection des pixels des pi&egrave;ces de tangram:</p>
+<pre>
+   pthresholding 100 1e30 tangram.pan out.pan
+</pre>
+
+<!---------------------------------- -->
+<h3>Voir aussi</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#thresholding">Seuillage</a>
+
+<!---------------------------------- -->
+<h3>Prototype C++</h3>
+<!---------------------------------- -->
+<tt>
+Errc PThresholding( const Img2duc &amp;im_in, Img2duc &amp;im_out, Uchar seuilb, Uchar seuilh );
+</tt>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Auteur: R&eacute;gis Clouard
+</address>
+<!---------------------------------- -->
+</body>
+</html>

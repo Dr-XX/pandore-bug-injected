@@ -1,0 +1,112 @@
+<html>
+<head>
+<title>OPERATEURS PANDORE</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center><hr>
+
+<!---------------------------------- -->
+<h1>pregionorientation</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Calcul de l'orientation des r&eacute;gions.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>pregionorientation</b> <i>attr</i> [<i>rg_in</i>|-] [<i>col_out</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p>L'op&eacute;rateur <b>pregionorientation</b> cr&eacute;e une collection
+<i>col_out</i> contenant un tableau nomm&eacute; <i>attr</i> de 
+Ulong &eacute;l&eacute;ments dans lequel le i&egrave;me &eacute;l&eacute;ment
+correspond &agrave; l'orientation de la r&eacute;gion de label i+1.
+</p>
+
+<p>La valeur d'orientation est donn&eacute;e en <b>degr&eacute; [0,360]</b>.
+<br>Elle est calcul&eacute;e &agrave; partir des moments d'inertie:</p>
+<pre>
+   orientation = 0.5*arctan(2*M11/(M20-M02)).
+</pre>
+
+<p>Si <tt>M20=M02</tt> alors c'est que la r&eacute;gion pr&eacute;sente
+une sym&eacute;trie de rotation. Dans ce cas, la valeur d'orientation
+est &eacute;gale &agrave; <b>360</b>.</p>
+
+<!---------------------------------- -->
+<h3>Param&egrave;tres</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>attr</i> est une chaîne de caract&egrave;res qui d&eacute;finit
+le nom donn&eacute; au tableau qui va contenir
+les valeurs d'orientation dans la collection.
+</ul>
+
+<!---------------------------------- -->
+<h3>Entr&eacute;es</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>rg_in</i>: une carte de r&eacute;gions 2D.
+</ul>
+
+<!---------------------------------- -->
+<h3>Sorties</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>col_out</i>: une collection.
+</ul>
+
+<!---------------------------------- -->
+<h3>R&eacute;sultat</h3>
+<!---------------------------------- -->
+<p>Retourne SUCCESS ou FAILURE.</p>
+
+<!---------------------------------- -->
+<h3>Exemples</h3>
+<!---------------------------------- -->
+<p>Affiche l'orientation des r&eacute;gions obtenues
+par une simple binarisation de l'image tangram.pan:</p>
+<pre>
+   pbinarization 100 1e30 tangram.pan a.pan
+   plabeling 8 a.pan b.pan
+   pregionorientation orientation b.pan c.pan
+   pcol2txt c.pan
+</pre>
+
+<!---------------------------------- -->
+<h3>Voir aussi</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#regionfeaturesextraction">Caract&eacute;risation de r&eacute;gion</a>
+
+<!---------------------------------- -->
+<h3>Prototype C++</h3>
+<!---------------------------------- -->
+<tt>
+Errc PRegionOrientation( const Reg2d &amp;rg_in, Collection &amp;cold, const std::string &amp;attr );
+</tt>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Auteur: Alexandre Duret-Lutz
+</address>
+<!---------------------------------- -->
+</body>
+</html>

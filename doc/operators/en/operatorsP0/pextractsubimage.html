@@ -1,0 +1,123 @@
+<html>
+<head>
+<title>PANDORE OPERATORS</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>pextractsubimage</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Extracts subimage from image.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>pextractsubimage</b> <i>x</i> <i>y</i> <i>z</i> <i>l</i> <i>h</i> <i>p</i> [<i>im_in</i>|-] [<i>im_out</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p><b>pextractsubimage</b> builds a new image
+<i>im_out</i> with pixels of the input image <i>im_in</i>
+included in the window beginning at coordinates (<i>x,y,z</i>)
+and with the dimension (<i>l,h,p</i>).</p>
+
+<p>For region map, there is no relabeling. The regions in <i>im_out</i>
+keep the same label than in <i>im_in</i> even if some regions
+have disappeared.</p>
+
+<!---------------------------------- -->
+<h3>Parameters</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>x,y,z</i> specify the coordinates in <i>im_in1</i>
+of the image <i>im_out</i>.
+
+<li><i>l,h,p</i> specify the dimensions of the image <i>im_out</i>.
+If one of the dimension is lower than 0 or greater than the maximum
+then the maximum size is used.
+
+<br>In case of 2D image, <i>z</i> and <i>p</i>
+parameters are ignored but must be given.
+</ul>
+
+<!---------------------------------- -->
+<h3>Inputs</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_in</i>: an image or a region map.
+</ul>
+
+<!---------------------------------- -->
+<h3>Outputs</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_out</i>: an object of the same type as <i>im_in</i>.
+</ul>
+
+<!---------------------------------- -->
+<h3>Result</h3>
+<!---------------------------------- -->
+<p>For image returns SUCCESS or FAILURE.
+For region map returns the maximum label or FAILURE.</p>
+
+<!---------------------------------- -->
+<h3>Examples</h3>
+<!---------------------------------- -->
+<p>Extracts part of the tangram.pan from coordinates (75, 55)
+and size (50, 55) as new image.</p>
+<pre>
+   pextractsubimage 75 55 0 50 55 0 examples/tangram.pan a.pan
+</pre>
+
+<p>Extracts part of the tangram.pan from coordinates (75, 55)
+to maximum coordinates as a new image.</p>
+<pre>
+   pextractsubimage 75 55 0 -1 -1 0 examples/tangram.pan a.pan
+</pre>
+
+<!---------------------------------- -->
+<h3>See also</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#utility">Utility</a>,
+<a href="./pinsertsubimage.html">pinsertsubimage</a>
+
+<!---------------------------------- -->
+<h3>C++ prototype</h3>
+<!---------------------------------- -->
+<tt>
+Errc PExtractSubImage( const Img2duc &amp;im_in, Img2duc &amp;im_out, Long cx, Long cy, Long cz );
+</tt>
+
+<!---------------------------------- -->
+<h3>Version fran&ccedil;aise</h3>
+<!---------------------------------- -->
+<p>Extraction d'une sous-image d'une image.</p>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Author: R&eacute;gis Clouard
+</address>
+<!---------------------------------- -->
+
+</body>
+</html>

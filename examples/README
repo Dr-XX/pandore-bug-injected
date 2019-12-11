@@ -1,0 +1,38 @@
+# This is an -*- indented-text -*- document.
+
+              PANDORE EXAMPLES
+
+
+1. CONTENT
+
+   a. The .sh files
+
+These files are executable scripts.
+
+   b. The .cpp files
+
+These files are C++ files.
+
+2. INSTALLATION
+
+  a. The .sh files
+
+To execute the .sh files, just type the name without
+the suffix .sh.
+For example:
+
+	$ dog
+
+  b. The .cpp files
+
+To complile the .cpp files just type:
+
+	$ make -f Makefile.unix <file>
+
+where <file> is the name of the C++ file. For example:
+
+	$ make -f Makefile.unix example2
+
+Then execute the file:
+
+	$ example2 tangram.pan a.pan

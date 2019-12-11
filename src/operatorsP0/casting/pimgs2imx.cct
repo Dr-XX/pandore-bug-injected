@@ -1,0 +1,140 @@
+/* -*- c-basic-offset: 3; mode: c++ -*-
+ *
+ * Copyright (c), GREYC.
+ * All rights reserved
+ *
+ * You may use this file under the terms of the BSD license as follows:
+ *
+ * "Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are
+ * met:
+ *   * Redistributions of source code must retain the above copyright
+ *     notice, this list of conditions and the following disclaimer.
+ *   * Redistributions in binary form must reproduce the above copyright
+ *     notice, this list of conditions and the following disclaimer in
+ *     the documentation and/or other materials provided with the
+ *     distribution.
+ *   * Neither the name of the GREYC, nor the name of its
+ *     contributors may be used to endorse or promote products
+ *     derived from this software without specific prior written
+ *     permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, 
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, 
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
+ *
+ * 
+ * For more information, refer to:
+ * https://clouard.users.greyc.fr/Pandore
+ */
+
+/**
+ * @author Regis Clouard - 2000-06-27
+ */
+
+#include <string.h>
+#include <pandore.h>
+using namespace pandore;
+
+/**
+ * @file pimg2imx.cpp
+ * Convert a set of images into a multispectral image.
+ * Input images must have the same properties.
+ */
+##begin PImgs2Imx < TIN, TOUT >
+Errc PImgs2Imx( Pobject* ims[], TOUT &imd ) {
+   for (int i = 1; i < imd.Bands(); i++) {
+      if (((TIN*)ims[i])->Size() != ((TIN*)ims[0])->Size()) {
+	 fprintf(stderr, "Error pim2imx: Incompatible input images\n");
+	 return FAILURE;
+      }
+   }
+
+   for (int b = 0; b < imd.Bands(); b++) {
+      TIN::ValueType *ps = ((TIN*)ims[b])->Vector();
+      TOUT::ValueType *pd = imd.Vector(b);
+
+      for (Ulong x=0; x< imd.VectorSize(); x++) {
+	 *(pd++) = *(ps++);
+      }
+   }
+
+   return SUCCESS;
+}
+
+## append loadcases
+   if ((objs[0]->Type() == Po_$TIN)) {
+      // Check compatibility of input images.
+      for (int i = 1; i < dimension; i++) {
+	 if (objs[i]->Type() != Po_$TIN) {
+	    goto error;
+	 }
+      }
+
+      objd[0] = new TOUT(dimension, ((TIN*)objs[0])->Size());
+      TOUT* const imd = (TOUT*)objd[0];
+
+      result = PImgs2Imx(objs, *imd);
+      goto end;
+   }
+## end
+##end
+
+##forall(PImgs2Imx, /Img2duc/, /Imx2duc/)
+##forall(PImgs2Imx, /Img2dsl/, /Imx2dsl/)
+##forall(PImgs2Imx, /Img2dsf/, /Imx2dsf/)
+##forall(PImgs2Imx, /Img3duc/, /Imx3duc/)
+##forall(PImgs2Imx, /Img3dsl/, /Imx3dsl/)
+##forall(PImgs2Imx, /Img3dsf/, /Imx3dsf/)
+
+#ifdef MAIN
+#define	USAGE	"usage: %s dimension [-m mask] [im_in|-]* [im_out|-]"
+#define	PARC	1
+#define	FINC	5
+#define	FOUTC	1
+#define	MASK	2
+
+int main( int argc, char *argv[] ) {
+   Errc result;          // The result code of the execution.
+   Pobject* mask;        // The region map.
+   Pobject* objin[50];   // The input objects;
+   Pobject* objs[50];    // The source objects masked.
+   Pobject* objout[50];  // The output object.
+   Pobject* objd[50];    // The result object of the execution.
+   char* parv[PARC+1];   // The input parameters.
+   
+   int dimension = 0;
+   if (argc > 1 ) {
+      if (!strcmp(argv[1], "-p")) {
+	 return 0;
+      } else if ( strcmp(argv[1], "-h")) {
+	 dimension = atoi(argv[1]);
+      }
+   }
+   
+   ReadArgs(argc, argv, PARC, dimension, FOUTC, &mask, objin, objs, objout, objd, parv, USAGE, MASK);
+
+##loadcases
+
+error:
+  {
+     PrintErrorFormat(objin, dimension);
+     result = FAILURE;
+  }	
+
+end:
+   if (result) {
+	WriteArgs(argc, argv, PARC, dimension, FOUTC, &mask, objin, objs, objout, objd, MASK);
+   }
+  Exit(result);
+  return 0;
+}
+#endif

@@ -1,0 +1,366 @@
+/* -*- mode: c++; c-basic-offset: 3 -*-
+ *
+ * Copyright (c), GREYC.
+ * All rights reserved
+ *
+ * You may use this file under the terms of the BSD license as follows:
+ *
+ * "Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are
+ * met:
+ *   * Redistributions of source code must retain the above copyright
+ *     notice, this list of conditions and the following disclaimer.
+ *   * Redistributions in binary form must reproduce the above copyright
+ *     notice, this list of conditions and the following disclaimer in
+ *     the documentation and/or other materials provided with the
+ *     distribution.
+ *   * Neither the name of the GREYC, nor the name of its
+ *     contributors may be used to endorse or promote products
+ *     derived from this software without specific prior written
+ *     permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
+ *
+ * 
+ * For more information, refer to:
+ * https://clouard.users.greyc.fr/Pandore
+ */
+
+/**
+ * @author Regis Clouard - 2003-05-23
+ * @author Regis Clouard - 2004-01-22 (new paremeters order)
+ */
+
+#include <pandore.h>
+using namespace pandore;
+
+/**
+ * @file phitormiss.cpp
+ * Morphological Hit or Miss transforamtion.
+ */
+##begin PHitOrMissG2D < TIN, LOOPP, POINT, VOISS, VOISL >
+Errc PHitOrMiss( const TIN &ims, const Img2duc &imse1, const Img2duc &imse2, TIN &imd) {
+   POINT p, p1, p2;
+   TIN::ValueType val = 0;
+   
+   POINT shift1(imse1.Size() / 2);
+   POINT shift2(imse2.Size() / 2);
+
+   for (p.y = 0; p.y < ims.Height(); p.y++) {
+      for (p.x = 0; p.x < ims.Width(); p.x++) {
+	 // erosion of with the SE1
+	 TIN::ValueType min = Limits<TIN::ValueType>::max();
+	 for (p1.y = 0; p1.y < imse1.Height(); p1.y++) {
+	    for (p1.x = 0; p1.x < imse1.Width(); p1.x++) {
+	       p2 = p + p1 - shift1;
+	       if (ims.Hold(p2) && imse1[p1] && ((val = ims[p2]) < min)) {
+		  min = val;
+	       }
+	    }
+	 }
+	 // dilatation of with the SE2
+	 TIN::ValueType max = Limits<TIN::ValueType>::min();
+	 for (p1.y = 0; p1.y < imse2.Height(); p1.y++)
+	    for (p1.x = 0; p1.x < imse2.Width(); p1.x++) {
+	       p2 = p + p1 - shift2;
+	       if (ims.Hold(p2) && imse2[p1] && ((val = ims[p2]) > max)) {
+		  max = val;
+	       }
+	    }
+	 if (min > max) {
+	    imd[p] = min - max;
+	 } else {
+	    imd[p] = 0;
+	 }
+      }
+   }
+   return SUCCESS;
+}
+
+## append loadcases
+   if (objs[1]->Type() == Po_$TIN) {
+      TIN* const ims = (TIN*)objs[2];
+      Img2duc* const imse1 = (Img2duc*)objs[0];
+      Img2duc* const imse2 = (Img2duc*)objs[1];
+      objd[0] = new TIN(ims->Props());
+      TIN* const imd = (TIN*)objd[0];
+      
+      result = PHitOrMiss(*ims, *imse1, *imse2, *imd);
+      goto end;
+   }
+## end
+##end
+
+##begin PHitOrMissG3D < TIN, LOOPP, POINT, VOISS, VOISL >
+Errc PHitOrMiss( const TIN &ims, const Img3duc &imse1, const Img3duc &imse2, TIN &imd ) {
+   POINT p, p1, p2;
+   TIN::ValueType val = 0;
+
+   POINT shift1(imse1.Size() / 2);
+   POINT shift2(imse2.Size() / 2);
+
+   for (p.z = 0; p.z < ims.Depth(); p.z++) {
+      for (p.y = 0; p.y < ims.Height(); p.y++) {
+	 for (p.x = 0; p.x < ims.Width(); p.x++) {
+	    TIN::ValueType min = Limits<TIN::ValueType>::max();
+	    
+	    for (p1.z = 0; p1.z < imse1.Depth(); p1.z++) {
+	       for (p1.y = 0; p1.y < imse1.Height(); p1.y++) {
+		  for (p1.x = 0; p1.x < imse1.Width(); p1.x++) {
+		     p2 = p + p1 - shift1;
+		     if (ims.Hold(p2) && imse1[p1] && ((val = ims[p2]) < min)) {
+			min = val;
+		     }
+		  }
+	       }
+	    }
+	    TIN::ValueType max  =Limits<TIN::ValueType>::min();
+	    for (p1.z = 0; p1.z  <imse2.Depth(); p1.z++) {
+	       for (p1.y = 0; p1.y < imse2.Height(); p1.y++) {
+		  for (p1.x = 0; p1.x < imse2.Width(); p1.x++) {
+		     p2 = p + p1 - shift2;
+		     if (ims.Hold(p2) && imse2[p1] && ((val = ims[p2]) > max)) {
+			max = val;
+		     }
+		  }
+	       }
+	    }
+	    if (min > max) {
+	       imd[p] = min - max;
+	    } else {
+	       imd[p] = 0;
+	    }
+	 }
+      }
+   }
+   return SUCCESS;
+}
+
+## append loadcases
+   if (objs[1]->Type() == Po_$TIN) {
+      TIN* const ims = (TIN*)objs[2];
+      Img3duc* const imse1 = (Img3duc*)objs[0];
+      Img3duc* const imse2 = (Img3duc*)objs[1];
+      objd[0] = new TIN(ims->Props());
+      TIN* const imd = (TIN*)objd[0];
+      
+      result = PHitOrMiss(*ims, *imse1, *imse2, *imd);
+      goto end;
+   }
+## end
+##end
+
+
+/*
+ * Lexicographic order between 2 colors (cx, cy, cz) and (cx1, cy1, cz1)
+ */
+template<typename T>
+static bool Greater(T cx, T cy, T cz, T cx1, T cy1, T cz1) {
+   if (cx1 < cx) {
+       return true;
+   } else if (cx1 > cx) {
+      return false;
+   }
+   if (cy1 < cy) {
+       return true;
+   } else if (cy1 > cy) {
+      return false;
+   }
+   if (cz1 < cz) {
+       return true;
+   } else if (cz1 > cz) {
+      return false;
+   } else {
+      return false;
+   }
+}
+template<typename T>
+static bool Lower(T cx1, T cy1, T cz1, T cx, T cy, T cz) {
+   if (cx1 < cx) {
+      return true;
+   } else if (cx1 > cx) {
+      return false;
+   }
+   if (cy1 < cy) {
+      return true;
+   } else if (cy1 > cy) {
+      return false;
+   }
+   if (cz1 < cz) {
+      return true;
+   } else if (cz1 > cz) {
+      return false;
+   } else {
+      return false;
+   }
+}
+
+##begin PHitOrMissC2D < TIN, LOOPP, POINT, VOISS, VOISL >
+Errc PHitOrMiss( const TIN &ims, const Img2duc &imse1, const Img2duc &imse2, TIN &imd ) {
+   POINT p, p1, p2;
+   POINT shift1(imse1.Size() / 2);
+   POINT shift2(imse2.Size() / 2);
+   
+   for (p.y = 0; p.y < ims.Height(); p.y++) {
+      for (p.x = 0; p.x < ims.Width(); p.x++) {
+	 TIN::ValueType minX = Limits<TIN::ValueType>::min();
+	 TIN::ValueType minY = Limits<TIN::ValueType>::min();
+	 TIN::ValueType minZ = Limits<TIN::ValueType>::min();
+	 
+	 for (p1.y = 0; p1.y < imse1.Height(); p1.y++) {
+	    for (p1.x = 0; p1.x < imse1.Width(); p1.x++) {
+	       p2 = p + p1 - shift1;
+	       if (ims.Hold(p2)
+		   && imse1[p1]
+		   && Lower(ims.X[p2], ims.Y[p2], ims.Z[p2], minX, minY, minZ)) {
+		  minX = ims.X[p2];
+		  minY = ims.Y[p2];
+		  minZ = ims.Z[p2];
+	       }
+	    }
+	 }
+	 TIN::ValueType maxX = Limits<TIN::ValueType>::min();
+	 TIN::ValueType maxY = Limits<TIN::ValueType>::min();
+	 TIN::ValueType maxZ = Limits<TIN::ValueType>::min();
+	 for (p1.y = 0; p1.y < imse2.Height(); p1.y++) {
+	    for (p1.x = 0; p1.x < imse2.Width(); p1.x++) {
+	       p2 = p + p1 - shift2;
+	       if (ims.Hold(p2)
+		   && imse2[p1]
+		   && Greater(ims.X[p2], ims.Y[p2], ims.Z[p2], maxX, maxY, maxZ)) {
+		  maxX = ims.X[p2];
+		  maxY = ims.Y[p2];
+		  maxZ = ims.Z[p2];
+	       }
+	    }
+	 }
+	 if (Greater(minX, minY, minZ, maxX, maxY, maxZ) ) {
+	    imd.X[p] = MIN(minX - maxX, 0);
+	    imd.Y[p] = MIN(minY - maxY, 0);
+	    imd.Z[p] = MIN(maxZ - maxZ, 0);
+	 } else {
+	    imd.X[p] = 0;
+	    imd.Y[p] = 0;
+	    imd.Z[p] = 0;
+	 }
+      }
+   }
+   return SUCCESS;
+}
+
+## append loadcases
+   if (objs[1]->Type() == Po_$TIN) {
+      TIN* const ims = (TIN*)objs[2];
+      Img2duc* const imse1 = (Img2duc*)objs[0];
+      Img2duc* const imse2 = (Img2duc*)objs[1];
+      objd[0] = new TIN(ims->Props());
+      TIN* const imd = (TIN*)objd[0];
+      
+      result = PHitOrMiss(*ims, *imse1, *imse2, *imd);
+      goto end;
+   }
+## end
+##end
+
+##begin PHitOrMissC3D < TIN, LOOPP, POINT, VOISS, VOISL >
+Errc PHitOrMiss( const TIN &ims, const Img3duc &imse1, const Img3duc &imse2, TIN &imd ) {
+   POINT p, p1, p2;
+   
+   POINT shift1(imse1.Size() / 2);
+   POINT shift2(imse2.Size() / 2);
+
+   for (p.z = 0; p.z < ims.Depth(); p.y++) {
+      for (p.y = 0; p.y < ims.Height(); p.y++) {
+	 for (p.x = 0; p.x < ims.Width(); p.x++) {
+	    TIN::ValueType minX, minY, minZ;
+	    minX = Limits<TIN::ValueType>::max();
+	    minY = Limits<TIN::ValueType>::max();
+	    minZ = Limits<TIN::ValueType>::max();
+	    
+	    for (p1.z = 0; p1.z < imse1.Depth(); p1.z++) {
+	       for (p1.y = 0; p1.y < imse1.Height(); p1.y++) {
+		  for (p1.x = 0; p1.x < imse1.Width(); p1.x++) {
+		     p2 = p + p1 - shift1;
+		     if (ims.Hold(p2)
+			 && imse1[p1]
+			 && Lower(ims.X[p2], ims.Y[p2], ims.Z[p2], minX, minY, minZ)) {
+			minX = ims.X[p2];
+			minY = ims.Y[p2];
+			minZ = ims.Z[p2];
+		     }
+		  }
+	       }
+	    }
+	    TIN::ValueType maxX, maxY, maxZ;
+	    maxX = Limits<TIN::ValueType>::min();
+	    maxY = Limits<TIN::ValueType>::min();
+	    maxZ = Limits<TIN::ValueType>::min();
+	    
+	    for (p1.z = 0; p1.z < imse2.Depth(); p1.z++) {
+	       for (p1.y = 0; p1.y < imse2.Height(); p1.y++) {
+		  for (p1.x = 0; p1.x < imse2.Width(); p1.x++) {
+		     p2 = p + p1 - shift2;
+		     if (ims.Hold(p2)
+			 && imse2[p1]
+			 && Greater(ims.X[p2], ims.Y[p2], ims.Z[p2], maxX, maxY, maxZ)) {
+			maxX = ims.X[p2];
+			maxY = ims.Y[p2];
+			maxZ = ims.Z[p2];
+		     }
+		  }
+	       }
+	    }
+	    if (Greater(minX, minY, minZ, maxX, maxY, maxZ) ) {
+	       imd.X[p] = MIN(minX - maxX, 0);
+	       imd.Y[p] = MIN(minY - maxY, 0);
+	       imd.Z[p] = MIN(maxZ - maxZ, 0);
+	    } else {
+	       imd.X[p] = 0;
+	       imd.Y[p] = 0;
+	       imd.Z[p] = 0;
+	    }
+	 }
+      }
+   }
+   return SUCCESS;
+}
+
+## append loadcases
+   if (objs[1]->Type() == Po_$TIN) {
+      TIN* const ims = (TIN*)objs[2];
+      Img3duc* const imse1 = (Img3duc*)objs[0];
+      Img3duc* const imse2 = (Img3duc*)objs[1];
+      objd[0] = new TIN(ims->Props());
+      TIN* const imd = (TIN*)objd[0];
+      
+      result = PHitOrMiss(*ims, *imse1, *imse2, *imd);
+      goto end;
+   }
+## end
+##end
+
+
+##forall(PHitOrMissG2D, /Img2d/)
+##forall(PHitOrMissG3D, /Img3d/)
+##forall(PHitOrMissC2D, /Imc2d/)
+##forall(PHitOrMissC3D, /Imc3d/)
+
+#ifdef MAIN
+#define	USAGE	"usage: %s [-m mask] [im_se1|-] [im_se2|-] [im_in|-] [im_out|-]"
+#define	PARC	0
+#define	FINC	3
+#define	FOUTC	1
+#define	MASK	1
+
+##main(PARC, FINC, FOUTC, MASK, USAGE)
+#endif

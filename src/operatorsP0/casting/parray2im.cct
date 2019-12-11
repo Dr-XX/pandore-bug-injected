@@ -1,0 +1,281 @@
+/* -*- c-basic-offset: 3; mode: c++ -*-
+ *
+ * Copyright (c), GREYC.
+ * All rights reserved
+ *
+ * You may use this file under the terms of the BSD license as follows:
+ *
+ * "Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are
+ * met:
+ *   * Redistributions of source code must retain the above copyright
+ *     notice, this list of conditions and the following disclaimer.
+ *   * Redistributions in binary form must reproduce the above copyright
+ *     notice, this list of conditions and the following disclaimer in
+ *     the documentation and/or other materials provided with the
+ *     distribution.
+ *   * Neither the name of the GREYC, nor the name of its
+ *     contributors may be used to endorse or promote products
+ *     derived from this software without specific prior written
+ *     permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, 
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, 
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
+ *
+ * 
+ * For more information, refer to:
+ * https://clouard.users.greyc.fr/Pandore
+ */
+
+/**
+ * @author Alexandre Duret-Lutz - 1999-11-03
+ * @author Regis Clouard - 2004-08-03 (version 5)
+ * @author Regis Clouard - 2007-05-21 (fix bug on multispectral images)
+ */
+
+#include <pandore.h>
+using namespace pandore;
+
+#if (defined _MSC_VER) && (!defined snprintf)
+#define snprintf _snprintf
+#endif
+
+/**
+ * @file parray2im.cpp
+ * Convert array to image.
+ */
+template <typename T, typename U>
+Errc PArray2Im( const std::string name, const Collection &c, Imx3d<T> &imd, U * ) {
+   int b;
+   Ulong maxsize;
+   std::string realname;
+   char number[12];
+   
+   // Get max size
+   maxsize = MAXULONG;
+   for (b = 0; b < imd.Bands(); b++) {
+      snprintf(number, sizeof(number), ".%d", b + 1);
+      number[sizeof(number) - 1] = 0;
+      if (imd.Bands() > 1) {
+	 realname = name + number;
+      } else {
+	 realname = name;
+      }
+      Ulong _n = c.GETARRAYSIZE(realname, U);
+      if (_n < maxsize) {
+	 maxsize = _n;
+      }
+   }
+   for (b = 0; b < imd.Bands(); b++) {
+      snprintf(number, sizeof(number), ".%d", b + 1);
+      number[sizeof(number) - 1] = 0;
+      if (imd.Bands() > 1) {
+	 realname = name + number;
+      } else {
+	 realname = name;
+      }
+      U* data = c.GETARRAY(realname, U);
+      Ulong pos = 0;
+      for (int z = 0; z< imd.Depth(); ++z) {
+	 for (int y = 0; y< imd.Height(); ++y) {
+	    for (int x = 0; x < imd.Width(); ++x) {
+	       imd[b][z][y][x] = (T)data[pos];
+	       ++pos;
+	       if (pos > maxsize) {
+		  break;
+	       }
+	    }
+	 }
+      }
+   }
+   return SUCCESS;
+}
+
+##begin a2i2g(TYPE1, TYPE2)
+## append cases
+   if ((type_name == "Array:TYPE1") && (type == 0) && (ndep == 0)) {
+      Img2d<TYPE2>* imd1 = new Img2d<TYPE2>(nrow, ncol);
+      objd = imd1;
+      result = PArray2Im(name, ims1, *imd1, (TYPE1*)NULL);
+   } else
+## end
+##end
+
+##begin a2i2c(TYPE1, TYPE2)
+## append cases
+   if ((type_name == "Array:TYPE1") && (type == 1) && (ndep == 0)) {
+      Imc2d<TYPE2>* imd1 = new Imc2d<TYPE2>(nrow, ncol);
+      objd = imd1;
+      result = PArray2Im(name, ims1, *imd1, (TYPE1*)NULL);
+   } else
+## end
+##end
+
+##begin a2i2x(TYPE1, TYPE2)
+## append cases
+   if ((type_name == "Array:TYPE1") && (type == 2) && (ndep == 0)) {
+      // Get the number of bands.
+      std::list<std::string> l = ims1.List();
+      std::list<std::string>::const_iterator i;
+      int bands=0;
+      for ( i = l.begin(); i != l.end(); ++i, ++bands) ;
+      Imx2d<TYPE2>* imd1=new Imx2d<TYPE2>(bands, nrow, ncol);
+      objd = imd1;
+      result = PArray2Im(name, ims1, *imd1, (TYPE1*)NULL);
+   } else
+## end
+##end
+
+
+##begin a2i3g(TYPE1, TYPE2)
+## append cases
+   if ((type_name == "Array:TYPE1") && (type == 0) && (ndep > 0)) {
+      Img3d<TYPE2>* imd1 = new Img3d<TYPE2>(ndep, nrow, ncol);
+      objd = imd1;
+      result = PArray2Im(name, ims1, *imd1, (TYPE1*)NULL);
+   } else
+## end
+##end
+
+##begin a2i3c(TYPE1, TYPE2)
+## append cases
+   if ((type_name == "Array:TYPE1") && (type == 1) && (ndep > 0)) {
+      Imc3d<TYPE2>* imd1 = new Imc3d<TYPE2>(ndep, nrow, ncol);
+      objd = imd1;
+      result = PArray2Im(name, ims1, *imd1, (TYPE1*)NULL);
+   } else
+## end
+##end
+
+##begin a2i3c(TYPE1, TYPE2)
+## append cases
+ if ((type_name == "Array:TYPE1") && (type == 2) && (ndep > 0)) {
+    // Get the number of bands.
+    std::list<std::string> l = ims1.List();
+    std::list<std::string>::const_iterator i;
+    int bands=0;
+    for ( i = l.begin(); i != l.end(); ++i, ++bands) ;
+    
+    Imx3d<TYPE2>* imd1=new Imx3d<TYPE2>(bands, ndep, nrow, ncol);
+    objd = imd1;
+    result = PArray2Im(name, ims1, *imd1, (TYPE1*)NULL);
+ } else
+## end
+##end
+
+##forallbase(a2i2g, /Char/, /Uchar/)
+##forallbase(a2i2g, /Uchar/, /Uchar/)
+##forallbase(a2i2g, /Short/, /Long/)
+##forallbase(a2i2g, /Ushort/, /Long/)
+##forallbase(a2i2g, /Ulong/, /Long/)
+##forallbase(a2i2g, /Long/, /Long/)
+##forallbase(a2i2g, /Float/, /Float/)
+##forallbase(a2i2g, /Double/, /Float/)
+
+##forallbase(a2i2c, /Char/, /Uchar/)
+##forallbase(a2i2c, /Uchar/, /Uchar/)
+##forallbase(a2i2c, /Short/, /Long/)
+##forallbase(a2i2c, /Ushort/, /Long/)
+##forallbase(a2i2c, /Ulong/, /Long/)
+##forallbase(a2i2c, /Long/, /Long/)
+##forallbase(a2i2c, /Float/, /Float/)
+##forallbase(a2i2c, /Double/, /Float/)
+
+
+##forallbase(a2i3g, /Char/, /Uchar/)
+##forallbase(a2i3g, /Uchar/, /Uchar/)
+##forallbase(a2i3g, /Short/, /Long/)
+##forallbase(a2i3g, /Ushort/, /Long/)
+##forallbase(a2i3g, /Ulong/, /Long/)
+##forallbase(a2i3g, /Long/, /Long/)
+##forallbase(a2i3g, /Float/, /Float/)
+##forallbase(a2i3g, /Double/, /Float/)
+
+##forallbase(a2i3c, /Char/, /Uchar/)
+##forallbase(a2i3c, /Uchar/, /Uchar/)
+##forallbase(a2i3c, /Short/, /Long/)
+##forallbase(a2i3c, /Ushort/, /Long/)
+##forallbase(a2i3c, /Ulong/, /Long/)
+##forallbase(a2i3c, /Long/, /Long/)
+##forallbase(a2i3c, /Float/, /Float/)
+##forallbase(a2i3c, /Double/, /Float/)
+
+Errc PArray2Im( const Collection &ims1, Pobject* &objd, const std::string name, int ndep, int nrow, int ncol ) {
+   Errc result;
+   std::string type_name;
+   int type;
+
+   // Verification des arguments.
+   if ((ndep != 0) && (ncol * nrow == 0)) {
+      Exit(FAILURE);
+   }
+   if ((nrow != 0) && (ncol == 0)) {
+      Exit(FAILURE);
+   }
+   if (ims1.Exists(name+".4")) {
+      type = 2;
+      type_name = ims1.GetType(name+".1");
+   } else if (ims1.Exists(name+".3")) {
+      type = 1;
+      type_name = ims1.GetType(name+".1");
+   } else{
+      type = 0;
+      type_name = ims1.GetType(name);
+   }
+   
+##cases
+   {
+      fprintf(stderr, "Error parray2im: bad collection\n");
+      result = FAILURE;
+   }
+   return result;
+}
+
+#ifdef MAIN
+
+/*
+ * Modify only the following constants, and the function call.
+ */
+#define	USAGE	"usage: %s w h d name [col_in|-] [im_out|-]"
+#define	PARC	4
+#define	FINC	1
+#define	FOUTC	1
+#define	MASK	0
+
+int main( int argc, char *argv[] ) {
+   Errc result;              // The result code of the execution.
+   Pobject* mask;            // The region mask.
+   Pobject* objin[FINC+1];   // The input objects;
+   Pobject* objs[FINC+1];    // The source objects masked by the carte.
+   Pobject* objout[FOUTC+1]; // The output object.
+   Pobject* objd[FOUTC+1];   // The result object of the execution.
+   char* parv[PARC+1];       // The input parameters.
+   
+   ReadArgs(argc, argv, PARC, FINC, FOUTC, &mask, objin, objs, objout, objd, parv, USAGE, MASK);
+   
+   if (objs[0]->Type() == Po_Collection) {
+      Collection* ims1=(Collection*)objs[0];
+      
+      result = PArray2Im(*ims1, objd[0], std::string(argv[4]), atoi(parv[2]), atoi(parv[1]), atoi(parv[0]));
+   } else {
+      PrintErrorFormat(objin, FINC);
+      result = FAILURE;
+   }
+   
+   if (result) {
+      WriteArgs(argc, argv, PARC, FINC, FOUTC, &mask, objin, objs, objout, objd, MASK);
+   }
+   Exit(result);
+   return 0;
+}
+
+#endif

@@ -1,0 +1,109 @@
+<html>
+<head>
+<title>OPERATEURS PANDORE</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>pscrolling</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Construction de l'enroul&eacute; d'une image.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>pscrolling</b> <i>direction</i> <i>decalage</i> [<i>-m mask</i>] [<i>im_in</i>|-] [<i>im_out</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p>L'op&eacute;rateur <b>pscrolling</b> permet de construire
+une nouvelle image <i>im_out</i> en translatant le contenu
+de l'image <i>im_in</i> de <i>decalage</i>
+pixels dans la <i>direction</i> indiqu&eacute;e.</p>
+
+<p>Les pixels pouss&eacute;s hors de l'image se retrouvent de l'autre
+c&ocirc;t&eacute; de l'image de sortie.</p>
+
+<!---------------------------------- -->
+<h3>Param&egrave;tres</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>direction</i> donne la direction de translation:</p>
+<ul>
+<li>0 = translation en x.
+<li>1 = translation en y.
+<li>2 = translation en z.
+</ul>
+<li><i>decalage</i> est une valeur enti&egrave;re
+positive ou n&eacute;gative selon le sens du d&eacute;calage souhait&eacute;.</p>
+</ul>
+
+<!---------------------------------- -->
+<h3>Entr&eacute;es</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_in</i>: une image ou une carte de r&eacute;gions.
+</ul>
+
+<!---------------------------------- -->
+<h3>Sorties</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_out</i>: une image de m&ecirc;me type que l'image d'entr&eacute;e ou une carte de r&eacute;gions.
+</ul>
+
+<!---------------------------------- -->
+<h3>R&eacute;sultat</h3>
+<!---------------------------------- -->
+<p>Retourne SUCCESS ou FAILURE.</p>
+
+<!---------------------------------- -->
+<h3>Exemples</h3>
+<!---------------------------------- -->
+<p>Translate le contenu de l'image tangram.pan de 50 pixels &agrave; gauche: </p>
+<pre>
+   pscrolling 0 50 tangram.pan a.pan
+</pre>
+
+
+<!---------------------------------- -->
+<h3>Voir aussi</h3>
+<!---------------------------------- -->
+<a href="./ptranslation.html">ptranslation</a>,
+<a href="../operatorsP0.html#transformation">Transformation</a>
+
+<!---------------------------------- -->
+<h3>Prototype C++</h3>
+<!---------------------------------- -->
+<tt>
+Errc PScrolling( const Img3duc &amp;im_in,Img3duc &amp;im_out, Uchar direction, Long decalage );
+</tt>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Auteur: R&eacute;gis Clouard
+</address>
+<!---------------------------------- -->
+
+</body>
+</html>

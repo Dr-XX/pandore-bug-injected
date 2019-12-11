@@ -1,0 +1,119 @@
+/* -*- c-basic-offset: 3; mode: c++ -*-
+ *
+ * Copyright (c), GREYC.
+ * All rights reserved
+ *
+ * You may use this file under the terms of the BSD license as follows:
+ *
+ * "Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are
+ * met:
+ *   * Redistributions of source code must retain the above copyright
+ *     notice, this list of conditions and the following disclaimer.
+ *   * Redistributions in binary form must reproduce the above copyright
+ *     notice, this list of conditions and the following disclaimer in
+ *     the documentation and/or other materials provided with the
+ *     distribution.
+ *   * Neither the name of the GREYC, nor the name of its
+ *     contributors may be used to endorse or promote products
+ *     derived from this software without specific prior written
+ *     permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, 
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, 
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
+ *
+ * 
+ * For more information, refer to:
+ * https://clouard.users.greyc.fr/Pandore
+ */
+
+#include <pandore.h>
+using namespace pandore;
+
+/**
+ * @file premoveslice.cpp
+ * Removes one slice at the beginning (if direction <=0)
+ * or at the end (if direction >0) of a 3D image.
+ */
+template <typename T>
+Errc PRemoveSlice( const Imx3d<T> &ims, Imx3d<T> &imd1, Imx2d<T> &imd2, int direction ) {
+   PobjectProps props = ims.Props();
+   if (--props.ndep <= 0) {
+      return FAILURE;
+   }
+   
+   imd1.New(props);
+   props.ndep = 0;
+   imd2.New(props);
+   
+   Long shift = (direction <= 0)? 1: 0;
+
+   Point3d p;
+   for (p.z = 0; p.z < imd1.Depth(); p.z++) {
+      for (p.y = 0; p.y < imd1.Height(); p.y++) {
+	 for (p.x = 0; p.x < imd1.Width(); p.x++) {
+	    for (int b = 0; b < imd1.Bands(); b++) {
+	       imd1[b][p] = ims[b][p.z + shift][p.y][p.x];
+	    }
+	 }
+      }
+   }
+   
+   p.z = (direction <= 0) ? 0 : ims.Depth() - 1;
+
+   for (p.y = 0; p.y < ims.Height(); p.y++) {
+      for (p.x = 0; p.x < ims.Width(); p.x++) {
+	 for (int b = 0; b < ims.Bands(); b++) { 
+	    imd2[b][p.y][p.x] = ims[b][p];
+	 }
+      }
+   }
+   return SUCCESS;
+}
+
+##begin PRemoveSlice < TIN1, TIN2 >
+## append loadcases
+   if (objs[0]->Type() == Po_$TIN1) {
+      TIN1* const ims = (TIN1*)objs[0];
+
+      objd[0] = new TIN1;
+      TIN1* const imd1 = (TIN1*)objd[0];
+      objd[1] = new TIN2;
+      TIN2* const imd2 = (TIN2*)objd[1];
+
+      result = PRemoveSlice(*ims, *imd1, *imd2, atol(parv[0]));
+      goto end;
+   }
+## end
+##end
+
+##forall(PRemoveSlice, /Img3duc/, /Img2duc/)
+##forall(PRemoveSlice, /Img3dsl/, /Img2dsl/)
+##forall(PRemoveSlice, /Img3dsf/, /Img2dsf/)
+
+##forall(PRemoveSlice, /Imc3duc/, /Imc2duc/)
+##forall(PRemoveSlice, /Imc3dsl/, /Imc2dsl/)
+##forall(PRemoveSlice, /Imc3dsf/, /Imc2dsf/)
+
+##forall(PRemoveSlice, /Imx3duc/, /Imx2duc/)
+##forall(PRemoveSlice, /Imx3dsl/, /Imx2dsl/)
+##forall(PRemoveSlice, /Imx3dsf/, /Imx2dsf/)
+##forall(PRemoveSlice, /Reg3d/, /Reg2d/)
+
+#ifdef MAIN
+#define	USAGE	"usage: %s direction [im_in|-] [im_ou1|-] [im_out2|-]"
+#define	PARC	1
+#define	FINC	1
+#define	FOUTC	2
+#define	MASK	0
+##main(PARC, FINC, FOUTC, MASK, USAGE)
+#endif

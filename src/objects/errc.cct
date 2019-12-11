@@ -1,0 +1,156 @@
+/* -*- c-basic-offset: 3; mode:c++ -*-
+ *
+ * Copyright (c), GREYC.
+ * All rights reserved
+ *
+ * You may use this file under the terms of the BSD license as follows:
+ *
+ * "Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are
+ * met:
+ *   * Redistributions of source code must retain the above copyright
+ *     notice, this list of conditions and the following disclaimer.
+ *   * Redistributions in binary form must reproduce the above copyright
+ *     notice, this list of conditions and the following disclaimer in
+ *     the documentation and/or other materials provided with the
+ *     distribution.
+ *   * Neither the name of the GREYC, nor the name of its
+ *     contributors may be used to endorse or promote products
+ *     derived from this software without specific prior written
+ *     permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
+ *
+ *
+ * For more information, refer to:
+ * https://clouard.users.greyc.fr/Pandore
+ */
+
+/**
+ * @file errc.cpp
+ *
+ * The class of exit values.
+ */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <pandore.h>
+
+#ifdef _MSC_VER
+#include <io.h>
+#define snprintf _snprintf
+#endif
+
+void pandore::Exit (const Errc &e ) { e.Exit(); }
+
+void pandore::Errc::Exit( ) const {
+   switch (_ret) {
+   case FS_RET : pandore::Exit(_val.fs); 
+##begin other_cases TYPE
+   case TYPE$_RET : pandore::Exit(_val.v_$TYPE);
+##end
+##forallbase(other_cases, /./)
+   }
+}
+
+/*
+ * Writes the result of an operator execution into the HOME/.pandore file.
+ * This allows to handle Errc values, while the exit command
+ * only allows CHAR values.
+ */
+void pandore::Exit( FS_t statut ) {
+   char	filename[256];
+   FILE *fp;
+   char *directory;
+   int processIdentifier = 0;
+   
+   if (!(directory = getenv(PANDORE_TMP))) {
+#if defined _WIN32 || defined WIN32
+      if ((directory = getenv("TEMP")) == 0) {
+	 directory = const_cast<char *>("c:\\Temp");
+      }
+#else
+      directory = const_cast<char *>("/tmp");
+      processIdentifier = (int)getppid();
+#endif
+   }
+#if defined _WIN32 || defined WIN32
+   snprintf(filename, sizeof(filename), "%s\\%s%d", directory, STATUS_FILE, processIdentifier);
+#else
+   snprintf(filename, sizeof(filename), "%s/%s%d", directory, STATUS_FILE, processIdentifier);
+#endif
+   filename[sizeof(filename) - 1] = '\0';
+   if (strlen(filename) > 0) {
+      if ((fp = fopen(filename, "wb"))) {
+	 if (statut == FAILURE) {
+	    fwrite("E", sizeof(Char), 1, fp);
+	    fclose(fp);
+	    exit(1);
+	 } else {
+	    fwrite("S", sizeof(Char), 1, fp);
+	    fclose(fp);
+	    exit(0);
+	 }
+      }
+   }
+   exit(1);
+}
+
+##begin Exit TYPE NBR
+/*
+ * Writes the result of an operator execution into the HOME/.pandore file.
+ * This allows to handle TYPE values, while the exit command
+ * only allows CHAR values.
+ */
+void pandore::Exit( TYPE statut ) {
+   FILE *fp;
+   char	filename[256];
+   char *directory;
+   int processIdentifier = 0;
+
+   if (!(directory = getenv(PANDORE_TMP))) {
+#if defined _WIN32 || defined WIN32
+      if ((directory = getenv("TEMP")) == 0) {
+	 directory = const_cast<char *>("c:\\Temp");
+      }
+#else
+      directory = const_cast<char *>("/tmp");
+      processIdentifier = (int)getppid();
+#endif
+   }
+#if defined _WIN32 || defined WIN32
+   snprintf(filename, sizeof(filename), "%s\\%s%d", directory, STATUS_FILE, processIdentifier);
+#else
+   snprintf(filename, sizeof(filename), "%s/%s%d", directory, STATUS_FILE, processIdentifier);
+#endif
+   filename[sizeof(filename) - 1] = '\0';
+   if (strlen(filename) > 0 && (fp = fopen(filename, "wb"))) {
+      fwrite("NBR", sizeof(Char), 1, fp);
+      fwrite(&statut, sizeof(TYPE), 1, fp);
+      fclose(fp);
+      exit(0);
+   }
+   exit(1);
+}
+##end
+##Exit(Char,   0)
+##Exit(Short,  1)
+##Exit(Long,   2)
+##Exit(Uchar,  3)
+##Exit(Ushort, 4)
+##Exit(Ulong,  5)
+##Exit(Float,  6)
+##Exit(Double, 7)
+##Exit(Llong,  8)
+##Exit(Ullong, 9)

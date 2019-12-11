@@ -1,0 +1,126 @@
+<html>
+<head>
+<title>PANDORE OPERATORS</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>pcontrast1quadtree</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Performs quadtree (or octree) segmentation based on contrast criterion.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>pcontrast1quadtree</b> <i>threshold</i> [<i>-m mask</i>] [<i>im_in</i>|-] [<i>rg_out</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p><b>pcontrast1quadtree</b> segments the input image <i>im_in</i>
+into homogenous regions. Homogeneous regions are regions that have
+an inner contrast &le; <i>threshold</i>.</p>
+
+<p>The principle of the algorithm is as follows:</p>
+<ul>
+<li>At the begin consider the image as the first block.
+<li>If the block violates the uniformity predicate (i.e. inner contrast &le; <i>threshold</i>)
+then split the block into four equally sized sub-blocks and
+then apply the algorithm recursively on each sub-blocks.
+</ul>
+
+<p>Therefore, the result is composed of rectangular regions.</p>
+
+<p>The contrast is calculated from:</p>
+<pre>
+    contrast(R)= 1/N * SUM(max(C(s,t), t in V(s) and t in R))
+and C(s,t)= | im_in[s] - im_in[t] |
+</pre>
+<p>where N is the number of pixels of the region R.
+</pre>
+
+<p>For 3D image, the output region map is composed of octree regions.</p>
+
+<!---------------------------------- -->
+<h3>Parameters</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>threshold</i> is the maximum contrast value
+to decide if a region is homogeneous or not.
+Values are from the gray scale
+of the input image <i>im_in</i> (eg., 0-255 for Uchar image).
+</ul>
+
+<!---------------------------------- -->
+<h3>Inputs</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_in</i>: a grayscale image.
+</ul>
+
+<!---------------------------------- -->
+<h3>Outputs</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>rg_out</i>: a region map.
+</ul>
+
+<!---------------------------------- -->
+<h3>Result</h3>
+<!---------------------------------- -->
+<p>Returns the number of regions.</p>
+
+<!---------------------------------- -->
+<h3>Examples</h3>
+<!---------------------------------- -->
+<p>Builds the quadtree of tangram.pan:</p>
+<pre>
+   pcontrast1quadtree 10 tangram.pan a.pan
+</pre>
+
+<!---------------------------------- -->
+<h3>See also</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#segmentation">Segmentation</a>
+
+<!---------------------------------- -->
+<h3>C++ prototype</h3>
+<!---------------------------------- -->
+<tt>
+Errc PContrast1Quadtree( const Img2duc &amp;im_in, Reg2d &amp;rg_out, Uchar threshold );
+</tt>
+
+<!---------------------------------- -->
+<h3>Version fran&ccedil;aise</h3>
+<!---------------------------------- -->
+<p>Segmentation d'une image par quadtree (ou octree) selon le contraste.</p>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Author: Laurent Quesnel
+</address>
+<!---------------------------------- -->
+
+</td>
+
+</body>
+</html>

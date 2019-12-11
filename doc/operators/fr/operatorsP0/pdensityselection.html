@@ -1,0 +1,119 @@
+<html>
+<head>
+<title>PANDORE OPERATORS</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>pdensityselection</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+S&eacute;lection de r&eacute;gions sur leur valeur de densit&eacute;.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>pdensityselection</b> <i>relation</i> <i>seuil</i> [<i>-m mask</i>] [<i>rg_in</i>|-] [<i>im_in</i>|-] [<i>rg_out</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p>L'op&eacute;rateur <b>pdensityselection</b> permet de s&eacute;lectionner
+les r&eacute;gions sur leur degr&eacute; de densit&eacute;.
+Le param&egrave;tre <i>relation</i> sp&eacute;cifie la relation d'ordre 
+par rapport &agrave; <i>seuil</i> pour s&eacute;lectionner ou non une r&eacute;gion.</p>
+
+<p>La densit&eacute; est le rapport entre le nombre de pixels
+contenu dans la r&eacute;gion et donn&eacute;&eacute;s dans <i>im_in</i>
+et la surface de la r&eacute;gion donn&eacute;e dans <i>rg_in</i>.
+
+<pre>
+densite = nombre de pixels/surface de la r&eacute;gion.
+</pre>
+
+<!---------------------------------- -->
+<h3>Param&egrave;tres</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>relation</i> est une valeur enti&egrave;re de l'intervalle [-3,3], pr&eacute;cisant
+la relation &agrave; la valeur de <i>seuil</i>:</p>
+<ul>
+<li><i>relation</i> = 3 : les r&eacute;gions &gt; de valeur maximale.
+<li><i>relation</i> = 2 : toutes les r&eacute;gions &gt;= <i>seuil</i>.
+<li><i>relation</i> = 1 : toutes les r&eacute;gions &gt; <i>seuil</i>.
+<li><i>relation</i> = 0 : toutes les r&eacute;gions = <i>seuil</i>.
+<li><i>relation</i> = -1 : toutes les r&eacute;gions &lt; <i>seuil</i>.
+<li><i>relation</i> = -2 : toutes les r&eacute;gions &lt;= <i>seuil</i>.
+<li><i>relation</i> = -3 : les r&eacute;gions &gt; de valeur minimale.
+</ul>
+
+<li>Le <i>seuil</i> est une valeur r&eacute;elle [0..1] qui correspond
+au degr&eacute; de sph&eacute;ricit&eacute;.
+</ul>
+
+<!---------------------------------- -->
+<h3>Entr&eacute;es</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>rg_in</i>: une carte de r&eacute;gions 2D.
+<li><i>im_in</i>: une image 2d d'octets.
+</ul>
+
+<!---------------------------------- -->
+<h3>Sorties</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>rg_out</i>: une carte de r&eacute;gions 2D.
+</ul>
+
+<!---------------------------------- -->
+<h3>R&eacute;sultat</h3>
+<!---------------------------------- -->
+<p>Retourne le nombre de r&eacute;gions ainsi s&eacute;lectionn&eacute;es.</p>
+
+<!---------------------------------- -->
+<h3>Exemples</h3>
+<!---------------------------------- -->
+<p>S&eacute;lectionne les r&eacute;gions avec le plus fort facteur de
+densit&eacute;:</p>
+<pre>
+   pdensityselection 3 0 a.pan tangram.pan b.pan
+</pre>
+
+<!---------------------------------- -->
+<h3>Voir aussi</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#region">R&eacute;gion</a>
+
+<!---------------------------------- -->
+<h3>Prototype C++</h3>
+<!---------------------------------- -->
+<tt>
+Errc PDensitySelection( const Reg2d &amp;rg_in, const Img2duc &amp;ims, Reg2d &amp;rg_out, int relation, float seuil );
+</tt>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Auteur: R&eacute;gis Clouard
+</address>
+<!---------------------------------- -->
+</body>
+</html>

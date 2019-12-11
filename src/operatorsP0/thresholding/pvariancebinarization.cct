@@ -1,0 +1,156 @@
+/* -*- c-basic-offset: 3; mode: c++ -*-
+ *
+ * Copyright (c), GREYC.
+ * All rights reserved
+ *
+ * You may use this file under the terms of the BSD license as follows:
+ *
+ * "Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are
+ * met:
+ *   * Redistributions of source code must retain the above copyright
+ *     notice, this list of conditions and the following disclaimer.
+ *   * Redistributions in binary form must reproduce the above copyright
+ *     notice, this list of conditions and the following disclaimer in
+ *     the documentation and/or other materials provided with the
+ *     distribution.
+ *   * Neither the name of the GREYC, nor the name of its
+ *     contributors may be used to endorse or promote products
+ *     derived from this software without specific prior written
+ *     permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
+ *
+ * 
+ * For more information, refer to:
+ * https://clouard.users.greyc.fr/Pandore
+ */
+
+#include <pandore.h>
+using namespace pandore;
+
+/**
+ * @file pvariancethresholding.cpp
+ * @brief binarization based on Otsu algorithm: use the threshold
+ * that maximizes the interclass variance (2 classes 0 - 255).
+ *
+ * Reference: N. Otsu, "A threshold selection method from grey scale histogram",
+ * IEEE Trans. on Syst. Man and Cyber., vol 1, pp 62-66, 1979 
+ */
+
+#define ALPHA 0.5F	// Smoothing degree.
+
+##begin PVarianceBinarization< TIN1, TIN2, LOOP, VARS, ACC >
+Errc PVarianceBinarization( const TIN1 &ims, TIN2 &imd ) {
+   std::map<TIN1::ValueType, float> h;
+   std::map<TIN1::ValueType, float> ch; // Cumulated histogram
+   std::map<TIN1::ValueType, float> wh; // Weighted histogram
+   std::map<TIN1::ValueType, float>::iterator i;
+
+   int VARS;
+   float m0, m1;
+   
+   // Compute histogram
+##LOOP(ims, VARS)
+   {
+      h[ims[ACC]]++;
+   }
+
+   // Compute the cumulated histogram and the weighted histogram.
+   i = h.begin();
+   float chv = ch[i->first] = i->second;
+   float whv = wh[i->first] = 0.0;
+   i++;
+   for (; i != h.end(); ++i) {
+      chv = ch[i->first] = chv + i->second;
+      whv = wh[i->first] = whv + (i->first * i->second);
+   }
+
+   // Compute the variance for each grayscale.
+   for (i = h.begin(); i != h.end(); ++i) {
+      m0 = wh[i->first] / ch[i->first];
+      if ((int)ch[i->first] == (int)chv) { // hcp = total pixels
+	 m1 = 0;
+      } else {
+	 m1 = (whv - wh[i->first]) / (chv - ch[i->first]);
+      }
+      h[i->first] = -ch[i->first] * (chv - ch[i->first]) * SQR(m0 - m1);
+   }
+
+   // Smoothing with a symetric exponential.
+   float hprev;
+   i = h.begin();
+   hprev = (i++)->second;
+   for (; i != h.end(); ++i) {
+      hprev = h[i->first] = ALPHA * (h[i->first] - hprev) + hprev;
+   }
+   i = h.end();
+   i--;
+   hprev = (i--)->second;
+   for (; i != h.begin(); --i) {
+      hprev = h[i->first] = ALPHA * (h[i->first] - hprev) + hprev;
+   }
+   i = h.begin();
+   hprev = h[i->first] = ALPHA * (h[i->first] - hprev) + hprev;
+   
+   // Get the minima to determine the threshold.
+   i = h.begin();
+   TIN1::ValueType minimum = (i++)->first;
+   for (; i != h.end(); ++i) {
+      if (h[i->first] < h[minimum]) {
+	 minimum = i->first;
+      }
+   }
+
+   minimum++; // Because thresholding use disequality (> threshold).
+   // For example, if we have only two grayscale,
+   // the minimum is the first grayscale, so the
+   // threshood will be the second grayscale.
+   // Use thresholds to build the output image.
+##LOOP(ims, VARS)
+   {
+      if (ims[ACC] < minimum) {
+	 imd[ACC] = 0;
+      } else {
+	 imd[ACC] = MAXUCHAR;
+      }
+   }
+   return minimum;
+}
+
+## append loadcases
+   if (objs[0]->Type() == Po_$TIN1) {
+      TIN1* const ims = (TIN1*)objs[0];
+      objd[0] = new TIN2(ims->Props());
+      TIN2* const imd = (TIN2*)objd[0];
+      
+      result = PVarianceBinarization(*ims, *imd);
+      goto end;
+   }
+## end
+##end
+
+##forall(PVarianceBinarization, /Img1d/, Img1duc)
+##forall(PVarianceBinarization, /Img2d/, Img2duc)
+##forall(PVarianceBinarization, /Img3d/, Img3duc)
+
+#ifdef MAIN
+#define USAGE	"usage: %s [-m mask] [im_in|-] [im_out|-]"
+#define PARC	0
+#define FINC	1
+#define FOUTC	1
+#define MASK	1
+
+##main(PARC, FINC, FOUTC, MASK, USAGE)
+
+#endif

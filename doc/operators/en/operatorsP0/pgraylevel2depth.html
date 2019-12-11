@@ -1,0 +1,116 @@
+<html>
+<head>
+<title>PANDORE OPERATORS</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff"><center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>pgraylevel2depth</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Converts gray levels to depth values.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>pgraylevel2depth</b> <i>depthmax</i> [<i>-m mask </i>] [<i>im_in</i>|-] [<i>im_out</i>|-] 
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p><b>pgraylevel2depth</b> builds a 3D image from a 2D image, where
+the gray level are converted to depth. For example, the gray level
+127 at coordinate (x,y) in the 2D image is copied along the 127 first
+slices at the same coordinate.</p>
+
+<p>The parameter <i>depthmax</i> defines the depth of the 
+output image <i>im_out</i>. All depths are normalized from that 
+maximum depth.</p>
+
+<p>The 3D image is built from the last slice. It means that clear objects
+occupy the first slices while dark objects occupy
+the last slices.</p>
+
+<p>The algorithm is as follows:</p>
+<pre>
+for (y=0; y&lt; normalize(im_in[x],depthmax); y++)
+	im_out[y][x] = normalize(im_in[x],depth);
+</pre>
+
+<!---------------------------------- -->
+<h3>Parameters</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>depthmax</i> defines the maximum depth
+and also the depth of the output image <i>im_out</i>.
+</ul>
+
+<!---------------------------------- -->
+<h3>Inputs</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_in</i>: a 2D gray level image.
+</ul>
+
+<!---------------------------------- -->
+<h3>Outputs</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_out</i>: a 3D Uchar image (img3duc).
+</ul>
+
+<!---------------------------------- -->
+<h3>Result</h3>
+<!---------------------------------- -->
+<p>Returns SUCCESS or FAILURE.</p>
+
+<!---------------------------------- -->
+<h3>Examples</h3>
+<!---------------------------------- -->
+<p>Builds the 3D image out.pan from the 2D image tangram.pan:</p>
+<pre>
+   pgraylevel2depth 50 tangram.pan a.pan
+</pre>
+
+<!---------------------------------- -->
+<h3>See also</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#utility">Utility</a>,
+<a href="./pdepth2graylevel.html">pdepth2graylevel</a>
+
+<!---------------------------------- -->
+<h3>C++ prototype</h3>
+<!---------------------------------- -->
+<tt>
+Errc PGraylevel2Depth( const Img2duc &amp;im_in, Img3duc &amp;im_out, long depthmax );
+</tt>
+
+<!---------------------------------- -->
+<h3>Version fran&ccedil;aise</h3>
+<!---------------------------------- -->
+<p>Construction d'une image de reliefs 3D &agrave; partir d'une image 2D.</p>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Author: Jean-Marie Janik
+</address>
+<!---------------------------------- -->
+</body>
+</html>

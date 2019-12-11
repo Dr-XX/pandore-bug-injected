@@ -1,0 +1,116 @@
+<html>
+<head>
+<title>OPERATEURS PANDORE</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>puniformityquadtree</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Segmentation d'une image par quadtree (ou octree) selon l'uniformit&eacute;.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>puniformityquadtree</b> <i>seuil</i> [<i>-m mask</i>] [<i>im_in</i>|-] [<i>rg_out</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p>L'op&eacute;rateur <b>puniformityquadtree</b> permet de segmenter l'image en diff&eacute;rentes
+r&eacute;gions selon le crit&egrave;re de l'uniformit&eacute;. Les r&eacute;gions obtenues sont rectangulaires.</p>
+
+<p>Le principe de  l'algorithme est le suivant:</p>
+<ul>
+<li> Si un bloc n'est pas homog&egrave;ne (i.e. l'uniformit&eacute; est inf&eacute;rieure au seuil)
+alors on le divise en 4 blocs &eacute;gaux
+et on r&eacute;applique l'algorithme sur chacun des blocs.
+</ul>
+
+<p>On utilise ici la valeur de l'uniformit&eacute;galcul&eacute;e par:</p>
+<pre>
+   uniformite(R)= 1 - ( variance(R) / (moyenne(R)^2) )
+</pre>
+
+<!---------------------------------- -->
+<h3>Param&egrave;tres</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>seuil</i> est la valeur d'uniformit&eacute; minimum consid&eacute;r&eacute;e
+pour qu'une r&eacute;gion soit accept&eacute;e comme uniforme.
+Les valeurs appartiennent &agrave; l'intervalle [0..1]:
+<ul>
+<li>1 correspond &agrave; des r&eacute;gions tr&egrave;s uniformes.
+<li>0 correspond &agrave; des r&eacute;gions peu uniformes.
+</ul>
+
+<p>G&eacute;n&eacute;ralement on utilise la valeur <i>seuil</i>=0.999
+ce qui permet de jauger la pr&eacute;cision.</p>
+</ul>
+
+<!---------------------------------- -->
+<h3>Entr&eacute;es</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_in</i>: une image de niveaux de gris.
+</ul>
+
+<!---------------------------------- -->
+<h3>Sorties</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>rg_in</i>: une carte de r&eacute;gions.
+</ul>
+
+<!---------------------------------- -->
+<h3>R&eacute;sultat</h3>
+<!---------------------------------- -->
+<p>Retourne le nombre de r&eacute;gions obtenues.</p>
+
+<!---------------------------------- -->
+<h3>Exemples</h3>
+<!---------------------------------- -->
+<p>Construit une partition de tangram.pan :</p>
+<pre>
+   puniformityquadtree 0.9 tangram.pan a.pan
+</pre>
+
+<!---------------------------------- -->
+<h3>Voir aussi</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#segmentation">Segmentation</a>
+
+<!---------------------------------- -->
+<h3>Prototype C++</h3>
+<!---------------------------------- -->
+<tt>
+Errc PUniformityQuadtree( const Img2duc &amp;im_in, Reg2d &amp;rg_out, float seuil );
+</tt>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Auteur: Laurent Quesnel
+</address>
+<!---------------------------------- -->
+
+</body>
+</html>

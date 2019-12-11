@@ -1,0 +1,129 @@
+<html>
+<head>
+<title>PANDORE OPERATORS</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>pmeanshiftsegmentation</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Performs pixel classification on image using mean shift algorithm.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>pmeanshiftsegmentation</b> <i>spatial-bandwidth</i> <i>range-bandwidth</i> <i>minimum-region-area</i> <i>accuracy-level</i> [<i>-m mask</i>] [<i>im_in</i>|-] [<i>rg_out</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p>The <b>pmeanshiftsegmentation</b> classifies the input image pixels
+into regions using color homogeneity. It is a procedure for
+locating the maxima of a density function given discrete
+data sampled from that function. The algorithm
+is based on the detection of the modes of this density function.</p>
+
+<p>The parameters controls  the classification
+ process. The <i>spatial-bandwidth</i> controls the size of the search window
+ when computing mean shift. The <i>range-bandwidth</i> controls the color
+vicinity for homogeneous regions. The more the spatial-bandwidth
+ and the range-bandwith, the less number of regions.</p>
+
+<p>The result is the region map <i>rg_out</i>.</p>
+
+<!---------------------------------- -->
+<h3>Parameters</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>spatial-bandwidth</i> specifies a spatial search window of size
+(2r+1)*(2r+1) during the mean shift computation,
+where <i>r</i> is the spatial bandwidth.
+It's an integer value greater than zero.
+
+<li><i>range-bandwidth</i> specifies the bandwidth of the search
+window in the range subspace during the computation of mean shift.
+It's a real value greater than zero (should not be high, generally &lt;10).
+
+<li><i>minimum-region-area</i> specifies the minimum allowable region
+area (in pixels) contained in the segmented image. It's an integer
+greater than zero given in pixels.
+
+<li><i>accuracy-level</i> determines the accuracy level used when
+computing mean shift. Value is an integer in [0..2], where 2 is the maximum
+accuracy level. However the more is the accuracy level, the less is
+speed level. 2 gives the most accurate results.
+Note that the size of the <i>spatial-bandwidth</i> parameter also
+infers on the speed.
+</ul>
+
+<!---------------------------------- -->
+<h3>Inputs</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_in</i>: a 2D image.
+</ul>
+
+<!---------------------------------- -->
+<h3>Outputs</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>rg_out</i>: a region map.
+</ul>
+
+<!---------------------------------- -->
+<h3>Result</h3>
+<!---------------------------------- -->
+<p>Returns the number of regions or FAILURE.</p>
+
+<!---------------------------------- -->
+<h3>Examples</h3>
+<!---------------------------------- -->
+<p>Segments the tangram pieces:</p>
+<pre>
+  pmeanshiftsegmentation 7 6.5 100 0 examples/tangram.pan a.pan
+</pre>
+
+<!---------------------------------- -->
+<h3>See also</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#segmentation">Segmentation</a>
+
+<!---------------------------------- -->
+<h3>C++ prototype</h3>
+<!---------------------------------- -->
+<tt>
+Errc PMeanShiftSegmentation( const Imc2duc &ims, Reg2d &rgd, int spatialBandwidth, float rangeBandwidth, int minimumRegionArea, int accuracyLevel );
+</tt>
+
+<!---------------------------------- -->
+<h3>Reference</h3>
+<!---------------------------------- -->
+D. Comanicu, P. Meer: "Mean shift: A robust approach toward feature space analysis." IEEE Trans. Pattern Anal. Machine Intell., 24, 603-619, May 2002
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Author: Régis Clouard
+</address>
+<!---------------------------------- -->
+
+</body>
+</html>

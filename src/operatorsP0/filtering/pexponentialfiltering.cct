@@ -1,0 +1,293 @@
+/* -*- mode: c++; c-basic-offset: 3 -*-
+ *
+ * Copyright (c), GREYC.
+ * All rights reserved
+ *
+ * You may use this file under the terms of the BSD license as follows:
+ *
+ * "Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are
+ * met:
+ *   * Redistributions of source code must retain the above copyright
+ *     notice, this list of conditions and the following disclaimer.
+ *   * Redistributions in binary form must reproduce the above copyright
+ *     notice, this list of conditions and the following disclaimer in
+ *     the documentation and/or other materials provided with the
+ *     distribution.
+ *   * Neither the name of the GREYC, nor the name of its
+ *     contributors may be used to endorse or promote products
+ *     derived from this software without specific prior written
+ *     permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, 
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, 
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
+ *
+ * 
+ * For more information, refer to:
+ * https://clouard.users.greyc.fr/Pandore
+ */
+
+/**
+ * @author Regis Clouard - 1994-10-13
+ */
+
+#include <math.h>
+#include <pandore.h>
+using namespace pandore;
+
+/**
+ * @file pexponentialfiltering.cpp
+ *
+ * Filtre exponentiel symetrique.
+ * alpha: Valeur de lissage. (0 fort, 1 nul).
+ * Construction d'une image intermediaire par passage
+ * d'un filtre exponentielle sur l'image source.
+ * Renouvellement de l'operation par passage du meme
+ * filtre en sens inverse pour construire l'image destination.
+ */
+template <typename T>
+void expo_x( const Imx3d<T> &ims, Imx3dsf &imd, float alpha ) {
+   Float *h1 = (Float*)malloc(ims.Width()*sizeof(Float));
+   Float *h2 = (Float*)malloc(ims.Width()*sizeof(Float));
+
+   for (int b=0; b<ims.Bands(); b++) {
+      for (int z=0; z<ims.Depth(); z++) {
+	 for (int y=0; y<ims.Height(); y++) {
+
+	    h1[0]=(float)ims(b, z, y, 0);
+	    for (int x=1; x<ims.Width(); x++) {
+	       h1[x] = alpha*((float)ims(b, z, y, x)-h1[x-1]) + h1[x-1];
+	    }
+
+	    h2[ims.Width()-1]=h1[ims.Width()-1];
+	    for (int x=ims.Width()-2; x>=0; x--) {
+	       h2[x] = alpha*(h1[x]-h2[x+1]) + h2[x+1];
+	    }
+
+	    for (int x=0; x<ims.Width(); x++) {
+	       imd(b, z, y, x) = h2[x];
+	    }
+	 }
+      }
+   }
+   free(h1);
+   free(h2);
+}
+
+template <typename T>
+void expo_y( const Imx3dsf &ims, Imx3d<T> &imd, float alpha ) {
+   Float *h1 = (Float*)malloc(ims.Height()*sizeof(Float));
+   Float *h2 = (Float*)malloc(ims.Height()*sizeof(Float));
+   
+   for (int b=0; b<ims.Bands(); b++) {
+      for (int z=0; z<ims.Depth(); z++) {
+	 for (int x=0; x<ims.Width(); x++) {
+	    h1[0]=ims(b, z, 0, x);
+	    Long y;
+	    for (y=1; y<ims.Height(); y++) {
+	       h1[y]=alpha*(ims(b, z, y, x)-h1[y-1])+h1[y-1];
+	    }
+	    h2[ims.Height()-1]=h1[ims.Height()-1];
+	    for (y=ims.Height()-2; y>=0; y--) {
+	       h2[y]=alpha*(h1[y]-h2[y+1])+h2[y+1];
+	    }
+	    for (y=0; y<ims.Height(); y++) {
+	       imd(b, z, y, x)=(T)h2[y];
+	    }
+	 }
+      }
+   }
+   free(h1);
+   free(h2);
+}
+
+template <typename T>
+void expo_z( const Imx3dsf &ims, Imx3d<T> &imd, float alpha ) {
+   Float *h1 = (Float*)malloc(ims.Depth()*sizeof(Float));
+   Float *h2 = (Float*)malloc(ims.Depth()*sizeof(Float));
+   
+   for (int b=0; b<ims.Bands(); b++) {
+      for (int y=0; y<ims.Height(); y++) {
+	 for (int x=0; x<ims.Width(); x++) {
+	    h1[0] = ims(b, 0, y, x);
+	    for (int z=1; z<ims.Depth(); z++) {
+	       h1[z]=alpha*(ims(b, z, y, x)-h1[z-1]) + h1[z-1];
+	    }
+
+	    h2[ims.Depth()-1]=h1[ims.Depth()-1];
+	    for (int z=ims.Depth()-2; z>=0; z--) {
+	       h2[z]=alpha*(h1[z]-h2[z+1]) + h2[z+1];
+	    }
+
+	    for (int z=0; z<ims.Depth(); z++) {
+	       imd(b, z, y, x) = (T)h2[z];
+	    }
+	 }
+      }
+   }
+   free(h1);
+   free(h2);
+}
+
+##begin PExponentialFiltering2G < TIN >
+Errc PExponentialFiltering( const TIN &ims, TIN &imd, float alpha ) {
+   Img2dsf sf1(ims.Size());
+
+   expo_x(ims, sf1, alpha);
+   expo_y(sf1, imd, alpha);
+  
+   return SUCCESS;
+}
+## append loadcases
+   if (objs[0]->Type()==Po_$TIN) {
+      TIN* const ims=(TIN*)objs[0];
+      objd[0]=new TIN(ims->Props());
+      TIN* const imd=(TIN*)objd[0];
+      
+      result=PExponentialFiltering(*ims, *imd, (Float)atof(parv[0]));
+      goto end;
+   }
+## end
+##end
+
+##begin PExponentialFiltering3G < TIN >
+Errc PExponentialFiltering( const TIN &ims, TIN &imd, float alpha ) {
+   Img3dsf sf1(ims.Size());
+   Img3dsf sf2(ims.Size());
+
+   expo_x(ims, sf2, alpha);
+   expo_y(sf2, sf1, alpha);
+   expo_z(sf1, imd, alpha);
+
+   return SUCCESS;
+}
+## append loadcases
+   if (objs[0]->Type()==Po_$TIN) {
+      TIN* const ims=(TIN*)objs[0];
+      objd[0]=new TIN(ims->Props());
+      TIN* const imd=(TIN*)objd[0];
+      
+      result=PExponentialFiltering(*ims, *imd, (Float)atof(parv[0]));
+      goto end;
+   }
+## end
+##end
+
+##begin PExponentialFiltering2C < TIN >
+Errc PExponentialFiltering( const TIN &ims, TIN &imd, float alpha ) {
+   Imc2dsf imi1(ims.Props());
+  
+   expo_x(ims, imi1, alpha);
+   expo_y(imi1, imd, alpha);
+
+   return SUCCESS;
+}
+
+## append loadcases
+   if (objs[0]->Type()==Po_$TIN) {
+      TIN* const ims=(TIN*)objs[0];
+      objd[0]=new TIN(ims->Props());
+      TIN* const imd=(TIN*)objd[0];
+      
+      result=PExponentialFiltering(*ims, *imd, (Float)atof(parv[0]));
+      goto end;
+   }
+## end
+##end
+
+##begin PExponentialFiltering3C < TIN >
+Errc PExponentialFiltering( const TIN &ims, TIN &imd, float alpha ) {
+   Imc3dsf sf1(ims.Props());
+   Imc3dsf sf2(ims.Props());
+  
+   expo_x(ims, sf2, alpha);
+   expo_y(sf2, sf1, alpha);
+   expo_z(sf1, imd, alpha);
+
+   return SUCCESS;
+}
+
+## append loadcases
+   if (objs[0]->Type()==Po_$TIN) {
+      TIN* const ims=(TIN*)objs[0];
+      objd[0]=new TIN(ims->Props());
+      TIN* const imd=(TIN*)objd[0];
+      
+      result=PExponentialFiltering(*ims, *imd, (Float)atof(parv[0]));
+      goto end;
+   }
+## end
+##end
+
+##begin PExponentialFiltering2X < TIN >
+Errc PExponentialFiltering( const TIN &ims, TIN &imd, float alpha) {
+   Imx2dsf imi1(ims.Props());
+  
+   expo_x(ims, imi1, alpha);
+   expo_y(imi1, imd, alpha);
+
+   return SUCCESS;
+}
+
+## append loadcases
+   if (objs[0]->Type()==Po_$TIN) {
+      TIN* const ims=(TIN*)objs[0];
+      objd[0]=new TIN(ims->Props());
+      TIN* const imd=(TIN*)objd[0];
+      
+      result=PExponentialFiltering(*ims, *imd, (Float)atof(parv[0]));
+      goto end;
+   }
+## end
+##end
+
+
+##begin PExponentialFiltering3X < TIN >
+Errc PExponentialFiltering( const TIN &ims, TIN &imd, float alpha ) {
+   Imx3dsf sf1(ims.Props());
+   Imx3dsf sf2(ims.Props());
+
+   expo_x(ims, sf2, alpha);
+   expo_y(sf2, sf1, alpha);
+   expo_z(sf1, imd, alpha);
+
+   return SUCCESS;
+}
+
+## append loadcases
+   if (objs[0]->Type()==Po_$TIN) {
+      TIN* const ims=(TIN*)objs[0];
+      objd[0]=new TIN(ims->Props());
+      TIN* const imd=(TIN*)objd[0];
+      
+      result=PExponentialFiltering(*ims, *imd, (Float)atof(parv[0]));
+      goto end;
+   }
+## end
+##end
+
+##forall(PExponentialFiltering2G, /Img2d/)
+##forall(PExponentialFiltering3G, /Img3d/)
+##forall(PExponentialFiltering2C, /Imc2d/)
+##forall(PExponentialFiltering3C, /Imc3d/)
+##forall(PExponentialFiltering2X, /Imx2d/)
+##forall(PExponentialFiltering3X, /Imx3d/)
+
+#ifdef MAIN
+#define	USAGE	"usage: %s alpha [-m mask] [im_in|-] [im_out|-]"
+#define	PARC	1
+#define	FINC	1
+#define	FOUTC	1
+#define	MASK	3
+
+##main(PARC, FINC, FOUTC, MASK, USAGE)
+#endif

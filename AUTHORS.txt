@@ -1,0 +1,13 @@
+ * Régis Clouard	* Alexandre Duret-Lutz
+ * Abderrahim Elmoataz	* François Angot
+ * Olivier Lezoray	* Philippe Belhomme
+ * Sophie Schüpp	* Boris Lenseigne
+ * Laurent Quesnel	* Ludovic Soltys
+ * Jalal Fadili		* Sébastien Bougleux
+ * Sébastien Fourey	* Arnaud Renouf
+ * Hua LI		* David Tschumperlé
+ * Nicolas Briand	* Jean-Marie Janik
+ * Guillaume Née	* Francois-Xavier Dupé
+ * Pierre Buyssens	* Cyril Bazin
+ * Alexis François	* Matthieu Toutain
+ * Sébastien Bernery	* Ahcene Sadi

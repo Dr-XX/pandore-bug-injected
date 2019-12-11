@@ -1,0 +1,125 @@
+<html>
+<head>
+<title>PANDORE OPERATORS</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center><hr>
+
+
+<!---------------------------------- -->
+<h1>psharp</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Performs contrast sharpening using laplacian unsharp masking.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>psharp</b> <i>connexity</i> <i>degree</i> [<i>-m mask</i>] [<i>im_in</i>|-] [<i>im_out</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p><b>psharp</b> performs a contrast sharpening of the input image <i>im_in</i>
+using the Laplacian unsharp masking.
+The objective of sharpening is to highlight fine details and to enhance details
+that are blurred. It consists in shrinking the width of intensity
+variation without affecting the mean intensity of regions on
+both sides of the variation.</p>
+
+<p>The unsharp masking algorithm is based on the subtraction of a <i>degree</i>
+times of  the input image with the laplacian of the image. It is implemented
+by a spatial filtering with the following filters that depends on the
+<i>connexity</i>.<br>
+For example, 2D filters are:</p>
+<pre>
+       4-connexity                8-connexity
+    0      -1      0           -1     -1      -1
+   -1   4*degree  -1    or     -1   8*degree  -1
+    0      -1      0           -1     -1      -1
+</pre>
+
+<p>For 3D filters, the center is set with 6*degree in case of 6-connexity,
+or 26*degree in case of 26-connexity.</p>
+
+<!---------------------------------- -->
+<h3>Parameters</h3>
+<!---------------------------------- -->
+<ul>
+<li><p><i>connexity</i> specifies the type of connexity
+between neighbours (4 and 8 for 2D image and 6 or 26 for 3D image).</p>
+
+<li><p><i>degree</i> is a real value that specifies
+the degree of sharpening. The more is the degree
+the less is the effect of sharpening.
+Typical values are 0.7, 1.0, 1.7, 2, 7.</p>
+</ul>
+
+<!---------------------------------- -->
+<h3>Inputs</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_in</i>: an image.
+</ul>
+
+<!---------------------------------- -->
+<h3>Outputs</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_out</i>: an image with the same properties as im_in.
+</ul>
+
+<!---------------------------------- -->
+<h3>Result</h3>
+<!---------------------------------- -->
+<p>Returns SUCCESS or FAILURE in case of invalid parameter values.</p>
+
+<!---------------------------------- -->
+<h3>Examples</h3>
+<!---------------------------------- -->
+<p>Sharpens the tangram.pan using the laplacian (which corresponds to degree=1).</p>
+<pre>
+   psharp 8 1 tangram.pan a.pan
+</pre>
+
+<!---------------------------------- -->
+<h3>See also</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#filtering">Filtering</a>
+
+<!---------------------------------- -->
+<h3>C++ prototype</h3>
+<!---------------------------------- -->
+<tt>
+Errc PSharp( const Img2duc &amp;im_in, Img2duc &amp;im_out, int connexity, float degree );
+</tt>
+
+<!---------------------------------- -->
+<h3>Version fran&ccedil;aise</h3>
+<!---------------------------------- -->
+<p>Rehaussement du contraste par convolution.</p>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Author: R&eacute;gis Clouard
+</address>
+<!---------------------------------- -->
+
+</body>
+</html>

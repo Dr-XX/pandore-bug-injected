@@ -1,0 +1,150 @@
+<html>
+<head>
+<title>PANDORE OPERATORS</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>pdenoisePDE</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+R&eacute;gularisation d'images multivalu&eacute;es par lissage anisotrope bas&eacute; EDP.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>pdenoisePDE</b> <i>nb_iter</i> <i>amplitude</i> <i>sharpness</i> <i>anisotropy</i> <i>alpha</i> <i>sigma</i> [<i>im_in</i>|-] [<i>im_out</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p>L'op&eacute;rateur <b>pdenoisePDE</b> permet de r&eacute;gulariser une image couleur ou
+multi-valu&eacute;e 2D ou 3D.
+La technique de r&eacute;gularisation utilis&eacute;e permet de traiter de mani&egrave;re
+efficace les artefacts locaux rencontr&eacute;s dans des images
+(bruit ou artefacts de compression par exemple).
+La r&eacute;gularisation est anisotrope et pr&eacute;serve les courbures, c'est-&egrave;-dire qu'elle
+permet de lisser l'image tout en pr&eacute;servant les structures importantes
+des images (bords, coins, discontinuit&eacute;s).</p>
+
+<p>Le temps d'ex&eacute;cution peut &ecirc;tre tr&egrave;s long selon les valeurs de
+param&egrave;tre pass&eacute;es.</p>
+
+<!---------------------------------- -->
+<h3>Param&egrave;tres</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>nb_iter</i> d&eacute;finit le nombre d'it&eacute;rations d'EDP effectu&eacute;s.
+Beaucoup d'it&eacute;rations permettent de lisser l'image de mani&egrave;re plus importante.
+Pour des images peu bruit&eacute;es, une valeur de 1 convient.
+<li><i>amplitude</i> d&eacute;finit l'amplitude du lissage lors d'une it&eacute;ration
+(pas de temps de l'EDP). Plus ce param&egrave;tre est important, plus l'image va
+se lisser rapidement &agrave; chaque it&eacute;ration. En g&eacute;n&eacute;ral, une valeur entre 5 et 200
+convient. 
+<li><i>sharpness</i> d&eacute;finit une valeur de contraste de r&eacute;f&eacute;rence des
+contours &agrave; pr&eacute;server. Plus ce param&egrave;tre est important, plus les contours
+seront pr&eacute;serv&eacute;s (mais &eacute;ventuellement le bruit aussi!).
+Une valeur de 0 indique que chaque pixel sera liss&eacute; avec la m&ecirc;me force,
+&eacute;ventuellement dans des directions diff&eacute;rentes. Une valeur entre 0 et 2
+convient g&eacute;n&eacute;ralement.
+<li><i>anisotropy</i> d&eacute;finit le degr&eacute; d'anisotropie du lissage.
+Un lissage tr&egrave;s anisotrope (anisotropy=1) est tr&egrave;s
+fortement orient&eacute; dans les directions des contours.
+Un lissage isotrope au contraire, ne favorise
+aucune direction de lissage (anisotropy=0).
+Selon le type de bruit, il est utile de limiter
+l'anisotropie pour &eacute;viter un effet d'apparition de textures.
+Ce param&egrave;tre doit prendre sa valeur entre 0 et 1.
+<li><i>alpha</i> d&eacute;finit la variance estim&eacute;e du bruit (par exemple 0.1).
+<li><i>sigma</i> d&eacute;finit un param&egrave;tre d'&eacute;chelle de la g&eacute;om&eacute;trie de l'image.
+Avant chaque it&eacute;ration, la g&eacute;om&eacute;trie locale de l'image est &eacute;valu&eacute;e.
+Le param&egrave;tre sigma correspond au pr&eacute;-lissage de cette g&eacute;om&eacute;trie.
+Plus sigma est grand, moins les d&eacute;tails seront pr&eacute;serv&eacute;s, mais plus le lissage
+semblera coh&eacute;rent. Plus sigma est petit, plus les d&eacute;tails seront pr&eacute;serv&eacute;s,
+mais en cas de bruit, le lissage peut &ecirc;tre
+incoh&eacute;rent.
+En g&eacute;n&eacute;ral, une valeur de sigma inf&eacute;rieur &agrave; 1 est suffisante (par exemple 0.8).
+</ul>
+</p>
+
+<!---------------------------------- -->
+<h3>Entr&eacute;es</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_in</i>: une image.
+</ul>
+
+<!---------------------------------- -->
+<h3>Sorties</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_out</i>: une image de m&ecirc;me type que l'image d'entr&eacute;e.
+</ul>
+
+<!---------------------------------- -->
+<h3>R&eacute;sultat</h3>
+<!---------------------------------- -->
+<p>Retourne SUCCESS ou FAILURE.</p>
+
+<!---------------------------------- -->
+<h3>Exemples</h3>
+<!---------------------------------- -->
+<p>R&eacute;duit le bruit de l'image "tangram.pan" en seulement 2 it&eacute;rations
+<pre>
+   pdenoisePDE 2 100 2 0.7 0.1 0.8 tangram.pan a.pan
+   visu a.pan
+</pre>
+
+<!---------------------------------- -->
+<h3>Voir aussi</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#filtering">Filtrage spatial</a>
+
+<!---------------------------------- -->
+<h3>Prototype C++</h3>
+<!---------------------------------- -->
+<tt>
+Errc PDenoisePDE( const Imx3d &amp;ims, Imx3d &amp;imd, Long nb_iter, Float amplitude, Float sharpness, Float anisotropy, Float alpha, Float sigma );
+</tt>
+
+<!---------------------------------- -->
+<h3>Reference</h3>
+<!---------------------------------- -->
+D. Tschumperl&eacute;, "<i>Fast Anisotropic Smoothing of Multi-Valued Images using Curvature-Preserving PDE's</i>", Cahier du GREYC No 05/01, Avril 2005.<br><br>
+
+<!---------------------------------- -->
+<h3>Avertissement</h3>
+<!---------------------------------- -->
+<p><font color="red">Ce module est soumis &agrave; la licence 
+<a href="http://www.cecill.info/licences/Licence_CeCILL_V1.1-US.html">CeCiLL</a>, et ne peut pas
+&ecirc;tre utilis&eacute; dans une application commerciale sous une licence propri&eacute;taire.
+En particulier, il utilise les fonctionnalit&eacute;s de la biblioth&egrave;que
+<a href="http://cimg.sourceforge.net">CImg</a>, soumise &eacute;galement &agrave; la licence
+<a href="http://www.cecill.info/licences/Licence_CeCILL_V1.1-US.html">CeCiLL</a>.</p></font>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Auteur: D. Tschumperl&eacute;
+</address>
+<!---------------------------------- -->
+
+</body>
+</html>

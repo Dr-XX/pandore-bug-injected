@@ -1,0 +1,109 @@
+<html>
+<head>
+<title>OPERATEURS PANDORE</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>pnewimage</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Cr&eacute;ation d'une nouvelle image.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>pnewimage</b> <i>w</i> <i>h</i> <i>d</i> <i>val</i> [<i>im_out</i>|-] 
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p>L'op&eacute;rateur <b>pnewimage</b> cr&eacute;e une nouvelle image de taille
+(<i>w: largeur,h: hauteur,d: profondeur</i>) avec la valeur <i>val</i> pour tous les pixels.</p>
+
+<p>Si <i>h</i>&lt;=0 alors l'image de sortie est une image 1D<br>
+Si <i>d</i>&lt;=0 alors l'image de sortie est une image 2D<br>
+sinon une image 3D.</p>
+
+<p>Le type de l'image de sortie d&eacute;pend de la valeur de <i>val</i>.
+Si <i>val</i> est un entier &lt; 255 et &ge; 0 alors l'image de sortie est une image d'octets;
+si <i>val</i> est un entier &gt; 255 ou &lt; 0 alors l'image de sortie est une image de longs;
+si <i>val</i> est un r&eacute;el l'image de sortie est une image de r&eacute;els.</p>
+
+<p>Deux autres op&eacute;rators peuvent &ecirc;tre utilis&eacute; pour cr&eacute;er une nouvelle image.
+<a href="./psetcst.html">psetcst</a> cr&eacute;e une nouvelle image &agrave; partir des
+propri&eacute;t&eacute;s d'une autre image.
+<a href="./pshapedesign.html">pshapedesign</a> cr&eacute;e une nouvelle image &agrave; partir 
+de la sp&eacute;cification de dimensions et d'un type.</p>
+
+<!---------------------------------- -->
+<h3>Param&egrave;tres</h3>
+<!---------------------------------- -->
+<ul>
+<li><p><i>w,h,d</i> (largeur, hauteur, profondeur) sp&eacute;cifient la taille de l'image de sortie. 
+
+<li><i>val</i> donne la valeur pour tous les pixels de l'image.
+Ce peut &ecirc;tre un entier court ou long ou un r&eacute;el.
+</ul>
+
+<!---------------------------------- -->
+<h3>Sorties</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_out</i>: une image dont le type d&eacute;pend de <i>val</i>.
+</ul>
+
+<!---------------------------------- -->
+<h3>R&eacute;sultat</h3>
+<!---------------------------------- -->
+<p>Retourne SUCCESS ou FAILURE.</p>
+
+<!---------------------------------- -->
+<h3>Exemples</h3>
+<!---------------------------------- -->
+<p>Comble les trous dans les r&eacute;gions
+obtenues par une segmentation de l'image tangram.pan.</p>
+<pre>
+   pbinarization 100 1e30 tangram.pan in.pan
+   pnewimage 256 256 0 255 i0.pan
+   psetborder 1 1 1 1 1 1 0 i0.pan i1.pan
+   perosionreconstruction 4 i1.pan in.pan fillhole_out.pan
+</pre>
+
+<!---------------------------------- -->
+<h3>Voir aussi</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#utility">Utilitaire</a>
+
+<!---------------------------------- -->
+<h3>Prototype C++</h3>
+<!---------------------------------- -->
+<tt>
+Pas de prototype.
+</tt>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Auteur: R&eacute;gis Clouard
+</address>
+<!---------------------------------- -->
+</body>
+</html>

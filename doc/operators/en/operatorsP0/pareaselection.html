@@ -1,0 +1,122 @@
+<html>
+<head>
+<title>PANDORE OPERATORS</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>pareaselection</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Selects regions from area size.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>pareaselection</b> <i>relation</i> <i>threshold</i> [<i>-m mask</i>] [<i>rg_in</i>|-] [<i>rg_out</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p><b>pareaselection</b> selects regions from their area size.
+The parameter <i>relation</i> specifies the partial order with the
+ <i>threshold</i> value that is used to select or not a region.</p>
+
+<p>The area is calculated from the number of pixels included in the
+region and on the boundary. The algorithm uses one half pixel
+for concavity. For example, the area is 10 pixels
+for the following region (<tt>8 + 4*0.5</tt>) :</p>
+<pre>
+    xx
+   xxxx
+    xx
+</pre>
+
+<!---------------------------------- -->
+<h3>Parameters</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>relation</i> is an integer from [-3,3] which specifies
+the order relation to the <i>threshold</i> value:</p>
+<ul>
+<li><i>relation</i> = 3: regions with the maximum value.
+<li><i>relation</i> = 2: regions &gt;= <i>threshold</i>.
+<li><i>relation</i> = 1: regions &gt; <i>threshold</i>.
+<li><i>relation</i> = 0: regions = <i>threshold</i>.
+<li><i>relation</i> = -1: regions &lt; <i>threshold</i>.
+<li><i>relation</i> = -2: regions &lt;= <i>threshold</i>.
+<li><i>relation</i> = -3: regions with the minimum value.
+</ul>
+
+<li><i>threshold</i> is an integer defined in pixel unit.</p>
+</ul>
+
+<!---------------------------------- -->
+<h3>Inputs</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>rg_in</i>: a 2D region map.
+</ul>
+
+<!---------------------------------- -->
+<h3>Outputs</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>rg_out</i>: a 2D region map.
+</ul>
+
+<!---------------------------------- -->
+<h3>Result</h3>
+<!---------------------------------- -->
+<p>Returns the number of selected regions.</p>
+
+<!---------------------------------- -->
+<h3>Examples</h3>
+<!---------------------------------- -->
+<p>Selects all regions with area size = 50 pixels:</p>
+<pre>
+   pareaselection 0 50  rin.pan rout.pan
+</pre>
+
+<!---------------------------------- -->
+<h3>See also</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#region">Region</a>
+
+<!---------------------------------- -->
+<h3>C++ prototype</h3>
+<!---------------------------------- -->
+<tt>
+Errc PAreaSelection( const Reg2d &amp;rg_in, Reg2d &amp;rg_out, int relation, Ulong threshold );
+</tt>
+
+<!---------------------------------- -->
+<h3>Version fran&ccedil;aise</h3>
+<!---------------------------------- -->
+<p>S&eacute;lection de régions sur leur valeur de surface.</p>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Author: R&eacute;gis Clouard
+</address>
+<!---------------------------------- -->
+</body>
+</html>

@@ -1,0 +1,99 @@
+<html>
+<head>
+<title>PANDORE OPERATORS</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>pvariancefiltering</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Filtrage d'une image par variance.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>pvariancefiltering</b> <i>seuil_bas</i> <i>seuil_haut</i> [<i>-m mask</i>] [<i>im_in</i>|-] [<i>im_out</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p>L'op&eacute;rateur <b>pvariancefiltering</b> permet de filtrer l'image d'entr&eacute;e
+<i>im_in</i>, par application d'un filtre de variance.
+Chaque pixel est remplac&eacute; par la variance de ses 8 voisins en 2D ou
+de ses 26 voisins en 3D si elle est comprise entre les deux seuils.</p>
+
+<!---------------------------------- -->
+<h3>Param&egrave;tres</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>seuil_bas</i> et <i>seuil_haut</i>
+donnent les valeurs acceptables pour le remplacement
+et sont proportionnelles &agrave; la variance des valeurs
+de pixels.
+</ul>
+
+<!---------------------------------- -->
+<h3>Entr&eacute;es</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_in</i>: une image de niveaux de gris.
+</ul>
+
+<!---------------------------------- -->
+<h3>Sorties</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_out</i>: une image de r&eacute;els (Img2dsf ou Img3dsf).
+</ul>
+
+<!---------------------------------- -->
+<h3>R&eacute;sultat</h3>
+<!---------------------------------- -->
+<p>Retourne SUCCESS ou FAILURE.</p>
+
+<!---------------------------------- -->
+<h3>Exemples</h3>
+<!---------------------------------- -->
+<p>Applique le filtre de variance &agrave; l'image tangram.pan:</p>
+<pre>
+   pvariancefiltering 0 255 tangram.pan a.pan
+</pre>
+
+<!---------------------------------- -->
+<h3>Voir aussi</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#filtering">Filtrage spatial</a>
+
+<!---------------------------------- -->
+<h3>Prototype C++</h3>
+<!---------------------------------- -->
+<tt>
+Errc PVarianceFiltering( const Img2duc &amp;im_in, Img2duc &amp;im_out, Uchar seuil_bas, Uchar seuil_haut );
+</tt>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Auteur: Fran&ccedil;ois Angot
+</address>
+<!---------------------------------- -->
+</body>
+</html>

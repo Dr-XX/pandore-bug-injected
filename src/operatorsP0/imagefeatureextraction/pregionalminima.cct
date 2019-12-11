@@ -1,0 +1,168 @@
+/* -*- mode: c++; c-basic-offset: 3 -*-
+ *
+ * Copyright (c), GREYC.
+ * All rights reserved
+ *
+ * You may use this file under the terms of the BSD license as follows:
+ *
+ * "Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are
+ * met:
+ *   * Redistributions of source code must retain the above copyright
+ *     notice, this list of conditions and the following disclaimer.
+ *   * Redistributions in binary form must reproduce the above copyright
+ *     notice, this list of conditions and the following disclaimer in
+ *     the documentation and/or other materials provided with the
+ *     distribution.
+ *   * Neither the name of the GREYC, nor the name of its
+ *     contributors may be used to endorse or promote products
+ *     derived from this software without specific prior written
+ *     permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, 
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, 
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
+ *
+ * 
+ * For more information, refer to:
+ * https://clouard.users.greyc.fr/Pandore
+ */
+
+/**
+ * @author Régis Clouard  - 2014-12-09
+ */
+
+#include <pandore.h>
+using namespace pandore;
+
+/**
+ * @file pregionalminima.cpp
+ */
+##begin PRegionalMinima1D < TIN, LOOPP, POINT, VOISL>
+Errc PRegionalMinima( const TIN &ims, TIN &imd, int length ) {
+   if (length > ims.Width()) {
+      std::cerr << "Error pregionalminima: length > image size" << std::endl;
+      return FAILURE;
+   }
+   
+   TIN imi(ims.Props());
+   
+   POINT p;
+   for (p.x = 0; p.x < ims.Width(); p.x++) {
+      imi[p] = ims[p];
+      for (int v = 0; v < VOISL; v++) {
+	 if (ims.Hold(p + v$VOISL[v]) && ims[p + v$VOISL[v]] < ims[p]) {
+	    imi[p] = Limits<TIN::ValueType>::max();
+	    break;
+	 }
+      }
+   }
+   
+   for (p.x = 0 ; p.x < imi.Width(); p.x++) {
+      TIN::ValueType min = imi[p];
+      for (int k = -length/2; k < length/2; k++) {
+   	 if (imi.Hold(p + k) && imi[p.x + k] < min) {
+   	    min = imi[p + k];
+   	 }
+      }
+      if (min == Limits<TIN::ValueType>::max()) {
+	 min = 0;
+      }
+      if (imi[p.x] == min) {
+	 imd[p] = 255;
+      } else {
+	 imd[p] = 0;
+      }
+   }
+   return SUCCESS;
+}
+
+## append loadcases
+   if (objs[0]->Type() == Po_$TIN) {
+      TIN* const ims = (TIN*)objs[0];
+      objd[0] = new TIN(ims->Size());
+      TIN* const imd = (TIN*)objd[0];
+      
+      result = PRegionalMinima(*ims, *imd, atoi(parv[0]));
+      goto end;
+   }
+## end
+##end
+
+##begin PRegionalMinima2D < TIN, LOOPP, POINT, VOISL>
+Errc PRegionalMinima( const TIN &ims, TIN &imd, int length ) {
+   if (length > ims.Width()) {
+      std::cerr << "Error pregionalminima: length > image size" << std::endl;
+      return FAILURE;
+   }
+   
+   TIN imi(ims.Props());
+   
+   POINT p;
+   for (p.y = 0; p.y < ims.Height(); p.y++) {
+      for (p.x = 0; p.x < ims.Width(); p.x++) {
+	 imi[p] = ims[p];
+	 for (int v = 0; v < VOISL; v++) {
+	    if (ims.Hold(p + v$VOISL[v]) && ims[p + v$VOISL[v]] < ims[p]) {
+	       imi[p] = Limits<TIN::ValueType>::max();
+	       break;
+	    }
+	 }
+      }
+   }
+   
+   for (p.y = 0 ; p.y < imi.Height(); p.y++) {
+      for (p.x = 0 ; p.x < imi.Width(); p.x++) {
+	 TIN::ValueType min = imi[p];
+	 POINT q;
+	 for (q.y = -length/2; q.y < length/2; q.y++) {
+	    for (q.x = -length/2; q.x < length/2; q.x++) {
+	       if (imi.Hold(p + q) && imi[p + q] < min) {
+		  min = imi[p + q];
+	       }
+	    }
+	 }
+	 if (min == Limits<TIN::ValueType>::max()) {
+	    imd[p] = 0;
+	 } else if (imi[p] == min) {
+	    imd[p] = 255;
+	 } else {
+	    imd[p] = 0;
+	 }
+      }
+   }
+   return SUCCESS;
+}
+
+## append loadcases
+   if (objs[0]->Type() == Po_$TIN) {
+      TIN* const ims = (TIN*)objs[0];
+      objd[0] = new TIN(ims->Size());
+      TIN* const imd = (TIN*)objd[0];
+      
+      result = PRegionalMinima(*ims, *imd, atoi(parv[0]));
+      goto end;
+   }
+## end
+##end
+
+##forall(PRegionalMinima1D, /Img1d/)
+##forall(PRegionalMinima2D, /Img2d/)
+
+#ifdef MAIN
+#define	USAGE	"usage: %s length [-m mask] [im_in|-] [im_out|-]"
+#define	PARC	1
+#define	FINC	1
+#define	FOUTC	1
+#define	MASK	2
+
+##main(PARC, FINC, FOUTC, MASK, USAGE)
+#endif

@@ -1,0 +1,124 @@
+<html>
+<head>
+<title>PANDORE OPERATORS</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>pmeanaggregation</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Performs pixel aggregation based on mean criterion.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>pmeanaggregation</b> <i>connexity</i> <i>threshold</i> [<i>-m mask</i>] [<i>rg_in</i>|-] [<i>im_in</i>|-] [<i>rg_out</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p><b>pmeanaggregation</b> builds a new region map
+from aggregation of pixels to regions of the input
+region map <i>rg_in</i>.
+A pixel p is aggregated to a region R if:</p>
+<ul>
+<li>p is connected to the region R according to the specified <i>connexity</i>;
+<li>|mean(R)-mean(R+im_in[p])| &le; threshold
+</ul>
+
+<p>The mean of the region is not updated with the new pixel
+to avoid moving away too much from the initial situation. 
+One prefer iterative executions of the operator to update
+the inner mean. For example, operator can be iterated
+until <a href="./pstatus.html">pstatus</a> returns 0.</p>
+
+<p>The output region map <i>rg_out</i> has the same number
+of labels than the input region map.</p>
+
+<!---------------------------------- -->
+<h3>Parameters</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>connexity</i> specifies the neighbor relation
+between pixels (4 or 8 for 2D; 6 or 26 for 3D).
+
+<li><i>threshold</i> specifies the maximum
+mean value to decide to aggregate a pixel to the region.
+Values are from the gray scale of the input
+image.
+</ul>
+
+<!---------------------------------- -->
+<h3>Inputs</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>rg_in</i>: a region map.
+<li><i>im_in</i>: a grayscale image.
+</ul>
+
+<!---------------------------------- -->
+<h3>Outputs</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>rg_out</i>: a region map.
+</ul>
+
+<!---------------------------------- -->
+<h3>Result</h3>
+<!---------------------------------- -->
+<p>Returns the number of aggregation
+or FAILURE.</p>
+
+<!---------------------------------- -->
+<h3>Examples</h3>
+<!---------------------------------- -->
+<p>Aggregates pixels to tangram pieces:</p>
+<pre>
+   pbinarization 96 1e30 tangram.pan a.pan
+   plabeling 8 a.pan b.pan
+   pmeanaggregation 8 45 b.pan tangram.pan out.pan
+</pre>
+
+<!---------------------------------- -->
+<h3>See also</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#segmentation">Segmentation</a>
+
+<!---------------------------------- -->
+<h3>C++ prototype</h3>
+<!---------------------------------- -->
+<tt>
+Errc PMeanAggregation( const Reg2d &amp;rg_in, Img2duc &amp;im_in, Reg2d &amp;rg_out, int connexity, Uchar threshold );
+</tt>
+
+<!---------------------------------- -->
+<h3>Version fran&ccedil;aise</h3>
+<!---------------------------------- -->
+<p>Croissance des r&eacute;gions d'une carte selon la moyenne intérieure.</p>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Author: R&eacute;gis Clouard
+</address>
+<!---------------------------------- -->
+</body>
+</html>

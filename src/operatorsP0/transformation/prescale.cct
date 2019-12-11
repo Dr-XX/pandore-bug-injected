@@ -1,0 +1,411 @@
+/* -*- c-basic-offset: 3; mode: c++ -*-
+ *
+ * Copyright (c) 2013,  GREYC.
+ * All rights reserved
+ *
+ * You may use this file under the terms of the BSD license as follows:
+ *
+ * "Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are
+ * met:
+ *   * Redistributions of source code must retain the above copyright
+ *     notice, this list of conditions and the following disclaimer.
+ *   * Redistributions in binary form must reproduce the above copyright
+ *     notice, this list of conditions and the following disclaimer in
+ *     the documentation and/or other materials provided with the
+ *     distribution.
+ *   * Neither the name of the GREYC, nor the name of its
+ *     contributors may be used to endorse or promote products
+ *     derived from this software without specific prior written
+ *     permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, 
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, 
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
+ *
+ * 
+ * For more information, refer to:
+ * https://clouard.users.greyc.fr/Pandore
+ */
+
+/**
+ * @author Régis Clouard - 1997-02-22
+ */
+
+#include <pandore.h>
+using namespace pandore;
+
+/**
+ * @file prescale.cpp
+ * Rescales the image according to scale factor in each direction.
+ * This version uses the nearest neighbors interpolation.
+ *
+ * @param rescalex scale factor along X axis.
+ * @param rescaley scale factor along Y axis.
+ * @param rescalez scale factor along Z axis.
+ * @return SUCCESS or FAILURE
+ * imd(i, j) = ims(i/scaley, j/scalex).
+ */
+Errc PRescale( const Reg2d &rgs, Reg2d &rgd, const float scaley, const float scalex ) {
+   Point2d p;
+
+   if ( scalex <= 0 || scaley <= 0 ) {
+      fprintf(stderr, "Error prescale: Bad parameter values: %f %f\n", scalex, scaley);
+      return FAILURE;
+   }
+
+   for (p.y = 0 ; p.y < rgd.Height(); p.y++) {
+      for (p.x = 0 ; p.x < rgd.Width(); p.x++) {
+	 rgd[p] = rgs((int)(p.y / scaley), (int)(p.x / scalex));
+      }
+
+      
+   }
+   rgd.Labels(rgs.Labels());
+   return SUCCESS;
+}
+
+template <typename T>
+Errc PRescale( const Imx2d<T> &ims, Imx2d<T> &imd, const float scaley, const float scalex ) {
+   Point2d p;
+
+   if ( scalex <= 0 || scaley <= 0 ) {
+      fprintf(stderr, "Error prescale: Bad parameter values: %f %f\n", scalex, scaley);
+      return FAILURE;
+   }
+
+   for (int b = 0; b < imd.Bands(); b++) {
+      for (p.y = 0 ; p.y < imd.Height(); p.y++) {
+	 for (p.x = 0 ; p.x < imd.Width(); p.x++) {
+	    imd[b][p] = ims(b, (int)(p.y / scaley), (int)(p.x / scalex));
+	 }
+      }
+   }
+   
+   return SUCCESS;
+}
+
+
+##begin PRescale2G < TYPE >
+## append loadcases
+   if (objs[0]->Type() == Po_$TYPE) {
+      const float scalex = (float)atof(parv[0]);
+      const float scaley = (float)atof(parv[1]);
+      if ( scalex <= 0 || scaley <= 0) {
+	 result = FAILURE;
+      } else {
+	 TYPE* const ims = (TYPE*)objs[0];
+	 objd[0] = new TYPE(Long(ims->Height() * scaley),
+			    Long(ims->Width() * scalex));
+	 TYPE* const imd = (TYPE*)objd[0];
+	 result = PRescale(*ims, *imd, scaley, scalex);
+      }
+      goto end;
+   }
+## end
+##end
+
+##begin PRescale2C < TYPE >
+## append loadcases
+if (objs[0]->Type() == Po_$TYPE) {
+      const float scalex = (float)atof(parv[0]);
+      const float scaley = (float)atof(parv[1]);
+      if ( scalex <= 0 || scaley <= 0) {
+	 result = FAILURE;
+      } else {
+	 TYPE* const ims = (TYPE*)objs[0];
+	 objd[0] = new TYPE(Long(ims->Height() * scaley),
+			    Long(ims->Width() * scalex));
+	 TYPE* const imd = (TYPE*)objd[0];
+	 imd->ColorSpace(ims->ColorSpace());
+	 result = PRescale(*ims, *imd, scaley, scalex);
+      }
+      goto end;
+   }
+## end
+##end
+
+##begin PRescale2X < TYPE >
+## append loadcases
+   if (objs[0]->Type() == Po_$TYPE) {
+      const float scalex = (float)atof(parv[0]);
+      const float scaley = (float)atof(parv[1]);
+      if ( scalex <= 0 || scaley <= 0) {
+	 result = FAILURE;
+      } else {
+	 TYPE* const ims = (TYPE*)objs[0];
+	 objd[0] = new TYPE(ims->Bands(),
+			    Long(ims->Height() * scaley),
+			    Long(ims->Width() * scalex));
+	 TYPE* const imd = (TYPE*)objd[0];
+	 result = PRescale(*ims, *imd, scaley, scalex);
+      }
+      goto end;
+   }
+
+## end
+##end
+
+##begin PRescale2R < TYPE >
+## append loadcases
+   if (objs[0]->Type() == Po_$TYPE) {
+      const float scalex = (float)atof(parv[0]);
+      const float scaley = (float)atof(parv[1]);
+      if ( scalex <= 0 || scaley <= 0) {
+	 result = FAILURE;
+      } else {
+	 TYPE* const rgs = (TYPE*)objs[0];
+	 objd[0] = new TYPE(Long(rgs->Height() * scaley),
+			    Long(rgs->Width() * scalex));
+	 TYPE* const rgd = (TYPE*)objd[0];
+	 result = PRescale(*rgs, *rgd, scaley, scalex);
+      }
+      goto end;
+   }
+
+## end
+##end
+
+template <typename T>
+Errc PRescale( const Reg3d &rgs, Reg3d &rgd, const float scalez, const float scaley, const float scalex ) {
+   Point3d p;
+
+   if ( scalex <= 0 || scaley <= 0 || scalez <= 0) {
+      fprintf(stderr, "Error prescale: Bad parameter values: %f %f %f\n", scalex, scaley, scalez);
+      return FAILURE;
+   }
+   for (p.z = 0 ; p.z < rgd.Depth() ; p.z++) {
+      int z1 = (int)(p.z / scalez);
+      for (p.y = 0 ; p.y < rgd.Height() ; p.y++) {
+	 int y1 = (int)(p.y / scaley);
+	 for (p.x = 0 ; p.x < rgd.Width() ; p.x++) {
+	    int x1 = (int)(p.x / scalex);
+	    rgd(p.z, p.y, p.x) = rgs(z1, y1, x1);
+	 }
+      }
+   }
+
+   rgd.Labels(rgs.Labels());
+   return SUCCESS;
+}
+
+template <typename T>
+Errc PRescale( const Imx3d<T> &ims, Imx3d<T> &imd, const float scalez, const float scaley, const float scalex ) {
+   Point3d p;
+
+   if ( scalex <= 0 || scaley <= 0 || scalez <= 0) {
+      fprintf(stderr, "Error prescale: Bad parameter values: %f %f %f\n", scalex, scaley, scalez);
+      return FAILURE;
+   }
+   for (int b = 0; b < imd.Bands(); b++) {
+      for (p.z = 0 ; p.z < imd.Depth() ; p.z++) {
+	 int z1 = (int)(p.z / scalez);
+	 for (p.y = 0 ; p.y < imd.Height() ; p.y++) {
+	    int y1 = (int)(p.y / scaley);
+	    for (p.x = 0 ; p.x < imd.Width() ; p.x++) {
+	       int x1 = (int)(p.x / scalex);
+	       imd(b, p.z, p.y, p.x) = ims(b, z1, y1, x1);
+	    }
+	 }
+      }
+   }
+   return SUCCESS;
+}
+
+##begin PRescale3G < TYPE >
+## append loadcases
+   if (objs[0]->Type() == Po_$TYPE) {
+      const float scalex = (float)atof(parv[0]);
+      const float scaley = (float)atof(parv[1]);
+      const float scalez = (float)atof(parv[2]);
+      if ( scalex <= 0 || scaley <= 0 || scalez <= 0) {
+	 result = FAILURE;
+      } else {
+	 TYPE* const ims = (TYPE*)objs[0];
+	 objd[0] = new TYPE(Long(ims->Depth() * scalez),
+			    Long(ims->Height() * scaley),
+			    Long(ims->Width() * scalex));
+	 TYPE* const imd = (TYPE*)objd[0];
+	 result = PRescale(*ims, *imd, scalez, scaley, scalex);
+      }
+      goto end;
+   }
+## end
+##end
+
+##begin PRescale3C < TYPE >
+## append loadcases
+   if (objs[0]->Type() == Po_$TYPE) {
+      const float scalex = (float)atof(parv[0]);
+      const float scaley = (float)atof(parv[1]);
+      const float scalez = (float)atof(parv[2]);
+      if ( scalex <= 0 || scaley <= 0 || scalez <= 0) {
+	 result = FAILURE;
+      } else {
+	 TYPE* const ims = (TYPE*)objs[0];
+	 objd[0] = new TYPE(Long(ims->Depth() * scalez),
+			    Long(ims->Height() * scaley),
+			    Long(ims->Width() * scalex));
+	 TYPE* const imd = (TYPE*)objd[0];
+	 result = PRescale(*ims, *imd, scalez, scaley, scalex);
+	 imd->ColorSpace(ims->ColorSpace());
+      }
+      goto end;
+   }
+## end
+##end
+
+##begin PRescale3X < TYPE >
+## append loadcases
+   if (objs[0]->Type() == Po_$TYPE) {
+      const float scalex = (float)atof(parv[0]);
+      const float scaley = (float)atof(parv[1]);
+      const float scalez = (float)atof(parv[2]);
+      if ( scalex <= 0 || scaley <= 0 || scalez <= 0) {
+	 result = FAILURE;
+      } else {
+	 TYPE* const ims = (TYPE*)objs[0];
+	 objd[0] = new TYPE(ims->Bands(),
+			    Long(ims->Depth() * scalez),
+			    Long(ims->Height() * scaley),
+			    Long(ims->Width() * scalex));
+	 TYPE* const imd = (TYPE*)objd[0];
+	 result = PRescale(*ims, *imd, scalez, scaley, scalex);
+      }
+      goto end;
+   }
+
+## end
+##end
+
+##begin PRescale3R < TYPE >
+## append loadcases
+   if (objs[0]->Type() == Po_$TYPE) {
+      const float scalex = (float)atof(parv[0]);
+      const float scaley = (float)atof(parv[1]);
+      const float scalez = (float)atof(parv[2]);
+      if ( scalex <= 0 || scaley <= 0 || scalez <= 0) {
+	 result = FAILURE;
+      } else {
+	 TYPE* const rgs = (TYPE*)objs[0];
+	 objd[0] = new TYPE(Long(rgs->Depth() * scalez),
+			    Long(rgs->Height() * scaley),
+			    Long(rgs->Width() * scalex));
+	 TYPE* const rgd = (TYPE*)objd[0];
+	 result = PRescale(*rgs, *rgd, scalez, scaley, scalex);
+      }
+      goto end;
+   }
+
+## end
+##end
+
+##begin PRescaleG2 < TYPE, LOOPP, POINT >
+Errc PRescale( const TYPE &grs, TYPE &grd,  const float zoomy, const float zoomx ) {
+   GEdge *l;
+
+   for (int i = 0; i < grs.Size(); i++) {
+      if (grs[i] != NULL) {
+	 grd.Add(i, grs[i]->Item(), (int)(grs[i]->seed.y * zoomy), (int)(grs[i]->seed.x * zoomx));
+	 grd[i]->value = grs[i]->value;
+	 for (l = grs[i]->Neighbours(); l != NULL; l = l->Next()) {
+	    if (i > l->Node()) {
+	       grd.Link(i, l->Node(), l->weight);
+	    }
+	 }
+      }
+   }
+   
+   return SUCCESS;
+}
+
+## append loadcases
+   if (objs[0]->Type() == Po_$TYPE) {
+      TYPE* const grs = (TYPE*)objs[0];
+      objd[0] = new TYPE(grs->Size(), Long(grs->Height() * atoi(parv[1])),
+			 Long(grs->Width() * atoi(parv[0])));
+      TYPE* const grd = (TYPE*)objd[0];
+      if ( (atof(parv[0]) <= 0) || (atof(parv[1]) <= 0)) {
+	 result = FAILURE;
+      } else {
+	 result = PRescale(*grs, *grd, (float)atof(parv[1]), (float)atof(parv[0]));
+      }
+      goto end;
+   }
+
+## end
+##end
+
+##begin PRescaleG3 < TYPE, LOOPP, POINT >
+Errc PRescale( const TYPE &grs, TYPE &grd, const float zoomz, const float zoomy, const float zoomx ) {
+   GEdge *l;
+   
+   for (int i = 0; i < grs.Size(); i++) {
+      if (grs[i] != NULL) {
+	 grd.Add(i, grs[i]->Item(),
+		 (int)(grs[i]->seed.z * zoomz),
+		 (int)(grs[i]->seed.y * zoomy),
+		 (int)(grs[i]->seed.x * zoomx));
+	 grd[i]->value = grs[i]->value;
+	 for (l = grs[i]->Neighbours(); l != NULL; l = l->Next()) {
+	    if (i>l->Node()) {
+	       grd.Link(i, l->Node(), l->weight);
+	    }
+	 }
+      }
+   }
+
+   return SUCCESS;
+}
+
+## append loadcases
+   if (objs[0]->Type() == Po_$TYPE) {
+      TYPE* const grs = (TYPE*)objs[0];
+      objd[0] = new TYPE(grs->Size(),
+			 Long(atoi(parv[2]) * grs->Depth()),
+			 Long(atoi(parv[1]) * grs->Height()),
+			 Long(atoi(parv[0]) * grs->Width()));
+      TYPE* const grd = (TYPE*)objd[0];
+      if ( (atof(parv[0]) <= 0) || (atof(parv[1]) <= 0) || (atof(parv[2]) <= 0)) {
+	 result = FAILURE;
+      } else {
+	 result = PRescale(*grs, *grd, (float)atof(parv[2]), (float)atof(parv[1]), (float)atof(parv[0]));
+      }
+      goto end;
+   }
+
+## end
+##end
+
+##forall(PRescale2G, /Img2d/)
+##forall(PRescale3G, /Img3d/)
+
+##forall(PRescale2C, /Imc2d/)
+##forall(PRescale3C, /Imc3d/)
+
+##forall(PRescale2X, /Imx2d/)
+##forall(PRescale3X, /Imx3d/)
+
+##forall(PRescale2R, /Reg2d/)
+##forall(PRescale3R, /Reg3d/)
+
+##forall(PRescaleG2, /Graph2d/)
+##forall(PRescaleG3, /Graph3d/)
+
+#ifdef MAIN
+#define	USAGE	"usage: %s zoomx zoomy zoomz [im_in|-] [im_out|-]"
+#define	PARC	3
+#define	FINC	1
+#define	FOUTC	1
+#define	MASK	0
+
+##main(PARC, FINC, FOUTC, MASK, USAGE)
+#endif

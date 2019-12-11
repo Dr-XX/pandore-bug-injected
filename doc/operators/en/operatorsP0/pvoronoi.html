@@ -1,0 +1,116 @@
+<html>
+<head>
+<title>PANDORE OPERATORS</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>pvoronoi</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Calculates the Voronoi diagram.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>pvoronoi</b> [<i>-m mask</i>] [<i>rg_in</i>|-] [<i>rg_out</i>|-][<i>im_out</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p><b>pvoronoi</b> builds the Voronoi diagram 
+from the seed map <i>rg_in</i>. A seed is a pixel that has a
+unique label value in the region map.</p>
+
+<p>Voronoi diagrams represent the region of influence around each
+of a given set of seeds.
+Every point in the region around a seed is closer to that seed
+than to any of the other seeds.</p>
+
+<p>The algorithm uses the Chanfrein distance which is an approximation
+of the euclidean distance.</p>
+
+<p><i>rg_out</i> is the Voronoi region map where region keeps the same label
+value than the related seed in the input region map <i>rg_in</i>.</p>
+
+<p><i>im_out</i> is the distance image that results from the Voronoi
+diagram. Each pixel is set with the distance to the closer seed.</p>
+
+<p>The <a href="./pdelaunay.html">Delaunay</a> triangulation is the geometric dual of the Voronoi diagram.</p>
+
+<!---------------------------------- -->
+<h3>Inputs</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>rg_in</i>: a region map.
+</ul>
+
+<!---------------------------------- -->
+<h3>Outputs</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>rg_out</i>: a region map.
+<li><i>im_out</i>: a signed long image.
+</ul>
+
+<!---------------------------------- -->
+<h3>Result</h3>
+<!---------------------------------- -->
+<p>Returns SUCCESS or FAILURE.</p>
+
+<!---------------------------------- -->
+<h3>Examples</h3>
+<!---------------------------------- -->
+<p>Calculates the Voronoi diagram from the centers of mass of tangram pieces:</p>
+<pre>
+   pbinarization 96 1e30 tangram.pan a.pan
+   plabeling 8 a.pan b.pan
+   pfillhole b.pan c.pan
+   pcenterofmass c.pan d.pan
+   pvoronoi d.pan out1.pan out2.pan
+</pre>
+
+<!---------------------------------- -->
+<h3>See also</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#segmentation">Segmentation</a>,
+<a href="./pdelaunay.html">pdelaunay</a>.
+
+
+<!---------------------------------- -->
+<h3>C++ prototype</h3>
+<!---------------------------------- -->
+<tt>
+Errc PVoronoi( Reg &amp;im_in, Reg2d &amp;rg_out1, Img2dsl &amp;im_out );
+</tt>
+
+<!---------------------------------- -->
+<h3>Version fran&ccedil;aise</h3>
+<!---------------------------------- -->
+<p>Calcul de la partition de Vorono&iuml;.</p>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Author: R&eacute;gis Clouard
+</address>
+<!---------------------------------- -->
+</body>
+</html>

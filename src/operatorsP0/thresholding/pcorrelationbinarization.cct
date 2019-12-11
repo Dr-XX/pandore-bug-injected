@@ -1,0 +1,157 @@
+/* -*- mode: c++; c-basic-offset: 3 -*-
+ *
+ * Copyright (c), GREYC.
+ * All rights reserved
+ *
+ * You may use this file under the terms of the BSD license as follows:
+ *
+ * "Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are
+ * met:
+ *   * Redistributions of source code must retain the above copyright
+ *     notice, this list of conditions and the following disclaimer.
+ *   * Redistributions in binary form must reproduce the above copyright
+ *     notice, this list of conditions and the following disclaimer in
+ *     the documentation and/or other materials provided with the
+ *     distribution.
+ *   * Neither the name of the GREYC, nor the name of its
+ *     contributors may be used to endorse or promote products
+ *     derived from this software without specific prior written
+ *     permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
+ *
+ * 
+ * For more information, refer to:
+ * https://clouard.users.greyc.fr/Pandore
+ */
+
+#include <math.h>
+#include <pandore.h>
+using namespace pandore;
+
+/**
+ * @file pmaxcorrelationbinarization.cpp
+ * @brief Binarization based on maximum correlation criterion.
+ *
+ * J.C Yen, F.J Chang, S. Chang, "A New Criterion for Automatic Multilevel Thresholding",
+ * IEEE Trans. On Image Processing, Vol. 4, No. 3,pp 370-378, 1995.
+ */
+
+/**
+ * Thresholds the input image with the Maximum Correlation Criterion.
+ * @param ims the input image.
+ * @param imd the output image.
+ * @return the threshold value.
+ */
+##begin OPERATOR < TIN1, TIN2, LOOPP, POINT >
+Errc PMaximumCorrelationBinarization( const TIN1 &ims, TIN2 &imd ) {
+   std::map<TIN1::ValueType, float> h;
+   std::map<TIN1::ValueType, double> hc;
+   std::map<TIN1::ValueType, double> hcc;
+   std::map<TIN1::ValueType, double> tc;
+   std::map<TIN1::ValueType, float>::iterator i;
+
+   POINT p;
+
+   // Compute the histogram
+##LOOPP(ims, p)
+   {
+      h[ims[p]]++;
+   }
+   // Computes the cumulated histogram and the cumulated correlation histogram.
+   const long nbpix = ims.VectorSize();
+   i = h.begin();
+   double hcp = hc[i->first] = i->second / nbpix;
+   double hccp = hcc[i->first] = hcp * hcp;
+#ifdef DEBUG
+   printf("hc[%d]=%lg hcc[%d]=%lg\n", (int)i->first, hc[i->first], (int)i->first, hcc[i->first]);
+#endif
+
+   for ( i++; i != h.end(); ++i) {
+      double pi = i->second/nbpix;
+      hcp = hc[i->first] = hcp + pi;
+      hccp = hcc[i->first] = hccp + (pi * pi);
+#ifdef DEBUG
+      printf("hc[%d]=%lf pi*pi=%lg hcc[%d]=%lf\n", (int)i->first, hc[i->first], (float)(pi * pi), (int)i->first, hcc[i->first]);
+#endif
+   }
+
+   std::map<TIN1::ValueType, float>::iterator begin = h.begin();
+   std::map<TIN1::ValueType, float>::iterator end = h.end();
+   std::map<TIN1::ValueType, float>::iterator temp;
+   begin++;
+   end --;
+   for (i = begin; i != end; ++i) {
+      temp = i;
+      temp--;
+      Double Ps = hc[temp->first];
+      Double Gs = hcc[temp->first];
+      Double Gps = hccp - Gs;
+      tc[i->first] = - log(Gs * Gps) + 2.0F * log(Ps * (1.0F - Ps));
+#ifdef DEBUG
+       printf("Tc[%d]=%f\n", (int)i->first, tc[i->first]);
+       printf("   Ps=%g, Gs=%g, Gps=%g (%g %g)\n", Ps, Gs, Gps, hccp, hcc[i->first]);
+       printf("   (Gs*gps)=%g, Ps*(1-Ps)=%g)\n", (float)(Gs * Gps), (float)(Ps * (1.0F * Ps)));
+#endif
+   }
+
+   // Get the maximum of the correlation to determine the threshold.
+   i = begin;
+   TIN1::ValueType maximum = (TIN1::ValueType)i->first;
+   for (; i != end; ++i) {
+#ifdef DEBUG
+      printf("comparaison = %f %f\n", tc[i->first], tc[maximum]);
+#endif
+      if (tc[i->first] > tc[maximum]) {
+	 maximum = i->first;
+      }
+   }
+   
+   // Use thresholds to build the output image.
+##LOOPP(ims, p)
+   {
+      if (ims[p] < maximum) {
+	 imd[p] = 0;
+      } else {
+	 imd[p] = MAXUCHAR;
+      }
+   }
+   return maximum;
+}
+
+## append loadcases
+   if (objs[0]->Type() == Po_$TIN1) {
+      TIN1* const ims = (TIN1*)objs[0];
+      objd[0] = new TIN2(ims->Props());
+      TIN2* const imd = (TIN2*)objd[0];
+      
+      result = PMaximumCorrelationBinarization(*ims, *imd);
+      goto end;
+   }
+## end
+##end
+
+##forall(OPERATOR, /Img2d/, Img2duc)
+##forall(OPERATOR, /Img3d/, Img3duc)
+
+#ifdef MAIN
+#define USAGE	"usage: %s [-m mask] [im_in|-] [im_out|-]"
+#define PARC	0
+#define FINC	1
+#define FOUTC	1
+#define MASK	1
+
+##main(PARC, FINC, FOUTC, MASK, USAGE)
+
+#endif

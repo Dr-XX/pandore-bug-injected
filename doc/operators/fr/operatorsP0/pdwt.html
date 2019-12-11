@@ -1,0 +1,130 @@
+<head>
+<title>PANDORE OPERATORS</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>pdwt</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Calcul de la transform&eacute;e en ondelettes dyadiques biorthogonales d'une image.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>pdwt</b> <i>scale</i> [<i>im_in</i>|-] [<i>col_in</i>|-] [<i>im_out</i>| -]
+</tt> 
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p>L'op&eacute;rateur <b>pdwt</b> calcule les coefficients d'ondelette
+d'une image en niveaux de gris selon l'algorithme pyramidal. Par exemple, 
+&agrave; l'<i>echelle</i> 1, on obtient alors 4 sous-images:</p>
+<pre>
+    [1][2]
+    [3][4]
+</pre>
+
+<p>o&ugrave; [1] correspond &agrave; l'image approxim&eacute;e
+sous-&eacute;chantillon&eacute;e  d'un facteur 2, et
+[2], [3], [4] correspondent au signal de d&eacute;tail suivant chacun une 
+direction privil&eacute;gi&eacute;e (resp. horizontale, verticale, diagonale) 
+sous-&eacute;chantillon&eacute;e d'un facteur 2.</p>
+
+<p>Les coefficients du filtre utilis&eacute; se trouvent dans
+la collection<i>im_in</i> cr&eacute;&eacute;e &agrave; partir de l'op&eacute;rateur <a href="./pqmf.html">pqmf</a>.</p>
+
+<p><b>Important</b>: L'op&eacute;rateur fonctionne quelles que soient
+les dimensions  de l'image. N&eacute;anmoins, l'algorithme exige d'avoir
+des images dont les dimensions sont en puissance de 2 (ex: 128, 256, 512,...).
+De ce fait, l'op&eacute;rateur utilise l'image initiale en ajoutant des
+bandes noires sur la droite et en dessous de l'image initiale pour que
+les dimensions soient en puissance de 2.
+Ainsi, si l'une des dimensions est comprise entre 
+129 et 256, elle sera de 256 dans l'image finale, etc...</p>
+
+<!---------------------------------- -->
+<h3>Param&egrave;tres</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>scale</i>  indique le nombre de niveaux de r&eacute;solution 
+sur lesquels on veut d&eacute;composer l'image.
+</ul>
+
+<!---------------------------------- -->
+<h3>Entr&eacute;es</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_in</i>: une image 2D.
+<li><i>col_in</i>: une collection qui contient les coefficients du filtre.
+</ul>
+
+<!---------------------------------- -->
+<h3>Sorties</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_out</i>: une image 2D de Float.
+</ul>
+
+<!---------------------------------- -->
+<h3>R&eacute;sultat</h3>
+<!---------------------------------- -->
+<p>Retourne SUCCESS ou FAILURE.</p>
+
+<!---------------------------------- -->
+<h3>Exemples</h3>
+<!---------------------------------- -->
+<p>Construit une image synth&eacute;tique avec un carr&eacute;
+pour illustrer le ph&eacute;nom&egrave;ne de Gibbs an analyse par ondelettes:</p>
+<pre>
+   pshapedesign 256 256 0 2 150 150 a.pan
+   pqmf daubechies 4 b.pan
+   pdwt 1 a.pan b.pan c.pan
+   psplitimage c.pan d1.pan d2.pan d3.pan d4.pan
+   pthresholding 20 400 d2.pan e2.pan
+   pthresholding 20 400 d3.pan e3.pan
+   pthresholding 20 400 d4.pan e4.pan
+   pmergeimages d1.pan e2.pan e3.pan e4.pan f.pan
+   pidwt 1 f.pan b.pan out.pan
+</pre>
+
+<!---------------------------------- -->
+<h3>Voir aussi</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#frequency">Domaine Fr&eacute;quentiel</a>,
+<a href="./pidwt.html">pidwt</a>,
+<a href="./pqmf.html">pqmf</a>
+
+<!---------------------------------- -->
+<h3>Prototype C++</h3>
+<!---------------------------------- -->
+<tt>
+Errc PDwt( const Img2duc &amp;im_in, const Collection &amp;col_in, Img2dsf &amp;im_out, int scale );
+</tt> 
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Auteur: Ludovic Soltys 
+</address>
+<!---------------------------------- -->
+
+</body>
+</html>

@@ -1,0 +1,159 @@
+/* -*- c-basic-offset: 3; mode: c++ -*-
+ *
+ * Copyright (c), GREYC.
+ * All rights reserved
+ *
+ * You may use this file under the terms of the BSD license as follows:
+ *
+ * "Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are
+ * met:
+ *   * Redistributions of source code must retain the above copyright
+ *     notice, this list of conditions and the following disclaimer.
+ *   * Redistributions in binary form must reproduce the above copyright
+ *     notice, this list of conditions and the following disclaimer in
+ *     the documentation and/or other materials provided with the
+ *     distribution.
+ *   * Neither the name of the GREYC, nor the name of its
+ *     contributors may be used to endorse or promote products
+ *     derived from this software without specific prior written
+ *     permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, 
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, 
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
+ *
+ * 
+ * For more information, refer to:
+ * https://clouard.users.greyc.fr/Pandore
+ */
+
+#include <math.h>
+#include <pandore.h>
+using namespace pandore;
+
+/**
+ * @file pround.cpp
+ * Computes the round-to-nearest of real values.
+ * mode: the round-to-nearest mode.
+ *       0: nearest integer (1.1=1; 1.9=2; -8.8=-9; -8.1=-8).
+ *       1: largest integral value not greater than x (1.1=1, 1.9=1; -8.8=-9; -8.1=-9);
+ *       2: smallest integral value not less than x (1.1=2; 1.9=2; -8.8=-8; -8.1=-8);
+ */
+
+#define PRECISION 0.49999999
+
+template <typename T>
+Errc PRound( const Imx3d<T> &ims, Imx3d<T> &imd, int mode ) {
+   if (mode == 0) {
+    
+      for (int b = 0; b < ims.Bands(); b++) {
+	 T *ps = ims.Vector(b);
+	 T *pd = imd.Vector(b);
+	 for (; ps < ims.Vector(b) + ims.VectorSize(); ps++, pd++) {
+	    if (*ps >= 0) {
+	       *pd = (T)floor((double)*ps + PRECISION);
+	    } else {
+	       *pd = (T)ceil((double)*ps - PRECISION);
+	    }
+	 }
+      }
+   } else if (mode == 1) {
+      for (int b = 0; b < ims.Bands(); b++) {
+	 T *ps = ims.Vector(b);
+	 T *pd  =imd.Vector(b);
+	 
+	 for (; ps < ims.Vector(b) + ims.VectorSize(); ps++, pd++) {
+	    *pd = (T)floor((double)*ps);
+	 }
+      }
+   } else {
+      for (int b = 0; b < ims.Bands(); b++) {
+	 T *ps = ims.Vector(b);
+	 T *pd = imd.Vector(b);
+	 for (; ps < ims.Vector(b) + ims.VectorSize(); ps++, pd++) {
+	    *pd = (T)ceil((double)*ps);
+	 }
+      }
+   }
+   return SUCCESS;
+}
+
+##begin PRound < TYPE >
+## append loadcases
+if (objs[0]->Type() == Po_$TYPE) {
+   TYPE* const ims = (TYPE*)objs[0];
+   objd[0] = new TYPE(ims->Props());
+   TYPE* imd = (TYPE*)objd[0];
+      
+   result = PRound(*ims, *imd, atoi(parv[0]));
+   goto end;
+} 
+## end
+##end
+
+##begin PRoundGraph TYPE
+/**
+ * Graph (nodes).
+ */
+Errc PRound( const TYPE &grs, TYPE &grd, int mode ) {
+   grd = grs;
+
+   if (mode == 0) {
+      for (int i = 0; i < grs.Size(); i++) {
+	 if ((grd[i])) {
+	    if (grd[i]->value >= 0) {
+	       grd[i]->value = (TYPE::ValueType)floor((double)grd[i]->value+PRECISION);
+	    } else {
+	       grd[i]->value = (TYPE::ValueType)ceil((double)grd[i]->value-PRECISION);
+	    }
+	 }
+      }
+   } else if (mode == 1) {
+      for (int i = 0; i < grs.Size(); i++) {
+	 if ((grd[i])) {
+	    grd[i]->value = (TYPE::ValueType)floor((double)grd[i]->value);
+	 }
+      }
+   } else {
+      for (int i = 0; i < grs.Size(); i++) {
+	 if ((grd[i])) {
+	    grd[i]->value = (TYPE::ValueType)ceil((double)grd[i]->value);
+	 }
+      }
+   }
+   return  SUCCESS;
+}
+
+## append loadcases
+if (objs[0]->Type() == Po_$TYPE) {
+   TYPE* const grs = (TYPE*)objs[0];
+   objd[0] = new TYPE(grs->Size());
+   TYPE* const grd = (TYPE*)objd[0];
+      
+   result = PRound(*grs, *grd, atoi(parv[0]));
+   goto end;
+}
+## end
+##end
+
+##forall(PRound, /Im..dsf/)
+##forall(PRoundGraph, /Graph/)
+
+#ifdef MAIN
+#define	USAGE	"usage: %s mode [-m mask] [im_in|-] [im_out|-]"
+#define	PARC	1
+#define	FINC	1
+#define	FOUTC	1
+#define	MASK	1
+
+##main(PARC, FINC, FOUTC, MASK, USAGE)
+#endif

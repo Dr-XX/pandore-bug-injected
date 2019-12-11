@@ -1,0 +1,396 @@
+/* -*- c-basic-offset: 3; mode: c++ -*-
+ *
+ * Copyright (c), GREYC.
+ * All rights reserved
+ *
+ * You may use this file under the terms of the BSD license as follows:
+ *
+ * "Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are
+ * met:
+ *   * Redistributions of source code must retain the above copyright
+ *     notice, this list of conditions and the following disclaimer.
+ *   * Redistributions in binary form must reproduce the above copyright
+ *     notice, this list of conditions and the following disclaimer in
+ *     the documentation and/or other materials provided with the
+ *     distribution.
+ *   * Neither the name of the GREYC, nor the name of its
+ *     contributors may be used to endorse or promote products
+ *     derived from this software without specific prior written
+ *     permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, 
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, 
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
+ *
+ * 
+ * For more information, refer to:
+ * https://clouard.users.greyc.fr/Pandore
+ */
+
+/**
+ * @author François Angot - 1998-07-01
+ * @author Regis Clouard - 2004-07-30
+ * @author Francois Lecellier - 2010-04-22 (fix bug on parameter)
+ */
+
+#include <pandore.h>
+using namespace pandore;
+
+/**
+ * @file pflip.cpp
+ * Construit le symetrique d'une image.
+ */
+##begin PFlip2G < TIN, LOOPP, POINT >
+Errc PFlip( const TIN &ims, TIN &imd, int direction ) {
+   POINT p;
+   
+   switch(direction) {
+   case 0 :
+##LOOPP(ims, p)
+      {
+	 imd[p] = ims[p.y][ims.Width()-1-p.x];
+      }
+      break;
+   case 1 :
+##LOOPP(ims, p)
+      {
+	 imd[p] = ims[ims.Height()-1-p.y][p.x];
+      }
+      break;
+   default: return FAILURE;
+   }
+   return SUCCESS;
+}
+
+## append loadcases
+   if (objs[0]->Type() == Po_$TIN) {
+      TIN* const ims = (TIN*)objs[0];
+      objd[0] = new TIN(ims->Props());
+      TIN* const imd = (TIN*)objd[0];
+      
+      result = PFlip(*ims, *imd, atoi(parv[0]));
+      goto end;
+   }
+## end
+##end
+
+##begin PFlip2R < TIN, LOOPP, POINT >
+Errc PFlip( const TIN &rgs, TIN &rgd, int direction ) {
+   POINT p;
+   
+   switch(direction) {
+   case 0 :
+##LOOPP(rgs, p)
+      {
+	 rgd[p] = rgs[p.y][rgs.Width()-1-p.x];
+      }
+      break;
+   case 1 :
+##LOOPP(rgs, p)
+      {
+	 rgd[p] = rgs[rgs.Height()-1-p.y][p.x];
+      }
+      break;
+   default: return FAILURE;
+   }
+   rgd.Labels(rgs.Labels());
+   return SUCCESS;
+}
+
+## append loadcases
+   if (objs[0]->Type() == Po_$TIN) {
+      TIN* const rgs = (TIN*)objs[0];
+      objd[0] = new TIN(rgs->Props());
+      TIN* const rgd = (TIN*)objd[0];
+      
+      result = PFlip(*rgs, *rgd, atoi(parv[0]));
+      goto end;
+   }
+## end
+##end
+
+##begin PFlip2C < TIN, LOOPP, POINT >
+Errc PFlip( const TIN &ims, TIN &imd, int direction ) {
+   POINT p;
+   
+   switch(direction) {
+   case 0 :
+##LOOPP(ims, p)
+      {
+	 imd.X[p] = ims.X[p.y][ims.Width()-1-p.x];
+	 imd.Y[p] = ims.Y[p.y][ims.Width()-1-p.x];
+	 imd.Z[p] = ims.Z[p.y][ims.Width()-1-p.x];
+      }
+      break;
+   case 1 :
+##LOOPP(ims, p)
+      {
+	 imd.X[p] = ims.X[ims.Height()-1-p.y][p.x];
+	 imd.Y[p] = ims.Y[ims.Height()-1-p.y][p.x];
+	 imd.Z[p] = ims.Z[ims.Height()-1-p.y][p.x];
+      }
+      break;
+   default: return FAILURE;
+   }
+   return SUCCESS;
+}
+
+## append loadcases
+   if (objs[0]->Type() == Po_$TIN) {
+      TIN* const ims = (TIN*)objs[0];
+      objd[0] = new TIN(ims->Props());
+      TIN* const imd = (TIN*)objd[0];
+      
+      result = PFlip(*ims, *imd, atoi(parv[0]));
+      goto end;
+   }
+## end
+##end
+
+
+##begin PFlip2X < TIN, LOOPP, POINT >
+Errc PFlip(TIN &ims, TIN &imd, int direction) {
+   POINT p;
+   
+   switch(direction) {
+   case 0 :
+##LOOPP(ims, p)
+      {
+	 for (int b = 0; b < ims.Bands(); b++) {
+	    imd[b][p] = ims[b][p.y][ims.Width()-1-p.x];
+	 }
+      }
+      break;
+   case 1 :
+##LOOPP(ims, p)
+      {
+	 for (int b = 0; b < ims.Bands(); b++) {
+	    imd[b][p] = ims[b][ims.Height()-1-p.y][p.x];
+	 }
+      }
+      break;
+   default: return FAILURE;
+   }
+   return SUCCESS;
+}
+
+## append loadcases
+   if (objs[0]->Type() == Po_$TIN) {
+      TIN* const ims = (TIN*)objs[0];
+      objd[0] = new TIN(ims->Props());
+      TIN* const imd = (TIN*)objd[0];
+      
+      result = PFlip(*ims, *imd, atoi(parv[0]));
+      goto end;
+   }
+## end
+##end
+
+##begin PFlip3G < TIN, LOOPP, POINT >
+Errc PFlip( const TIN &ims, TIN &imd, int direction ) {
+   POINT p;
+  
+   switch(direction) {
+   case 0 :
+##LOOPP(ims, p)
+      {
+	 imd[p] = ims[p.z][p.y][ims.Width()-1-p.x];
+      }
+      break;
+   case 1 :
+##LOOPP(ims, p)
+      {
+	 imd[p] = ims[p.z][ims.Height()-1-p.y][p.x];
+      }
+      break;
+   case 2 :
+##LOOPP(ims, p)
+      {
+	 imd[p] = ims[ims.Depth()-1-p.z][p.y][p.x];
+      }
+      break;
+   default: return FAILURE;
+   }
+  
+   return SUCCESS;
+}
+
+## append loadcases
+   if (objs[0]->Type() == Po_$TIN) {
+      TIN* const ims = (TIN*)objs[0];
+      objd[0] = new TIN(ims->Props());
+      TIN* const imd = (TIN*)objd[0];
+      
+      result = PFlip(*ims, *imd, atoi(parv[0]));
+      goto end;
+   }
+## end
+##end
+
+##begin PFlip3R < TIN, LOOPP, POINT >
+Errc PFlip( const TIN &rgs, TIN &rgd, int direction ) {
+   POINT p;
+  
+   switch(direction) {
+   case 0 :
+##LOOPP(rgs, p)
+      {
+	 rgd[p] = rgs[p.z][p.y][rgs.Width()-1-p.x];
+      }
+      break;
+   case 1 :
+##LOOPP(rgs, p)
+      {
+	 rgd[p] = rgs[p.z][rgs.Height()-1-p.y][p.x];
+      }
+      break;
+   case 2 :
+##LOOPP(rgs, p)
+      {
+	 rgd[p] = rgs[rgs.Depth()-1-p.z][p.y][p.x];
+      }
+      break;
+   default: return FAILURE;
+   }
+   rgd.Labels(rgs.Labels());  
+   return SUCCESS;
+}
+
+## append loadcases
+   if (objs[0]->Type() == Po_$TIN) {
+      TIN* const rgs = (TIN*)objs[0];
+      objd[0] = new TIN(rgs->Props());
+      TIN* const rgd = (TIN*)objd[0];
+      
+      result = PFlip(*rgs, *rgd, atoi(parv[0]));
+      goto end;
+   }
+## end
+##end
+
+##begin PFlip3C < TIN, LOOPP, POINT >
+Errc PFlip( const TIN &ims, TIN &imd, int direction ) {
+   POINT p;
+  
+   switch(direction) {
+   case 0 :
+##LOOPP(ims, p)
+      {
+	 imd.X[p] = ims.X[p.z][p.y][ims.Width()-1-p.x];
+	 imd.Y[p] = ims.Y[p.z][p.y][ims.Width()-1-p.x];
+	 imd.Z[p] = ims.Z[p.z][p.y][ims.Width()-1-p.x];
+      }
+      break;
+   case 1 :
+##LOOPP(ims, p)
+      {
+	 imd.X[p] = ims.X[p.z][ims.Height()-1-p.y][p.x];
+	 imd.Y[p] = ims.Y[p.z][ims.Height()-1-p.y][p.x];
+	 imd.Z[p] = ims.Z[p.z][ims.Height()-1-p.y][p.x];
+      }
+      break;
+   case 2 :
+##LOOPP(ims, p)
+      {
+	 imd.X[p] = ims.X[ims.Depth()-1-p.z][p.y][p.x];
+	 imd.Y[p] = ims.Y[ims.Depth()-1-p.z][p.y][p.x];
+	 imd.Z[p] = ims.Z[ims.Depth()-1-p.z][p.y][p.x];
+      }
+      break;
+   default: return FAILURE;
+   }
+   
+   return SUCCESS;
+}
+
+## append loadcases
+   if (objs[0]->Type() == Po_$TIN) {
+      TIN* const ims = (TIN*)objs[0];
+      objd[0] = new TIN(ims->Props());
+      TIN* const imd = (TIN*)objd[0];
+      
+      result  =PFlip(*ims, *imd, atoi(parv[0]));
+      goto end;
+   }
+## end
+##end
+
+
+##begin PFlip3X < TIN, LOOPP, POINT >
+Errc PFlip( const TIN &ims, TIN &imd, int direction ) {
+   POINT p;
+   
+   switch(direction) {
+   case 0 :
+##LOOPP(ims, p)
+      {
+	 for (int b = 0; b < ims.Bands(); b++) {
+	    imd[b][p] = ims[b][p.z][p.y][ims.Width()-1-p.x];
+	 }
+      }
+      break;
+   case 1 :
+##LOOPP(ims, p)
+      {
+	 for (int b = 0; b < ims.Bands(); b++) {
+	    imd[b][p] = ims[b][p.z][p.y][ims.Width()-1-p.x];
+	 }
+      }
+      break;
+   case 2 :
+##LOOPP(ims, p)
+      {
+	 for (int b = 0; b < ims.Bands(); b++) {
+	    imd[b][p] = ims[b][p.z][p.y][ims.Width()-1-p.x];
+	 }
+      }
+      break;
+   default: return FAILURE;
+   }
+   
+   return SUCCESS;
+}
+
+
+## append loadcases
+   if (objs[0]->Type() == Po_$TIN) {
+      TIN* const ims = (TIN*)objs[0];
+      objd[0] = new TIN(ims->Props());
+      TIN* const imd = (TIN*)objd[0];
+      
+      result = PFlip(*ims, *imd, atoi(parv[0]));
+      goto end;
+   }
+## end
+##end
+
+##forall(PFlip2G, /Img2d/)
+##forall(PFlip3G, /Img3d/)
+
+##forall(PFlip2C, /Imc2d/)
+##forall(PFlip3C, /Imc3d/)
+
+##forall(PFlip2X, /Imx2d/)
+##forall(PFlip3X, /Imx3d/)
+
+##forall(PFlip2R, /Reg2d/)
+##forall(PFlip3R, /Reg3d/)
+
+#ifdef MAIN
+#define	USAGE	"usage: %s direction [-m mask] [im_in|-] [im_out|-]"
+#define	PARC	1
+#define	FINC	1
+#define	FOUTC	1
+#define	MASK	1
+
+##main(PARC, FINC, FOUTC, MASK, USAGE)
+#endif

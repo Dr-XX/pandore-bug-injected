@@ -1,0 +1,128 @@
+<html>
+<head>
+<title>PANDORE OPERATORS</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>pxyz2luv</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Converts XYZ color image to L*u*v color image.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>pxyz2luv</b> <i>primaries</i> [<i>-m mask</i>] [<i>im_in</i>|-] [<i>im_out</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p><b>pxyz2luv</b> converts color image from
+the color space XYZ to the color space 
+L*u*v (L: Luminancy, u,v : chrominancy).</p>
+
+<p>Luv is very used in calculation of small colors or color differences,
+especially with additive colors.
+
+<pre>
+    L* = 116*((Y/Yn)^(1/3)) whether Y/Yn>0.008856
+    L* = 903.3*Y/Yn whether Y/Yn<=0.008856
+    u* = 13*(L*)*(u'-u'n)
+    v* = 13*(L*)*(v'-v'n)
+</pre>
+<p>where u'=4*X/(X+15*Y*+3*Z) and v'=9*Y/(X+15*Y+3*Z)
+<br>and u'n and v'n have the same definitions for u' and v' but applied to the
+white point reference given par the parameter <i>primaries</i>. So, you have:
+<br>u'n=4*Xn/(Xn+15*Yn*+3*Zn) and v'n=9*Yn/(Xn+15*Yn+3*Zn).</p>
+
+
+<p>The output image is of float type.</p>
+
+<!---------------------------------- -->
+<h3>Parameters</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>primaries</i> is an integer from [0..6] 
+which defines the type of conversion:</p>
+<ul>
+<li>0: illuminant E
+<li>1: illuminant primaries CIE-DIN
+<li>2: illuminant A primaries macbeth colour chart
+<li>3: illuminant A primaries CIE
+<li>4: illuminant C primaries NTSC
+<li>5: illuminant C primaries CIE
+<li>6: illuminant D65
+</ul>
+</ul>
+
+<!---------------------------------- -->
+<h3>Inputs</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_in</i>: a XYZ color image.
+</ul>
+
+<!---------------------------------- -->
+<h3>Outputs</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_out</i>: a L*u*v color image.
+</ul>
+
+<!---------------------------------- -->
+<h3>Result</h3>
+<!---------------------------------- -->
+<p>Returns SUCCESS or FAILURE.</p>
+
+<!---------------------------------- -->
+<h3>Examples</h3>
+<!---------------------------------- -->
+<p></p>
+<pre>
+   pxyz2luv 4 a.pan b.pan
+</pre>
+
+<!---------------------------------- -->
+<h3>See also</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#color">Color</a>
+
+<!---------------------------------- -->
+<h3>C++ prototype</h3>
+<!---------------------------------- -->
+<tt>
+Errc PXYZ2LUV( const Imc2dsf &amp;im_in, Imc2dsf &amp;im_out, int primaries );<br>
+</tt>
+
+<!---------------------------------- -->
+<h3>Version fran&ccedil;aise</h3>
+<!---------------------------------- -->
+<p>Changement d'espace couleur de XYZ vers Luv.</p>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Author: Olivier Lezoray
+</address>
+<!---------------------------------- -->
+
+</body>
+</html>

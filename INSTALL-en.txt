@@ -1,0 +1,105 @@
+	UNIX / LINUX / MACOS X / CYGWIN / MINGW INSTALLATION INSTRUCTIONS
+
+1. DEPENDENCIES
+
+The complete installation needs:
+
+  a. required:
+
+   - a C++ compiler.
+
+  b. recommended:
+
+   - Qt version >= 4.0.0 for visualization operation (www.trolltech.com).
+
+   - or X11 and Motif for visualization operators.
+     However, Qt is preferred to X11.
+
+     Without these two API, operators 'pvisu' and 'pdraw' are not available.
+     However, the rest of the operators work without Qt (or X11).
+
+2. UNPACK THE DISTRIBUTIION
+
+  a. Copy the file pandore6.x.x-unix.tgz into the target folder
+     (eg. /usr/local/pantheon).
+
+  b. Unpack and untar the file
+
+     gunzip pandore6.x.x-unix.tgz
+     tar xvf pandore6.x.x-unix.tar
+
+     or directly
+
+     tar xvfz pandore6.x.x-unix.tgz (or gtar xvfz pandore6.x.x-unix.tgz)
+
+
+3. INSTALLATION
+
+  Use:
+
+    ./configure
+    make (or make -j6)
+    make install
+    make clean
+
+  The complete installation should create the followings:
+  - the library 'libpandore.so' (or libpandore.dylib under MacOS X) in the folder './lib',
+  - executable operators in the folder './bin',
+  - the launch script './pandore'.
+
+  To check the installation, execute the following commands:
+
+    pandore
+    pversion
+
+  or a more complete commands sequence:
+
+    pbmp2pan examples/tangram.bmp /tmp/tangram.pan
+    pstatus
+    pvisu /tmp/tangram.pan
+
+  The command 'pstatus' must display "SUCCESS".
+
+4. ADVANCED INSTALLATION
+
+    a- Pandore configure script accepts most of the standard Autoconf arguments:
+
+  --help                 	display a help message and exit
+
+  --static			create the static version of the Pandore library
+				 	(PREFIX/lib/libpandore.a)
+
+  --with-qmake=PATH		path to the qmake command.
+
+  --with-x11-includes=PATH	path to X11 includes (Motif version only).
+
+  --with-x11-libraries=PATH	path to X11 libraries (Motif version only).
+
+  --with-motif-includes=PATH	path to Motif includes (Motif version only).
+
+  --with-motif-libraries=PATH	path to Motif libraries (Motif version only).
+
+  b- The configure variables you should be aware of are (file 'configure'):
+
+   * PERL	path to the perl interpreter (optional)
+
+   * MAKE	path to the make command;
+
+   * CXX	path to the c++ compiler.
+
+   * CFLAGS	C compiler options.
+
+   * X11INCLUDEPATH: path to the X11 includes.
+
+   * X11LIBPATH: path to the X11 libraries.
+
+   * MOTIFLIBPATH: path to the Motif includes.
+
+   * MOTIFINCLUDEPATH: path to the Motif libraries.
+
+5. COMPLETE REINSTALLATION
+
+  Remove all files from the system which are (or would be) installed by
+  'make install' using the current configuration.
+
+      make distclean

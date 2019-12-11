@@ -1,0 +1,127 @@
+<html>
+<head>
+<title>OPERATEURS PANDORE</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>pxyz2luv</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Changement d'espace couleur de XYZ vers Luv.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>pxyz2luv</b> <i>primaires</i> [<i>-m mask</i>] [<i>im_in</i>|-] [<i>im_out</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p>L'op&eacute;rateur <b>pxyz2luv</b> permet de passer de l'espace
+couleur XYZ &agrave; l'espace L*u*v. (L: Luminance, u,v : chrominance).</p>
+
+<p>Le r&ocirc;le de cet espace est de fournir une d&eacute;rivation perceptuellement uniforme
+de l'espace CIE XYZ. Perceptuellement uniforme signifie que
+deux couleurs qui sont &agrave; &eacute;gale distance dans l'espace des couleurs
+sont &agrave; &eacute;gale distance perceptuellement.</p>
+
+<p>La formule de calcul est donn&eacute;e par:</p>
+<pre>
+si (Y/Yn>0.008856)
+alors L* = 116*((Y/Yn)^(1/3)-16) 
+sinon L* = 903.3*Y/Yn
+
+u* = 13*(L*)*(u'-u0')
+v* = 13*(L*)*(v'-v0')
+</pre>
+<p>o&ugrave; u'=4*X/(X+15*Y*+3*Z) et v'=9*Y/(X+15*Y+3*Z)
+et u0' and v0' ont les m&ecirc;mes d&eacute;finitions
+mais appliqu&eacute;es sur le blanc de r&eacute;f&eacute;rence donn&eacute; par 
+le param&egrave;tre <i>primaire</i>.
+</p>
+
+<p>L'image de sortie est une image de float.</p>
+
+<!---------------------------------- -->
+<h3>Param&egrave;tres</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>primaires</i> est un entier de l'espace [0..6]
+qui d&eacute;finit le type de conversion:</p>
+<ul>
+<li>0-illuminant E
+<li>1-illuminant primaires CIE-DIN
+<li>2-illuminant A primaires macbeth colour chart
+<li>3-illuminant A primaires CIE
+<li>4-illuminant C primaires NTSC
+<li>5-illuminant C primaires CIE
+<li>6-illuminant D65
+</ul>
+</ul>
+
+<!---------------------------------- -->
+<h3>Entr&eacute;es</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_in</i>: une image couleur de type XYZ.
+</ul>
+
+<!---------------------------------- -->
+<h3>Sorties</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_out</i>: une image couleur de type Luv;
+</ul>
+
+<!---------------------------------- -->
+<h3>R&eacute;sultat</h3>
+<!---------------------------------- -->
+<p>Retourne SUCCESS ou FAILURE.</p>
+
+<!---------------------------------- -->
+<h3>Exemples</h3>
+<!---------------------------------- -->
+<p></p>
+<pre>
+   pxyz2luv 4 a.pan b.pan
+</pre>
+
+<!---------------------------------- -->
+<h3>Voir aussi</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#color">Color</a>
+
+<!---------------------------------- -->
+<h3>Prototype C++</h3>
+<!---------------------------------- -->
+<tt>
+Errc PXYZ2LUV( const Imc2dsf &amp;im_in, Imc2dsf &amp;im_out, int primaires );
+</tt>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Auteur: Olivier Lezoray
+</address>
+<!---------------------------------- -->
+
+</body>
+</html>

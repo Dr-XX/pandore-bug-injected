@@ -1,0 +1,99 @@
+<html>
+<head>
+<title>PANDORE OPERATORS</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center><hr>
+
+<!---------------------------------- -->
+<h1>pseedplacement</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Placement of seeds on a regular grid.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>pseedplacement </b> <i>dx</i> <i>dy</i> <i>dz</i> [<i>-m mask</i>] [<i>im_in</i>|-] [<i>reg_out</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p>The operator creates a region maps of the same size as the input image <i>im_in</i>
+with the seeds (region of size 1) placed on regular grid.</p>
+
+<!---------------------------------- -->
+<h3>Parameters</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>dx</i>, <i>dy</i>, <i>dz</i> specify the 
+frequency of the seeds in column, row, and depth.
+</ul>
+
+<!---------------------------------- -->
+<h3>Inputs</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_in</i>: an image.
+</ul>
+
+<!---------------------------------- -->
+<h3>Outputs</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>reg_out</i>: a region map with the seeds.
+</ul>
+
+<!---------------------------------- -->
+<h3>Result</h3>
+<!---------------------------------- -->
+<p>Returns SUCCESS or FAILURE.</p>
+
+<!---------------------------------- -->
+<h3>Examples</h3>
+<!---------------------------------- -->
+<p>Place seed every 10 pixels on the grid
+then build the superpixels around the seeds:</p>
+<pre>
+./pseedplacement 10 10 0 examples/tangram.pan rgin.pan
+./psuperpixelsegmentation 0 1 rgin.pan examples/tangram.pan rgout.pan geodesic-map.pan
+pboundary 8 rgout.pan cont.pan
+psuperimposition 3 cont.pan examples:tangram.pan result.pan
+</pre>
+
+<!---------------------------------- -->
+<h3>See also</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#segmentation">Segmentation</a>,
+<a href="./psuperpixelsegmentation.html">psuperpixelsegmentation</a>
+
+<!---------------------------------- -->
+<h3>C++ prototype</h3>
+<!---------------------------------- -->
+<tt>
+Errc PSeedPlacement2D( Reg2d &rgd, int dx, int dy );
+</tt>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Author: Pierre Buyssens
+</address>
+<!---------------------------------- -->
+</body>
+</html>

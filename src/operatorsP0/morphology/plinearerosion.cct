@@ -1,0 +1,375 @@
+/* -*- mode: c++; c-basic-offset: 3 -*-
+ *
+ * Copyright (c), GREYC.
+ * All rights reserved
+ *
+ * You may use this file under the terms of the BSD license as follows:
+ *
+ * "Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are
+ * met:
+ *   * Redistributions of source code must retain the above copyright
+ *     notice, this list of conditions and the following disclaimer.
+ *   * Redistributions in binary form must reproduce the above copyright
+ *     notice, this list of conditions and the following disclaimer in
+ *     the documentation and/or other materials provided with the
+ *     distribution.
+ *   * Neither the name of the GREYC, nor the name of its
+ *     contributors may be used to endorse or promote products
+ *     derived from this software without specific prior written
+ *     permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, 
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, 
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
+ *
+ * 
+ * For more information, refer to:
+ * https://clouard.users.greyc.fr/Pandore
+ */
+
+/**
+ * @author Régis Clouard - 1997-07-22
+ * @author Régis Clouard - 2003-06-04 (add demitaille).
+ * @author Régis Clouard - Jul 09, 2011 (new parameters).
+ */
+
+#define _USE_MATH_DEFINES
+#include <cmath>
+#include <pandore.h>
+using namespace pandore;
+
+#include "morphology/structelt.h"
+
+/**
+ * @file plinearerosion.cpp
+ *
+ * Erosion based on a linear structuring element, 
+ * with a given orientation and a given size.
+ */
+template <typename T>
+Errc PLinearErosion( const Imx2d<T> &ims, Imx2d<T> &imd, int orientation1, int orientation2, const int halfsize ) {
+   if (halfsize < 1) {
+      std::cerr << "Error plinearerosion: bad structuring element size: " << halfsize << std::endl;
+      return FAILURE;
+   }
+   orientation1 = orientation1 % 360;
+
+   StructuringElement2d *se = new StructuringElement2d(orientation1, orientation2, halfsize);
+
+   Point2d p, p1;
+   for (int b = 0; b < ims.Bands(); b++) {
+      for (p.y = 0; p.y < ims.Height(); p.y++) {
+	 for (p.x = 0; p.x < ims.Width(); p.x++) {
+	    T min = Limits<T>::max(), val;
+	    for (int i = 0; i < se->length; i++) {
+	       p1 = p;
+	       se->Move(i, p1);
+	       if (ims.Hold(p1) && ((val = ims[b][p1]) < min)) {
+		  min = val;
+	       }
+	    }
+	    imd[b][p] = min;
+	 }
+      }
+   }
+   
+   delete se;
+   return SUCCESS;
+}
+
+##begin PLinearErosionG2D <TIN>
+## append loadcases
+   if (objs[0]->Type() == Po_$TIN) {
+      TIN* const ims = (TIN*)objs[0];
+      objd[0] = new TIN(ims->Props());
+      TIN* const imd = (TIN*)objd[0];
+      
+      result = PLinearErosion(*ims, *imd, atoi(parv[0]), atoi(parv[1]), atoi(parv[2]));
+      goto end;
+   }
+## end
+##end
+
+
+template <typename T>
+Errc PLinearErosion( const Imx3d<T> &ims, Imx3d<T> &imd, int orientation1, int orientation2, int halfsize ) {
+   if (halfsize < 1) {
+      std::cerr << "Error plinearerosion: bad structuring element size: " << halfsize << std::endl;
+      return FAILURE;
+   }
+   orientation1 = orientation1 % 360;
+   orientation2 = orientation2 % 360;
+   StructuringElement3d *se = new StructuringElement3d(orientation1, orientation2, halfsize);
+
+   Point3d p, p1;
+   for (int b = 0; b < ims.Bands(); b++) {
+      for (p.z = 0; p.z < ims.Depth(); p.z++) {
+	 for (p.y = 0; p.y < ims.Height(); p.y++) {
+	    for (p.x = 0; p.x < ims.Width(); p.x++) {
+	       T min = Limits<T>::max(), val;
+	       for (int i = 0; i < se->length; i++) {
+		  p1 = p;
+		  se->Move(i, p1);
+		  if (ims.Hold(p1) && ((val = ims[b][p1]) < min)) {
+		     min = val;
+		  }
+	       }
+	       imd[b][p] = min;
+	    }
+	 }
+      }
+   }
+   delete se;
+   return SUCCESS;
+}
+
+##begin PLinearErosionG3D <TIN>
+## append loadcases
+   if (objs[0]->Type() == Po_$TIN) {
+      TIN* const ims = (TIN*)objs[0];
+      objd[0] = new TIN(ims->Props());
+      TIN* const imd = (TIN*)objd[0];
+      
+      result = PLinearErosion(*ims, *imd, atoi(parv[0]), atoi(parv[1]), atoi(parv[2]));
+      goto end;
+   }
+## end
+##end
+
+#ifndef __LOWER_H__
+#define __LOWER_H__
+/*
+ * Lexicographic order between 2 colors (cx, cy, cz) and (cx1, cy1, cz1)
+ */
+template<typename T>
+static bool Lower( T cx1, T cy1, T cz1, T cx, T cy, T cz ) {
+   if (cx1 < cx) {
+      return true;
+   } else if (cx1 > cx) {
+      return false;
+   }
+   if (cy1 < cy) {
+      return true;
+   } else if (cy1 > cy) {
+      return false;
+   }
+   if (cz1 < cz) {
+      return true;
+   } else if (cz1 > cz) {
+      return false;
+   } else {
+      return false;
+   }
+}
+#endif
+
+template <typename T>
+Errc PLinearErosion( const Imc2d<T> &ims, Imc2d<T> &imd, int orientation1, int orientation2,  int halfsize ) {
+   if (halfsize < 1) {
+      std::cerr << "Error plinearerosion: bad structuring element size: " << halfsize << std::endl;
+      return FAILURE;
+   }
+   orientation1 = orientation1 % 360;
+
+   StructuringElement2d *se = new StructuringElement2d(orientation1, orientation2, halfsize);
+
+   Point2d p, p1;
+   for (p.y = 0; p.y < ims.Height(); p.y++) {
+      for (p.x = 0; p.x < ims.Width(); p.x++) {
+ 	 T minX = Limits<T>::max();
+ 	 T minY = Limits<T>::max();
+ 	 T minZ = Limits<T>::max();
+	 for (int i = 0; i < se->length; i++) {
+	    p1 = p;
+	    se->Move(i, p1);
+	    if (ims.Hold(p1) && Lower(ims.X[p1], ims.Y[p1], ims.Z[p1], minX, minY, minZ)) {
+	       minX = ims.X[p1];
+	       minY = ims.Y[p1];
+	       minZ = ims.Z[p1];
+	    }
+	 }
+	 imd.X[p] = minX;
+	 imd.Y[p] = minY;
+	 imd.Z[p] = minZ;
+      }
+   }
+
+   delete se;
+   return SUCCESS;
+}
+
+##begin PLinearErosionC2D <TIN>
+## append loadcases
+   if (objs[0]->Type() == Po_$TIN) {
+      TIN* const ims = (TIN*)objs[0];
+      objd[0] = new TIN(ims->Props());
+      TIN* const imd = (TIN*)objd[0];
+      
+      result = PLinearErosion(*ims, *imd, atoi(parv[0]), atoi(parv[1]), atoi(parv[2]));
+      goto end;
+   }
+## end
+##end
+
+template <typename T>
+Errc PLinearErosion( const Imc3d<T> &ims, Imc3d<T> &imd, int orientation1, int orientation2, int halfsize ) {
+   if (halfsize < 1) {
+      std::cerr << "Error plinearerosion: bad structuring element size: " << halfsize << std::endl;
+      return FAILURE;
+   }
+   orientation1 = orientation1 % 360;
+   orientation2 = orientation2 % 360;
+   
+   StructuringElement3d *se = new StructuringElement3d(orientation1, orientation2, halfsize);
+   
+   Point3d p, p1;
+   for (p.z = 0; p.z < ims.Depth(); p.z++) {
+      for (p.y = 0; p.y < ims.Height(); p.y++) {
+	 for (p.x = 0; p.x < ims.Width(); p.x++) {
+	    T minX = Limits<T>::max();
+	    T minY = Limits<T>::max();
+	    T minZ = Limits<T>::max();
+	    for (int i = 0; i < se->length; i++) {
+	       p1 = p;
+	       se->Move(i, p1);
+	       if (ims.Hold(p1) && Lower(ims.X[p1], ims.Y[p1], ims.Z[p1], minX, minY, minZ)) {
+		  minX = ims.X[p1];
+		  minY = ims.Y[p1];
+		  minZ = ims.Z[p1];
+	       }
+	    }
+	    imd.X[p] = minX;
+	    imd.Y[p] = minY;
+	    imd.Z[p] = minZ;
+	 }
+      }
+   }
+
+   delete se;
+   return SUCCESS;
+}
+
+##begin PLinearErosionC3D <TIN>
+## append loadcases
+   if (objs[0]->Type() == Po_$TIN) {
+      TIN* const ims = (TIN*)objs[0];
+      objd[0] = new TIN(ims->Props());
+      TIN* const imd = (TIN*)objd[0];
+      
+      result = PLinearErosion(*ims, *imd, atoi(parv[0]), atoi(parv[1]), atoi(parv[2]));
+      goto end;
+   }
+## end
+##end
+
+Errc PLinearErosion( const Reg2d &ims, Reg2d &imd, int orientation1, int orientation2, int halfsize ) {
+   if (halfsize < 1) {
+      std::cerr << "Error plinearerosion: bad structuring element size: " << halfsize << std::endl;
+      return FAILURE;
+   }
+   orientation1 = orientation1 % 360;
+
+   StructuringElement2d *se = new StructuringElement2d(orientation1, orientation2, halfsize);
+
+   Point2d p, p1;
+   for (p.y = 0; p.y < ims.Height(); p.y++)
+      for (p.x = 0; p.x < ims.Width(); p.x++) {
+ 	 Reg2d::ValueType min = Limits<Reg2d::ValueType>::max(), val;
+	 for (int i = 0; i < se->length; i++) {
+	    p1 = p;
+	    se->Move(i, p1);
+	    if (ims.Hold(p1) && ((val = ims[p1]) < min)) {
+	       min = val;
+	    }
+	 }
+	 imd[p] = min;
+      }
+
+   imd.Labels(ims.Labels());
+   delete se;
+   return SUCCESS;
+}
+
+##begin PLinearErosionR2D <TIN>
+## append loadcases
+   if (objs[0]->Type() == Po_$TIN) {
+      TIN* const ims = (TIN*)objs[0];
+      objd[0] = new TIN(ims->Props());
+      TIN* const imd = (TIN*)objd[0];
+      
+      result = PLinearErosion(*ims, *imd, atoi(parv[0]), atoi(parv[1]), atoi(parv[2]));
+      goto end;
+   }
+## end
+##end
+
+Errc PLinearErosion( const Reg3d &ims, Reg3d &imd, int orientation1, int orientation2, int halfsize ) {
+   if (halfsize < 1) {
+      std::cerr << "Error plinearerosion: bad structuring element size: " << halfsize << std::endl;
+      return FAILURE;
+   }
+   orientation1 = orientation1 % 360;
+   orientation2 = orientation2 % 360;
+
+   StructuringElement3d *se = new StructuringElement3d(orientation1, orientation2, halfsize);
+
+   Point3d p, p1;
+   for (p.z = 0; p.z < ims.Depth(); p.z++)
+      for (p.y  = 0; p.y < ims.Height(); p.y++)
+	 for (p.x = 0; p.x < ims.Width(); p.x++) {
+	    Reg3d::ValueType min = Limits<Reg3d::ValueType>::max(), val;
+	    for (int i = 0; i < se->length; i++) {
+	       p1 = p;
+	       se->Move(i, p1);
+	       if (ims.Hold(p1) && ((val = ims[p1]) < min)) {
+		  min = val;
+	       }
+	    }
+	    imd[p] = min;
+	 }
+
+   imd.Labels(ims.Labels());
+   delete se;
+   return SUCCESS;
+}
+
+##begin PLinearErosionR3D<TIN>
+## append loadcases
+   if (objs[0]->Type() == Po_$TIN) {
+      TIN* const ims = (TIN*)objs[0];
+      objd[0] = new TIN(ims->Props());
+      TIN* const imd = (TIN*)objd[0];
+      
+      result = PLinearErosion(*ims, *imd, atoi(parv[0]), atoi(parv[1]), atoi(parv[2]));
+      goto end;
+   }
+## end
+##end
+
+##forall(PLinearErosionG2D, /Img2d/)
+##forall(PLinearErosionG2D, /Imx2d/)
+##forall(PLinearErosionR2D, /Reg2d/)
+##forall(PLinearErosionC2D, /Imc2d/)
+##forall(PLinearErosionC3D, /Imc3d/)
+##forall(PLinearErosionG3D, /Img3d/)
+##forall(PLinearErosionG3D, /Imx3d/)
+##forall(PLinearErosionR3D, /Reg3d/)
+
+#ifdef MAIN
+#define USAGE	"usage: %s orientation1 orientation2 halfsize [-m mask] [im_in|-] [im_out|-]"
+#define PARC	3
+#define FINC	1
+#define FOUTC	1
+#define MASK	1
+
+##main(PARC, FINC, FOUTC, MASK, USAGE)
+#endif

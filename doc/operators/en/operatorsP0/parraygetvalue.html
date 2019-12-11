@@ -1,0 +1,94 @@
+<html>
+<head>
+<title>PANDORE OPERATORS</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>parraygetvalue</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Gets value from array.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>parraygetvalue</b> <i>index</i> <i>name</i> [<i>col_in</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3> 
+<!---------------------------------- -->
+<p><b>parraygetvalue</b> returns the value of item at the 
+specified <i>index</i> in the array <i>name</i> of the input collection <i>col_in</i>.</p>
+
+<p>The result can then be get by the operator <b>pstatus</b>.</p>
+
+<!---------------------------------- -->
+<h3>Parameters</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>name</i> is the name of the array in the collection. It is string without blank character.
+<li><i>index</i> is the rank of the item in the array. It is an integer from 0 to the number of item in the array -1.
+</ul>
+
+<!---------------------------------- -->
+<h3>Inputs</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>col_in</i>: a collection.
+</ul>
+
+<!---------------------------------- -->
+<h3>Result</h3>
+<!---------------------------------- -->
+<p>Returns the value of the item or FAILURE.</p>
+
+<!---------------------------------- -->
+<h3>Examples</h3>
+<!---------------------------------- -->
+<p></p>
+<pre>
+</pre>
+
+<!---------------------------------- -->
+<h3>See also</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#array">Array</a>
+
+<!---------------------------------- -->
+<h3>C++ prototype</h3>
+<!---------------------------------- -->
+<tt>
+Errc PArrayGetValue( Collection &amp;col_in, const std::String &amp;name, int index );
+</tt>
+
+<!---------------------------------- -->
+<h3>Version fran&ccedil;aise</h3>
+<!---------------------------------- -->
+<p>Extraction de la valeur d'un &eacute;lément d'un vecteur dans une collection.</p>
+		      
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Author: R&eacute;gis Clouard
+</address>
+<!---------------------------------- -->
+</body>
+</html>

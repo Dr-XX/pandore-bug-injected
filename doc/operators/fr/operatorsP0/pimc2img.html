@@ -1,0 +1,101 @@
+<html>
+<head>
+<title>OPERATEURS PANDORE</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>pimc2img</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Construction d'une image de niveaux de gris avec un plan d'une image couleur.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>pimc2img</b> <i>noplan</i> [<i>-m mask</i>] [<i>im_in</i>|-] [<i>im_out</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p>L'op&eacute;rateur <b>pimc2img</b> permet de cr&eacute;er une nouvelle image de niveaux de gris
+<i>im_out</i> &agrave; partir d'un plan d'une image couleur d'entr&eacute;e <i>im_in</i>.
+Le type des pixels de l'image de sortie <i>im_out</i> est
+le m&ecirc;me que celui de l'image d'entr&eacute;e <i>im_in</i>.</p>
+
+<!---------------------------------- -->
+<h3>Param&egrave;tres</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>noplan</i> est un entier de l'intervalle [0..2] avec la convention suivante:
+<ul>
+<li>0: le 1er plan; par exemple le rouge dans une image RGB, ou la teinte dans une image HSL,
+<li>1: le 2eme plan; par exemple le vert dans une image RGB, ou la saturation dans une image HSL
+<li>2: le 3eme plan; par exemple le bleu dans une image RGB, ou la luminance dans une image HSL.
+</ul>
+</ul>
+
+<!---------------------------------- -->
+<h3>Entr&eacute;es</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_in</i>: une image couleur.
+</ul>
+
+<!---------------------------------- -->
+<h3>Sorties</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_out</i>: une image en niveaux de gris.
+</ul>
+
+<!---------------------------------- -->
+<h3>R&eacute;sultat</h3>
+<!---------------------------------- -->
+<p>Retourne SUCCESS ou FAILURE.</p>
+
+<!---------------------------------- -->
+<h3>Exemples</h3>
+<!---------------------------------- -->
+<p>Extrait la premi&egrave;re bande de l'image couleur parrot.pan:</p>
+<pre>
+   pimc2img 0 parrot.pan a.pn
+</pre>
+
+<!---------------------------------- -->
+<h3>Voir aussi</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#casting">Coercition</a>
+
+<!---------------------------------- -->
+<h3>Prototype C++</h3>
+<!---------------------------------- -->
+<tt>
+Errc PImc2Img( const Imc2duc &amp;ims, const Img2duc &amp;im2, int plan);
+</tt>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Auteur: R&eacute;gis Clouard
+</address>
+<!---------------------------------- -->
+</body>
+</html>

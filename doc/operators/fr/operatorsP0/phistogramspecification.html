@@ -1,0 +1,116 @@
+<html>
+<head>
+<title>PANDORE OPERATORS</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+<body background="#ffffff">
+
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>phistogramspecification</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Rehaussement de contraste par sp&eacute;cification d'histogramme.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>phistogramspecification</b> [<i>-m mask</i>] [<i>im_in1</i>|-] [<i>im_in2</i>|-] [<i>im_out</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p>L'op&eacute;rateur <b>phistogramspecification</b> effectue
+une transformation des niveaux de gris de l'image d'entr&eacute;e
+ <i>im_in1</i> en utilisant une forme d'histogramme particuli&egrave;re
+donn&eacute;e par l'image de r&eacute;f&eacute;rence <i>im_in2</i>.
+
+<p>Cet op&eacute;rateur peut &ecirc;tre utilis&eacute; pour am&eacute;liorer une liste
+d'images d'une m&ecirc;me sc&egrave;ne.
+La premi&egrave;re &eacute;tape est d'am&eacute;liorer l'histogramme d'une image de la liste
+&agrave; la main, et la deuxi&egrave;me &eacute;tape consiste &agrave; appliquer le m&ecirc;me histogramme
+sur toutes les images de la liste.</p>
+
+<p>La sp&eacute;cification d'histogramme est bas&eacute; sur l'algorithme suivant:</p>
+<ol>
+<li>calcule l'histogramme cumul&eacute; normalis&eacute; hc1 de l'image d'entr&eacute;e <i>im_in1</i>;
+<li>calcule l'histogramme cumul&eacute; normalis&eacute; hc2 de l'image de r&eacute;f&eacute;rence <i>im_in2</i>;
+<li>pour chaque pixel 'p' de l'image d'entr&eacute;e :
+<ol>
+	<li>s=hc1[im_in1[p]];
+	<li>Search for i such as hc2[i]=s;
+	<li>im_out[p]=i.
+</ol>
+</ol>
+
+<p>Pour les images couleur et multispectrale,
+la transformation utilise l'approche marginale : l'op&eacute;rateur est
+appliqu&eacute; sur chaque bande individuellement.</p>
+
+<!---------------------------------- -->
+<h3>Entr&eacute;es</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_in</i>: une image.
+</ul>
+
+<!---------------------------------- -->
+<h3>Sorties</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_out</i>: une image du m&ecirc;me type que l'image d'entr&eacute;e <i>im_in</i>.
+</ul>
+
+<!---------------------------------- -->
+<h3>R&eacute;sultat</h3>
+<!---------------------------------- -->
+<p>Retourne SUCCESS ou FAILURE en cas d'incompatibilit&eacute; entre les images d'entr&eacute;e.</p>
+
+<!---------------------------------- -->
+<h3>Exemples</h3>
+<!---------------------------------- -->
+<p>Applique la transformation de l'histogramme de l'image
+tangram.pan par une transformation logarithmique
+&agrave; l'image tangram.pan elle-m&ecirc;me :</p>
+<pre>
+   plogtransform 0 0 255 tangram.pan reference.pan
+   phistogramspecification tangram.pan reference.pan a.pan
+</pre>
+
+<!---------------------------------- -->
+<h3>Voir aussi</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#luttransform">Transformation de la LUT</a>,
+<a href="./phistogramequalization.html">phistogramequalization</a>
+
+<!---------------------------------- -->
+<h3>Prototype C++</h3>
+<!---------------------------------- -->
+<tt>
+Errc PHistogramSpecification( const Img2duc &amp;im_in1, const Img2duc &amp;im_in2, Img2duc &amp;im_out );
+</tt>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Auteur: R&eacute;gis Clouard
+</address>
+<!---------------------------------- -->
+</p>
+</body>
+</html>

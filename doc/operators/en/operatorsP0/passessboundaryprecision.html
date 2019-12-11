@@ -1,0 +1,146 @@
+<html>
+<head>
+<title>PANDORE OPERATORS</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff"><center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>passessboundaryprecision</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Assesses regio nboundary precision of a segmentation result by comparison with a reference segmentation.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>passessboundaryprecision</b> <i>matching_algorithm_id</i> <i>matching_threshold</i> [<i>segmentation_result_in</i>|-] [<i>reference_segmentation_in</i>|-] [<i>col_out</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p>The operator <b>passessboundaryprecision</b> calculates 2 errors to assess
+region boundary precision of a segmentation result by comparison with
+a reference segmentation.</p>
+
+<p>The two errors are:</p>
+<ul>
+   <li><b>Pixel deficit error</b> accounts for proportion of missed pixels in correctly detected regions. 
+   <li><b>Pixel excess error</b> accounts for proportion of false pixels added to correctly detected regions. 
+</ul>
+
+<p>Error values are between 0..1, where 0 means no error and 1 
+the worst result.
+A deficit error of <i>x</i> means that <i>x * 100</i> percent of the
+region pixels are not detected in average by region.
+An excess error of <i>x</i> means that <i>x * 100</i> percent
+of the segments pixels are outside the related region
+boundary in average by segment.
+The result is stored in the output collection <i>col_out</i>
+which contains the two error values.</p>
+
+<p>Discrepancy measures are computed using a matching graph between segments in the segmentation
+result and regions in the reference segmentation.
+Two types of graph matching algorithm can used depending on the parameter <i>matching_algorithm_id</i>:
+the first one allows for over and under-segmentation, and the second
+one is restricted to unique region-segment matching.
+In this graph, a segment <i>S</i> detects a region <i>R</i>
+if the overlapping area | R * S | is such that:
+<pre>
+  | R * S |                                   | R * S |    
+  --------- >= <i>matching_threshold</i> and  --------- >= <i>matching_threshold</i>
+    | R |                                       | S |
+</pre>
+
+
+<!---------------------------------- -->
+<H3>Parameters</H3>
+<!---------------------------------- -->
+<ul>
+<li><i>matching_algorithm_id</i>: the index of the matching algorithm to be used:
+<ul>
+<li>0: for 1-n and n-1 matching.
+A segment in the segmentation result can merge several regions in the reference segmentation (under-segmentation), and
+a region in the reference segmentation can be split into several segments in the segmentation result (over-segmentation).
+However, a segment or a region cannot be both part of over-segmentation and under-segmentation.
+<li>1: for 1-1 matching. A segment can only detect one region at the most, and a region can only be
+detected by one segment at the most.
+</ul>
+<li><i>matching_threshold</i>: minimum proportion of overlapping area between a region and a segment to accept a detection.
+The value is in the interval [0,1] where value <i>x</i> corresponds to
+to a minimum of (<i>x</i>*100)% overlapping.
+</ul>
+
+<!---------------------------------- -->
+<h3>Inputs</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>segmentation_result_in</i>&nbsp;: a region map with segmentation result.
+<li><i>reference_segmentation_in</i>&nbsp;: a region map with reference segmentation.
+</ul>
+
+<!---------------------------------- -->
+<h3>Outputs</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>col_out</i>: a collection with the 2 error values. 
+</ul>
+
+<!---------------------------------- -->
+<h3>Result</h3>
+<!---------------------------------- -->
+<p>Returns SUCCESS or FAILURE.</p>
+
+<!---------------------------------- -->
+<h3>Examples</h3>
+<!---------------------------------- -->
+<p>Assesses region boundary precision of the segmentation result stored in 'tangram.pan' considering a minimum overlapping area of 50%:</p>
+<pre>
+passessdetectionaccuracy 0 0.5 resultimages/algo001/tangram.pan groundtruths/expert001/tangram.pan errors.pan
+pvisu errors.pan
+</pre>
+
+<!---------------------------------- -->
+<h3>See also</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#evaluation">Evaluation</a>,
+<a href="./passessdetectionaccuracy.html">passessdetectionaccuracy</a>,
+<a href="./passessfragmentationconsistency.html">passessfragmentationconsistency</a>,
+<a href="./passessshapefidelity.html">passessshapefidelity</a>,
+<a href="./passesstopologypreservation.html">passesstopologypreservation</a>,
+<a href="./passesssegmentationalgorithm.html">passesssegmentationalgorithm</a>,
+<a href="./pranksegmentationalgorithms.html">pranksegmentationalgorithms</a>,
+<a href="./pranksegmentationalgorithmsfromfolders.html">pranksegmentationalgorithmsfromfolders</a>
+
+<!---------------------------------- -->
+<h3>Prototype C++</h3>
+<!---------------------------------- -->
+<tt>
+Errc PAssessBoundaryPrecision( const Reg2d &amp;segmentation_result_in, const Reg2d &amp;reference_segmentation_in, Collection &amp;cold,
+			const int matching_algorithm_id,  const float matching_threshold );
+</tt>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Author: R&eacute;gis Clouard
+</address>
+<!---------------------------------- -->
+
+</body>
+</html>

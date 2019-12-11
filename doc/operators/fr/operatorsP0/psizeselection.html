@@ -1,0 +1,115 @@
+<html>
+<head>
+<title>PANDORE OPERATORS</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>psizeselection</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+S&eacute;lection de r&eacute;gions sur leur taille (profondeur, hauteur et largeur).
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>psizeselection</b> <i>relation</i> <i>width</i> <i>height</i> <i>depth</i> [<i>-m mask</i>] [<i>rg_in</i>|-] [<i>rg_out</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p><b>psizeselection</b> s&eacute;lectionne les r&eacute;gions par leur
+valeur de taille (depth, height and width).
+Le param&egrave;tre <i>relation</i> sp&eacute;cifie la relation d'ordre
+&agrave; la valeur de taille pour s&eacute;lectionner ou pas une r&eacute;gion.</p>
+<p>Si une taille =-1 alors elle n'est pas prise en compte dans
+la s&eacute;lection.</p>
+
+<!---------------------------------- -->
+<h3>Param&egrave;tres</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>relation</i> est une valeur enti&egrave;re de l'intervalle [-2,2], pr&eacute;cisant
+la relation &agrave; la valeur de taille:</p>
+<ul>
+<li><i>relation</i> = 2 : toutes les r&eacute;gions &gt;= taille.
+<li><i>relation</i> = 1 : toutes les r&eacute;gions &gt; taille.
+<li><i>relation</i> = 0 : toutes les r&eacute;gions = taille.
+<li><i>relation</i> = -1 : toutes les r&eacute;gions &lt; taille.
+<li><i>relation</i> = -2 : toutes les r&eacute;gions &lt;= taille.
+</ul>
+</ul>
+
+<ul>
+<li><i>depth</i> est un entier d&eacute;fini en pixels.
+Si la valeur de param&egrave;tre =-1 alors la taille n'est pas prise en compte.</p>
+<li><i>height</i> est un entier d&eacute;fini en pixels.
+Si la valeur de param&egrave;tre =-1 alors la taille n'est pas prise en compte.</p>
+<li><i>width</i> est un entier d&eacute;fini en pixels.
+Si la valeur de param&egrave;tre =-1 alors la taille n'est pas prise en compte.</p>
+</ul>
+
+<!---------------------------------- -->
+<h3>Entr&eacute;es</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>rg_in</i>: une carte de r&eacute;gions.
+</ul>
+
+<!---------------------------------- -->
+<h3>Sorties</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>rg_out</i>: une carte de r&eacute;gions.
+</ul>
+
+<!---------------------------------- -->
+<h3>R&eacute;sultat</h3>
+<!---------------------------------- -->
+Retourne le nombre de r&eacute;gions ainsi s&eacute;lectionn&eacute;es.
+
+<!---------------------------------- -->
+<h3>Exemples</h3>
+<!---------------------------------- -->
+<p>S&eacute;lectionne les r&eacute;gions de largeur = 50 pixels dans la carte de r&eacute;gions rin.pan :</p>
+<pre>
+   psizeselection 0 50 -1 0 rin.pan rout.pan
+</pre>
+
+<!---------------------------------- -->
+<h3>Voir aussi</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#region">R&eacute;gion</a>
+
+<!---------------------------------- -->
+<h3>Prototype C++</h3>
+<!---------------------------------- -->
+<tt>
+Errc PSizeSelection( const Reg2d &amp;rg_in, Reg2d &amp;rg_out, int relation, long width, long height, long depth );
+</tt>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Auteur: R&eacute;gis Clouard
+</address>
+<!---------------------------------- -->
+</body>
+</html>

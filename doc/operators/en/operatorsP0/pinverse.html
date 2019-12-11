@@ -1,0 +1,122 @@
+<html>
+<head>
+<title>PANDORE OPERATORS</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>pinverse</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Performs inversion of image or graph or region map labels.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>pinverse</b> [<i>-m mask</i>] [<i>im_in</i>|-] [<i>im_out</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p>The operator <b>pinverse</b> performs an inversion of the values
+of the input <i>im_in</i>.</p>
+
+<p>For byte images, inversion is applied from
+the minimum and maximum values of the related type (0-255):</p>
+<pre>
+   pixel = (max(type) + min(type)) - pixel.
+</pre>
+
+
+<p>For integer and float images, inversion is applied from
+the minimum and maximum values in the image:</p>
+<pre>
+   pixel = (max(image) + min(image)) - pixel.
+</pre>
+
+<p>For color or multispectral image, the "inversion" operator
+is computed separately on each band.</p>
+
+<p>For graph, inversion is applied on each node value:</p>
+<pre>
+   val = (max(graph) - min(graph)) - val.
+</pre>
+
+<p>For region map, inversion is applied on each label
+different from 0:
+<pre>
+label 0 -> 0;
+label 1 -> higher label value;
+label 2 -> higher label value-1;
+...
+label higher label value -> 1;
+</pre>
+
+<!---------------------------------- -->
+<h3>Inputs</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_in</i>: an image, a graph or a region map.
+</ul>
+
+<!---------------------------------- -->
+<h3>Outputs</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_out</i>: an object of the same type as im_in.
+</ul>
+
+<!---------------------------------- -->
+<h3>Result</h3>
+<!---------------------------------- -->
+<p>Returns SUCCESS or FAILURE.</p>
+
+<!---------------------------------- -->
+<h3>Examples</h3>
+<!---------------------------------- -->
+<ul>
+<li>Invert the pixel values of the butterfly image:
+<pre>
+   pinverse examples/butterfly.pan a.pan
+</pre>
+
+<!---------------------------------- -->
+<h3>See also</h3>
+<!---------------------------------- -->
+<ul>
+<li><a href="pnot.html">pnot</a>
+<li><a href="../operatorsP0.html#logic">logic</a>
+</ul>
+
+<!---------------------------------- -->
+<h3>C++ prototype</h3>
+<!---------------------------------- -->
+<tt>
+Errc PInverse( const Img2duc &amp;im_in, Img2duc &amp;im_out );
+</tt>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Author: R&eacute;gis Clouard
+</address>
+<!---------------------------------- -->
+</body>
+</html>

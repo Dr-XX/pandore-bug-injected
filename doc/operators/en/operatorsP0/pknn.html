@@ -1,0 +1,159 @@
+<html>
+<head>
+<title>PANDORE OPERATORS</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>pknn</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Performs K-Nearest Neighbors Clustering on a set of objects.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>pknn</b> <i>attr_base</i> <i>attr_in</i> <i>attr_out</i> <i>k</i> [<i>col_base</i>|-] [<i>col_in</i>|-] [<i>col_out</i>|-]
+</tt>
+ 
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p><b>pknn</b> is a partitioning method for a group of n objects
+into <i>k</i> clusters.
+The classifier works based on minimum distance from the query instance
+to the training samples to determine the K-nearest neighbors.
+After we gather K nearest neighbors, we take simple majority of these
+K-nearest neighbors to be the prediction of the query instance.</p>
+
+<p>The distance measure between two objects xi and xj
+uses the euclidean distance:</p>
+<pre>
+    D<sub>ij</sub> = [ SUM<sub>{d=1;n}</sub> (xid - xjd)<sup>2</sup> ]<sup>1/2</sup>
+</pre>
+<p>where xid is the feature d for the object i and xjd is the feature d for
+the object j.</p>
+
+<!---------------------------------- -->
+<h3>Parameters</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>attr_base</i> is the base name of the feature vector
+of the classified objects.
+The vectors
+are named <tt>attr_base.1</tt>, <tt>attr_base.2</tt>,..., <tt>attr_base.n</tt> in the input collection.
+The item j of the array  <tt>attr_in.i</tt> contains the (i)th
+feature of the (j+1)th object. They are Double arrays.
+If the array <tt>attr_base.C</tt> is present then it contains
+the cluster number of each objects. Otherwise the ith object
+falls into the cluster i.
+
+<li><i>attr_in</i> is the base name of the feature vector of the objects
+to be classified. The vectors
+are named <tt>attr_in.1</tt>, <tt>attr_in.2</tt>, ..., <tt>attr_in.n</tt> in the input collection.
+The item j of the array  <tt>attr_in.i</tt> contains the (i)th
+feature of the (j+1)th object. They are Double arrays.
+
+<li><i>attr_out</i> is the name of the output array. Each item
+i of the array contains the number of the cluster from which the
+(i)th object is assigned. <i>attr_out</i> is an array of
+unsigned longs where attr_out[i] specifies the cluster number for
+the object i.
+
+<li><i>k</i> is the number of desired cluster.
+</ul>
+
+<!---------------------------------- -->
+<h3>Inputs</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>col_base</i>: a collection which contains the feature vector of the classified objects.
+<li><i>col_in</i>: a collection which contains the feature vector of the objects to be classified.
+</ul>
+
+<!---------------------------------- -->
+<h3>Outputs</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>col_out</i>: a collection.
+</ul>
+
+<!---------------------------------- -->
+<h3>Result</h3>
+<!---------------------------------- -->
+<p>Returns SUCCESS or FAILURE.</p>
+
+<!---------------------------------- -->
+<h3>Examples</h3>
+<!---------------------------------- -->
+<p>Classifies beans into the jellybean.pan image from sample
+of each bean stored in the directory 'base' (Unix version).</p>
+<pre>
+# Learning
+   classes=1;
+   for i in base/*.pan
+   do
+      pim2array ind $i /tmp/tmp1 
+      parraysize ind.1 /tmp/tmp1
+      size=`pstatus`
+      pcreatearray ind.C Ushort $size $classes | pcolcatenateitem /tmp/tmp1 - i-01.pan
+      if [ -f base.pan ]
+      then pcolcatenateitem i-01.pan base.pan base.pan
+      else cp i-01.pan base.pan
+      fi
+      classes=`expr $classes + 1`
+   done 
+
+# Classification
+   pproperty 0 jellybeans.pan
+   ncol=`pstatus`
+   pproperty 1 jellybeans.pan
+   nrow=`pstatus`
+
+   pim2array ind jellybeans.pan | pknn ind ind ind 10 base.pan - | parray2im $ncol $nrow 0 ind | pim2rg - out.pan
+</pre>
+
+<!---------------------------------- -->
+<h3>See also</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#classification">Classification</a>
+
+<!---------------------------------- -->
+<h3>C++ prototype</h3>
+<!---------------------------------- -->
+<tt>
+Errc PKnn(const std::string &amp;a_base,  const Collection &amp;c_base,
+          const std::string &amp;a_in,    const Collection &amp;c_in,
+          const std::string &amp;a_out,         Collection &amp;c_out,
+          int K);
+</tt>
+
+<!---------------------------------- -->
+<h3>Version fran&ccedil;aise</h3>
+<!---------------------------------- -->
+<p>Classification selon les k plus proches voisins.</p>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Author: Alexandre Duret-Lutz
+</address>
+<!---------------------------------- -->
+</body>
+</html>

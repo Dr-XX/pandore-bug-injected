@@ -1,0 +1,98 @@
+<html>
+<head>
+<title>PANDORE OPERATORS</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>pvaluenumber</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Returns the amount of non null pixels of image, region map or graph.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>pvaluenumber</b> [<i>-m mask</i>] [<i>im_in</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p><b>pvaluenumber</b> counts the number of non
+null pixels in the input image <i>im_in</i>.
+If the input object is a graph, <b>pvaluenumber</b>
+counts the number of non null nodes.</p>
+
+<!---------------------------------- -->
+<h3>Inputs</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_in</i>: a grayscale, a region map or a graph.
+</ul>
+
+<!---------------------------------- -->
+<h3>Result</h3>
+<!---------------------------------- -->
+<p>Returns the number of non null pixels in the input image <i>im_in</i>.
+This value can be get using operator <b>pstatus</b>.</p>
+
+<!---------------------------------- -->
+<h3>Examples</h3>
+<!---------------------------------- -->
+<p>Returns the number of non null pixels in tangram.pan (Unix version):</p>
+<pre>
+   pvaluenumber tangram.pan
+   val=`pstatus`
+   echo "Total = $val"
+</pre>
+
+<p>Returns the number of non null pixels in tangram.pan (MsDOS version):</p>
+<pre>
+   pvaluenumber tangram.pan
+   call pstatus
+   call pset val
+   echo Total = %val%
+</pre>
+
+<!---------------------------------- -->
+<h3>See also</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#imagefeaturesextraction">Image Features Extraction</a>
+
+<!---------------------------------- -->
+<h3>C++ prototype</h3>
+<!---------------------------------- -->
+<tt>
+Double PValueNumber( const Img2duc &amp;im_in );
+</tt>
+
+<!---------------------------------- -->
+<h3>Version fran&ccedil;aise</h3>
+<!---------------------------------- -->
+<p>Comptage du nombre de pixels non nuls dans une image (un graphe ou une carte de r&eacute;gions).</p>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Author: R&eacute;gis Clouard
+</address>
+<!---------------------------------- -->
+</body>
+</html>

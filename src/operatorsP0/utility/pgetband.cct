@@ -1,0 +1,121 @@
+/* -*- c-basic-offset: 3; mode: c++ -*-
+ *
+ * Copyright (c), GREYC.
+ * All rights reserved
+ *
+ * You may use this file under the terms of the BSD license as follows:
+ *
+ * "Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are
+ * met:
+ *   * Redistributions of source code must retain the above copyright
+ *     notice, this list of conditions and the following disclaimer.
+ *   * Redistributions in binary form must reproduce the above copyright
+ *     notice, this list of conditions and the following disclaimer in
+ *     the documentation and/or other materials provided with the
+ *     distribution.
+ *   * Neither the name of the GREYC, nor the name of its
+ *     contributors may be used to endorse or promote products
+ *     derived from this software without specific prior written
+ *     permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, 
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, 
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
+ *
+ * 
+ * For more information, refer to:
+ * https://clouard.users.greyc.fr/Pandore
+ */
+
+#include <pandore.h>
+using namespace pandore;
+
+/**
+ * @file pgetband.cpp
+ * Returns the specified band if any, or return
+ * the closest one (the first or the last).
+ */
+template <typename T>
+Errc PGetBand( const Imx2d<T> &ims, Img2d<T> &imd, int band ) {
+   if (band < 0) {
+      band = 0;
+   } else if (band >= ims.Bands() - 1) {
+      band = ims.Bands() - 1;
+   }
+   T *pg = imd.Vector();
+   T *pc = ims.Vector(band);
+   for (Ulong x = 0; x < ims.VectorSize(); x++) {
+      *(pg++) = *(pc++);
+   }
+   
+   return band;
+}
+
+template <typename T>
+Errc PGetBand( const Imx3d<T> &ims, Img3d<T> &imd, int band ) {
+   if (band < 0) {
+      band = 0;
+   } else if (band >= ims.Bands() - 1) {
+      band = ims.Bands() - 1;
+   }
+   T *pg = imd.Vector();
+   T *pc = ims.Vector(band);
+   for (Ulong x = 0; x < ims.VectorSize(); x++) {
+      *(pg++) = *(pc++);
+   }
+   
+   return band;
+}
+
+##begin PGetBand2d < TIN1, TIN2 >
+## append loadcases
+   if (objs[0]->Type() == Po_$TIN1) {
+      TIN1* const ims = (TIN1*)objs[0];
+      objd[0] = new TIN2(ims->Props());
+      TIN2* const imd = (TIN2*)objd[0];
+      
+      result=PGetBand(*ims, *imd, atoi(parv[0]));
+      goto end;
+   }
+## end
+##end
+
+##forall(PGetBand2d, /Im.2duc/, /Img2duc/)
+##forall(PGetBand2d, /Im.2dsl/, /Img2dsl/)
+##forall(PGetBand2d, /Im.2dsf/, /Img2dsf/)
+
+##begin PGetBand3d < TIN1, TIN2 >
+## append loadcases
+   if (objs[0]->Type() == Po_$TIN1) {
+      TIN1* const ims = (TIN1*)objs[0];
+      objd[0] = new TIN2(ims->Props());
+      TIN2* const imd = (TIN2*)objd[0];
+      
+      result=PGetBand(*ims, *imd, atoi(parv[0]));
+      goto end;
+   }
+## end
+##end
+
+##forall(PGetBand3d, /Im.3duc/, /Img3duc/)
+##forall(PGetBand3d, /Im.3dsl/, /Img3dsl/)
+##forall(PGetBand3d, /Im.3dsf/, /Img3dsf/)
+
+#ifdef MAIN
+#define	USAGE	"usage: %s band [-m mask] [im_in|-] [im_out|-]"
+#define	PARC	1
+#define	FINC	1
+#define	FOUTC	1
+#define	MASK	2
+
+##main(PARC, FINC, FOUTC, MASK, USAGE)
+#endif

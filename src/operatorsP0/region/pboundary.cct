@@ -1,0 +1,153 @@
+/* -*- mode: c++; c-basic-offset: 3 -*-
+ *
+ * Copyright (c), GREYC.
+ * All rights reserved
+ *
+ * You may use this file under the terms of the BSD license as follows:
+ *
+ * "Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are
+ * met:
+ *   * Redistributions of source code must retain the above copyright
+ *     notice, this list of conditions and the following disclaimer.
+ *   * Redistributions in binary form must reproduce the above copyright
+ *     notice, this list of conditions and the following disclaimer in
+ *     the documentation and/or other materials provided with the
+ *     distribution.
+ *   * Neither the name of the GREYC, nor the name of its
+ *     contributors may be used to endorse or promote products
+ *     derived from this software without specific prior written
+ *     permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE." *
+ * 
+ * For more information, refer to:
+ * https://clouard.users.greyc.fr/Pandore
+ */
+
+#include <pandore.h>
+using namespace pandore;
+
+/**
+ * @file pboundary.cpp
+ *
+ * Localisation of the region boundary.
+ * A point is a boundary point if at least one of its neigbours
+ * is not in the same region.
+ */
+##begin PBoundaryI < TIN1 , TIN2, LOOPP, LOOPPB, POINT, VOISS, VOISL >
+Errc PBoundary( const TIN1 &ims, TIN2 &imd, int connexity ) {
+   POINT p;
+
+   if (connexity == VOISS) {
+##LOOPP(ims, p)
+      {
+	 imd[p] = 0;
+	 for (int v = 0; v < VOISS; v++) {
+	    POINT p1 = p + v$VOISS[v];
+	    if (ims.Hold(p1) && ims[p] != ims[p1] && ims[p] != 0) {
+	       imd[p] = Limits<TIN2::ValueType>::max();
+	       break;
+	    }
+	 }
+      } 
+   } else {
+##LOOPP(ims, p)
+      {
+	 imd[p] = 0;
+	 for (int v = 0; v < VOISL; v++) {
+	    POINT p1 = p + v$VOISL[v];
+	    if (ims.Hold(p1) && ims[p] != ims[p1] && ims[p] != 0) {
+	       imd[p] = Limits<TIN2::ValueType>::max();
+	       break;
+	    }
+	 }
+      } 
+   }
+
+   return SUCCESS;
+}
+## append loadcases
+   if (objs[0]->Type() == Po_$TIN1) {
+      TIN1* const ims = (TIN1*)objs[0];
+      objd[0] = new TIN2(ims->Size());
+      TIN2* const imd = (TIN2*)objd[0];
+      
+      result = PBoundary(*ims, *imd, atoi(parv[0]));
+      goto end;
+   }
+## end
+##end
+
+##begin PBoundaryG(TIN)
+Errc PBoundary( const TIN &grs, TIN &grd, int ) {
+   GEdge *ptr;
+   TIN::ValueType u;
+
+   grd = grs;
+   // Initialisation a 0
+   // sauf les points terminaux qui sont donc sur la bordure.
+   for (Long i = 0; i < grs.Size(); i++) {
+      if ((grd[i])) {
+	 int nbvois = 0;
+	 for (ptr = grs[i]->Neighbours(); ptr; ptr = ptr->Next()) {
+	    nbvois++;
+	 }
+	 if (nbvois > 1) {
+	    grd[i]->value = 0;
+	 } else {
+	    grd[i]->value = 255.0;
+	 }
+      }
+   }
+
+   for (Long i = 0; i < grs.Size(); i++) {
+      if ((grs[i])) {
+	 u = grs[i]->value;
+	 for (ptr = grs[i]->Neighbours(); ptr; ptr = ptr->Next()) {
+	    if ((grs[ptr->Node()]->value!=u) && (grd[ptr->Node()]->value == 0)) {
+	       grd[i]->value = 255.0;
+	    }
+	 }
+      }
+   }
+   
+   return SUCCESS;
+}
+## append loadcases
+   if (objs[0]->Type() == Po_$TIN) {
+      TIN* const grs = (TIN*)objs[0];
+      objd[0] = new TIN(grs->Size());
+      TIN* const grd = (TIN*)objd[0];
+      
+      result = PBoundary(*grs, *grd, atoi(parv[0]));
+      goto end;
+   }
+## end
+##end
+
+##forall(PBoundaryI, /Img2d/, Img2duc)
+##forall(PBoundaryI, /Img3d/, Img3duc)
+##forall(PBoundaryI, /Reg2d/, Img2duc)
+##forall(PBoundaryI, /Reg3d/, Img3duc)
+##forall(PBoundaryG, /Graph/)
+
+#ifdef MAIN
+#define	USAGE	"usage: %s connexity [-m mask] [im_in|-] [im_out|-]"
+#define	PARC	1
+#define	FINC	1
+#define	FOUTC	1
+#define	MASK	2 // Only Masking
+
+##main(PARC, FINC, FOUTC, MASK, USAGE)
+#endif

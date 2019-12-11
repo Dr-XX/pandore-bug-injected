@@ -1,0 +1,96 @@
+<html>
+<head>
+<title>OPERATEURS PANDORE</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>ppan2ps</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Conversion d'une image Pandore en un fichier Encapsuled PostScript.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>ppan2ps</b> [ <i>im_in</i>|-] [ <i>file_out</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p>L'op&eacute;rateur <b>ppan2ps</b> permet de convertir une image
+Pandore en un fichier PostScript.</p>
+
+<p>Seules les images 2D et les cartes de r&egrave;gions 2D peuvent
+&ecirc;tre converties en fichier PostScript.</p>
+ 
+<p>Le fichier r&eacute;sultant peut alors &ecirc;tre imprim&eacute;
+ou int&eacute;gr&eacute; dans un document Word, TeX, Excel...</p>
+
+
+<!---------------------------------- -->
+<h3>Entr&eacute;es</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_in</i>: une image 2D ou une carte de r&eacute;gions 2D.
+</ul>
+
+<!---------------------------------- -->
+<h3>Sorties</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>file_out</i>: un fichier PostScript.
+</ul>
+
+<!---------------------------------- -->
+<h3>R&eacute;sultat</h3>
+<!---------------------------------- -->
+<p>Retourne SUCCESS ou FAILURE.</p>
+
+<!---------------------------------- -->
+<h3>Exemples</h3>
+<!---------------------------------- -->
+<p>Construit image PostScript &agrave; partir de l'image Pandore tangramp.pan :</p>
+<pre>
+   ppan2ps tangram.pan tangram.eps
+</pre>
+
+<!---------------------------------- -->
+<h3>Voir aussi</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#conversion">Conversion</a>
+
+<!---------------------------------- -->
+<h3>Prototype C++</h3>
+<!---------------------------------- -->
+<tt>
+Errc PPan2PS( const Img2duc &amp;im_in, char *filename );
+</tt>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Auteur: R&eacute;gis Clouard
+</address>
+<!---------------------------------- -->
+
+</body>
+</html>

@@ -1,0 +1,119 @@
+<html>
+<head>
+<title>PANDORE OPERATORS</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>pnewimage</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Creates a new image from dimensions.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>pnewimage</b> <i>w</i> <i>h</i> <i>d</i> <i>val</i> [<i>im_out</i>|-] 
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p><b>pnewimage</b> creates a new image from the specified dimensions
+(<i>width,height,depth</i>) with the specified value <i>val</i> for all pixels.</p>
+
+<p>The format of the output image is deduced from the dimension values:
+<ul>
+<li>if <i>h</i>&lt;=0 then <i>im_out</i> is a 1D image;
+<li>if <i>d</i>&lt;=0 then <i>im_out</i> is a 2D image;
+<li>otherwise <i>im_out</i> is a 3D image.
+</ul>
+
+<p>The type of the output image is deduced from the parameter <i>val</i> value:
+<ul>
+<li>if <i>val</i> is an integer &lt; 255 and &ge; 0 then <i>im_out</i> is a Uchar image;
+<li>if <i>val</i> is an integer &gt; 255 or &lt; 0 then <i>im_out</i> is a Long image;
+<li>if <i>val</i> is a real value then <i>im_out</i> is a Float image.</p>
+</ul>
+
+<p>Two other operators can be used to create a new image.
+<a href="./psetcst.html">psetcst</a> creates a new image from properties of another image.
+<a href="./pshapedesign.html">pshapedesign</a> creates a new image from specified dimensions
+and type.</p>
+
+<!---------------------------------- -->
+<h3>Parameters</h3>
+<!---------------------------------- -->
+<ul>
+<li><p><i>w,h,d</i> (width, height, depth) defines the dimensions of the output image.
+<li><i>val</i> specifies the value for all pixels. It can be 
+an integer or a real value.
+</ul>
+
+<!---------------------------------- -->
+<h3>Outputs</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_out</i>: an image whose type depends on the parameters values.
+</ul>
+
+<!---------------------------------- -->
+<h3>Result</h3>
+<!---------------------------------- -->
+<p>Returns SUCCESS or FAILURE.</p>
+
+<!---------------------------------- -->
+<h3>Examples</h3>
+<!---------------------------------- -->
+<p>Fills hole in regions yields by a simple segmentation process
+of the tangram.pan image:</p>
+<pre>
+   pbinarization 100 1e30 tangram.pan in.pan
+   pnewimage 256 256 0 255 i0.pan
+   psetborder 1 1 1 1 1 1 0 i0.pan i1.pan
+   perosionreconstruction 4 i1.pan in.pan fillhole_out.pan
+</pre>
+
+<!---------------------------------- -->
+<h3>See also</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#utility">Utility</a>,
+<a href="./pshapedesign.html">pshapedesign</a>,
+<a href="./psetcst.html">psetcst</a>
+
+<!---------------------------------- -->
+<h3>C++ prototype</h3>
+<!---------------------------------- -->
+<tt>
+No prototype.
+</tt>
+
+<!---------------------------------- -->
+<h3>Version fran&ccedil;aise</h3>
+<!---------------------------------- -->
+<p>Cr&eacute;ation d'une nouvelle image &agrave; partir de dimensions.</p>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Author: R&eacute;gis Clouard
+</address>
+<!---------------------------------- -->
+</body>
+</html>

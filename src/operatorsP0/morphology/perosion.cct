@@ -1,0 +1,723 @@
+/* -*- mode: c++; c-basic-offset: 3 -*-
+ *
+ * Copyright (c), GREYC.
+ * All rights reserved
+ *
+ * You may use this file under the terms of the BSD license as follows:
+ *
+ * "Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are
+ * met:
+ *   * Redistributions of source code must retain the above copyright
+ *     notice, this list of conditions and the following disclaimer.
+ *   * Redistributions in binary form must reproduce the above copyright
+ *     notice, this list of conditions and the following disclaimer in
+ *     the documentation and/or other materials provided with the
+ *     distribution.
+ *   * Neither the name of the GREYC, nor the name of its
+ *     contributors may be used to endorse or promote products
+ *     derived from this software without specific prior written
+ *     permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
+ *
+ * 
+ * For more information, refer to:
+ * https://clouard.users.greyc.fr/Pandore
+ */
+
+/**
+ * @author Régis Clouard - 1996-02-19
+ * @author Francois Angot - 1996-08-05
+ * @author Olivier Lezoray - 1996-09-30
+ * @author Regis Clouard - 2003-05-22 (new algorithm)
+ * @author Regis Clouard - Jun 19, 2011 (new algorithm)
+ * @author Alexis François - Nov 03, 2012 (speed up for square structuring element).
+ */
+
+#define _USE_MATH_DEFINES
+#include <math.h>
+#include <pandore.h>
+using namespace pandore;
+#include "morphology/structelt.h"
+
+/**
+ * @file perosion.cpp
+ * Morphological erosion.
+ * numSE: Structuring Element index between
+ * halfsize : halfsize of the structuring element.
+ */
+##begin PErosionG1D < TIN, LOOPP, POINT, VOISS, VOISL >
+Errc PErosion( const TIN &ims, TIN &imd, int numSE, int halfsize ) {
+   if (halfsize < 1) {
+      std::cerr << "Error perosion: bad structuring element size: " << halfsize << std::endl;
+      return FAILURE;
+   }
+
+   StructuringElement1d *se = new StructuringElement1d(numSE, halfsize);
+   Point1d p, p1;
+   for (p.x = 0; p.x < ims.Width(); p.x++) {
+      TIN::ValueType min = Limits < TIN::ValueType>::max(), val;
+      for (int i = 0; i < se->length; i++) {
+  	 p1 = p;
+ 	 se->Move(i, p1);
+
+	 if (ims.Hold(p1) && ((val = ims[p1]) < min)) {
+	    min = val;
+	 }
+      }
+      imd[p] = min;
+   }
+
+   delete se;
+   return SUCCESS;
+}
+
+## append loadcases
+   if (objs[0]->Type() == Po_$TIN) {
+      TIN* const ims = (TIN*)objs[0];
+      objd[0] = new TIN(ims->Props());
+      TIN* const imd = (TIN*)objd[0];
+      
+      result = PErosion(*ims, *imd, atoi(parv[0]), atoi(parv[1]));
+      goto end;
+   }
+## end
+##end
+
+template < typename T>
+Errc PErosionGeneral( const Imx2d < T> &ims, Imx2d < T> &imd, int numSE, int halfsize ) {
+   if (numSE > 9 || numSE < 0) {
+      std::cerr << "Error perosion: bad structuring element type: " << numSE << std::endl;
+      return FAILURE;
+   }
+   if (halfsize < 1) {
+      std::cerr << "Error perosion: bad structuring element size: " << halfsize << std::endl;
+      return FAILURE;
+   }
+
+   StructuringElement2d *se = new StructuringElement2d(numSE, halfsize);
+
+   Point2d p, p1;
+   for (int b = 0; b < ims.Bands(); b++) {
+      for (p.y = 0; p.y < ims.Height(); p.y++) {
+	 for (p.x = 0; p.x < ims.Width(); p.x++) {
+	    T min=Limits < T>::max(), val;
+	    for (int i = 0; i < se->length; i++) {
+ 	       p1 = p;
+ 	       se->Move(i, p1);
+
+	       if (ims.Hold(p1) && ((val = ims[b][p1]) < min)) {
+		  min = val;
+	       }
+	    }
+	    imd[b][p] = min;
+	 }
+      }
+   }
+   delete se;
+   return SUCCESS;
+}
+
+////// Alexis extension
+template < typename T>
+void dxFastErosionVertical( const pandore::Imx2d < T>& ims, pandore::Imx2d < T>& imd, int halfsize ) {
+    const Long height_1 = ims.Height() - 1;
+    const Long width = ims.Width();
+    
+    // Using structuring element 1x2 :
+    // X
+    // X
+    const Imx2d < T> *ims_ptr = reinterpret_cast<const pandore::Imx2d < T>*>(&ims);
+    Imx2d < T> imt;
+    bool write = false;
+
+    for (int b = 0; b < ims.Bands(); b++) {
+       for (int hs = 0; hs < halfsize; ++hs ) {
+	  for (int x=0;  x < width; ++x) {
+	     T p2 = (*ims_ptr)(b, 0, x);
+	     for (int y = 0; y < height_1; ++y) {
+                T p1 = p2;
+                p2 = (*ims_ptr)(b, y + 1, x);
+                if (p1 != p2) { // If they are different, set the lower value to the higher pixel
+		   if (p1 < p2) {
+		      imd(b, y + 1, x) = p1;
+		      write = true;
+		   } else {
+		      if (write) { // If the pixel have already been set
+			 if (p2 < imd(b, y, x)) { // Test if the new value is higher
+			    imd(b, y, x) = p2; // Set the pixel with the new value
+			 }
+			 write = false;
+		      } else { // If the pixel is not set
+			 imd(b, y, x) = p2;
+		      }
+		   }
+                }
+	     }
+	  }
+	  if (hs != halfsize - 1) {
+	     imt = imd;
+	     ims_ptr = &imt;
+	  }
+       }
+    }
+}
+
+template < typename T>
+void dxFastErosionHorizontal( const pandore::Imx2d < T>& ims, pandore::Imx2d < T>& imd, int halfsize ) {
+    const Long height = ims.Height();
+    const Long width_1 = ims.Width() - 1;
+
+    // Using structuring element 2x1 :
+    // X X
+    const Imx2d < T> *ims_ptr = reinterpret_cast<const pandore::Imx2d < T>*>(&ims);
+    Imx2d < T> imt;
+    bool write = false;
+    
+    for (int b = 0; b < ims.Bands(); b++) {
+       for (int hs = 0; hs < halfsize; ++hs ) {
+	  for (int y = 0; y < height; ++y) {
+	     T p2 = (*ims_ptr)(b, y, 0);
+	     for (int x = 0; x < width_1; ++x) {
+                T p1 = p2;
+                p2 = (*ims_ptr)(b, y, x + 1);
+                if (p1 != p2) {
+		   if (p1 < p2) {
+		      imd(b, y, x + 1) = p1;
+		      write = true;
+		   } else {
+		      if (write) {
+			 if (p2 < imd(b, y, x)) { // Test if the new value is highter
+			    imd(b, y, x) = p2; // Set the pixel with the new value
+			 }
+			 write = false;
+		      } else {
+			 imd(b, y, x) = p2;
+		      }
+		   }
+                }
+	     }
+	  }
+	  if (hs != halfsize - 1) {
+	     imt = imd;
+	     ims_ptr = &imt;
+	  }
+       }
+    }
+}
+
+/**
+ * Fast erosion for square structuring element
+ */
+template < typename T>
+void dxFastErosion8( const Imx2d < T>& ims, Imx2d < T>& imd, int halfsize ) {
+    Imx2d < T> imt(ims);
+    dxFastErosionVertical(ims, imt, halfsize);
+    imd = imt;
+    dxFastErosionHorizontal(imt, imd, halfsize);
+}
+
+template < typename T>
+void dxFastErosionVertical( const pandore::Imx3d < T>& ims, pandore::Imx3d < T>& imd, int halfsize ) {
+    const Long height_1 = ims.Height() - 1;
+    const Long width = ims.Width();
+    const Long depth = ims.Depth();
+
+    bool write = false;    
+    Imx3d < T> imt;
+    const Imx3d < T> *ims_ptr = reinterpret_cast<const pandore::Imx3d < T>*>(&ims);
+
+    for (int b = 0; b < ims.Bands(); b++) {
+       for (int hs = 0; hs < halfsize; ++hs ) {
+	  for (int z = 0; z < depth; ++z) {
+	     for (int x = 0; x < width; ++x) {
+		T p2 = (*ims_ptr)(b, z, 0, x);
+		for (int y = 0; y < height_1; ++y) {
+		   T p1 = p2;
+		   p2 = (*ims_ptr)(b, z, y + 1, x);
+		   if (p1 != p2) { // If they are different, set the lower value to the higher pixel
+		      if (p1 < p2) {
+			 imd(b, z, y + 1, x) = p1;
+			 write = true;
+		      } else {
+			 if (write) { // If the pixel have already been set
+			    if (p2 < imd(b, z, y, x)) { // Test if the new value is higher
+			       imd(b, z, y, x) = p2; // Set the pixel with the new value
+			    }
+			    write = false;
+			 } else { // If the pixel is not set
+			    imd(b, z, y, x) = p2;
+			 }
+		      }
+		   }
+		}
+	     }
+	  }
+	  if (hs != halfsize - 1) {
+	     imt = imd;
+	     ims_ptr = &imt;
+	  }
+       }
+    }
+}
+
+template < typename T>
+void dxFastErosionHorizontal( const pandore::Imx3d < T>& ims, pandore::Imx3d < T>& imd, int halfsize ) {
+    const Long depth = ims.Depth();
+    const Long height = ims.Height();
+    const Long width_1 = ims.Width() - 1;
+
+    bool write = false;
+    const Imx3d < T> *ims_ptr = reinterpret_cast<const pandore::Imx3d < T>*>(&ims);
+    Imx3d < T> imt;
+    
+    for (int b = 0; b < ims.Bands(); b++) {
+       for (int hs = 0; hs < halfsize; ++hs ) {
+	  for (int z = 0; z < depth; ++z) {
+	     for (int y = 0; y < height; ++y) {
+		T p2 = (*ims_ptr)(b, z, y, 0);
+		for (int x = 0; x < width_1; ++x) {
+		   T p1 = p2;
+		   p2 = (*ims_ptr)(b, z, y, x + 1);
+		   if (p1 != p2) {
+		      if (p1 < p2) {
+			 imd(b, z, y, x + 1) = p1;
+			 write = true;
+		      } else {
+			 if (write) {
+			    if (p2 < imd(b, z, y, x)) { // Test if the new value is highter
+			       imd(b, z, y, x) = p2; // Set the pixel with the new value
+			    }
+			    write = false;
+			 } else {
+			    imd(b, z, y, x) = p2;
+			 }
+		      }
+		   }
+		}
+	     }
+	  }
+	  if (hs != halfsize - 1) {
+	     imt = imd;
+	     ims_ptr = &imt;
+	  }
+       }
+    }
+}
+
+template < typename T>
+void dxFastErosionDepth( const pandore::Imx3d < T>& ims, pandore::Imx3d < T>& imd, int halfsize ) {
+    const Long depth_1 = ims.Depth() - 1;
+    const Long height = ims.Height();
+    const Long width = ims.Width();
+
+    bool write = false;
+    Imx3d < T> imt;
+    const Imx3d < T> *ims_ptr = reinterpret_cast<const pandore::Imx2d < T>*>(&ims);
+    
+    for (int b = 0; b < ims.Bands(); b++) {
+       for (int hs = 0; hs < halfsize; ++hs ) {
+	  for (int y = 0; y < height; ++y) {
+	     for (int x = 0; x < width; ++x) {
+		T p2 = (*ims_ptr)(b, 0, y, x);
+		for (int z = 0; z < depth_1; ++z) {
+		   T p1 = p2;
+		   p2 = (*ims_ptr)(b, z + 1, y, x);
+		   if (p1 != p2) {
+		      if (p1 < p2) {
+			 imd(b, z + 1, y, x) = p1;
+			 write = true;
+		      } else {
+			 if (write) {
+			    if (p2 < imd(b, z, y, x)) { // Test if the new value is highter
+			       imd(b, z, y, x) = p2; // Set the pixel with the new value
+			    }
+			    write = false;
+			 } else {
+			    imd(b, z, y, x) = p2;
+			 }
+		      }
+		   }
+		}
+	     }
+	  }
+	  if (hs != halfsize - 1) {
+	     imt = imd;
+	     ims_ptr = &imt;
+	  }
+       }
+    }
+}
+
+/**
+ * Fast erosion for square structuring element.
+ */
+template < typename T>
+void dxFastErosion26( const Imx3d < T>& ims, Imx3d < T>& imd, int halfsize ) {
+   imd = ims;
+   dxFastErosionVertical(ims, imd, halfsize);
+   Imx3d < T> imt(imd);
+   dxFastErosionHorizontal(imd, imt, halfsize);
+   imd = imt;
+   dxFastErosionDepth(imt, imd, halfsize);
+}
+/////////
+
+template < typename T>
+Errc PErosion( const Imx2d < T> &ims, Imx2d < T> &imd, int numSE, int halfsize ) {
+   if (numSE == 1) {
+      dxFastErosion8(ims, imd, halfsize);
+      return SUCCESS;
+   }
+   return PErosionGeneral(ims, imd, numSE, halfsize);
+}
+
+##begin PErosionG2D < TIN, LOOPP, POINT, VOISS, VOISL >
+## append loadcases
+   if (objs[0]->Type() == Po_$TIN) {
+      TIN* const ims = (TIN*)objs[0];
+      objd[0] = new TIN(ims->Props());
+      TIN* const imd = (TIN*)objd[0];
+      
+      result = PErosion(*ims, *imd, atoi(parv[0]), atoi(parv[1]));
+      goto end;
+   }
+## end
+##end
+
+template < typename T>
+Errc PErosion( const Imx3d < T> &ims, Imx3d < T> &imd, int numSE, int halfsize ) {
+   if (numSE > 12 || numSE < 0) {
+      std::cerr << "Error perosion: bad structuring element type: " << numSE << std::endl;
+      return FAILURE;
+   }
+   if (halfsize < 1) {
+      std::cerr << "Error perosion: bad structuring element size: " << halfsize << std::endl;
+      return FAILURE;
+   }
+
+   if (numSE == 1) {
+      dxFastErosion26(ims, imd, halfsize);
+      return SUCCESS;
+   }
+
+   StructuringElement3d *se = new StructuringElement3d(numSE, halfsize);
+
+   Point3d p, p1;
+   for (int b = 0; b < ims.Bands(); b++) {
+      for (p.z = 0; p.z < ims.Depth(); p.z++) {
+	 for (p.y = 0; p.y < ims.Height(); p.y++) {
+	    for (p.x = 0; p.x < ims.Width(); p.x++) {
+	       T min = Limits < T>::max(), val;
+	       for (int i = 0; i < se->length; i++) {
+ 	          p1 = p;
+ 	          se->Move(i, p1);
+		  if (ims.Hold(p1) && ((val = ims(b, p1)) < min)) {
+		     min = val;
+		  }
+	       }
+	       imd(b, p) = min;
+	    }
+	 }
+      }
+   }
+   
+   delete se;
+   return SUCCESS;
+}
+
+##begin PErosionG3D < TIN>
+## append loadcases
+   if (objs[0]->Type() == Po_$TIN) {
+      TIN* const ims = (TIN*)objs[0];
+      objd[0] = new TIN(ims->Props());
+      TIN* const imd = (TIN*)objd[0];
+      
+      result = PErosion(*ims, *imd, atoi(parv[0]), atoi(parv[1]));
+      goto end;
+   }
+## end
+##end
+
+#ifndef __LOWER_H__
+#define __LOWER_H__
+/*
+ * Lexicographic order between 2 colors (cx, cy, cz) and (cx1, cy1, cz1)
+ */
+template < typename T>
+static bool Lower( T cx1, T cy1, T cz1, T cx, T cy, T cz ) {
+    if (cx1 < cx) {
+       return true;
+    } else if (cx1 > cx) {
+	return false;
+    }
+    if (cy1 < cy) {
+	return true;
+    } else if (cy1 > cy) {
+	return false;
+    }
+    if (cz1 < cz) {
+       return true;
+    } else if (cz1 > cz) {
+	return false;
+    } else {
+	return false;
+    }
+}
+
+#endif
+
+template < typename T>
+Errc PErosion( const Imc2d < T> &ims, Imc2d < T> &imd, int numSE, int halfsize ) {
+   if (numSE > 9 || numSE < 0) {
+      std::cerr << "Error perosion: bad structuring element type: " << numSE << std::endl;
+      return FAILURE;
+   }
+   if (halfsize < 1) {
+      std::cerr << "Error perosion: bad structuring element size: " << halfsize << std::endl;
+      return FAILURE;
+   }
+
+   StructuringElement2d *se = new StructuringElement2d(numSE, halfsize);
+   Point2d p, p1;
+   for (p.y = 0; p.y < ims.Height(); p.y++) {
+      for (p.x = 0; p.x < ims.Width(); p.x++) {
+ 	 T minX = Limits < T>::max();
+ 	 T minY = Limits < T>::max();
+ 	 T minZ = Limits < T>::max();
+	 for (int i = 0; i < se->length; i++) {
+ 	    p1 = p;
+ 	    se->Move(i, p1);
+	    if (ims.Hold(p1) && Lower(ims.X[p1], ims.Y[p1], ims.Z[p1], minX, minY, minZ)) {
+	       minX = ims.X[p1];
+	       minY = ims.Y[p1];
+	       minZ = ims.Z[p1];
+	    }
+	 }
+	 imd.X[p] = minX;
+	 imd.Y[p] = minY;
+	 imd.Z[p] = minZ;
+      }
+   }
+
+   delete se;
+   return SUCCESS;
+}
+
+##begin PErosionC2D < TIN>
+## append loadcases
+   if (objs[0]->Type() == Po_$TIN) {
+      TIN* const ims = (TIN*)objs[0];
+      objd[0] = new TIN(ims->Props());
+      TIN* const imd = (TIN*)objd[0];
+      
+      result = PErosion(*ims, *imd, atoi(parv[0]), atoi(parv[1]));
+      goto end;
+   }
+## end
+##end
+
+template < typename T>
+Errc PErosion( const Imc3d < T> &ims, Imc3d < T> &imd, int numSE, int halfsize ) {
+   if (numSE > 12 || numSE < 0) {
+      std::cerr << "Error perosion: bad structuring element type: " << numSE << std::endl;
+      return FAILURE;
+   }
+   if (halfsize < 1) {
+      std::cerr << "Error perosion: bad structuring element size: " << halfsize << std::endl;
+      return FAILURE;
+   }
+
+   StructuringElement3d *se = new StructuringElement3d(numSE, halfsize);
+
+   Point3d p, p1;
+   for (p.z = 0; p.z < ims.Depth(); p.z++) {
+      for (p.y = 0; p.y < ims.Height(); p.y++) {
+	 for (p.x = 0; p.x < ims.Width(); p.x++) {
+	    T minX=Limits < T>::max();
+	    T minY=Limits < T>::max();
+	    T minZ=Limits < T>::max();
+	    for (int i = 0; i < se->length; i++) {
+ 	       p1 = p;
+ 	       se->Move(i, p1);
+	       if (ims.Hold(p1) && Lower(ims.X[p1], ims.Y[p1], ims.Z[p1], minX, minY, minZ)) {
+		  minX = ims.X[p1];
+		  minY = ims.Y[p1];
+		  minZ = ims.Z[p1];
+	       }
+	    }
+	    imd.X[p] = minX;
+	    imd.Y[p] = minY;
+	    imd.Z[p] = minZ;
+	 }
+      }
+   }
+
+   delete se;
+   return SUCCESS;
+}
+
+##begin PErosionC3D < TIN>
+## append loadcases
+   if (objs[0]->Type() == Po_$TIN) {
+      TIN* const ims = (TIN*)objs[0];
+      objd[0] = new TIN(ims->Props());
+      TIN* const imd = (TIN*)objd[0];
+      
+      result = PErosion(*ims, *imd, atoi(parv[0]), atoi(parv[1]));
+      goto end;
+   }
+## end
+##end
+
+Errc PErosion( const Reg2d &ims, Reg2d &imd, int numSE, int halfsize ) {
+   if (numSE > 9 || numSE < 0) {
+      std::cerr << "Error perosion: bad structuring element type: " << numSE << std::endl;
+      return FAILURE;
+   }
+   if (halfsize < 1) {
+      std::cerr << "Error perosion: bad structuring element size: " << halfsize << std::endl;
+      return FAILURE;
+   }
+
+   StructuringElement2d *se = new StructuringElement2d(numSE, halfsize);
+
+   Point2d p, p1;
+   for (p.y = 0; p.y < ims.Height(); p.y++) {
+      for (p.x = 0; p.x < ims.Width(); p.x++) {
+ 	 Reg2d::ValueType val = ims[p];
+	 for (int i = 0; i < se->length; i++) {
+	    p1 = p;
+	    se->Move(i, p1);
+	    if (ims.Hold(p1) && ((ims[p1]) < ims[p])) {
+	       val = 0;
+	    }
+	 }
+	 imd[p] = val;
+      }
+   }
+   delete se;
+   imd.Labels(ims.Labels());
+   return SUCCESS;
+}
+
+##begin PErosionR2D < TIN>
+## append loadcases
+   if (objs[0]->Type() == Po_$TIN) {
+      TIN* const ims = (TIN*)objs[0];
+      objd[0] = new TIN(ims->Props());
+      TIN* const imd = (TIN*)objd[0];
+      
+      result = PErosion(*ims, *imd, atoi(parv[0]), atoi(parv[1]));
+      goto end;
+   }
+## end
+##end
+
+Errc PErosion( const Reg3d &ims, Reg3d &imd, int numSE, int halfsize ) {
+   if (numSE > 12 || numSE < 0) {
+      std::cerr << "Error perosion: bad structuring element type: " << numSE << std::endl;
+      return FAILURE;
+   }
+   if (halfsize < 1) {
+      std::cerr << "Error perosion: bad structuring element size: " << halfsize << std::endl;
+      return FAILURE;
+   }
+
+   StructuringElement3d *se = new StructuringElement3d(numSE, halfsize);
+
+   Point3d p, p1;
+   for (p.z = 0; p.z < ims.Depth(); p.z++) {
+      for (p.y = 0; p.y < ims.Height(); p.y++) {
+	 for (p.x = 0; p.x < ims.Width(); p.x++) {
+	    Reg3d::ValueType val = ims[p];
+	    for (int i = 0; i < se->length; i++) {
+ 	       p1 = p;
+ 	       se->Move(i, p1);
+	       if (ims.Hold(p1) && ((ims[p1]) < ims[p])) {
+		  val = 0;
+	       }
+	    }
+	    imd[p] = val;
+	 }
+      }
+   }
+
+   imd.Labels(ims.Labels());
+   delete se;
+   return SUCCESS;
+}
+
+##begin PErosionR3D < TIN>
+## append loadcases
+   if (objs[0]->Type() == Po_$TIN) {
+      TIN* const ims = (TIN*)objs[0];
+      objd[0] = new TIN(ims->Props());
+      TIN* const imd = (TIN*)objd[0];
+      
+      result = PErosion(*ims, *imd, atoi(parv[0]), atoi(parv[1]));
+      goto end;
+   }
+## end
+##end
+
+##begin PErosionG < TIN>
+Errc PErosion( const TIN &grs, TIN &grd ) {
+   grd = grs;
+   
+   for (int i = 1; i < grd.Size(); i++) {
+      if (grs[i]) {
+	 for (GEdge* ptr = grs[i]->Neighbours(); ptr != NULL; ptr = ptr->Next()) {
+	    if (grs[ptr->Node()]->value < grd[i]->value) {
+	       grd[i]->value = grs[ptr->Node()]->value;
+	    }
+	 }
+      }
+   }
+   
+   return SUCCESS;
+}
+
+## append loadcases
+   if (objs[0]->Type() == Po_$TIN) {
+      TIN* const grs = (TIN*)objs[0];
+      objd[0] = new TIN(grs->Props());
+      TIN * const grd = (TIN*)objd[0];
+      
+      result = PErosion(*grs, *grd);
+      goto end;
+   }
+## end
+##end
+
+##forall(PErosionG1D, /Img1d/)
+##forall(PErosionG2D, /Img2d/)
+##forall(PErosionG2D, /Imx2d/)
+##forall(PErosionR2D, /Reg2d/)
+##forall(PErosionC2D, /Imc2d/)
+##forall(PErosionC3D, /Imc3d/)
+##forall(PErosionG3D, /Img3d/)
+##forall(PErosionG3D, /Imx3d/)
+##forall(PErosionR3D, /Reg3d/)
+##forall(PErosionG, /Graph/)
+
+#ifdef MAIN
+#define	USAGE	"usage: %s se halfsize [-m mask] [im_in|-] [im_out|-]"
+#define	PARC	2
+#define	FINC	1
+#define	FOUTC	1
+#define	MASK	1
+
+##main(PARC, FINC, FOUTC, MASK, USAGE)
+#endif

@@ -1,0 +1,112 @@
+<html>
+<head>
+<title>PANDORE OPERATORS</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>pvaluerank</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+D&eacute;termination de la ieme valeur d'une image.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>pvaluerank</b> <i>index</i> [<i>-m mask</i>] [<i>im_in</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p>L'op&eacute;rateur <b>pvaluerank</b> permet d'obtenir la <i>index</i>
+i&egrave;me valeur (en commen&ccedil;ant par 1) pr&eacute;sente dans une image ou dans les 
+sommets d'un graphe.</p>
+
+<p>C'est un op&eacute;rateur particuli&egrave;rement utile pour
+conna&icirc;tre la valeur d'un seuil d'une image obtenue par
+classification. En effet, apr&egrave;s la classification, l'image de sortie
+est construite avec comme label des r&eacute;gions la valeur du
+seuil utilis&eacute;e pour classifier cette r&eacute;gion
+(Voir les op&eacute;rateurs de classification).</p>
+
+<!---------------------------------- -->
+<h3>Param&egrave;tres</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>index</i> est un entier entre [1..MAX+1],
+o&ugrave; d&eacute;pend du type de l'image d'entr&eacute;e (e.g., 255
+pour une image de char). Si sa valeur est sup&eacute;rieure
+&agrave; la derni&egrave;re valeur, alors c'est cette derni&egrave;re qui
+est retourn&eacute;e.
+</ul>
+
+<!---------------------------------- -->
+<h3>Entr&eacute;es</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_in</i>: une image de niveaux de gris, une carte de r&eacute;gions ou un graphe.
+</ul>
+
+<!---------------------------------- -->
+<h3>R&eacute;sultat</h3>
+<!---------------------------------- -->
+<p>Retourne une valeur de pixel ou FAILURE
+si la <i>index</i>eme valeur n'existe pas.<br>
+Cette valeur peut &ecirc;tre r&eacute;cup&eacute;r&eacute;e par l'op&eacute;rateur <b>pstatus</b>.</p>
+
+<!---------------------------------- -->
+<h3>Exemples</h3>
+<!---------------------------------- -->
+<p>Retourne la valeur de seuil obtenue par un seuillage
+selon Chanda de l'image tangram.pan (version Unix)</p>
+<pre>
+   pchanda 10 tangram.pan a.pan
+   pvaluerank 1 a.pan
+   seuil=`pstatus`
+</pre>
+<p>Retourne la valeur de seuil obtenue par un seuillage
+selon Chanda de l'image tangram.pan (version MsDos)</p>
+<pre>
+   pchanda 10 tangram.pan a.pan
+   pvaluerank 1 a.pan
+   call pstatus
+   call pset seuil
+</pre>
+
+<!---------------------------------- -->
+<h3>Voir aussi</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#imagefeatureextraction">Extraction caract&eacute;ristiques image</a>
+
+<!---------------------------------- -->
+<h3>Prototype C++</h3>
+<!---------------------------------- -->
+<tt>
+Errc PvalueRank( const Img3duc &amp;im_in, int index );
+</tt>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Auteur: R&eacute;gis Clouard
+</address>
+<!---------------------------------- -->
+</body>
+</html>

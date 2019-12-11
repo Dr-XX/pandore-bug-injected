@@ -1,0 +1,132 @@
+<html>
+<head>
+<title>PANDORE OPERATORS</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>prescale</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Performs an affine rescaling of image, region map or graph using the nearest neighbor interpolation.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>prescale</b> <i>zoomx</i> <i>zoomy</i> <i>zoomyz</i> [<i>im_in</i>|-] [<i>im_out</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p><b>prescale</b> changes magnification of the input image <i></i>
+by a factor <i>zoomx</i> along the x axis,
+<i>zoomy</i> along the y axis and
+<i>zoomz</i> along the z axis (for 3D images).
+The image is enlarged along an axis if the zoom factor is &gt; 1 and
+is shrunk if the zoom factor is &gt;0 and &lt;1.</p>
+
+<p>This version uses the nearest neighbor interpolation. 
+Thus, the image shrinking consists in a subsampling of the pixels
+and the image enlargement consists in a replication of the pixels
+(This has the effect of simply making each pixel bigger):</p>
+<pre>
+   im_out[z][y][x]=im_in[z/zoomz][y/zoomy][x/zoomx];
+</pre>
+
+<p>The nearest neighbor interpolation is the most basic and requires the least processing time
+of all the interpolation algorithms. However, this results in blocky artifacts within the image.</p>
+
+<p>Better results can be obtained with other rescaling operators such as <a href="./plinearrescale.html">plinearrescale</a>
+or <a href="./pbicubicrescale.html">pbicubicrescale</a>.</p>
+
+<!---------------------------------- -->
+<h3>Parameters</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>zoomx</i>, <i>zoomy</i>, <i>zoomz</i>
+are positive real values.
+<p>if a zoom factor is &gt; 1 then the image is enlarged along
+the related axis.<br>
+<p>if a zoom factor is &lt; 1 then the image is shrunk along
+the related axis.<br>
+<i>zoomz</i> is ignored for 2D images but must be given.
+</ul>
+
+<!---------------------------------- -->
+<h3>Inputs</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_in</i>: an image, a region map, or a graph.
+</ul>
+
+<!---------------------------------- -->
+<h3>Outputs</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_out</i>: an image of the same type as the input image.
+</ul>
+
+<!---------------------------------- -->
+<h3>Result</h3>
+<!---------------------------------- -->
+<p>Returns SUCCESS or FAILURE.</p>
+
+<!---------------------------------- -->
+<h3>Examples</h3>
+<!---------------------------------- -->
+<ul>
+<li>Enlarges the tangram.pan 2D image by a factor 2:
+<pre>
+   prescale 2 2 0 tangram.pan a.pan
+</pre>
+<li>Shrinks the tangram.pan 2D image by a factor 2:
+<pre>
+   prescale 0.5 0.5 0 tangram.pan a.pan
+</pre>
+</ul>
+
+<!---------------------------------- -->
+<h3>See also</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#transformation">Transformation</a>,
+<a href="./plinearrescale.html">plinearrescale</a>,
+<a href="./pbicubicrescale.html">pbicubicrescale</a>
+
+<!---------------------------------- -->
+<h3>C++ prototype</h3>
+<!---------------------------------- -->
+<tt>
+Errc Prescale( const Img2duc &amp;im_in, Img2duc &amp;im_out, const float zoomy, const float zoomx );
+</tt>
+
+<!---------------------------------- -->
+<h3>Version fran&ccedil;aise</h3>
+<!---------------------------------- -->
+<p>Augmentation ou r&eacute;duction de la taille d'une image par interpolation selon le plus proche voisin.</p>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Author: R&eacute;gis Clouard
+</address>
+<!---------------------------------- -->
+
+</body>
+</html>

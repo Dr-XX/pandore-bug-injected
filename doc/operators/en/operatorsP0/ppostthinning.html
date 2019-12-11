@@ -1,0 +1,124 @@
+<html>
+<head>
+<title>PANDORE OPERATORS</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>ppostthinning</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Performs contour postthinning to guaranty 8-connexity (or 26-connexity).
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>ppostthinning</b> [<i>-m mask</i>] [<i>im_in</i>|-] [<i>im_out</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p><b>ppostthinning</b> consists in deleting
+all pixels that do not guaranty the 8-connexity in 2D
+(or the 26-connexity in 3D) for contour chains.<br>
+A contour chain is a sequence of connected non null pixels
+with 1 pixel thickness. There are connected with the 8-connexity
+in 2D (or the 26-connexity in 3D).</p>
+
+<p>A pixel "x" is deleted from the chain if it does not
+destroy the 8-connexity (or 26-connexity). For example,
+the center is deleted in case of the following configuration
+(and any other symmetrical configurations):</p>
+<pre>
+     |x|       | |0
+    x|x|   or x|x|  
+     | |0      |x|
+</pre>
+
+<p><b>Warning</b>: <b>ppostthinning</b> needs contour with 1 pixel thickness.
+It may be necessary to use before a skeletonization 
+operator, for example: <a href="./pskeletonization.html">pskeletonization</a>.</p>
+
+<p>The output image <i>im_out</i> is of the same type as the input image
+<i>im_in</i>.</p>
+
+<!---------------------------------- -->
+<h3>Inputs</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_in</i>: a 2D grayscale image (Img2duc) which contains the contours.
+</ul>
+
+<!---------------------------------- -->
+<h3>Outputs</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_out</i>: a 2D grayscale image (Img2duc).
+</ul>
+
+<!---------------------------------- -->
+<h3>Result</h3>
+<!---------------------------------- -->
+<p>Returns SUCCESS or FAILURE.</p>
+
+<!---------------------------------- -->
+<h3>Examples</h3>
+<!---------------------------------- -->
+<p>Extracts contours from the tangram.pan image:</p>
+<pre>
+   pexponentialfiltering 0.7 tangram.pan i1.pan
+   pgradient 1 i1.pan i2.pan i3.pan
+   pnonmaximasuppression i2.pan i3.pan i4.pan
+   ppostthinning i4.pan i5.pan
+   pgradientthreshold 0.03 i2.pan
+   seuilhaut=`pstatus`
+   pbinarization $seuilhaut 1e30 i5.pan i6.pan
+   pgradientthreshold 0.2 i2.pan
+   seuilbas=`pstatus`
+   pbinarization $seuilbas 1e30 i5.pan  i7.pan 
+   pgeodesicdilation 1 1 -1 i6.pan i7.pan out.pan
+</pre>
+
+<!---------------------------------- -->
+<h3>See also</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#contour">Contour</a>
+
+<!---------------------------------- -->
+<h3>C++ prototype</h3>
+<!---------------------------------- -->
+<tt>
+Errc PPostThinning( const Img2duc &amp;im_in, Img2duc &amp;im_out );
+</tt>
+
+<!---------------------------------- -->
+<h3>Version fran&ccedil;aise</h3>
+<!---------------------------------- -->
+<p>Suppression des points de contours superflus.</p>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Author: R&eacute;gis Clouard
+</address>
+<!---------------------------------- -->
+
+</body>
+</html>

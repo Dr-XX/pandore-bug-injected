@@ -1,0 +1,117 @@
+<html>
+<head>
+<title>OPERATEURS PANDORE</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>pmeanmerging</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Fusion prioritaire de r&eacute;gions selon la diff&eacute;rence de moyennes int&eacute;rieures.
+
+<br><br><hr noshade size=1 width=100 align=left>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>pmeanmerging</b> <i>nb_fusion</i> <i>seuil</i> [<i>-m mask</i>] [<i>rg_in</i>|-] [<i>gr_in</i>|-] [<i>im_in</i>|-] [<i>rg_out</i>|-] [<i>gr_out</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p>L'op&eacute;rateur <b>pmeanmerging</b> permet de fusionner les r&eacute;gions d'une
+carte de r&eacute;gions en utilisant le crit&egrave;re de la moyenne int&eacute;rieure.</p>
+
+<p>La notion de voisinage entre les r&eacute;gions est d&eacute;tenue par le graphe <i>gr_in</i>.</p>
+
+<p>Le principe de l'algorithme est le suivant:<br>
+Pour chaque r&eacute;gion de la carte de r&eacute;gions <i>im_in</i>,
+on calcule la diff&eacute;rence de moyenne int&eacute;rieure avec chacune de ses voisines.
+Si la diff&eacute;rence est inf&eacute;rieure au <i>seuil</i> donn&eacute; en param&egrave;tre,
+alors les r&eacute;gions sont fusionn&eacute;es.<br>
+On utilise ici l'algorithme de croissance prioritaire qui
+consiste &agrave; fusionner &agrave; chaque fois les 2 r&eacute;gions dont la diff&eacute;rence
+est la plus faible.</p>
+
+<!---------------------------------- -->
+<h3>Param&egrave;tres</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>nb_fusion</i> permet de sp&eacute;cifier le nombre de fusion
+&agrave; effectuer (la valeur -1 signifie d'ignorer ce param&egrave;tre
+et donc d'ex&eacute;cuter l'algorithme tant qu'il y a des fusions possibles).
+
+<li><i>seuil</i>  permet de sp&eacute;cifier la tol&eacute;rance maximale sur
+l'&eacute;cart des moyennes entre 2 r&eacute;gions.
+Les valeurs appartiennent &agrave; l'intervalle [0..nombre de niveaux de gris].
+</ul>
+
+<!---------------------------------- -->
+<h3>Entr&eacute;es</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>rg_in</i>: une carte de r&eacute;gions.
+<li><i>gr_in</i>: une graphe.
+<li><i>im_in</i>: une image.
+</ul>
+
+<!---------------------------------- -->
+<h3>Sorties</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>rg_out</i>: une carte de r&eacute;gions.
+<li><i>gr_out</i>: un graphe.
+</ul>
+
+<!---------------------------------- -->
+<h3>R&eacute;sultat</h3>
+<!---------------------------------- -->
+<p>Retourne le nombre de fusions effectu&eacute;es.</p>
+
+<!---------------------------------- -->
+<h3>Exemples</h3>
+<!---------------------------------- -->
+<p>Fusionne les r&eacute;gions issue d'une partition :</p>
+<pre>
+   puniformityquadtree 0.9 tangram.pan a.pan
+   prg2gr a.pan b.pan
+   pmeanmerging -1 10 a.pan b.pan tangram.pan c.pan d.pan
+</pre>
+
+<!---------------------------------- -->
+<h3>Voir aussi</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#segmentation">Segmentation</a>
+
+<!---------------------------------- -->
+<h3>Prototype C++</h3>
+<!---------------------------------- -->
+<tt>
+Errc PMeanMerging( const Reg2d &amp;rg_in, const Graph2d &amp;gr_in, const Img2duc &amp;im_in, Reg2d &amp;rg_out, Graph2d &amp;gr_out, double nb_fusion, Uchar seuil );
+</tt>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Auteur: Laurent Quesnel
+</address>
+<!---------------------------------- -->
+
+</body>
+</html>

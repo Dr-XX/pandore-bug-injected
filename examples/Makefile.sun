@@ -1,0 +1,57 @@
+#
+# @(#)Makefile
+#
+# PANDORE
+#
+# GREYC IMAGE
+# 6 Boulevard Maréchal Juin
+# F-14050 Caen Cedex France
+#
+# This file is free software. You can use it, distribute it
+# and/or modify it. However, the entire risk to the quality
+# and performance of this program is with you.
+#
+# Please email any bugs, comments, and/or additions to this file to:
+# https://clouard.users.greyc.fr/Pandore
+#
+
+#
+# (C)Régis Clouard - 2001-04-25
+# 
+
+.IGNORE:
+#.SILENT:
+.PRECIOUS: %.cc
+
+# X11 directory
+X11_PATH= /usr/openwin/
+
+# X11 linker options
+LDX11FLAGS=-L${X11_PATH}/lib -lX11 -lpthread -lrt
+
+# Command names.
+PERL=perl # Use by the Pandore PreProcessor.
+
+CC=g++
+
+RM=rm -f
+
+CCFLAGS=-Wall -O2 -I../include -I${PANDOREHOME}/include -I${PANDOREHOME}/src/operatorsP0 -DMAIN
+
+LDFLAGS= -L${PANDOREHOME}/lib -lpandore -lm ${LDX11FLAGS}
+
+PPP=${PERL} -I${PANDOREHOME}/etc/macros ${PANDOREHOME}/etc/macros/template.pl ${PANDOREHOME}/etc/macros/pand_macros
+
+# Target : How to compile a .cc file.
+% : %.cc
+	$(CC) $(CCFLAGS) -o $@ $< $(LDFLAGS) $(LIBS)
+
+% : %.cpp
+	$(CC) $(CCFLAGS) -o $@ $< $(LDFLAGS) $(LIBS)
+
+# Target : How to compile a .cct file (Use the Pandore Pre-Processor)
+%.cc : %.cct
+	$(PPP) $< > $@ || $(RM) $@
+
+%.cpp : %.cpt
+	$(PPP) $< > $@ || $(RM) $@

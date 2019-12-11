@@ -1,0 +1,128 @@
+<html>
+<head>
+<title>PANDORE OPERATORS</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center><hr>
+
+<!---------------------------------- -->
+<h1>pblockmatching</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Motion estimation between 2 images using block matching.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+
+<b>pblockmatching</b> <i>block_size</i> <i>search_size</i> <i>ssd_min</i> [<i>-m mask</i>] [<i>im_in_ref</i>|-] [<i>im_in_dest</i>|-] [<i>im_out_dep</i>|-]
+
+[<i>im_in</i>|-] [<i>im_out</i>|-]
+</tt></tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p><b>pblockmatching</b> builds a new image that contains the
+motion estimation between 2 images.The output image <i>im_out_dep</i>
+is a multispectral image containing a motion vector in each point:
+the first band contains the abscissa, and the second one the ordinate
+of the motion vector.
+
+<p>The motion estimation method using the "block matching"
+is to find a matching between each squared block of size
+<i>block_size</i> in the reference image <i>im_in_ref</i> 
+with the same block in the destination image <i>im_in_dest</i>.
+The corresponding distination block is searched in a the
+neigbourhood of size <i>search_size</i>.
+The matching criteria is the destination block that
+mimizes the Sum of Square Differences (SSD):</p>
+<pre>
+   SSD(u,v) = sum_{(x,y) in Block} [im_in_ref(x,y) - im_in_dest(x+u,y+v)]^2
+</pre> 
+
+<!---------------------------------- -->
+<h3>Parameters</h3>
+<!---------------------------------- -->
+<ul>
+<li/><i>block_size</i>: block size. A common value is 16.
+<li/><i>search_size</i>: radius of search for the corresponding block.
+<li/><i>ssd_min</i>: below this threshold
+motion is not considered to be significant.
+</ul>
+
+<!---------------------------------- -->
+<h3>Inputs</h3>
+<!---------------------------------- -->
+<ul>
+<li/><i>im_in_ref</i>: a 2D reference image.
+<li/><i>im_in_dest</i>: a 2D image.
+</ul>
+
+<!---------------------------------- -->
+<h3>Outputs</h3>
+<!---------------------------------- -->
+<ul>
+<li/><i>im_out_dep</i>: a 2D multispectral image (band 0: abscissa, band 1: ordinate)
+</ul>
+
+<!---------------------------------- -->
+<h3>Result</h3>
+<!---------------------------------- -->
+<p>Return SUCCESS or FAILURE.</p>
+
+<!---------------------------------- -->
+<h3>Examples</h3>
+<!---------------------------------- -->
+<p>Estimates the motion between an image and its translated:</p>
+<pre>
+ptranslation 0 17 tangram.pan tangram1.pan
+pblockmatching 16 20 3 tangram.pan tangram1.pan deplacements.pan
+pplotquiver 256 256 10 0.5 deplacements.pan out.pan
+</pre>
+
+<!---------------------------------- -->
+<h3>See Also</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#motion">Motion</a>
+
+<!---------------------------------- -->
+<h3>C++ prototype</h3>
+<!---------------------------------- -->
+<tt>
+Errc pblockmatching(const Img2duc &amp;im_in_ref, const Img2duc &amp;im_in_dest,
+		    Imx2dsf &amp;im_out_dep,
+		    short block_size_x,
+		    short search_size,
+		    short ssd_min);
+
+</tt>
+
+<!---------------------------------- -->
+<h3>Version fran&ccedil;aise</h3>
+<!---------------------------------- -->
+<p>Estimation du mouvement entre deux images par mise en correspondance de blocs.</p>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Authors: G. N&eacute;e - Y. Pitrey Helpiquet - S. J&eacute;han Besson 
+</address>
+<!---------------------------------- -->
+
+</bod>
+</html>

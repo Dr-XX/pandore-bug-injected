@@ -1,0 +1,116 @@
+<html>
+<head>
+<title>OPERATEURS PANDORE</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff"><center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>pblend</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+M&eacute;lange d'images ou de graphes.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>pblend</b> <i>alpha</i> [<i>-m mask</i>] [<i>im_in1</i>|-] [<i>im_in2</i>|-] [<i>im_out</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p>L'op&eacute;rateur <b>pblend</b> effectue un m&eacute;lange de valeurs
+de pixel des deux images d'entr&eacute;e <i>im_in1</i> et <i>im_in2</i>.</p>
+
+<p>Si <i>im_in1</i> et <i>im_in2</i> sont des images alors
+la nouvelle image <i>im_out</i> est construite avec le m&eacute;lange
+de chaque pxiel:</p>
+<pre>
+pixel(im_out) = alpha*pixel(im_in1) + (1-alpha)*pixel(im_in2);
+</pre>
+
+<p>Les deux images d'entr&eacute;e doivent &ecirc;tre du m&ecirc;me type.</p>
+
+<p>L'image de sortie <i>im_out</i> est du m&ecirc;me type que les images d'entr&eacute;e.
+
+<p>Pour les images couleur et multispectrale, l'op&eacute;rateur est appliqu&eacute;
+s&eacute;par&eacute;ment sur chacune des bandes.</p>
+
+<p>Si <i>im_in1</i> et <i>im_in2</i> sont des graphes alors
+le nouveau graphe <i>im_out</i> est construit avec le m&eacute;lange
+des valeurs de noeud.</p>
+
+<!---------------------------------- -->
+<h3>Paramaters</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>alpha</i> est un r&eacute;el entre [0..1] qui repr&eacute;sente le
+pourcentage d'image <i>im_in1</i> dans le m&eacute;lange.
+Le pourcentage d'image <i>im_in2</i>
+est alors de 1-<i>aplha</i>.
+</ul>
+
+<!---------------------------------- -->
+<h3>Entr&eacute;es</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_in1</i>: une image ou un graphe.
+<li><i>im_in2</i>: un objet du m&ecirc;me type que <i>im_in1</i>.
+</ul>
+
+<!---------------------------------- -->
+<h3>Sorties</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_out</i>: un objet du m&ecirc;me type que les entr&eacute;es.
+</ul>
+
+<!---------------------------------- -->
+<h3>R&eacute;sultat</h3>
+<!---------------------------------- -->
+<p>Retourne SUCCESS ou FAILURE.</p>
+
+<!---------------------------------- -->
+<h3>Exemples</h3>
+<!---------------------------------- -->
+<p>Effectue un moyennage entre les images a.pan et b.pan:</p>
+<pre>
+   pblend 0.5 a.pan b.pan c.pan
+</pre>
+
+<!---------------------------------- -->
+<h3>Voir aussi</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#arithmetic">Arithmetique</a>
+
+<!---------------------------------- -->
+<h3>Prototype C++</h3>
+<!---------------------------------- -->
+<tt>
+Errc PBlend( const Img2duc &amp;im_in1, const Img2duc &amp;im_in2, Img2dsf &amp;im_out, Float alpha );
+</tt>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Auteur: R&eacute;gis Clouard
+</address>
+<!---------------------------------- -->
+
+</body>
+</html>

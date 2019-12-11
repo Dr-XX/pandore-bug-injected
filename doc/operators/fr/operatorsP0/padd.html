@@ -1,0 +1,117 @@
+<html>
+<head>
+<title>OPERATEURS PANDORE</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff"><center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>padd</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Addition de 2 images ou de 2 graphes.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>padd</b> [-m mask] [<i>im_in1</i>|-] [<i>im_in2</i>|-] [<i>im_out</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p>L'op&eacute;rateur <b>padd</b> calcule la somme des valeurs de niveaux
+de gris entre chaque pixel de l'image <i>im_in1</i>
+et de l'image <i>im_in2</i> correspondant.</p>
+
+<p>Le r&eacute;sultat est mis dans l'image destination
+<i>im_out</i> dont le type d&eacute;pend de celles des entr&eacute;es en
+reprenant les m&ecirc;mes conventions que le C.</p>
+
+<p>Il n'y a pas de gestion du d&eacute;bordement de valeurs. La formule reprend
+exactement l'op&eacute;rateur du C :</p>
+<pre>
+   pixel(im_out) = pixel(im_in1) + pixel(im_in2);
+</pre>
+
+<p>Les deux images d'entr&eacute;e <i>im_in1</i> ou <i>im_in2</i> doivent &ecirc;tre
+de m&ecirc;me type. Au besoin, il est n&eacute;cessaire d'utiliser les op&eacute;rateurs
+de coercition. Par contre, l'image de sortie est du type le plus grand
+possible par rapport au type des images d'entr&eacute;e:</p>
+<ul>
+<li>Long entre images d'octets.
+<li>Long entre images d'entiers.
+<li>Float entre image de floats.
+</ul>
+
+<p>Pour les images couleur et multispectrale, l'op&eacute;rateur est appliqu&eacute;
+s&eacute;par&eacute;ment sur chacune des bandes.</p>
+
+<!---------------------------------- -->
+<h3>Entr&eacute;es</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_in1</i>: une image ou un graphe.
+<li><i>im_in2</i>: une image ou un graphe.
+</ul>
+
+<!---------------------------------- -->
+<h3>Sorties</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_out</i>: une image ou un graphe.
+Le type de l'image d&eacute;pend des types de l'image d'entr&eacute;e:</p>
+<ul>
+<li>Long si les entr&eacute;es sont des images de Uchar.
+<li>Long si les entr&eacute;es sont des images de Long.
+<li>Float si les entr&eacute;es sont des images de Float.
+</ul>
+</ul>
+
+<!---------------------------------- -->
+<h3>R&eacute;sultat</h3>
+<!---------------------------------- -->
+<p>Retourne SUCCESS ou FAILURE.</p>
+
+<!---------------------------------- -->
+<h3>Exemples</h3>
+<!---------------------------------- -->
+<pre>
+   padd a.pan b.pan result.pan
+</pre>
+
+<!---------------------------------- -->
+<h3>Voir aussi</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#arithmetic">Arithmetique</a>
+
+<!---------------------------------- -->
+<h3>Prototype C++</h3>
+<!---------------------------------- -->
+<tt>
+Errc PAdd( const Img2duc &amp;im_in1, const Img2duc &amp;im_in2, Img2duc &amp;im_out );
+</tt>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Auteur: R&eacute;gis Clouard
+</address>
+<!---------------------------------- -->
+
+</body>
+</html>

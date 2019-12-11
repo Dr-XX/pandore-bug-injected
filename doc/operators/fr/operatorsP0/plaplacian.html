@@ -1,0 +1,127 @@
+<html>
+<head>
+<title>OPERATEURS PANDORE</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>plaplacian</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Approximation du Laplacian d'une image.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>plaplacian</b> <i>connexity</i> [<i>-m mask</i>] [<i>im_in</i>|-] [<i>im_out</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p>L'op&eacute;rateur <b>plaplacian</b> permet d'approximer le calcul
+de l'amplitude de la deriv&eacute;e seconde de l'image <i>im_out</i>.</p>
+
+<p>Cet op&eacute;rateur est notamment utilis&eacute; pour d&eacute;tecter les
+contours des objets. L'int&eacute;r&ecirc;t, c'est qu'il donne des contours ferm&eacute;s.
+Par contre, il est tr&egrave;s sensible au bruit.</p>
+
+<p>L'algorithme consiste &agrave; convoluer l'image par le masque:
+<br>pour une <i>connexity</i>=4:</p>
+<pre>
+   |+0 -1  +0|
+   |-1  +4 -1|
+   |+0 -1  +0|
+</pre>
+<p>pour une <i>connexity</i>=8:</p>
+<pre>
+   |-1 -1- 1|
+   |-1  +8 -1|
+   |-1 -1 -1|
+</pre>
+
+<p>L'image de sortie <i>im_out</i> est de m&ecirc;me type
+que l'image d'entr&eacute;e <i>im_in</i>.</p>
+
+<p>Pour les images de Uchar (unsigned char), les valeurs sont d&eacute;cal&eacute;es
+de 127 (le 0 devient 127). Ainsi, pour la d&eacute;tection des passages
+par 0, il faut donc utiliser l'op&eacute;rateur <a href="./pzerocross.html">pzerocross</a> avec la valeur 127.</p>
+
+<p>Pour les images de Slong (signed long), les valeurs ne sont pas d&eacute;cal&eacute;es.
+Pour la d&eacute;tection des passages par 0, il faut donc utiliser
+l'op&eacute;rateur  <a href="./pzerocross.html">pzerocross</a> avec la valeur 0.</p>
+
+<!---------------------------------- -->
+<h3>Param&egrave;tres</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>connexity</i> sp&eacute;cifie le type de maillage: soit
+un voisinage 4 soit 8.
+</ul>
+
+<!---------------------------------- -->
+<h3>Entr&eacute;es</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_in</i>: une image 2D de niveaux de gris.
+</ul>
+
+<!---------------------------------- -->
+<h3>Sorties</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_out</i>: une image du m&ecirc;me type que l'image d'entr&eacute;e im_in.
+</ul>
+
+<!---------------------------------- -->
+<h3>R&eacute;sultat</h3>
+<!---------------------------------- -->
+<p>Retourne SUCCESS ou FAILURE.</p>
+
+<!---------------------------------- -->
+<h3>Exemples</h3>
+<!---------------------------------- -->
+<p>D&eacute;tection de contours selon l'algorithme LOG (Laplacien de Gaussiennes)</p>
+<pre>
+   pgaussfiltering 1.2 tangram.pan a.pan
+   plaplacian 8  a.pan b.pan
+   pzerocross 8 127 b.pan out.pan
+</pre>
+
+<!---------------------------------- -->
+<h3>Voir aussi</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#edgedetection">D&eacute;tection de contours</a>,
+<a href="./pzerocross.html">pzerocross</a>
+
+<!---------------------------------- -->
+<h3>Prototype C++</h3>
+<!---------------------------------- -->
+<tt>
+Errc PLaplacian( const Img2duc &amp;im_in, Img2duc &amp;im_out, int connexity );
+</tt>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Auteur: R&eacute;gis Clouard
+</address>
+<!---------------------------------- -->
+</body>
+</html>

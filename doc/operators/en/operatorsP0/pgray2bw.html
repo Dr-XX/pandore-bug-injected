@@ -1,0 +1,126 @@
+<html>
+<head>
+<title>PANDORE OPERATORS</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>pgray2bw</h1>
+<!---------------------------------- --> 
+<hr noshade size=1 width=100 align=left><br>
+
+Converts gray scale image to black and white image.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>pgray2bw</b> [<i>-m mask</i>] [<i>im_in</i>|-] [<i>im_out</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p><b>pgray2bw</b> is a mean to reduce the gray level range of images
+down to the 2 colors.
+It consists of mapping the original grey image into a binary image.</p>
+
+<p>The technique consists in using a grey-level pattern
+(a dither matrix) image to be compared to the original image.
+If the pixel is greater than the pixel on the pattern,
+the output pixel is white (255), otherwise it is black (0).</p>
+
+<p>The 16x16 dither matrix used in this operator is:</p>
+<pre>
+{128,	32,	160,	8,	136,	40,	168,	2,	130,	34,	162,	10,	138,	42,	170,	192},
+{64,	224,	96,	200,	72,	232,	104,	194,	66,	226,	98,	202,	74,	234,	106,	48},
+{176,	16,	144,	56,	184,	24,	152,	50,	178,	18,	146,	58,	186,	26,	154,	240},
+{112,	208,	80,	248,	120,	216,	88,	242,	114,	210,	82,	250,	122,	218,	90,	12},
+{140,	44,	172,	4,	132,	36,	164,	14,	142,	46,	174,	6,	134,	38,	166,	204},
+{76,	236,	108,	196,	68,	228,	100,	206,	78,	238,	110,	198,	70,	230,	102,	60},
+{188,	28,	156,	52,	180,	20,	148,	62,	190,	30,	158,	54,	182,	22,	150,	252},
+{124,	220,	92,	244,	116,	212,	84,	254,	126,	222,	94,	246,	118,	214,	86,	3},
+{131,	35,	163,	11,	139,	43,	171,	1,	129,	33,	161,	9,	137,	41,	169,	195},
+{67,	227,	99,	203,	75,	235,	107,	193,	65,	225,	97,	201,	73,	233,	105,	51},
+{179,	19,	147,	59,	187,	27,	155,	49,	177,	17,	145,	57,	185,	25,	153,	243},
+{115,	211,	83,	251,	123,	219,	91,	241,	113,	209,	81,	249,	121,	217,	89,	15},
+{143,	47,	175,	7,	135,	39,	167,	13,	141,	45,	173,	5,	133,	37,	165,	207},
+{79,	239,	111,	199,	71,	231,	103,	205,	77,	237,	109,	197,	69,	229,	101,	63},
+{191,	31,	159,	55,	183,	23,	151,	61,	189,	29,	157,	53,	181,	21,	149,	254},
+{254,	127,	223,	95,	247,	119,	215,	87,	253,	125,	221,	93,	245,	117,	213,	85}};
+</pre>
+
+<p>For each pixel p of the input image:</p>
+<pre>
+   if (im_in[p] >= matrix[p.y%16][p.x%16])
+      imd[p]=255;
+   else
+      imd[p]=0;
+</pre>
+
+<!---------------------------------- -->
+<h3>Inputs</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_in</i>: a 2D image of bytes (Img2duc).
+</ul>
+
+<!---------------------------------- -->
+<h3>Outputs</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_out</i>: a 2D image of bytes (Img2duc).
+</ul>
+
+<!---------------------------------- -->
+<h3>Result</h3>
+<!---------------------------------- -->
+<p>Returns SUCCESS or FAILURE.</p>
+
+<!---------------------------------- -->
+<h3>Examples</h3>
+<!---------------------------------- -->
+<p>Transforms image 'tangram.pan' to black and white image.</p>
+<pre>
+   pgray2bw tangram.pan a.pan
+</pre>
+
+<!---------------------------------- -->
+<h3>See also</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#color">Color</a>
+
+<!---------------------------------- -->
+<h3>C++ prototype</h3>
+<!---------------------------------- -->
+<tt>
+Errc PGray2BW( const Img2duc &amp;im_in, Img2duc &amp;im_out );
+</tt>
+
+<!---------------------------------- -->
+<h3>Version fran&ccedil;aise</h3>
+<!---------------------------------- -->
+<p>Conversion d'une image de niveaux de gris en une image binaire &eacute;quivalente.</p>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Author: R&eacute;gis Clouard
+</address>
+<!---------------------------------- -->
+</body>
+</html>

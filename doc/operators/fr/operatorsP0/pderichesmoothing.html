@@ -1,0 +1,101 @@
+<html>
+<head>
+<title>PANDORE OPERATORS</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>pderichesmoothing</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Lissage de Deriche.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>pderichesmoothing</b> <i>alpha</i> [<i>-m mask</i>] [<i>im_in</i>|-] [<i>im_out</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p>L'op&eacute;rateur <b>pderichesmoothing</b> permet de lisser une image
+par la m&eacute;thode de Deriche.</p>
+
+<!---------------------------------- -->
+<h3>Param&egrave;tres</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>alpha</i> donne l'intensit&eacute; du lissage associ&eacute;
+&agrave; la d&eacute;tection du gradient. Les valeurs sont typiquement
+dans l'intervalle [0..10]. Plus la valeur est faible,
+plus le lissage est fort.
+Une valeur de 0 correspond &agrave; un lissage total de l'image
+(donc il ne reste plus de gradient).
+Une valeur typique est 1.
+</ul>
+
+<!---------------------------------- -->
+<h3>Entr&eacute;es</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_in</i>: une image 2D.
+</ul>
+
+<!---------------------------------- -->
+<h3>Sorties</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_out</i>: une image du m&ecirc;me type que l'image d'entr&eacute;e.
+</ul>
+
+<!---------------------------------- -->
+<h3>R&eacute;sultat</h3>
+<!---------------------------------- -->
+<p>Retourne SUCCESS ou FAILURE.</p>
+
+<!---------------------------------- -->
+<h3>Exemples</h3>
+<!---------------------------------- -->
+<p>Applique le lissage de Deriche sur l'image tangram.pan:</p>
+<pre>
+   pderichesmoothing 1 tangram.pan out.pan
+</pre>
+
+<!---------------------------------- -->
+<h3>Voir aussi</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#filtering">Filtrage spatial</a>
+
+<!---------------------------------- -->
+<h3>Prototype C++</h3>
+<!---------------------------------- -->
+<tt>
+Errc PDericheSmoothing( const Img2duc &amp;im_in, Img2duc &amp;im_out, double alpha );
+</tt>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Auteur: Carlotti &amp; Joguet
+</address>
+<!---------------------------------- -->
+
+</body>
+</html>

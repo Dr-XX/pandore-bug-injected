@@ -1,0 +1,115 @@
+<html>
+<head>
+<title>OPERATEURS PANDORE</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+<body background="#ffffff">
+
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>padaptivemeanbinarization</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Binarisation de l'image par adaptation locale bas&eacute;e sur la moyenne.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>padaptivemeanbinarization</b> <i>radius_x</i> <i>radius_y</i> <i>radius_z</i> <i>percent</i> [<i>-m mask</i>] [<i>im_in</i>|-] [<i>im_out</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p>La binarisation de Wellner est une binarisation adaptative
+qui op&egrave;re sur une fen&ecirc;tre glissante.
+Elle est bas&eacute;e sur l'analyse de la moyenne des pixels dans
+la fen&ecirc;tre.
+Si la valeur du pixel central est inf&eacute;rieure &agrave; un
+certain pourcentage de la moyenne des valeurs des pixels dans
+la fen&ecirc;tre alors le pixel devient noir sinon il devient blanc.</p>
+
+<p>L'algorithme peut &ecirc;tre r&eacute;sum&eacute; par :</p>
+<pre>
+im_out(x,y) = 0   si im_in(x,y) <= mean(fenetre(f(x,y), x,y, radius)) * (1-p/100)
+            = 255 sinon
+</pre>
+
+<!---------------------------------- -->
+<h3>Param&egrave;tres</h3>
+<!---------------------------------- -->
+<ul>
+  <li><i>radius_x</i>, <i>radius_y</i>, <i>radius_z</i>: la demi taille
+de la fen&ecirc;tre en x, y, et z.
+Une valeur typique pour radius_x est un 1/16 de la largeur de l'image.</p>
+  <li><i>percent</i> : le pourcentage de la moyenne des voisins.
+Une valeur typique est 15.</li>
+</ul>
+
+<!---------------------------------- -->
+<h3>Entr&eacute;es</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_in</i> : une image d'octets en niveaux de gris.
+</ul>
+
+<!---------------------------------- -->
+<h3>Sorties</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_out</i>: une image binaire.
+</ul>
+
+<!---------------------------------- -->
+<h3>R&eacute;sultat</h3>
+<!---------------------------------- -->
+<p>Retourne SUCCESS ou FAILURE.</p>
+
+<!---------------------------------- -->
+<h3>Exemple</h3>
+<!---------------------------------- -->
+<p>Binarisation de l'image page.pan :</P>
+<pre>
+padaptivemeanbinarization 16 16 0 15 examples/page.pan bin.pan
+</pre>
+
+<!---------------------------------- -->
+<h3>Voir aussi</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#thresholding">Seuillage</a>
+
+<!---------------------------------- -->
+<h3>Prototype C++</h3>
+<!---------------------------------- -->
+<tt>
+Errc PAdaptiveMeanBinarization( const Img2duc &amp;im_in, Img2duc &amp;im_out, int radius_x, int radius_y, int radius_z, const int percent);
+</tt>
+
+<!---------------------------------- -->
+<h3>R&eacute;f&eacute;rences</h3>
+<!---------------------------------- -->
+<p>B. Bradleya and G. Rothb, "Adaptive Thersholding
+  using the Integral Image", Journal of Graphics, GPU,
+  and Game Tools, 12(2), pp. 13-21, 2007.</p>
+
+<!---------------------------------- -->
+<address>
+Auteur: S&eacute;bastien Bernery
+</address>
+<!---------------------------------- -->
+
+</body>
+</html>

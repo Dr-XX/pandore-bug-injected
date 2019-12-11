@@ -1,0 +1,92 @@
+<html>
+<head>
+<title>OPERATEURS PANDORE</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>pim3d22d</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Conversion d'une image ou d'une carte de r&eacute;gions 3D avec un seul plan en image ou carte de r&eacute;gions 2D.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>pim3d22d</b> [<i>-m mask</i>] [<i>im_in</i>|-] [<i>im_out</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p>L'op&eacute;rateur <b>pim3d22d</b> construit une image 2D 
+<i>im_out</i> &agrave; partir d'une image 3D <i>im_in</i> ne poss&eacute;dant
+qu'un seul plan. Si l'entr&eacute;e est une carte de r&eacute;gions 3D alors la sortie
+sera une carte de sortie 2D.</p>
+
+<p>L'op&eacute;rateur <a href="./pgetslice.html">pgetslice</a> peut &ecirc;tre
+utilis&eacute; pour extraire un plan d'une image 3D &agrave; plusieurs plans.
+
+<!---------------------------------- -->
+<h3>Entr&eacute;es</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_in</i>: une image 3D ou une carte de r&eacute;gions 3D.
+</ul>
+
+<!---------------------------------- -->
+<h3>Sorties</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_out</i>: une image 2D du m&ecirc;me type que l'image d'entr&eacute;e ou une carte de r&eacute;gions 2D.
+</ul>
+
+<!---------------------------------- -->
+<h3>R&eacute;sultat</h3>
+<!---------------------------------- -->
+<p>Retourne SUCCESS ou FAILURE.</p>
+
+<!---------------------------------- -->
+<h3>Exemples</h3>
+<!---------------------------------- -->
+<p>Convertit l'images 3D a.pan avec 1 plan en image 2D b.pan:</p>
+<pre>
+   pim3d22d a.pan b.pan
+</pre>
+<!---------------------------------- -->
+<h3>Voir aussi</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#casting">Coercition</a>,
+<a href="./pim2d23d.html">pim2d23d</a>
+
+<!---------------------------------- -->
+<h3>Prototype C++</h3>
+<!---------------------------------- -->
+<tt>
+Errc PIm3d22d( const Imc2duc &amp;im_in, Img2duc &amp;im_out, Long noplan );
+</tt>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Auteur: R&eacute;gis Clouard
+</address>
+<!---------------------------------- -->
+</body>
+</html>

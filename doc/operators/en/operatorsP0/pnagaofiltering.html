@@ -1,0 +1,118 @@
+<html>
+<head>
+<title>PANDORE OPERATORS</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>pnagaofiltering</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Performs Nagao filtering on image.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>pnagaofiltering</b> [<i>-m mask</i>] [<i>im_in</i>|-] [<i>im_out</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description </h3>
+<!---------------------------------- -->
+<p><b>pnagaofiltering</b> applies the Nagao filter algorithm on the input
+image <i>im_in</i>. 
+
+<p>The Nagoa filter proceeds by partitioning the neighborhood
+into distinct domains from which an homogeneous criterion
+is calculated.
+The more homogeneous domain is chosen and then central pixel
+is replaced by the mean value of the domain.
+Nagao filter uses 9 domains of size 5x5:
+the basis matrix and its 8 rotations:
+<pre>
+   rotation 0:
+     |0,1,1,1,0|
+     |0,1,1,1,0|
+     |0,0,1,0,0|
+     |0,0,0,0,0|
+     |0,0,0,0,0|
+
+   rotation 1:
+     |0,0,0,1,1|
+     |0,0,0,1,1|
+     |0,0,1,1,1|
+     |0,0,0,0,0|
+     |0,0,0,0,0| etc.
+</pre>
+
+<p>The image border (of size halfsize) is not considered for processing.
+The output image border is just a copy of the input image border.</p>
+
+<!---------------------------------- -->
+<h3>Inputs</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_in</i>: a grayscale 2d image.
+</ul>
+
+<!---------------------------------- -->
+<h3>Outputs</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_out</i>: an image of the same type as the input image.
+</ul>
+
+<!---------------------------------- -->
+<h3>Result</h3>
+<!---------------------------------- -->
+<p>Returns SUCCESS or FAILURE.</p>
+
+<!---------------------------------- -->
+<h3>Examples</h3>
+<!---------------------------------- -->
+<p>Applies a Nagao filter to tangram.pan:</p>
+<pre>
+   pnagaofiltering tangram.pan out.pan
+</pre>
+
+<!---------------------------------- -->
+<h3>See also</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#filtering">Filtering</a>
+
+<!---------------------------------- -->
+<h3>C++ prototype</h3>
+<!---------------------------------- -->
+<tt>
+Errc PNagaoFiltering( const Img2duc &amp;im_in, Img2duc &amp;im_out );
+</tt>
+
+<!---------------------------------- -->
+<h3>Version fran&ccedil;aise</h3>
+<!---------------------------------- -->
+<p>Lissage par maximum d'homog&eacute;néité selon le masque de Nagao.</p>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Author: R&eacute;gis Clouard
+</address>
+<!---------------------------------- -->
+</body>
+</html>

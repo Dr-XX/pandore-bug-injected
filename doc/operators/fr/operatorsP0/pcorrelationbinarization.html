@@ -1,0 +1,110 @@
+<html>
+<head>
+<title>OPERATEURS PANDORE</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>pcorrelationbinarization</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Binarisation de l'image par maximisation de la corr&eacute;lation interclasse.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>pcorrelationbinarization</b> [<i>-m mask</i>] [<i>im_in</i>|-] [<i>im_out</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p>L'op&eacute;rateur <b>pcorrelationbinarization</b> classifie les pixels
+de l'image d'entr&eacute;e <i>im_in</i> en 2 deux classes.
+La valeur de seuil est d&eacute;termin&eacute;e comme la valeur de niveau
+de gris <tt>s</tt> qui maximise les valeurs de correlation du
+fond et des objets pris s&eacute;par&eacute;ment.
+La quantit&eacute; totale de correlation pour un seuil s est donn&eacute;e par&nbsp;:
+<pre>
+   TC(s) = Cb(s) + Cf(s) { correlation pour le fond + correlation pour les objets }
+         = -ln[G(s)*G'(s)] +2*ln[P(s)*(1-P(s))]
+     o&ugrave; P(s) = SUM{i=0->s} [p(i)]
+     et G(s) = SUM{i=0->s} [p(i)^2)]
+     et G'(s) = SUM{i=s->m-1} [(p(i)^2]
+     et pi = fi/W*H
+</pre>
+
+<p>Le crit&egrave;re de correlation se d&eacute;termine &agrave; partir du seuil smax tel que:</p>
+<pre>
+   TC(smax) = max TC(s)
+</pre>
+
+<!---------------------------------- -->
+<h3>Entr&eacute;es</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_in</i>: une image niveaux de gris de Uchar (Img2duc, Img3duc).
+</ul>
+
+<!---------------------------------- -->
+<h3>Sorties</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_out</i>: une image niveaux de gris de Uchar (Img2duc, Img3duc).
+</ul>
+
+<!---------------------------------- -->
+<h3>R&eacute;sultat</h3>
+<!---------------------------------- -->
+<p>Retourne la valeur de seuil d&eacute;tect&eacute;e.</p>
+
+<!---------------------------------- -->
+<h3>Exemples</h3>
+<!---------------------------------- -->
+<p>Segmentation des pi&egrave;ces de tangram :</p>
+<pre>
+   pcorrelationbinarization tangram.pan a.pan
+</pre>
+
+<!---------------------------------- -->
+<h3>Voir aussi</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#thresholding">Thresholding</a>
+
+<!---------------------------------- -->
+<h3>Prototype C++</h3>
+<!---------------------------------- -->
+<tt>
+Errc PCorrelationBinarization( const Img2duc &amp;im_in, Img2duc &amp;im_out );
+</tt>
+
+<!---------------------------------- -->
+<h3>R&eacute;f&eacute;rence</h3>
+<!---------------------------------- -->
+<p>J-C Yen, F-J Chang, S. Chang, "A New Criterion for Automatic Multilevel Thresholding",
+<i>IEEE Trans. on Image Processing</i>, vol. 4, no. 3, pp 370-378, 1995.</p>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Auteur: R&eacute;gis Clouard
+</address>
+<!---------------------------------- -->
+</body>
+</html>

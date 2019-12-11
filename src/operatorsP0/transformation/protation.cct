@@ -1,0 +1,345 @@
+/* -*- c-basic-offset: 3 ; mode: c++ -*-
+ *
+ * Copyright (c), GREYC.
+ * All rights reserved
+ *
+ * You may use this file under the terms of the BSD license as follows:
+ *
+ * "Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are
+ * met:
+ *   * Redistributions of source code must retain the above copyright
+ *     notice, this list of conditions and the following disclaimer.
+ *   * Redistributions in binary form must reproduce the above copyright
+ *     notice, this list of conditions and the following disclaimer in
+ *     the documentation and/or other materials provided with the
+ *     distribution.
+ *   * Neither the name of the GREYC, nor the name of its
+ *     contributors may be used to endorse or promote products
+ *     derived from this software without specific prior written
+ *     permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, 
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, 
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
+ *
+ * 
+ * For more information, refer to:
+ * https://clouard.users.greyc.fr/Pandore
+ */
+
+/**
+ * @author Régis Clouard - 2001-05-30
+ * @author Régis Clouard - 2007-01-26 (use bilinear interpolation).
+ */
+
+#define _USE_MATH_DEFINES
+#include <math.h>
+#include <pandore.h>
+using namespace pandore;
+
+/**
+ * @file protation.cpp
+ *
+ * Rotates the content of the image without
+ * changing the size of the image.
+ * @param angle specifies the angle in degrees (can be negative).
+ */
+template <typename T>
+Errc PRotation( const Imx2d<T> &ims, Imx2d<T> &imd, int axis, const float angle ) {
+   Point2d p;
+   int b;
+
+   if (axis < 0 || axis > 2) {
+      ::std::cerr << "Error protation: bad parameter values: " << axis << ", "<<angle << ::std::endl;
+      return FAILURE;
+   }
+
+   // precompute the cosine and sine values used to speed things up.
+   const float cosas = (float)cos((angle*M_PI)/180);
+   const float sinas = (float)sin((angle*M_PI)/180);
+
+   // initialization
+   for (b = 0; b < ims.Bands(); b++) {
+      for (p.x = 0; p.x < imd.Width(); p.x++) {
+	 imd[b][imd.Height()-1][p.x] = 0;
+      }
+      for (p.y = 0; p.y < imd.Height(); p.y++) {
+	 imd[b][p.y][imd.Width()-1] = 0;
+      }
+   }
+
+   for (b = 0; b < ims.Bands(); b++) {
+      for (p.y = 0; p.y < imd.Height()-1; p.y++) {
+	 for (p.x = 0; p.x < imd.Width()-1; p.x++) {	 
+	    // compute the center of the translation image.
+	    const float xc = (float)(p.x-ims.Width()/2.0F);
+	    const float yc = (float)(p.y-ims.Height()/2.0F);
+	    
+	    // compute the related tx ty coordinates in ims.
+	    const float oldx = ( (xc * cosas) - (yc * sinas) ) + (float)ims.Width()/2;
+	    const float oldy = ( (xc * sinas) + (yc * cosas) ) + (float)ims.Height()/2;
+	    const int sx = (int)oldx;
+	    const int sy = (int)oldy;
+	    const float dx = oldx - sx;
+	    const float dy = oldy - sy;
+	    
+	    //clip to black any pixels that fall off of the image.
+  	    if (sx>0 && sy>0 && sx<ims.Width()-1 && sy<ims.Height()-1) {
+	       imd[b][p] = (T)((1.0f-dx) * (1.0f-dy) * ims[b][sy][sx]
+			       + (1.0f-dx)*dy * ims[b][sy+1][sx]
+			       + dx * (1.0f-dy) * ims[b][sy][sx+1]
+			       + dx * dy * ims[b][sy+1][sx+1]);
+ 	    } else {
+ 	       imd[b][p] = 0;
+	    }
+	 }
+      }
+   }
+   return SUCCESS;
+}
+
+##begin PRotation2G < TIN, LOOPP, POINT >
+## append loadcases
+   if (objs[0]->Type() == Po_$TIN) {
+      TIN* const ims = (TIN*)objs[0];
+      objd[0] = new TIN(ims->Props());
+      TIN* const imd = (TIN*)objd[0];
+      
+      result = PRotation(*ims, *imd, atoi(parv[0]), (float)atof(parv[1]));
+      goto end;
+   }
+## end
+##end
+
+##begin PRotation2C < TIN, LOOPP, POINT >
+## append loadcases
+   if (objs[0]->Type() == Po_$TIN) {
+      TIN* const ims = (TIN*)objs[0];
+      objd[0] = new TIN(ims->Props());
+      TIN* const imd = (TIN*)objd[0];
+      
+      result = PRotation(*ims, *imd, atoi(parv[0]), (float)atof(parv[1]));
+      goto end;
+   }
+## end
+##end
+
+##begin PRotation2X < TIN, LOOPP, POINT >
+## append loadcases
+   if (objs[0]->Type() == Po_$TIN) {
+      TIN* const ims = (TIN*)objs[0];
+      objd[0] = new TIN(ims->Props());
+      TIN* const imd = (TIN*)objd[0];
+      
+      result = PRotation(*ims, *imd, atoi(parv[0]), (float)atof(parv[1]));
+      goto end;
+   }
+## end
+##end
+
+##begin PRotation2R < TIN, LOOPP, POINT >
+## append loadcases
+   if (objs[0]->Type() == Po_$TIN) {
+      TIN* const rgs = (TIN*)objs[0];
+      objd[0] = new TIN(rgs->Props());
+      TIN* const rgd = (TIN*)objd[0];
+      
+      result = PRotation(*rgs, *rgd, atoi(parv[0]), (float)atof(parv[1]));
+      goto end;
+   }
+## end
+##end
+
+template <typename T>
+Errc PRotation( const Imx3d<T> &ims, Imx3d<T> &imd, const int axis, const float angle ) {
+   Point3d p;
+   int b;
+
+   if (axis <0 || axis > 2) {
+      ::std::cerr << "Error protation: bad parameter values: " << axis << ", "<<angle<<::std::endl;
+      return FAILURE;
+   }
+
+   //precompute the cosine and sine values used to speed things up
+   const float cosas = (float)cos((angle*M_PI)/180);
+   const float sinas = (float)sin((angle*M_PI)/180);
+
+   if (axis == 0) {
+      for (b=0; b<imd.Bands(); b++) {
+	 for (p.z=0; p.z<imd.Depth(); p.z++) {
+	    for (p.y=0; p.y<imd.Height(); p.y++) {
+	       for (p.x=0; p.x<imd.Width(); p.x++) {
+		  
+		  //compute the center of the translation image.
+		  const float xc = (float)(p.x-ims.Width()/2);
+		  const float yc = (float)(p.y-ims.Height()/2);
+		  
+		  //compute the related tx ty coordinates in ims.
+		  const float oldx = ( (xc * cosas) - (yc * sinas) ) + (float)ims.Width()/2;
+		  const float oldy = ( (xc * sinas) + (yc * cosas) ) + (float)ims.Height()/2;
+		  const int sx = (int)oldx;
+		  const int sy = (int)oldy;
+		  const float dx = oldx - sx;
+		  const float dy = oldy - sy;
+		  
+		  //clip to black any voxels that fall off of the image.
+		  if (sx>0 && sy>0 && sx<ims.Width()-1 && sy<ims.Height()-1) {
+		     imd[b][p] = (T)((1.0f-dx) * (1.0f-dy) * ims[b][p.z][sy][sx]
+				     + (1.0f-dx)*dy * ims[b][p.z][sy+1][sx]
+				     + dx * (1.0f-dy) * ims[b][p.z][sy][sx+1]
+				     + dx * dy * ims[b][p.z][sy+1][sx+1]);
+		  } else {
+		     imd[b][p] = 0;
+		  }
+	       }
+	    }
+	 }
+      }
+   } else if (axis==1) {
+      for (b=0; b<imd.Bands(); b++) {
+	 for (p.z=0; p.z<imd.Depth(); p.z++) {
+	    for (p.y=0; p.y<imd.Height(); p.y++) {
+	       for (p.x=0; p.x<imd.Width(); p.x++) {
+		  
+		  //compute the center of the translation image.
+		  const float xc = (float)(p.x-ims.Width()/2);
+		  const float zc = (float)(p.z-ims.Depth()/2);
+		  
+		  //compute the related tx ty coordinates in ims.
+		  const float oldx = ( (xc * cosas) - (zc * sinas) ) + (float)ims.Width()/2;
+		  const float oldz = ( (xc * sinas) + (zc * cosas) ) + (float)ims.Depth()/2;
+		  const int sx = (int)oldx;
+		  const int sz = (int)oldz;
+		  const float dx = oldx - sx;
+		  const float dz = oldz - sz;
+		  
+		  //clip to black any voxels that fall off of the image.
+		  if (sx>0 && sz>0 && sx<ims.Width()-1 && sz<ims.Depth()-1) {
+		     imd[b][p] = (T)((1.0f-dx) * (1.0f-dz) * ims[b][sz][p.y][sx]
+				     + (1.0f-dx)*dz * ims[b][sz+1][p.y][sx]
+				     + dx * (1.0f-dz) * ims[b][sz][p.y][sx+1]
+				     + dx * dz * ims[b][sz+1][p.y][sx+1]);
+		  } else {
+		     imd[b][p] = 0;
+		  }
+	       }
+	    }
+	 }
+      }
+   } else if (axis==2) {
+      for (b=0; b<imd.Bands(); b++) {
+	 for (p.z=0; p.z<imd.Depth(); p.z++) {
+	    for (p.y=0; p.y<imd.Height(); p.y++)
+	       for (p.x=0; p.x<imd.Width(); p.x++) {
+		  
+		  //compute the center of the translation image.
+		  const float yc = (float)(p.y-ims.Height() / 2);
+		  const float zc = (float)(p.z-ims.Depth() / 2);
+		  
+		  //compute the related tx ty coordinates in ims.
+		  const float oldy = ( (yc * cosas) - (zc * sinas) ) + (float)ims.Height()/2;
+		  const float oldz = ( (zc * sinas) + (zc * cosas) ) + (float)ims.Depth()/2;
+		  const int sy = (int)oldy;
+		  const int sz = (int)oldz;
+		  const float dy = oldy - sy;
+		  const float dz = oldz - sz;
+		  
+		  //clip to black any voxels that fall off of the image.
+		  if (sy>0 && sz>0 && sy<ims.Height()-1 && sz<ims.Depth()-1) {
+		     imd[b][p] = (T)((1.0f-dy) * (1.0f-dz) * ims[b][sz][sy][p.x]
+				     + (1.0f-dy)*dz * ims[b][sz+1][sy][p.x]
+				     + dy * (1.0f-dz) * ims[b][sz][sy+1][p.x]
+				     + dy * dz * ims[b][sz+1][sy+1][p.x]);
+		  } else {
+		     imd[b][p] = 0;
+		  }
+	       }
+	 }
+      }
+   }
+   
+   return SUCCESS;
+}
+
+##begin PRotation3G < TIN, LOOPP, POINT >
+## append loadcases
+   if (objs[0]->Type() == Po_$TIN) {
+      TIN* const ims = (TIN*)objs[0];
+      objd[0] = new TIN(ims->Props());
+      TIN* const imd = (TIN*)objd[0];
+      
+      result = PRotation(*ims, *imd, atoi(parv[0]), (float)atof(parv[1]));
+      goto end;
+   }
+## end
+##end
+
+##begin PRotation3C < TIN, LOOPP, POINT >
+## append loadcases
+   if (objs[0]->Type() == Po_$TIN) {
+      TIN* const ims = (TIN*)objs[0];
+      objd[0] = new TIN(ims->Props());
+      TIN* const imd = (TIN*)objd[0];
+      
+      result = PRotation(*ims, *imd, atoi(parv[0]), (float)atof(parv[1]));
+      goto end;
+   }
+## end
+##end
+
+##begin PRotation3X < TIN, LOOPP, POINT >
+## append loadcases
+   if (objs[0]->Type() == Po_$TIN) {
+      TIN* const ims = (TIN*)objs[0];
+      objd[0] = new TIN(ims->Props());
+      TIN* const imd = (TIN*)objd[0];
+      
+      result = PRotation(*ims, *imd, atoi(parv[0]), (float)atof(parv[1]));
+      goto end;
+   }
+## end
+##end
+
+##begin PRotation3R < TIN, LOOPP, POINT >
+## append loadcases
+   if (objs[0]->Type() == Po_$TIN) {
+      TIN* const rgs = (TIN*)objs[0];
+      objd[0] = new TIN(rgs->Props());
+      TIN* const rgd = (TIN*)objd[0];
+      
+      result = PRotation(*rgs, *rgd, atoi(parv[0]), (float)atof(parv[1]));
+      goto end;
+   }
+## end
+##end
+
+##forall(PRotation2G, /Img2d/)
+##forall(PRotation3G, /Img3d/)
+
+##forall(PRotation2C, /Imc2d/)
+##forall(PRotation3C, /Imc3d/)
+
+##forall(PRotation2X, /Imx2d/)
+##forall(PRotation3X, /Imx3d/)
+
+##forall(PRotation2R, /Reg2d/)
+##forall(PRotation3R, /Reg3d/)
+
+#ifdef MAIN
+#define	USAGE	"usage: %s axis angle [-m mask] [im_in|-] [im_out|-]"
+#define	PARC	2
+#define	FINC	1
+#define	FOUTC	1
+#define	MASK	1
+
+##main(PARC, FINC, FOUTC, MASK, USAGE)
+#endif

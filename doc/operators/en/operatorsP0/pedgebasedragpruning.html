@@ -1,0 +1,108 @@
+<html>
+<head>
+<title>OPERATEURS PANDORE</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>pedgebasedragpruning</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Cut adjacency link between regions that are separated by an edge. 
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>pedgebasedragpruning</b> [<i>rg_in</i>|-] [<i>gr_in</i>|-] [<i>im_in</i>|-] [<i>gr_out</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p><b>pedgebasedragpruning</b> cuts adjacency link
+in the </i>gr_in</i> between two regions that have
+at least one edge point on their boundary line given
+in the <i>im_in</i>. (A n edge point is
+a pixel in <i>im_in</i> with a valeur >0.)</p>
+
+<p>This operator prevents a merge process to merge
+two regions that are separted by an edge.</p>
+
+<!---------------------------------- -->
+<h3>Input</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>rg_in</i>: a region map.
+<li><i>gr_in</i>: a graph.
+<li><i>im_in</i>: an edge map.
+</ul>
+
+<!---------------------------------- -->
+<h3>Output</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>gr_out</i>: a graph.
+</ul>
+
+<!---------------------------------- -->
+<h3>Result</h3>
+<!---------------------------------- -->
+<p>Returns the number of cuts.</p>
+
+<!---------------------------------- -->
+<h3>Examples</h3>
+<!---------------------------------- -->
+<p>Performs a bottom-up merging processus (without and with edges):</p>
+<pre>
+   pbinarization 112 255 tangram.pan a.pan
+   plabeling 8 a.pan b.pan
+   paddcst 1 b.pan c.pan
+   prg2gr c.pan d.pan
+
+   # without edges.
+   psetcst 0 tangram.pan e.pan
+   pmeanmerging -1 60 c.pan d.pan e.pan f1.pan g1.pan
+
+   #with edges.
+   pderiche 1 tangram.pan f.pan g.pan
+   pvariancebinarization f.pan h.pan
+   pedgebasedragpruning c.pan d.pan h.pan i.pan
+   pmeanmerging -1 60 c.pan i.pan e.pan f2.pan g2.pan
+</pre>
+
+<!---------------------------------- -->
+<h3>See Also</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#segmentation">Segmentation</a>
+
+<!---------------------------------- -->
+<h3>C++ Prototype</h3>
+<!---------------------------------- -->
+<tt>
+Errc PEdgeBasedRAGPruning( const Reg3d &amp;rg_in, const Graph3d  &amp;gr_in, const Img3duc &amp;im_in, Graph3d &amp;gr_out);
+</tt>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Author: Régis Clouard
+</address>
+<!---------------------------------- -->
+</body>
+</html>

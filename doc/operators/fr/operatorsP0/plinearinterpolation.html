@@ -1,0 +1,112 @@
+<html>
+<head>
+<title>PANDORE OPERATORS</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>plinearinterpolation</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Remplacement de pixels manquants par interpolation lin&eacute;aire des voisins.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>plinearinterpolation</b> <i>window_depth</i> <i>window_height</i> <i>window_width</i>  [<i>im_in</i>|-] [<i>im_msk</i>|-] [<i>im_out</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p>L'op&eacute;rateur <b>plinearinterpolation</b> permet 
+de remplacer les pixels de l'image <i>im_in</i> qui sont
+masqu&eacute;s dans l'image <i>im_msk</i> par interpolation lin&eacute;aire
+des pixels du voisinage.
+La voisinage d'un pixel est d&eacute;fini par une fen&ecirc;tre de taille 
+<i>window_depth x window_height x window_width</i>
+centr&eacute;e sur le pixel.
+
+<p>
+L'image de sortie <i>im_out</i> est construite ainsi :
+<pre>
+si im_msk(y,x) = 0 alors im_out(y,x) = im_in(y,x)
+                   sinon im_out(y,x) = mean(im_in, (x, y)), window)
+</pre>
+<p>
+o&ugrave; mean(im_in, (y,x), window) est la moyenne des pixels non masqu&eacute;s
+dans la fen&ecirc;tre autour du point (x,y).
+</p>
+<!---------------------------------- -->
+<h3>Param&egrave;tres</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>window_width</i>, <i>window_height</i>, <i>window_depth</i>
+d&eacute;finissent la taille du voisinage de l'interpolation.
+</ul>
+
+<!---------------------------------- -->
+<h3>Entr&eacute;es</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_in</i> : une image.
+<li><i>im_msk</i> : une image binaire.
+</ul>
+
+<!---------------------------------- -->
+<h3>Sorties</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_out</i> : une image du m&ecirc;me type que l'image d'entr&eacute;e.
+</ul>
+
+<!---------------------------------- -->
+<h3>R&eacute;sultat</h3>
+<!---------------------------------- -->
+<p>Retourne SUCCESS ou FAILURE.</p>
+
+<!---------------------------------- -->
+<h3>Exemples</h3>
+<!---------------------------------- -->
+<p>Construit un masque rond et applique l'interpolation
+lin&eacute;aire &agrave; l'int&eacute;rieur du rond :
+<pre>
+  pshapedesign 205 244 0 1 20 0 a.pan
+  plinearinterpolation 20 20 0 examples/butterfly.pan a.pan b.pan
+</pre>
+
+<!---------------------------------- -->
+<h3>Voir aussi</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#interpolation">Interpolation</a>
+
+<!---------------------------------- -->
+<h3>Prototype C++</h3>
+<!---------------------------------- -->
+<tt>
+Errc PLinearInterpolation( const Img2duc &amp;im_in;, const Img2duc &amp;im_msk, Img2duc &amp;im_out, int window_depth, int window_height, int window_width );
+</tt>
+
+<hr>
+<!---------------------------------- -->
+<address>
+Auteur: R&eacute;gis Clouard
+</address>
+<!---------------------------------- -->
+</body>
+</html>

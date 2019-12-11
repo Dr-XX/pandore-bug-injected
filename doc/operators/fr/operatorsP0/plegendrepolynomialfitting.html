@@ -1,0 +1,113 @@
+<html>
+<head>
+<title>OPERATEURS PANDORE</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>plegendrepolynomialfitting</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Calcul de l'approximation du fond d'une image
+en utilisant une approximation par polyn&ocirc;mes de Legendre.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>plegendrepolynomialfitting</b> [<i>im_in</i>|-] [<i>im_out</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p><b>plegendrepolynomialfitting</b> convertit le contenu d'une image
+en un fond homog&egrave;ne en  utilisant une approximation par
+polyn&ocirc;mes de Legendre.</p>
+Il utilise la relation d'orthogonalit&eacute; des polyn&ocirc;mes de Legendre
+pour construire l'image comme la double somme de ces fonctions. 
+La somme est ensuite &eacute;valu&eacute;e pour produire l'image qui
+approxime une projection.</p>
+
+<!---------------------------------- -->
+<h3>Param&egrave;tres</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>xorder</i> donne le degr&eacute; pour x [0..10]. 
+<li><i>yorder</i> done le degr&eacute; pour y [0..10]. 
+</ul>
+<p>Plus les valeurs de degr&eacute; sont &eacute;lev&eacute;es plus
+l'approximation est faible (plus proche de l'image originale).</p>
+
+<!---------------------------------- -->
+<h3>Entr&eacute;es</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_in</i>: une image 2D.
+</ul>
+
+<!---------------------------------- -->
+<h3>Sorties</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_out</i>: une image 2D de m&ecirc;me type que l'image d'entr&eacute;e. 
+</ul>
+
+<!---------------------------------- -->
+<h3>R&eacute;sultat</h3>
+<!---------------------------------- -->
+<p>Retourne SUCCESS ou FAILURE.</p>
+
+<!---------------------------------- -->
+<h3>Exemples</h3>
+<!---------------------------------- -->
+<ul>
+<li>Correction de l'illumination de l'image tangram
+en utilisant la soustraction de fond. Le fond d'images est
+approxim&eacute; par une expression polynomiale d'ordre 2:
+<pre>
+   plegendrepolynomialfitting 2 2 tangram.pan a.pan
+   psub tangram.pan a.pan b.pan
+   pmeanvalue a.pan; mean=`pstatus`
+   paddcst $mean b.pan out.pan
+</pre>
+</ul>
+
+<a href="http://www.greyc.ensicaen.fr/~regis/Pantheon/casebase/illumination-correction">Autres exemples</a>
+
+<!---------------------------------- -->
+<h3>Voir aussi</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#surfacefitting">Surface Fitting</a>
+
+<!---------------------------------- -->
+<h3>Prototype C++</h3>
+<!---------------------------------- -->
+<tt>
+Errc  PLegendrePolynomialFitting( const  Imx2d<T>  &amp;im_in, Imx2d<T> &amp;im_out, int xOrder, int yOrder );
+</tt>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Auteur: R&eacute;gis Clouard
+</address>
+<!---------------------------------- -->
+
+</body>
+</html>

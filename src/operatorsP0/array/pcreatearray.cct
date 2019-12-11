@@ -1,0 +1,104 @@
+/* -*- c-basic-offset: 3; mode: c++ -*-
+ *
+ * Copyright (c), GREYC.
+ * All rights reserved
+ *
+ * You may use this file under the terms of the BSD license as follows:
+ *
+ * "Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are
+ * met:
+ *   * Redistributions of source code must retain the above copyright
+ *     notice, this list of conditions and the following disclaimer.
+ *   * Redistributions in binary form must reproduce the above copyright
+ *     notice, this list of conditions and the following disclaimer in
+ *     the documentation and/or other materials provided with the
+ *     distribution.
+ *   * Neither the name of the GREYC, nor the name of its
+ *     contributors may be used to endorse or promote products
+ *     derived from this software without specific prior written
+ *     permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, 
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, 
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
+ *
+ * 
+ * For more information, refer to:
+ * https://clouard.users.greyc.fr/Pandore
+ */
+
+/**
+ * @author Alexandre Duret-Lutz - 1999-11-02
+ * @author Régis Clouard - 2005-12-14 (allow size to be 0)
+ */
+
+#include <string.h>
+#include <pandore.h>
+using namespace pandore;
+
+/**
+ * @file pcreatearray.cpp
+ * Creates a new array in a collection.
+ */
+
+#ifdef _MSC_VER
+// Because Visual C++ does not support strcasecmp....
+#include <ctype.h>
+int strcasecmp( const char *s1, const char *s2 ) {
+   int i;
+   for (i = 0; s1[ i ] != '\0' && s2[ i ] != '\0'; ++i) {
+      char ch1 = toupper(s1[i]);
+      char ch2 = toupper(s2[i]);
+      
+      if (ch1 != ch2) {
+	 return (int) (ch1 - ch2);
+      }
+   }
+   
+   return (int) (s1[i] - s2[i]);
+}
+#endif
+
+/**
+ * Cree un tableau de taille n, initialise a la valeur v
+ */
+##begin PCreateArray(TYPE)
+Errc PCreateArray( Collection &col_out, Long size, TYPE value, std::string name ) {
+   TYPE *t = new TYPE[size];
+   
+   for (int i = 0; i < size; ++i) {
+      t[i] = value;
+   }
+   col_out.SETARRAY(name, TYPE, t, size);
+
+   return SUCCESS;
+}
+## append loadcases
+   if (!strcasecmp(argv[2], "TYPE")) {
+      objd[0] = new Collection;
+      Collection* const imd = (Collection*)objd[0];
+      result = PCreateArray(*imd, atol(parv[2]), (TYPE)atof(parv[3]), argv[1]);
+      goto end;
+   }
+## end
+##end
+
+##;Genere p2i pour toutes les Img1d, Img2d, Img3d, * eg1d, Reg2d et Reg3d
+##forallbase(PCreateArray, /./)
+
+#define	USAGE	"usage: %s name type size value [col_out|-]"
+#define	PARC	4
+#define	FINC	0
+#define	FOUTC	1
+#define	MASK	0
+
+##main(4, 0, 1, 0, USAGE)

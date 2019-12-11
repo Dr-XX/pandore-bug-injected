@@ -1,0 +1,144 @@
+/* -*- c-basic-offset: 3; mode: c++ -*-
+ *
+ * Copyright (c), GREYC.
+ * All rights reserved
+ *
+ * You may use this file under the terms of the BSD license as follows:
+ *
+ * "Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are
+ * met:
+ *   * Redistributions of source code must retain the above copyright
+ *     notice, this list of conditions and the following disclaimer.
+ *   * Redistributions in binary form must reproduce the above copyright
+ *     notice, this list of conditions and the following disclaimer in
+ *     the documentation and/or other materials provided with the
+ *     distribution.
+ *   * Neither the name of the GREYC, nor the name of its
+ *     contributors may be used to endorse or promote products
+ *     derived from this software without specific prior written
+ *     permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
+ *
+ * 
+ * For more information, refer to:
+ * https://clouard.users.greyc.fr/Pandore
+ */
+
+#include <pandore.h>
+using namespace pandore;
+
+/**
+ * @file pnormalization.cpp
+ * Unary normalization operator.
+ */
+
+template <typename T>
+Errc PNormalization( const Imx3d<T> &ims, Imx3d<T> &imd, T min, T max ) {
+   for (int band = 0; band < ims.Bands(); band++) {
+      T maxi, mini;
+      
+      T *ps = ims.Vector(band);
+
+      maxi = mini = *(ps++);
+      for (;ps<ims.Vector(band)+ims.VectorSize();ps++) {
+	 maxi = MAX(*ps, maxi);
+	 mini = MIN(*ps, mini);
+      }
+      // Slope coefficients
+      Float a = ((Float)max-min) / ((Float)maxi - mini);
+      Float b = (Float)((min*maxi)-(max*mini)) / (Float)(maxi - mini);
+
+      ps = ims.Vector(band);
+      T *pd = imd.Vector(band);
+      for (; ps < ims.Vector(band) + ims.VectorSize(); ps++, pd++) {
+	 *pd = (T)(a* (*ps) + b);
+      }
+   }
+   return SUCCESS;
+}
+
+##begin PNormalization < TYPE>
+## append loadcases
+   if (objs[0]->Type() == Po_$TYPE) {
+      TYPE* const ims = (TYPE*)objs[0];
+      objd[0] = new TYPE(ims->Props());
+      TYPE* imd = (TYPE*)objd[0];
+      
+      result = PNormalization(*ims, *imd, (TYPE::ValueType)atof(parv[0]), (TYPE::ValueType)atof(parv[1]));
+      goto end;
+   }
+## end
+##end
+
+##begin PNormalizationGraph TYPE
+/**
+ * Graph (nodes)
+ */
+Errc PNormalization( const TYPE &grs, TYPE &grd, Long min, Long max ) {
+  register int	i;
+  TYPE::ValueType maxi, mini;
+  Float temp;
+  Float a, b;
+  int deb;
+  
+  grd = grs;
+
+  // Find min max.
+  if (grs[1]->value == 0) {
+    maxi = mini = grs[1]->value;
+    deb = 1;
+  }else{
+    maxi = mini = grs[0]->value;
+    deb = 0;
+  }
+  for (i = deb + 1; i < grs.Size(); i++) {
+    maxi = MAX(grs[i]->value, maxi);
+    mini = MIN(grs[i]->value, mini);
+  }
+  a = (Float)(max - min) / (Float)(maxi - mini);
+  b = (Float)((min * maxi) - (max * mini)) / (Float)(maxi - mini);
+  
+  // Normalization
+  for (i = deb; i < grs.Size(); i++) {
+     temp = (Float)(grs[i]->value * a) + b;
+     grd[i]->value = temp;
+  }
+  
+  return SUCCESS;
+}
+## append loadcases
+   if (objs[0]->Type() == Po_$TYPE) {
+      TYPE* const grs = (TYPE*)objs[0];
+      objd[0] = new TYPE(grs->Size());
+      TYPE* const grd = (TYPE*)objd[0];
+      
+      result = PNormalization(*grs, *grd, atol(parv[0]), atol(parv[1]));
+      goto end;
+   }
+## end
+##end
+
+##forall(PNormalization, /Im..d../)
+##forall(PNormalizationGraph, /Graph/)
+
+#ifdef MAIN
+#define	USAGE	"usage: %s min max [-m mask] [im_in|-] [im_out|-]"
+#define	PARC	2
+#define	FINC	1
+#define	FOUTC	1
+#define	MASK	1
+
+##main(PARC, FINC, FOUTC, MASK, USAGE)
+#endif

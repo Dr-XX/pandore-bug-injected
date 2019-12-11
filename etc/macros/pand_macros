@@ -1,0 +1,216 @@
+##; -*- c++ ; c-basic-offset: 3 -*-
+##; --------------------------------------------------
+##; Loop macros
+##; --------------------------------------------------
+##; interate over a 1d image, with x indice
+##begin for1d IMG X
+   for (X = 0; X < IMG.Width(); X++)
+##end 
+##; interate over a 1d image, with point p
+##begin for1dp IMG P
+   for (P.x = 0; P.x < IMG.Width(); P.x++)
+##end 
+##; interate in a 1d image (without the border), with x indice
+##begin for1din IMG X
+   for (X = IMG.Width() - 1; X >= 0; X--)
+##end 
+##; interate in a 1d image (without the border), with point p
+##begin for1dpin IMG P
+   for (P.x = IMG.Width() - 1; P.x >= 0; P.x--)
+##end 
+##; interate over a 2d image, with y, x indices
+##begin for2d IMG Y X
+   for (Y = 0; Y < IMG.Height(); Y++)
+   for (X = 0; X < IMG.Width(); X++)
+##end 
+##; interate over a 2d image, with point p
+##begin for2dp IMG P
+   for (P.y = 0; P.y < IMG.Height(); P.y++)
+   for (P.x = 0; P.x < IMG.Width(); P.x++)
+##end 
+##; interate in a 2d image (without the border), with y, x indices
+##begin for2din IMG Y X
+   for (Y = IMG.Height() - 1; Y >= 0; Y--)
+   for (X = IMG.Width() - 1; X >= 0; X--)
+##end 
+##; interate in a 2d image (without the border), with point p
+##begin for2dpin IMG P
+   for (P.y = IMG.Height() - 1; P.y >= 0; P.y--)
+   for (P.x = IMG.Width() - 1; P.x >= 0; P.x--)
+##end 
+##; interate over a 3d image, with z, y, x indices
+##begin for3d IMG Z Y X
+   for (Z = 0; Z < IMG.Depth(); Z++)
+   for (Y = 0; Y < IMG.Height(); Y++)
+   for (X = 0; X < IMG.Width(); X++)
+##end 
+##; interate over a 3d image, with point p
+##begin for3dp IMG P
+   for (P.z = 0; P.z < IMG.Depth(); P.z++)
+   for (P.y = 0; P.y < IMG.Height(); P.y++)
+   for (P.x = 0; P.x < IMG.Width(); P.x++)
+##end 
+##; interate in a 3d image (without the border), with z, y, x indices
+##begin for3din IMG Z Y X
+   for (Z = IMG.Depth() - 1; Z >= 0; Z--)
+   for (Y = IMG.Height() - 1; Y >= 0; Y--)
+   for (X = IMG.Width() - 1; X >= 0; X--)
+##end 
+##; interate in a 3d image (without the border), with point p
+##begin for3dpin IMG P
+   for (P.z = IMG.Depth() - 1; P.z >= 0; P.z--)
+   for (P.y = IMG.Height() - 1; P.y >= 0; P.y--)
+   for (P.x = IMG.Width() - 1; P.x >= 0; P.x--)
+##end 
+##; --------------------------------------------------
+##; Loop macros (inside image)
+##; --------------------------------------------------
+##; interate over a 1d image, with x indice
+##begin for1db IMG X B
+   for (X = B; X < IMG.Width() - B; X++)
+##end 
+##; interate over a 1d image, with point p
+##begin for1dpb IMG P B
+   for (P.x = B; P.x < IMG.Width() - B; P.x++)
+##end 
+##; interate in a 1d image (without the border), with x indice
+##begin for1dinb IMG X B
+   for (X = IMG.Width() - 1 - B; X >= B; X--)
+##end 
+##; interate in a 1d image (without the border), with point p
+##begin for1dpinb IMG P B
+   for (P.x = IMG.Width() - B - 1; P.x >= B; P.x--)
+##end 
+##; interate over a 2d image, with y, x indices
+##begin for2db IMG Y X B
+   for (Y = B; Y < IMG.Height() - B; Y++)
+   for (X = B; X < IMG.Width() - B; X++)
+##end 
+##; interate over a 2d image, with point p
+##begin for2dpb IMG P B
+   for (P.y = B; P.y < IMG.Height() - B; P.y++)
+   for (P.x = B; P.x < IMG.Width() - B; P.x++)
+##end 
+##; interate in a 2d image (without the border), with y, x indices
+##begin for2dinb IMG Y X B
+   for (Y = IMG.Height() - 1 - B; Y >= B; Y--)
+   for (X = IMG.Width() - 1 - B; X >= B; X--)
+##end 
+##; interate in a 2d image (without the border), with point p
+##begin for2dpinb IMG P B
+   for (P.y = IMG.Height() - 1 - B; P.y >= B; P.y--)
+   for (P.x = IMG.Width() - 1 - B; P.x >= B; P.x--)
+##end 
+##; interate over a 3d image, with z, y, x indices
+##begin for3db IMG Z Y X B
+   for (Z = B; Z < IMG.Depth() - B; Z++)
+   for (Y = B; Y < IMG.Height() - B; Y++)
+   for (X = B; X < IMG.Width() - B; X++)
+##end 
+##; interate over a 3d image, with point p
+##begin for3dpb IMG P B
+   for (P.z = B; P.z < IMG.Depth() - B; P.z++)
+   for (P.y = B; P.y < IMG.Height() - B; P.y++)
+   for (P.x = B; P.x < IMG.Width() - B; P.x++)
+##end 
+##; interate in a 3d image (without the border), with z, y, x indices
+##begin for3dinb IMG Z Y X B
+   for (Z = IMG.Depth() - 1 - B; Z >= B; Z--)
+   for (Y = IMG.Height() - 1 - B; Y >= B; Y--)
+   for (X = IMG.Width() - 1 - B; X >= B; X--)
+##end 
+##; interate in a 3d image (without the border), with point p
+##begin for3dpinb IMG P B
+   for (P.z = IMG.Depth() - 1 - B; P.z >= B; P.z--)
+   for (P.y = IMG.Height() - 1 - B; P.y >= B; P.y--)
+   for (P.x = IMG.Width() - 1 - B; P.x >= B; P.x--)
+##end 
+##; --------------------------------------------------
+##; Standard variables and access
+##; --------------------------------------------------
+##; parametred access :
+##;   usualy we write   imd[ACC]
+##;   where ACC is substitued either by !acc2d(y, x) or !acc3d(z, y, x) 
+##begin !acc1d X
+X
+##end
+##begin !acc2d Y X
+Y][X
+##end
+##begin !acc3d Z Y Z
+Z][Y][X
+##end
+##; indices declaration :
+##;  register int VARS
+##; with VARS being  !var2d(y, x) or !var3d(z, y, x)
+##begin !var1d X
+X
+##end
+##begin !var2d Y X
+Y, X
+##end
+##begin !var3d Z Y X
+Z, Y, X
+##end
+##; non parametred versions
+##; with z, y, x as default
+##begin !acc1def
+x
+##end
+##begin !acc2def
+y][x
+##end
+##begin !acc3def
+z][y][x
+##end
+##begin !var1def
+x
+##end
+##begin !var2def
+y, x
+##end
+##begin !var3def
+z, y, x
+##end
+##; --------------------------------------------------
+##; main() generation
+##; --------------------------------------------------
+##; you should not have to use _beginmain
+##begin _beginmain PARC FINC FOUTC MASK USAGE
+int main( int argc, char *argv[] ) {
+   Errc result;                // The result code of the execution.
+   Pobject* mask;              // The region map.
+   Pobject* objin[FINC + 1];   // The input objects.
+   Pobject* objs[FINC + 1];    // The source objects masked.
+   Pobject* objout[FOUTC + 1]; // The output object.
+   Pobject* objd[FOUTC + 1];   // The result object of the execution.
+   char* parv[PARC + 1];       // The input parameters.
+
+   ReadArgs(argc, argv, PARC, FINC, FOUTC, &mask, objin, objs, objout, objd, parv, USAGE, MASK); 
+##end
+##; you should not have to use _endmain
+##begin _endmain PARC FINC FOUTC MASK
+  {
+     PrintErrorFormat(objin, FINC, argv); 
+     result = FAILURE; 
+  }	
+
+end:
+  if (result) {
+	WriteArgs(argc, argv, PARC, FINC, FOUTC, &mask, objin, objs, objout, objd, MASK); 
+  }
+  Exit(result); 
+  return 0; 
+}
+##end
+##; 
+##; This is the main macro
+##; you should have defined loadcases with all your load cases.
+##; (usualy by appending to it in the functions macros)
+##; 
+##begin main PARC FINC FOUTC MASK USAGE
+##_beginmain(PARC, FINC, FOUTC, MASK, USAGE)
+##loadcases
+##_endmain(PARC, FINC, FOUTC, MASK)
+##end
+##; --------------------------------------------------

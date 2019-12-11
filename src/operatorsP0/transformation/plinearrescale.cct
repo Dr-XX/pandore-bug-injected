@@ -1,0 +1,486 @@
+/* -*- c-basic-offset: 3; mode: c++ -*-
+ *
+ * Copyright (c), GREYC.
+ * All rights reserved
+ *
+ * You may use this file under the terms of the BSD license as follows:
+ *
+ * "Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are
+ * met:
+ *   * Redistributions of source code must retain the above copyright
+ *     notice, this list of conditions and the following disclaimer.
+ *   * Redistributions in binary form must reproduce the above copyright
+ *     notice, this list of conditions and the following disclaimer in
+ *     the documentation and/or other materials provided with the
+ *     distribution.
+ *   * Neither the name of the GREYC, nor the name of its
+ *     contributors may be used to endorse or promote products
+ *     derived from this software without specific prior written
+ *     permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
+ *
+ * 
+ * For more information, refer to:
+ * https://clouard.users.greyc.fr/Pandore
+ */
+
+/**
+ * @author Régis Clouard - 2006-11-17
+ */
+
+#include <pandore.h>
+using namespace pandore;
+
+/**
+ * @file plinearrescale.cpp
+ * Rescales the image according to scale factor in each axis direction.
+ * This version uses the bilinear interpolation.
+ *
+ * @param rescalex scale factor along X axis.
+ * @param rescaley scale factor along Y axis.
+ * @param rescalez scale factor along Z axis.
+ * @return SUCCESS or FAILURE
+ * imd(i,j) = ims(i/scaley,j/scalex).
+ */
+template <typename T>
+Errc PLinearRescale( const Imx2d<T> &ims, Imx2d<T> &imd, const float scaley, const float scalex ) {
+   Point2d p;
+   int b;
+
+   // The left bottom side
+   for (b = 0; b < imd.Bands(); b++) {
+      for (p.y = imd.Height()-(long)scaley; p.y < imd.Height(); p.y++) {
+	 for (p.x = imd.Width()-(long)scalex; p.x < imd.Width(); p.x++) {
+ 	    imd(b, p) = ims(b, ims.Height()-1, ims.Width()-1);
+	 }
+      }
+   }
+
+   // The left side of the image
+   for (b = 0; b < imd.Bands(); b++) {
+      for (p.y = 0 ; p.y < imd.Height()-(long)scaley; p.y++) {
+	 for (p.x = imd.Width()-(long)scalex; p.x < imd.Width(); p.x++) {
+	    const float oldx = p.x / scalex;
+	    const float oldy = p.y / scaley;
+	    const int sx = (int)oldx;
+	    const int sy = (int)oldy;
+	    const float dx = oldx - sx;
+	    const float dy = oldy - sy;
+	    if (sx < ims.Width()-1) {
+	       imd(b, p) = (T)((1.0f-dx) * (1.0f-dy) * ims(b, sy, sx)
+			      + (1.0f-dx)*dy * ims(b, sy+1, sx)
+			      + dx * (1.0f-dy) * ims(b, sy, sx+1)
+			      + dx * dy * ims(b, sy+1, sx+1));
+	    } else {
+	       imd(b, p) = (T)((1.0f-dy) * ims(b, sy, sx)
+			      + dy * ims(b, sy+1, sx));
+	    }
+	 }
+      }
+   }
+   
+   // The bottom side 
+   for (b = 0; b < imd.Bands(); b++) {
+      for (p.y = imd.Height()-(long)scaley; p.y < imd.Height(); p.y++) {
+	 for (p.x = 0; p.x < imd.Width()-(long)scalex; p.x++) {
+	    const float oldx = p.x / scalex;
+	    const float oldy = p.y / scaley;
+	    const int sx = (int)oldx;
+	    const int sy = (int)oldy;
+	    const float dx = oldx - sx;
+	    const float dy = oldy - sy;
+	    if (sy < ims.Height()-1) {
+	       imd(b, p) = (T)((1.0f-dx) * (1.0f-dy) * ims(b, sy, sx)
+			      + (1.0f-dx)*dy * ims(b, sy+1, sx)
+			      + dx * (1.0f-dy) * ims(b, sy, sx+1)
+			      + dx * dy * ims(b, sy+1, sx+1));
+	    } else {
+	       imd(b, p) = (T)((1.0f-dx) * ims(b, sy, sx)
+			      + dx * ims(b, sy, sx+1));
+	    }
+	 }
+      }
+   }
+   // General case
+   for (b = 0; b < imd.Bands(); b++) {
+      for (p.y = 0 ; p.y < imd.Height()-(long)scaley; p.y++) {
+	 for (p.x = 0 ; p.x < imd.Width()-(long)scalex; p.x++) {
+	    const float oldx = p.x / scalex;
+	    const float oldy = p.y / scaley;
+	    const float dx = oldx - int(oldx);
+	    const float dy = oldy - int(oldy);
+	    const int sx = (int)oldx;
+	    const int sy = (int)oldy;
+	    imd(b, p) = (T)((1.0f-dx) * (1.0f-dy) * ims(b, sy, sx)
+			   + (1.0f-dx)*dy * ims(b, sy+1, sx)
+			   + dx * (1.0f-dy) * ims(b, sy, sx+1)
+			   + dx * dy * ims(b, sy+1, sx+1));
+	 }
+      }
+   }
+
+   return SUCCESS;
+}
+##begin PLinearRescale2G < TYPE >
+## append loadcases
+if (objs[0]->Type() == Po_$TYPE) {
+   const float scalex = (float)atof(parv[0]);
+   const float scaley = (float)atof(parv[1]);
+   if (scalex <=0 || scaley <= 0) {
+      result = FAILURE;
+   } else {
+      TYPE* const ims = (TYPE*)objs[0];
+      objd[0] = new TYPE(Long(ims->Height()*scaley), Long(ims->Width()*scalex));
+      TYPE* const imd = (TYPE*)objd[0];
+      result=PLinearRescale(*ims, *imd, scaley, scalex);
+   }
+   goto end;
+ }
+## end
+##end
+
+##begin PLinearRescale2C < TYPE >
+## append loadcases
+if (objs[0]->Type() == Po_$TYPE) {
+   const float scalex = (float)atof(parv[0]);
+   const float scaley = (float)atof(parv[1]);
+   if (scalex <= 0 || scaley <= 0) {
+      result = FAILURE;
+    } else {
+      TYPE* const ims = (TYPE*)objs[0];
+      objd[0] = new TYPE(Long(ims->Height()*scaley), Long(ims->Width()*scalex));
+      TYPE* const imd = (TYPE*)objd[0];
+      imd->ColorSpace(ims->ColorSpace());
+      result = PLinearRescale(*ims, *imd, scaley, scalex);
+   }
+   goto end;
+ }
+## end
+##end
+
+##begin PLinearRescale2X < TYPE >
+## append loadcases
+if (objs[0]->Type() == Po_$TYPE) {
+   const float scalex = (float)atof(parv[0]);
+   const float scaley = (float)atof(parv[1]);
+   if ( scalex <= 0 || scaley <= 0) {
+      result = FAILURE;
+    } else {
+      TYPE* const ims = (TYPE*)objs[0];
+      objd[0] = new TYPE(ims->Bands(), 
+		       Long(ims->Height()*scaley), 
+		       Long(ims->Width()*scalex));
+      TYPE* const imd = (TYPE*)objd[0];
+      result = PLinearRescale(*ims, *imd, scaley, scalex);
+   }
+   goto end;
+ }
+
+## end
+##end
+
+template <typename T>
+Errc PLinearRescale( const Imx3d<T> &ims, Imx3d<T> &imd, const float scalez, const float scaley, const float scalex ) {
+   Point3d p;
+   int b;
+   
+   // The left bottom side 
+   for (b = 0; b < imd.Bands(); b++) {
+      for (p.z = imd.Depth()-(long)scalez; p.z < imd.Depth(); p.z++) {
+	 for (p.y = imd.Height()-(long)scaley; p.y < imd.Height(); p.y++) {
+	    for (p.x = imd.Width()-(long)scalex; p.x < imd.Width(); p.x++) {
+	       imd(b, p) = (T)ims(b, ims.Depth()-1, ims.Height()-1, ims.Width()-1);
+	    }
+	 }
+      }
+   }
+
+   
+   // The left side of the image
+   for (b = 0; b < imd.Bands(); b++) {
+      for (p.z = 0; p.z < imd.Depth()-(long)scalez; p.z++) {
+	 for (p.y = 0 ; p.y < imd.Height()-(long)scaley; p.y++) {
+	    for (p.x = imd.Width()-(long)scalex; p.x < imd.Width(); p.x++) {
+	       const float oldx = p.x / scalex;
+	       const float oldy = p.y / scaley;
+	       const float oldz = p.z / scalez;
+	       const int sx = (int)oldx;
+	       const int sy = (int)oldy;
+	       const int sz = (int)oldz;
+	       const float dx = oldx - sx;
+	       const float dy = oldy - sy;
+	       const float dz = oldz - sz;
+	       if (sx < ims.Width()-1) {
+		  imd(b, p) = (T)((1.0f-dx)*(1.0f-dy)*(1.0f-dz) * ims(b, sz, sy, sx)
+				 + (1.0f-dx)*dy*(1.0f-dz) * ims(b, sz, sy+1, sx)
+				 + dx*(1.0f-dy)*(1.0f-dz) * ims(b, sz, sy, sx+1)
+				 + dx*dy*(1.0f-dz) * ims(b, sz, sy+1, sx+1)
+				 
+				 + (1.0f-dx)*(1.0f-dy)*dz * ims(b, sz+1, sy, sx)
+				 + (1.0f-dx)*dy*dz * ims(b, sz+1, sy+1, sx)
+				 + dx*(1.0f-dy)*dz * ims(b, sz+1, sy, sx+1)
+				 + dx*dy*dz * ims(b, sz+1, sy+1, sx+1));
+	       } else {
+		  imd(b, p) = (T)((1.0f-dy) * ims(b, sz, sy, sx)
+				 + dy * ims(b, sz, sy+1, sx)
+				 +(1.0f-dy) * ims(b, sz+1, sy, sx)
+				 + dy * ims(b, sz+1, sy+1, sx));
+	       }
+	    }
+	 }
+      }
+   }
+   // The bottom side of the image
+   for (b = 0; b < imd.Bands(); b++) { 
+      for (p.z = 0; p.z < imd.Depth()-(long)scalez; p.z++) {
+	 for (p.y = imd.Height()-(long)scaley; p.y < imd.Height(); p.y++) {
+	    for (p.x = imd.Width()-(long)scalex; p.x < imd.Width(); p.x++) {
+	       const float oldx = p.x / scalex;
+	       const float oldy = p.y / scaley;
+	       const float oldz = p.z / scalez;
+	       const int sx = (int)oldx;
+	       const int sy = (int)oldy;
+	       const int sz = (int)oldz;
+	       const float dx = oldx - sx;
+	       const float dy = oldy - sy;
+	       const float dz = oldz - sz;
+	       if (sy < ims.Height()-1) {
+		  imd(b, p) = (T)((1.0f-dx)*(1.0f-dy)*(1.0f-dz) * ims(b, sz, sy, sx)
+				 + (1.0f-dx)*dy*(1.0f-dz) * ims(b, sz, sy+1, sx)
+				 + dx*(1.0f-dy)*(1.0f-dz) * ims(b, sz, sy, sx+1)
+				 + dx*dy*(1.0f-dz) * ims(b, sz, sy+1, sx+1)
+				 
+				 + (1.0f-dx)*(1.0f-dy)*dz * ims(b, sz+1, sy, sx)
+				 + (1.0f-dx)*dy*dz * ims(b, sz+1, sy+1, sx)
+				 + dx*(1.0f-dy)*dz * ims(b, sz+1, sy, sx+1)
+				 + dx*dy*dz * ims(b, sz+1, sy+1, sx+1));
+	       } else {
+		  imd(b, p) = (T)((1.0f-dx) * ims(b, sz, sy, sx)
+				 + dx * ims(b, sz, sy, sx+1)
+				 + (1.0f-dx) * ims(b, sz+1, sy, sx)
+				 + dx * ims(b, sz+1, sy, sx+1));
+	       }
+	    }
+	 }
+      }
+   }   
+
+   // The back side of the image
+   for (b = 0; b < imd.Bands(); b++) {
+      for (p.z = imd.Depth()-(long)scalez; p.z < imd.Depth(); p.z++) {
+	 for (p.y = 0 ; p.y < imd.Height()-(long)scaley; p.y++) {
+	    for (p.x = imd.Width()-(long)scalex; p.x < imd.Width(); p.x++) {
+	       const float oldx = p.x / scalex;
+	       const float oldy = p.y / scaley;
+	       const float oldz = p.z / scalez;
+	       const int sx = (int)oldx;
+	       const int sy = (int)oldy;
+	       const int sz = (int)oldz;
+	       const float dx = oldx - sx;
+	       const float dy = oldy - sy;
+	       const float dz = oldz - sz;
+	       if (sz < ims.Depth()-1) {
+		  imd(b, p) = (T)((1.0f-dx)*(1.0f-dy)*(1.0f-dz) * ims(b, sz, sy, sx)
+				 + (1.0f-dx)*dy*(1.0f-dz) * ims(b, sz, sy+1, sx)
+				 + dx*(1.0f-dy)*(1.0f-dz) * ims(b, sz, sy, sx+1)
+				 + dx*dy*(1.0f-dz) * ims(b, sz, sy+1, sx+1)
+				 
+				 + (1.0f-dx)*(1.0f-dy)*dz * ims(b, sz+1, sy, sx)
+				 + (1.0f-dx)*dy*dz * ims(b, sz+1, sy+1, sx)
+				 + dx*(1.0f-dy)*dz * ims(b, sz+1, sy, sx+1)
+				 + dx*dy*dz * ims(b, sz+1, sy+1, sx+1));
+	       } else {
+		  imd(b, p) = (T)((1.0f-dx)*(1.0f-dy)* ims(b, sz, sy, sx)
+				 + (1.0f-dx)*dy* ims(b, sz, sy+1, sx)
+				 + dx*(1.0f-dy) * ims(b, sz, sy, sx+1)
+				 + dx*dy* ims(b, sz, sy+1, sx+1));
+	       }
+	    }
+	 }
+      }
+   }
+   
+   for (b = 0; b < imd.Bands(); b++) {
+      for (p.z = 0 ; p.z < imd.Depth()-(long)scalez ; p.z++) {
+	 for (p.y = 0 ; p.y < imd.Height()-(long)scaley ; p.y++) {
+	    for (p.x = 0 ; p.x < imd.Width()-(long)scalex ; p.x++) {
+	       const float oldx = p.x / scalex;
+	       const float oldy = p.y / scaley;
+	       const float oldz = p.z / scalez;
+	       const int sx = (int)oldx;
+	       const int sy = (int)oldy;
+	       const int sz = (int)oldz;
+	       const float dx = oldx - sx;
+	       const float dy = oldy - sy;
+	       const float dz = oldz - sz;
+	       imd(b, p) = (T)((1.0f-dx)*(1.0f-dy)*(1.0f-dz) * ims(b, sz, sy, sx)
+			      + (1.0f-dx)*dy*(1.0f-dz) * ims(b, sz, sy+1, sx)
+			      + dx*(1.0f-dy)*(1.0f-dz) * ims(b, sz, sy, sx+1)
+			      + dx*dy*(1.0f-dz) * ims(b, sz, sy+1, sx+1)
+			      
+			      + (1.0f-dx)*(1.0f-dy)*dz * ims(b, sz+1, sy, sx)
+			      + (1.0f-dx)*dy*dz * ims(b, sz+1, sy+1, sx)
+			      + dx*(1.0f-dy)*dz * ims(b, sz+1, sy, sx+1)
+			      + dx*dy*dz * ims(b, sz+1, sy+1, sx+1));
+	    }
+	 }
+      }
+   }    
+   
+   return SUCCESS;
+}
+
+##begin PLinearRescale3G < TYPE >
+## append loadcases
+if (objs[0]->Type() == Po_$TYPE) {
+   const float scalex = (float)atof(parv[0]);
+   const float scaley = (float)atof(parv[1]);
+   const float scalez = (float)atof(parv[2]);
+   if (scalex <= 0 || scaley <= 0 || scalez <= 0) {
+      result = FAILURE;
+   } else {
+      TYPE* const ims = (TYPE*)objs[0];
+      objd[0] = new TYPE(Long(ims->Depth()*scalez), Long(ims->Height()*scaley), Long(ims->Width()*scalex));
+      TYPE* const imd = (TYPE*)objd[0];
+      result = PLinearRescale(*ims, *imd, scalez, scaley, scalex);
+   }
+   goto end;
+ }
+## end
+##end
+
+##begin PLinearRescale3C < TYPE >
+## append loadcases
+if (objs[0]->Type() == Po_$TYPE) {
+   const float scalex = (float)atof(parv[0]);
+   const float scaley = (float)atof(parv[1]);
+   const float scalez = (float)atof(parv[2]);
+   if (scalex <= 0 || scaley <= 0 || scalez <= 0) {
+      result = FAILURE;
+   } else {
+      TYPE* const ims = (TYPE*)objs[0];
+      objd[0] = new TYPE(Long(ims->Depth()*scalez), Long(ims->Height()*scaley), Long(ims->Width()*scalex));
+      TYPE* const imd = (TYPE*)objd[0];
+      result = PLinearRescale(*ims, *imd, scalez, scaley, scalex);
+      imd->ColorSpace(ims->ColorSpace());
+   }
+   goto end;
+ }
+## end
+##end
+
+##begin PLinearRescale3X < TYPE >
+## append loadcases
+if (objs[0]->Type() == Po_$TYPE) {
+   const float scalex = (float)atof(parv[0]);
+   const float scaley = (float)atof(parv[1]);
+   const float scalez = (float)atof(parv[2]);
+   if (scalex <= 0 || scaley <= 0 || scalez <= 0) {
+      result = FAILURE;
+   } else {
+      TYPE* const ims = (TYPE*)objs[0];
+      objd[0] = new TYPE(ims->Bands(), Long(ims->Depth()*scalez), Long(ims->Height()*scaley), Long(ims->Width()*scalex));
+      TYPE* const imd = (TYPE*)objd[0];
+      result = PLinearRescale(*ims, *imd, scalez, scaley, scalex);
+   }
+   goto end;
+ }
+
+## end
+##end
+
+##begin PLinearRescaleG2 < TYPE, LOOPP, POINT >
+Errc PLinearRescale( const TYPE &grs, TYPE &grd, float rescaley, float rescalex ) {
+   GEdge *l;
+
+   for (int i=0; i< grs.Size(); i++) {
+      if (grs[i] != NULL) {
+	 grd.Add(i, grs[i]->Item(), (int)(grs[i]->seed.y*rescaley), (int)(grs[i]->seed.x*rescalex));
+	 grd[i]->value=grs[i]->value;
+	 for (l=grs[i]->Neighbours(); l!=NULL; l=l->Next()) {
+	    if (i>l->Node()) {
+	       grd.Link(i, l->Node(), l->weight);
+	    }
+	 }
+      }
+   }
+   
+   return SUCCESS;
+}
+## append loadcases
+if (objs[0]->Type() == Po_$TYPE) {
+   TYPE* const grs = (TYPE*)objs[0];
+   objd[0] = new TYPE(grs->Size(), Long(grs->Height()*atoi(parv[1])), Long(grs->Width()*atoi(parv[0])));
+   TYPE* const grd = (TYPE*)objd[0];
+   if ( (atof(parv[0])<=0) || (atof(parv[1])<=0)) result = FAILURE;
+   else result = PLinearRescale(*grs, *grd, (float)atof(parv[1]), (float)atof(parv[0]));
+   goto end;
+ }
+## end
+##end
+
+
+##begin PLinearRescaleG3 < TYPE, LOOPP, POINT >
+Errc PLinearRescale( const TYPE &grs, TYPE &grd, float rescalez, float rescaley, float rescalex ) {
+   GEdge *l;
+
+   for (int i=0; i< grs.Size(); i++) {
+      if (grs[i] != NULL) {
+	 grd.Add(i, grs[i]->Item(), (int)(grs[i]->seed.z*rescalez), (int)(grs[i]->seed.y*rescaley), (int)(grs[i]->seed.x*rescalex));
+	 grd[i]->value=grs[i]->value;
+	 for (l=grs[i]->Neighbours(); l!=NULL; l=l->Next()) {
+	    if (i>l->Node()) {
+	       grd.Link(i, l->Node(), l->weight);
+	    }
+	 }
+      }
+   }
+   
+   return SUCCESS;
+}
+## append loadcases
+if (objs[0]->Type() == Po_$TYPE) {
+   TYPE* const grs = (TYPE*)objs[0];
+   objd[0] = new TYPE(grs->Size(), Long(grs->Depth()*atoi(parv[2])), Long(grs->Height()*atoi(parv[1])), Long(grs->Width()*atoi(parv[0])));
+   TYPE* const grd = (TYPE*)objd[0];
+   if ( (atof(parv[0]) <= 0) || (atof(parv[1]) <= 0)|| (atof(parv[2]) <= 0)) {
+      result = FAILURE;
+   } else {
+      result = PLinearRescale(*grs, *grd, (float)atof(parv[2]), (float)atof(parv[1]), (float)atof(parv[0]));
+   }
+   goto end;
+ }
+## end
+##end
+
+##forall(PLinearRescale2G, /Img2d/)
+##forall(PLinearRescale2C, /Imc2d/)
+##forall(PLinearRescale2X, /Imx2d/)
+##forall(PLinearRescaleG2, /Graph2d/)
+
+##forall(PLinearRescale3G, /Img3d/)
+##forall(PLinearRescale3C, /Imc3d/)
+##forall(PLinearRescale3X, /Imx3d/)
+##forall(PLinearRescaleG3, /Graph3d/)
+
+#ifdef MAIN
+#define	USAGE	"usage: %s rescalex rescaley rescalez [im_in|-] [im_out|-]"
+#define	PARC	3
+#define	FINC	1
+#define	FOUTC	1
+#define	MASK	0
+
+##main(PARC, FINC, FOUTC, MASK, USAGE)
+#endif

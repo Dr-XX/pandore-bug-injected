@@ -1,0 +1,124 @@
+<html>
+<head>
+<title>PANDORE OPERATORS</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>panalyze2pan</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Converts ANALYZE 7.5 image file to Pandore image file.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>panalyze2pan</b> <i>im_in</i> [<i>im_out</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p><b>panalyze2pan</b> converts an ANALYZE 7.5 image file
+to a Pandore image file.</p>
+
+<p>An ANALYZE (7.5) format image consists of two files
+in the same directory and with the same base name:</p>
+<ul>
+<li>a header file (suffixed .hdr). It contains information about the
+.img file, such as the volume represented by each number in the image (voxel size)
+and the number of pixels in the X, Y and Z directions.
+This header contains fields of text, floating point,
+integer and other information.
+<li>an image file (suffixed .img). It contains the numbers that make up
+the information in the image. 
+</ul>
+
+<p>The input file <i>im_in</i> is one of the two ANALYZE files. The second
+file is then read from the same directory and with the same base name.</p>
+
+<p>The result image <i>im_out</i> is a 3D multispectral image of floats (Imx3duc).</p>
+
+<!---------------------------------- -->
+<h3>Inputs</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_in</i>: an ANALYZE 7.5 file name (either .hdr .img).
+</ul>
+
+<!---------------------------------- -->
+<h3>Inputs</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_out</i>: a Pandore 3D image of Float (Imx3dsf).
+</ul>
+
+<!---------------------------------- -->
+<h3>Result</h3>
+<!---------------------------------- -->
+<p>Returns SUCCESS or FAILURE.</p>
+
+<!---------------------------------- -->
+<h3>Examples</h3>
+<!---------------------------------- -->
+<p>Converts image "brain" to Pandore image "a.pan"
+and then displays the band #0.</p>
+<pre>
+   panalyze2pan brain.hdr a.pan
+   pimx2img 0 a.pan | pvisu
+</pre>
+
+<!---------------------------------- -->
+<h3>See also</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#conversion">Conversion</a>,
+<a href="./ppan2analyze.html">ppan2analyze</a>
+
+<!---------------------------------- -->
+<h3>C++ prototype</h3>
+<!---------------------------------- -->
+<tt>
+Errc PAnalyze2Pan( const char* filename, Pobject** obj_out );
+</tt>
+
+<!---------------------------------- -->
+<h3>Version fran&ccedil;aise</h3>
+<!---------------------------------- -->
+<p>Conversion d'une image au format ANALYZE 7.5 en une image Pandore.</p>
+
+<!---------------------------------- -->
+<h3>Important notice</h3>
+<!---------------------------------- -->
+<p><font color="#ff0000">The source code of this Pandore operator is governed by a specific
+Free-Software License (the <a href="http://www.cecill.info/licences/Licence_CeCILL_V1.1-US.html">CeCiLL</a> License),
+also applying to the CImg Library. Please read it carefully, if you want to use this module
+in your own project (file CImg.h).</p>
+<p>IN PARTICULAR, YOU ARE NOT ALLOWED TO USE THIS PANDORE MODULE IN A
+CLOSED-SOURCE PROPRIETARY PROJECT WITHOUT ASKING AN AUTHORIZATION
+TO THE CIMG LIBRARY AUTHOR ( http://www.greyc.ensicaen.fr/~dtschump/ )
+</font></p>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Author: David Tschumperl&eacute;
+</address>
+<!---------------------------------- -->
+</body>
+</html>

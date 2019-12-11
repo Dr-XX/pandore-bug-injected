@@ -1,0 +1,118 @@
+<html>
+<head>
+<title>PANDORE OPERATORS</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></TD>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></TD></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>pboundary</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Locates region boundary.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>pboundary</b> <i>connexity</i> [<i>-m mask</i>] [<i>im_in</i>|-] [<i>im_out</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p><b>pboundary</b> builds a binary image
+with pixels that separate two regions.
+A pixel is a boundary point if at least one of its neighbors
+has a different value than itself.</p>
+
+<p>A boundary is a closed contour with a width of 2 pixels
+because it cannot be located between two pixels. One pixel
+is inside the region and one pixel is outside
+the region.
+Each boundary point is represented with a value of 255
+in the output image. The output image is an unsigned
+char grayscale image (Img2duc or Img3duc).</p>
+
+<p>For region map, only regions with label greater than 0 are considered.</p>
+
+<p>For graph, nodes with 0 or 1 neighbor
+are considered as boundary points.</p>
+
+<!---------------------------------- -->
+<h3>Parameters</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>connexity</i> defines the neighborhood relation:
+4, 8 for 2D,  or  6 or 26 for 3D.<br>
+This parameter is ignored for graphs.</p>
+</ul>
+
+<!---------------------------------- -->
+<h3>Inputs</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_in</i>: a grayscale image, a region map or a graph.
+</ul>
+
+<!---------------------------------- -->
+<h3>Outputs</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_out</i>: a binary image (Img2duc or Img3duc).
+</ul>
+
+<!---------------------------------- -->
+<h3>Result</h3>
+<!---------------------------------- -->
+<p>Returns SUCCESS or FAILURE.</p>
+
+<!---------------------------------- -->
+<h3>Examples</h3>
+<!---------------------------------- -->
+<p>Locates the boundary in the region map a.pan
+(add a boundary on the border):</p>
+<pre>
+   pboundary 8 a.pan b.pan
+   psetborder 1 1 1 1 0 0 255 b.pan c.pan
+</pre>
+
+<!---------------------------------- -->
+<h3>See also</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#region">Region</a>
+
+<!---------------------------------- -->
+<h3>C++ prototype</h3>
+<!---------------------------------- -->
+<tt>
+Errc PBoundary( const Reg2d &amp;im_in, Img2duc &amp;im_out, int connexity );
+</tt>
+
+<!---------------------------------- -->
+<h3>Version fran&ccedil;aise</h3>
+<!---------------------------------- -->
+<p>Localisation des points de fronti&egrave;re des r&eacute;gions.</p>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Author: R&eacute;gis Clouard
+</address>
+<!---------------------------------- -->
+</body>
+</html>

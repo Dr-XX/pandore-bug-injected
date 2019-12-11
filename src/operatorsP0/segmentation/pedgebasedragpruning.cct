@@ -1,0 +1,136 @@
+/* -*- mode: c++; c-basic-offset: 3 -*-
+ *
+ * Copyright (c), GREYC.
+ * All rights reserved
+ *
+ * You may use this file under the terms of the BSD license as follows:
+ *
+ * "Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are
+ * met:
+ *   * Redistributions of source code must retain the above copyright
+ *     notice, this list of conditions and the following disclaimer.
+ *   * Redistributions in binary form must reproduce the above copyright
+ *     notice, this list of conditions and the following disclaimer in
+ *     the documentation and/or other materials provided with the
+ *     distribution.
+ *   * Neither the name of the GREYC, nor the name of its
+ *     contributors may be used to endorse or promote products
+ *     derived from this software without specific prior written
+ *     permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
+ *
+ * 
+ * For more information, refer to:
+ * https://clouard.users.greyc.fr/Pandore
+ */
+
+/**
+ * @author Regis Clouard - 06 May 2011
+ */
+
+#include <pandore.h>
+using namespace pandore;
+
+Errc PEdgeBasedRAGPruning( const Reg2d &rgs, const Graph2d &gs, const Img2duc &ims, Graph2d &gd ) {
+   int count=0;
+
+   Point2d p;
+   gd=gs;
+   for (p.y=0; p.y<ims.Height(); p.y++ ) {
+      for (p.x=0; p.x<ims.Width(); p.x++ ) {
+	 if (ims[p]>0) {
+	    // Remove link between two adjacencents regions
+	    // if the current edge point
+	    // is on two regions boundary
+	    for (int v=0; v<2; v++ ) {
+	       Point2d p1=p+v4[v];
+	       Point2d p2=p+v4[v+2];
+	       if (rgs.Hold(p1) && rgs.Hold(p2)
+		   && ims[p1]==0 && ims[p2]==0 
+		   && (rgs[p1]!=rgs[p2]) ) {
+		  // unlink the two regions.
+		  gd.Unlink((Long)rgs[p1],(Long)rgs[p2]);
+		  count++;
+	       }
+	    }
+	 }
+      }
+   }
+   
+   return count; // retourne le nombre de regions fusionnees
+}
+
+Errc PEdgeBasedRAGPruning( const Reg3d &rgs, const Graph3d  &gs, const Img3duc &ims, Graph3d &gd ) {
+   int count=0;
+
+   Point3d p;
+   gd=gs;
+   for (p.z=0; p.z<ims.Depth(); p.z++ ) {
+      for (p.y=0; p.y<ims.Height(); p.y++ ) {
+	 for (p.x=0; p.x<ims.Width(); p.x++ ) {
+	    if (ims[p]>0) {
+	       // Remove link between two adjacencents regions
+	       // if the current edge point
+	       // is on two regions boundary
+	    for (int v=0; v<3; v++ ) {
+	       Point3d p1=p+v6[v];
+	       Point3d p2=p+v6[v+3];
+	       if (rgs.Hold(p1) && rgs.Hold(p2)
+		   && ims[p1]==0 && ims[p2]==0 
+		   && (rgs[p1]!=rgs[p2]) ) {
+		  // unlink the two regions.
+		  gd.Unlink((Long)rgs[p1],(Long)rgs[p2]);
+		  count++;
+	       }
+	    }
+	    }
+	 }
+      }
+   }
+   return count; // retourne le nombre de regions fusionnees
+}
+
+##begin PEDGEBASEDRAGPRUNING < TIN0, TIN1, TIN2 >
+## append loadcases
+   // verifier toutes les entrees
+   if (objs[0]->Type()==Po_$TIN0 && objs[1]->Type()==Po_$TIN1 && objs[2]->Type() == Po_$TIN2) {
+      TIN0* const rgs=(TIN0*)objs[0];  
+      TIN1* const gs=(TIN1*)objs[1];  
+      TIN2* const ims=(TIN2*)objs[2];
+      objd[0]=new TIN1(gs->Size());
+      TIN1* const gd=(TIN1*)objd[0];
+      
+      result = PEdgeBasedRAGPruning(*rgs,*gs,*ims,*gd);
+      goto end;
+   }
+## end
+##end
+
+##forall(PEDGEBASEDRAGPRUNING, /Reg2d/, /Graph2d/, /Img2duc/)
+##forall(PEDGEBASEDRAGPRUNING, /Reg3d/, /Graph3d/, /Img3duc/)
+
+#ifdef MAIN
+
+/*
+ * Modify only the following constants, and the operator switches.
+ */
+#define	USAGE	"usage: %s [-m mask] [rg_in|-] [gr_in|-] [im_in|-] [gr_out|-]"
+#define	PARC	0  // Number of parameters
+#define	FINC	3  // Number of input images
+#define	FOUTC	1  // Number of output images
+#define	MASK	0  // Level of masking
+
+##main(PARC,FINC,FOUTC,MASK,USAGE)
+#endif

@@ -1,0 +1,155 @@
+<html>
+<head>
+<title>PANDORE OPERATORS</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>plogtransform</h1>
+<!---------------------------------- -->
+
+<hr noshade size=1 width=100 align=left><br>
+
+Transformations des niveaux de gris par loi logarithmique ou exponentielle.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>plogtransform</b> <i>inverse min max</i> [<i>-m mask</i>] [<i>im_in</i>|-] [<i>im_out</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p>L'op&eacute;rateur <b>plogtransform</b> &eacute;tale ou compresse la plage des 
+niveaux de gris de l'image d'entr&eacute;e <i>im_in</i> en utilisant
+une transformation logarithmique ou exponentielle.
+Le param&egrave;tre <i>inverse</i> sp&eacute;cifie si la transformation est de
+type logarithmique ou exponentielle.</p>
+
+<p>L'effet d'une transformation logarithmique est de plaquer
+une courte plage de niveaux de gris sombres sur une plus grande plage de niveaux
+de gris et de plaquer une grande plage de niveaux de gris
+clairs sur une courte plage de niveaux de gris en sortie.
+L'effet d'une transformation exponentielle est inverse.</p>
+
+<p>La transformation logarithmique du pixel 'p' prend la forme :</p>
+<pre>
+im_out[p]=(c*log(im_in[p]-smin+1.0)) + min;
+c=(max-min) / (log(smax-smin+1.0))
+</pre>
+<p>o&ugrave; smin et smax sont les valeurs the minimale et maximale de l'image
+d'entr&eacute;e et c un facteur de normalisation pour l'&eacute;talement
+des valeurs de niveaux de gris en sortie entre <i>min</i>
+et <i>max</i>.</p>
+
+<p>La transformation exponentielle d'un pixel 'p' prend la forme suivante :</p>
+<pre>
+im_out[p]=exp((im_in[p]-smin)/c) -1.0 + min;
+c=(smax-smin) / (log(max-min+1.0))
+</pre>
+<p>o&ugrave; smin et smax sont les valeurs the minimale et maximale de l'image
+d'entr&eacute;e et c un facteur de normalisation pour l'&eacute;talement
+des valeurs de niveaux de gris en sortie entre <i>min</i>
+et <i>max</i>.</p>
+
+<p>Pour les images couleur et multispectrales, la transformation
+utilise l'approche vectorielle : le min et le max sont
+calcul&eacute;s sur toutes les bandes et chaque bande
+est modifi&eacute;e avec la m&ecirc;me transformation.</p>
+
+<!-- -------------------------------- -->
+<h3>Param&egrave;tres</h3>
+<!-- -------------------------------- -->
+<ul>
+<li><p><i>inverse</i> est un entier dans [0, 1] qui sp&eacute;cifie si
+la transformation est logarithmique (<i>inverse</i>=0) ou
+exponentielle (<i>inverse</i>=1).
+
+<li><p><i>min</i> et <i>max</i> sp&eacute;cifient les bornes des valeurs de pixel
+en sortie. Les valeurs possibles sont d&eacute;pendantes du type de l'image d'entr&eacute;e.
+<br>
+<b>Note</b>: si <i>min &lt; max</i> alors min et max sont affect&eacute;s
+respectivement par les valeurs minimale et maximale 
+possibles du type (eg.  0 and 255 pour les images Uchar).
+</p>
+</ul>
+
+<!---------------------------------- -->
+<h3>Entr&eacute;es</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_in</i>: une image.
+</ul>
+
+<!---------------------------------- -->
+<h3>Sorties</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_out</i>: une image avec les m&ecirc;mes propri&eacute;t&eacute;s que l'image d'entr&eacute;e <i>im_in</i>.
+</ul>
+
+<!-- -------------------------------- -->
+<h3>R&eacute;sultat</h3>
+<!-- -------------------------------- -->
+<p>Retourne SUCCESS ou FAILURE en cas de mauvais param&eacute;trage.</p>
+
+<!---------------------------------- -->
+<h3>Exemples</h3>
+<!---------------------------------- -->
+<ul>
+<li><p>Applique une transformation logarithmique suivie d'une transformation
+exponentielle pour cr&eacute;er l'image b.pan. Parce que la transformation exponentielle
+est l'inverse de la transformation logoarithmique, l'image de sortie
+est la m&ecirc;me que l'image d'entr&eacute;e (aux erreurs d'arrondi pr&egrave;s).
+La diff&eacute;rence des deux images doit &ecirc;tre nulle:</p>
+<pre>
+   plogtransform 0 0 255 tangram.pan a.pan
+   plogtransform 1 28 165 a.pan b.pan
+</pre>
+
+<li><p>Applique une transformation logarithmique pour cr&eacute;er l'image
+a.pan en utilisant les bornes de sortie maximale du type de l'image:</p>
+<pre>
+   plogtransform 0 1 -1 tangram.pan a.pan
+</pre>
+</ul>
+
+<!---------------------------------- -->
+<h3>Voir aussi</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#luttransform">Transformation de la LUT</a>,
+<a href="./plineartransform.html">plineartransform</a>,
+<a href="./ppowerlawtransform.html">ppowerlawtransform</a>
+
+<!-- -------------------------------- -->
+<h3>Prototype C++</h3>
+<!-- -------------------------------- -->
+<tt>
+Errc PLogTransform( const Img2duc &amp;im_in, const Img2duc &amp;im_out, int inverse, float min, float max );
+</tt>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Auteur: R&eacute;gis Clouard
+</address>
+<!---------------------------------- -->
+
+</body>
+</html>

@@ -1,0 +1,100 @@
+<html>
+<head>
+<title>OPERATEURS PANDORE</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff"><center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>pgetquadrangle</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+S&eacute;lection du meilleur quadrilat&egrave;re dans un ensemble de lignes.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>pgetquadrangle</b> [<i>-m mask</i>] [<i>im_lines</i>|-] [<i>im_bin</i>|-]  [<i>im_out</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p>L'op&eacute;rateur <b>pgetquadrangle</b> permet de d&eacute;tecter le meilleur quadrilat&egrave;re
+parmi les lignes de l'image <i>im_lines</i>. 
+D&eacute;tecter le tableau blanc consiste &agrave; rep&eacute;rer 
+Seul est retenu le quadrilat&egrave;re qui satisfait le mieux aux contraintes suivantes :</p>
+<ul>
+<li>Les lignes oppos&eacute;es doivent avoir une orientation proche (+/- 30&deg;).
+<li>Les lignes oppos&eacute;es doivent &ecirc;tre suffisamment loin l'une de l'autre (distance > 1/5 de la largeur ou de la hauteur).
+<li>L'angle entre deux lignes voisines doit &ecirc;tre proche de 90&deg; (+/- 30&deg;).
+<li>Le quadrilat&egrave;re doit &ecirc;tre suffisamment grand (de p&eacute;rim&egrave;tre > (W + H)/4). 
+<li>Le quadrilat&egrave;re choisi est celui qui a le meilleur rapport entre le p&eacute;rim&egrave;tre et
+la nombre de points de l'image binaire <i>im_bin</i> sous les bords du quadrilat&egrave;re
+d'une &eacute;paisseur de 3 pixels.
+</ul>
+
+<!---------------------------------- -->
+<h3>Entr&eacute;es</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_lines</i>: une image binaire contenant les lignes droites (g&eacute;n&eacute;ralement issues de phouglines).
+<li><i>im_bin</i>: une image binaire contenant les contours (g&eacute;n&eacute;ralement issues d'une binarization d'une image de gradient).
+</ul>
+
+<!---------------------------------- -->
+<h3>R&eacute;sultat</h3>
+<!---------------------------------- -->
+<p>FAILURE s'il n'existe aucun quadrilat&egrave;re possible.</p>
+
+<!---------------------------------- -->
+<h3>Exemples</h3>
+<!---------------------------------- -->
+<p>D&eacute;tection des bords du tableau blanc :</p>
+<pre>
+pshen 1.3 whiteboard.pan a.pan
+pbinarization 2 255 a.pan bin.pan
+phoughlines 10 0 360 a.pan lines.pan
+pgetquadrangle lines.pan a.pan result.pan
+</pre>
+
+<!---------------------------------- -->
+<h3>Voir aussi</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#reconstruction">Reconstruction</a>
+
+<!---------------------------------- -->
+<h3>Prototype C++</h3>
+<!---------------------------------- -->
+<tt>
+Errc PGetQuadrangle( const Img2duc &amp;im1_in, const Img2duc &amp;im2_in, Img2duc &amp;im_out );
+</tt>
+
+<!---------------------------------- -->
+<h3>Reference</h3>
+<!---------------------------------- -->
+<p>Z. Zhang, and L. He, "<i>Whiteboard Scanning and Image Enhancement</i>", Digital Signal Processing, Vol.17, No.2, pages 414-432, 2007.</p>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Auteur: R&eacute;gis Clouard
+</address>
+<!---------------------------------- -->
+
+</body>
+</html>

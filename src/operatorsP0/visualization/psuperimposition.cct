@@ -1,0 +1,103 @@
+/* -*- c-basic-offset: 3; mode: c++ -*-
+ *
+ * Copyright (c), GREYC.
+ * All rights reserved
+ *
+ * You may use this file under the terms of the BSD license as follows:
+ *
+ * "Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are
+ * met:
+ *   * Redistributions of source code must retain the above copyright
+ *     notice, this list of conditions and the following disclaimer.
+ *   * Redistributions in binary form must reproduce the above copyright
+ *     notice, this list of conditions and the following disclaimer in
+ *     the documentation and/or other materials provided with the
+ *     distribution.
+ *   * Neither the name of the GREYC, nor the name of its
+ *     contributors may be used to endorse or promote products
+ *     derived from this software without specific prior written
+ *     permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
+ *
+ * 
+ * For more information, refer to:
+ * https://clouard.users.greyc.fr/Pandore
+ */
+
+/**
+ * @author Régis Clouard - Jul 08, 2010
+ */
+
+#include <pandore.h>
+using namespace pandore;
+
+/**
+ * @file psuperimposition.cpp
+ *
+ * Superimposes a mask image onto an image.
+ */
+template <typename T1, typename T2>
+Errc PSuperimposition( const Imx3d<T1> &ims1, const Imx3d<T2> &ims2, Imx3d<T1> &imd, int color_mask ) { 
+   if ( ims1.Size() != ims2.Size() ) {
+      std::cerr << "Error psuperimposition: Incompatible image size." << std::endl;
+      return FAILURE;
+   }
+   const int ibands = ims1.Bands();
+   for (int b = 0; b < imd.Bands(); b++) {
+      int band = (1 << b) & color_mask;
+      T1 *ps1 = ims1.Vector(b % ibands);
+      T2 *ps2 = ims2.Vector(0);
+      T1 *pd = imd.Vector(b);
+      
+      for (; pd < imd.Vector(b) + imd.VectorSize(); ps1++, ps2++, pd++) {
+	 if (*ps2) {
+	    *pd = (band) ? T1(255) : 0;
+	 } else {
+	    *pd = *ps1;
+	 }
+      }
+   }
+   return SUCCESS;
+}
+
+##begin PSuperimposition < TIN1, TIN2, TIN3 > 
+## append loadcases
+   if ((objs[0]->Type() == Po_$TIN1) && (objs[1]->Type() == Po_$TIN2)) {
+      TIN1* const ims1 = (TIN1*)objs[0];
+      TIN2* const ims2 = (TIN2*)objs[1];
+      objd[0] = new TIN3(ims1->Props());
+      TIN3* const imd = (TIN3*)objd[0];
+
+      result = PSuperimposition(*ims1, *ims2, *imd, atoi(parv[0]));
+      goto end;
+   }
+## end
+##end
+
+##forall(PSuperimposition, /Im.2duc/, /Img2duc/, /Imc2duc/)
+##forall(PSuperimposition, /Im.2dsl/, /Img2duc/, /Imc2dsl/)
+##forall(PSuperimposition, /Im.2dsf/, /Img2duc/, /Imc2dsf/)
+##forall(PSuperimposition, /Im.3duc/, /Img3duc/, /Imc3duc/)
+##forall(PSuperimposition, /Im.3dsl/, /Img3duc/, /Imc3dsl/)
+##forall(PSuperimposition, /Im.3dsf/, /Img3duc/, /Imc3dsf/)
+
+#ifdef MAIN
+#define	USAGE	"usage: %s mask [-m mask] [im_in|-] [im_mk|-] [im_out|-]"
+#define	PARC	1
+#define	FINC	2
+#define	FOUTC	1
+#define	MASK	1
+##main(PARC, FINC, FOUTC, MASK, USAGE)
+#endif

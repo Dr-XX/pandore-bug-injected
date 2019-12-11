@@ -1,0 +1,154 @@
+/* -*- c-basic-offset: 3; mode: c++ -*-
+ *
+ * Copyright (c), GREYC.
+ * All rights reserved
+ *
+ * You may use this file under the terms of the BSD license as follows:
+ *
+ * "Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are
+ * met:
+ *   * Redistributions of source code must retain the above copyright
+ *     notice, this list of conditions and the following disclaimer.
+ *   * Redistributions in binary form must reproduce the above copyright
+ *     notice, this list of conditions and the following disclaimer in
+ *     the documentation and/or other materials provided with the
+ *     distribution.
+ *   * Neither the name of the GREYC, nor the name of its
+ *     contributors may be used to endorse or promote products
+ *     derived from this software without specific prior written
+ *     permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
+ *
+ * 
+ * For more information, refer to:
+ * https://clouard.users.greyc.fr/Pandore
+ */
+
+/**
+ * @author Régis Clouard - Aug 01, 2013
+ */
+
+#include <pandore.h>
+using namespace pandore;
+
+Errc PSetpixel( const Reg2d &ims, Reg2d &imd, Long y, Long x, Ulong value ) {
+   imd=ims;
+   imd(y,x) = value;
+   if (value>imd.Labels()) {
+      imd.Labels(value);
+   }
+   return SUCCESS;
+}
+
+Errc PSetpixel( const Reg3d &ims, Reg3d &imd, Long z, Long y, Long x, Ulong value ) {
+   imd=ims;
+   imd(z,y,x) = value;
+   if (value>imd.Labels()) {
+      imd.Labels(value);
+   }
+   return SUCCESS;
+}
+
+/**
+ * @file psetpixel.cpp
+ * Sets the given value at the specified cordinates.
+ */
+template <typename T>
+Errc PSetpixel( const Imx2d<T> &ims, Imx2d<T> &imd, Long y, Long x, T value ) {
+   imd=ims;
+   for (int b=0; b<ims.Bands(); b++) {
+      imd(b,y,x) = value;
+   }
+   return SUCCESS;
+}
+
+template <typename T>
+Errc PSetpixel( const Imx3d<T> &ims, Imx3d<T> &imd, Long z, Long y, Long x, T value ) {
+   imd=ims;
+   for (int b=0; b<ims.Bands(); b++) {
+      imd(b,z,y,x) = value;
+   }
+   return SUCCESS;
+}
+
+##begin SETPIXELR2D(TYPE)
+
+## append loadcases
+   if (objs[0]->Type() == Po_$TYPE) {
+      TYPE* const ims=(TYPE*)objs[0];
+      objd[0]=new TYPE(ims->Props());
+      TYPE* const imd=(TYPE*)objd[0];
+      result=PSetpixel(*ims,*imd,(Long)atoi(parv[1]), (Long)atoi(parv[0]), (TYPE::ValueType)atof(parv[3]));
+      goto end;
+   }
+## end 
+##end 
+
+##begin SETPIXELR3D(TYPE)
+
+## append loadcases
+   if (objs[0]->Type() == Po_$TYPE) {
+      TYPE* const ims=(TYPE*)objs[0];
+      objd[0]=new TYPE(ims->Props());
+      TYPE* const imd=(TYPE*)objd[0];
+      result=PSetpixel(*ims,*imd,(Long)atoi(parv[2]),(Long)atoi(parv[1]), (Long)atoi(parv[0]), (TYPE::ValueType)atof(parv[0]));
+      goto end;
+   }
+## end 
+##end 
+
+
+##begin SETPIXEL2D(TYPE)
+
+## append loadcases
+   if (objs[0]->Type() == Po_$TYPE) {
+      TYPE* const ims=(TYPE*)objs[0];
+      objd[0]=new TYPE(ims->Props());
+      TYPE* const imd=(TYPE*)objd[0];
+      result=PSetpixel(*ims,*imd,(Long)atoi(parv[1]), (Long)atoi(parv[0]), (TYPE::ValueType)atof(parv[3]));
+      goto end;
+   }
+## end 
+##end 
+
+##begin SETPIXEL3D(TYPE)
+
+## append loadcases
+   if (objs[0]->Type() == Po_$TYPE) {
+      TYPE* const ims=(TYPE*)objs[0];
+      objd[0]=new TYPE(ims->Props());
+      TYPE* const imd=(TYPE*)objd[0];
+      result=PSetpixel(*ims,*imd,(Long)atoi(parv[2]),(Long)atoi(parv[1]), (Long)atoi(parv[0]), (TYPE::ValueType)atof(parv[0]));
+      goto end;
+   }
+## end 
+##end 
+
+##forall(SETPIXEL2D,/Im.2/)
+##forall(SETPIXEL3D,/Im.3/)
+##forall(SETPIXELR2D,/Reg2d/)
+##forall(SETPIXELR3D,/Red3d/)
+
+
+#ifdef MAIN
+#define	USAGE	"usage: %s x y z value [im_in|-] [im_out|-]"
+#define	PARC	4
+#define	FINC	1
+#define	FOUTC	1
+#define	MASK	0
+
+##main(PARC,FINC,FOUTC,MASK,USAGE)
+
+#endif

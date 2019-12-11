@@ -1,0 +1,120 @@
+<html>
+<head>
+<title>OPERATEURS PANDORE</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>por</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Ou binaire entre images ou graphes, et union entre cartes de r&eacute;gions.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>por</b> [<i>-m mask</i>] [<i>im_in1</i>|-] [<i>im_in2</i>|-] [<i>im_out</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p>L'op&eacute;rateur <b>por</b> effectue le ou bit &agrave; bit entre les deux
+images d'entr&eacute;e <i>im_in1</i> et <i>im_in2</i>.
+
+<p>Pour les images de r&eacute;elles, le "ou" s'implante avec
+l'op&eacute;rateur C '|' et s'applique sur chaque pixel :</p>
+<pre>
+   pixel(im_out) = pixel(im_in1) | pixel(im_in2);
+</pre>
+
+<p>Pour les images r&eacute;elles, le "ou" est:</p>
+<pre>
+   pixel(im_out) = pixel(im_in1) + pixel(im_in2);
+</pre>
+
+<p>Pour les images couleur et multispectrale, le "ou" est
+calcul&eacute; sur chacune des bandes s&eacute;par&eacute;ment.</p>
+
+<p>Pour les graphes, l'op&eacute;rateur "ou" s'implante par
+l'op&eacute;rateur C + entre les valeurs de noeud.</p>
+
+<p>Pour les cartes de r&eacute;gions, le "ou" correspond &agrave; l'union 
+des r&eacute;gions.
+La carte de r&eacute;gions r&eacute;sultante <i>im_out</i> est compos&eacute;e des r&eacute;gions
+de chacune des deux cartes de r&eacute;gions d'entr&eacute;e en donnant pr&eacute;f&eacute;rence
+aux plus petites r&eacute;gions en cas de superposition.</p>
+
+<p>Les deux entr&eacute;es doivent &ecirc;tre de m&ecirc;me type.</p>
+
+<!---------------------------------- -->
+<h3>Entr&eacute;es</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_in1</i>: une image, un graphe ou une carte de r&eacute;gions.
+<li><i>im_in2</i>: une image, un graphe ou une carte de r&eacute;gions.
+</ul>
+
+<!---------------------------------- -->
+<h3>Sorties</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_out</i>: un objet du m&ecirc;me type que im_in1 et im_in2.
+</ul>
+
+<!---------------------------------- -->
+<h3>R&eacute;sultat</h3>
+<!---------------------------------- -->
+<p>Retourne SUCCESS ou FAILURE.</p>
+<p>Pour les cartes de r&eacute;gion, retourne la valeur de label maximum.</p>
+
+
+<!---------------------------------- -->
+<h3>Exemples</h3>
+<!---------------------------------- -->
+<ul>
+<li>Superposition des fronti&egraveres des pi&egrave;ces de tangram sur l'image originale :
+<pre>
+  pbinarization 100 1e30 examples/tangram.pan a.pan
+  pboundary 8 a.pan b.pan
+  por examples/tangram.pan b.pan c.pan
+</pre>
+</ul>
+
+<!---------------------------------- -->
+<h3>Voir aussi</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#logic">Logique</a>
+
+<!---------------------------------- -->
+<h3>Prototype C++</h3>
+<!---------------------------------- -->
+<tt>
+Errc POr( const Img2duc &amp;im_in1, const Img2duc &amp;im_in2, Img2duc &amp;im_out );
+</tt>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Auteur: R&eacute;gis Clouard
+</address>
+<!---------------------------------- -->
+
+</body>
+</html>

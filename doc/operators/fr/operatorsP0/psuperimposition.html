@@ -1,0 +1,121 @@
+<html>
+<head>
+<title>PANDORE OPERATORS</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>psuperimposition</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+<p>Surimposition de contours sur une image.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>psuperimposition</b> <i>color_mask</i> [<i>im_in</i>|-] [<i>mk_in</i>|-] [<i>im_out</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p>La <b>psuperimposition</b> permet d'incruster des contours dans une
+image en choisissant la couleur d'affichage. 
+Par exemple, dans le cas d'un image couleur si color_mask=0 alors les
+contours de l'image  de <i>mk_in</i> sont ajout&eacute;s &agrave;  la bande rouge de
+l'image initiale <i>im_in</i>.</p>
+
+<p>Cet op&eacute;rateur est g&eacute;n&eacute;ralement utilis&eacute;
+pour visualiser les contours extraits d'une image directement dans
+l'image elle-m&ecirc;me.</p>
+<p>L'image de sortie est du m&ecirc;me type que l'image d'entr&eacute;e.</p>
+
+<!---------------------------------- -->
+<h3>Param&egrave;tres</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>color_mask</i> sp&eacute;cifie le masque de coloration. Il agit comme
+un  masque de  bits. Par  exemple, si  on consid&egrave;re  une  image initiale
+couleur:
+<ul>
+<li>mask=0: le masque est peint en noir.
+<li>mask=1: le masque est peint en rouge.
+<li>mask=2: le masque est peint en vert.
+<li>mask=3: le masque est peint en jaune : rouge+vert.
+<li>mask=4: le masque est peint en bleu.
+<li>mask=5: le masque est peint en violet : rouge+bleu.
+<li>mask=5: le masque est peint en magenta : vert+bleu.
+<li>mask=7: le masque est peint en blanc;
+</ul>
+</ul>
+<!---------------------------------- -->
+<h3>Entr&eacute;es</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_in</i> : une image.
+<li><i>mk_in</i> : une image de niveaux de gris.
+</ul>
+
+<!---------------------------------- -->
+<h3>Sorties</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_out</i> : une image du m&ecirc;me type que l'image initiale.
+</ul>
+
+<!---------------------------------- -->
+<h3>Exemples</h3>
+<!---------------------------------- -->
+<ul>
+<li>Visualise les contours extraits de l'image tangram
+dans l'image tangram :
+<pre>
+   pgradient 1 examples/tangram.pan i1.pan i2.pan
+   pbinarization 30 1e30 i1.pan i3.pan
+   pbinarization 60 1e30 i1.pan i4.pan
+   pgeodesicdilation 1 1 -1 i4.pan i3.pan i4.pan
+   psuperimposition 1 examples/tangram.pan i4.pan out.pan
+</pre>
+</ul>
+
+<!---------------------------------- -->
+<h3>R&eacute;sultat</h3>
+<!---------------------------------- -->
+<p>Retourne SUCCESS ou FAILURE.</p>
+
+<!---------------------------------- -->
+<h3>Voir aussi</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#visualization">Visualization</a>
+
+<!---------------------------------- -->
+<h3>Prototype C++</h3>
+<!---------------------------------- -->
+<tt>
+Errc PSuperimposition( const Imc2duc &amp;im_in, const Img2duc &amp;mk_in, Imc2duc &amp;im_out, int color_mask);
+</tt>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Auteur: R&eacute;gis Clouard
+</address>
+<!---------------------------------- -->
+</body>
+</html>

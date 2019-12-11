@@ -1,0 +1,120 @@
+<html>
+<head>
+<title>PANDORE OPERATORS</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>pexponentialfiltering</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Lissage par une exponentielle sym&eacute;trique.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>pexponentialfiltering</b> <i>alpha</i> [<i>-m mask</i>] [<i>im_in</i>|-] [<i>im_out</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p>L'op&eacute;rateur <b>pexponentialfiltering</b> permet de lisser l'image d'entr&eacute;e
+<i>im_in</i>, par application d'un filtre exponentiel sym&eacute;trique.
+Le filtre exponentiel est construit comme suit pour une ligne:</p>
+<p>D'abord dans le sens du parcours causal (balayage vid&eacute;o):</p>
+<pre>
+h1[x]= alpha*(im_in[y][x]-h1[x-1]) + h1[x-1]
+</pre>
+
+<p>Puis le sens du parcours anti-causal (balayage anti-vid&eacute;o):</p>
+<pre>
+h2[x]= alpha*(h1[x]-h2[x+1]) + h[x+1]
+</pre>
+
+<p>L'op&eacute;ration est r&eacute;it&eacute;r&eacute;e finalement sur les colonnes.</p>
+
+<p>L'image de sortie est &eacute;gale &agrave; h2[x]</p>
+<pre>
+im_out[y][x] = h2[x]
+</pre>
+
+<!---------------------------------- -->
+<h3>Param&egrave;tres</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>alpha</i> est une valeur r&eacute;elle de l'intervalle [0,1]
+qui pr&eacute;cise le degr&eacute; de lissage :
+<ul>
+<li>1 correspond &agrave; l'application d'aucun lissage,
+<li>0 le plus fort lissage possible.
+</ul>
+</ul>
+
+<!---------------------------------- -->
+<h3>Entr&eacute;es</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_in</i>: une image.
+</ul>
+
+<!---------------------------------- -->
+<h3>Sorties</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_out</i>: une image du m&ecirc;me type que l'image d'entr&eacute;e.
+</ul>
+
+<!---------------------------------- -->
+<h3>R&eacute;sultat</h3>
+<!---------------------------------- -->
+<p>Retourne SUCCESS ou FAILURE.</p>
+
+<!---------------------------------- -->
+<h3>Exemples</h3>
+<!---------------------------------- -->
+<p>Effectue une d&eacute;tection de contours bas&eacute;e sur l'algorithme DOG (Diff&eacute;rence de gaussiennes):</p>
+<pre>
+   pexponentialfiltering 0.2 tangram.pan a.pan
+   pexponentialfiltering 0.8 tangram.pan b.pan
+   psub a.pan b.pan c.pan
+   pzerocross 8 0 c.pan out.pan
+</pre>
+
+<!---------------------------------- -->
+<h3>Voir aussi</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#filtering">Filtrage spatial</a>
+
+<!---------------------------------- -->
+<h3>Prototype C++</h3>
+<!---------------------------------- -->
+<tt>
+Errc PExponentialFiltering( const Img2duc &amp;im_in, Img2duc &amp;im_out, float alpha );
+</tt>
+
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Auteur: R&eacute;gis Clouard
+</address>
+<!---------------------------------- -->
+</body>
+</html>

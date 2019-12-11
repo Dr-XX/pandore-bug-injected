@@ -1,0 +1,118 @@
+<html>
+<head>
+<title>PANDORE OPERATORS</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>pcorrelationcoefficient</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Calculates the correlation cofficient between two arrays of values.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>pcorrelationcoefficient</b> <i>attr_in1</i> <i>attr_in2</i> <i>attr_out</i> [<i>col_in1</i>|-]  [<i>col_in2</i>|-] [<i>col_out</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p><b>pcorrelationcoefficient</b> calculates the correlation value
+between two variables represented each by an array of values
+of the same size and stored in a collection.</p>
+
+<p>The sample correlation coefficient between the two vecteurs X and Y is given by:
+<pre>
+r_{xy} = \frac{\sum\limits_{i=1}^n (x_i-\bar{x})(y_i-\bar{y})}{(n-1) s_x s_y}
+       = \frac{\sum\limits_{i=1}^n (x_i-\bar{x})(y_i-\bar{y})} {\sqrt{\sum\limits_{i=1}^n (x_i-\bar{x})^2 \sum\limits_{i=1}^n (y_i-\bar{y})^2}}, 
+</pre>
+where <span style="text-decoration: overline">x</span> and <span style="text-decoration: overline">y</span> 
+are the sample means of X and Y, and sx and sy are the sample standard deviations of X and Y.</p>
+
+<!---------------------------------- -->
+<h3>Parameters</h3>
+<!---------------------------------- -->
+<ul>
+<li>attr_in1, attr_in2: the collection <i>col_in</i> stores the vector of characteristics
+    used for the calculus.  If there are <tt>n</tt> vectors of <tt>p</tt> characteristics,
+    the collection should contain <tt>p</tt> arrays <tt>attr_in.1</tt>, <tt>attr_in.2</tt>, 
+    ..., <tt>attr_in.p</tt> of <tt>n</tt> floats each.
+<li>attr_out: the collection <i>col_out</i> contains :
+    <ul>
+    <li><tt>attr_out.mat</tt> : the array des <tt>p*p</tt> 
+        s de la matrice de covariance ;
+    <li><tt>attr_out.inv</tt> : the array des <tt>p*p</tt> values
+        of the inverse matrix of covariance ;
+    <li><tt>attr_out.det</tt> : the determinant of the covariance matrice
+    <li><tt>attr_out.det</tt> : the array of <tt>p</tt> 
+        values of the mean vector of characteritics.
+    </ul>
+</ul>
+
+<!---------------------------------- -->
+<h3>Inputs</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>col_in</i>: a collection with the array name_in1.
+<li><i>col_in</i>: a collection with the array name_in2 of the same size as name_in1.
+</ul>
+
+<!---------------------------------- -->
+<h3>Outputs</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>col_out</i>: a collection.
+</ul>
+
+<!---------------------------------- -->
+<h3>Result</h3>
+<!---------------------------------- -->
+<p>Returns the value of  correlation.</p>
+
+
+<!---------------------------------- -->
+<h3>Examples</h3>
+<!---------------------------------- -->
+<p></p>
+<pre>
+pcorrelationcoefficient Correctness Correctness r ccorrectness1.pan ccorrectness2.pan toto.pan
+</pre>
+
+<!---------------------------------- -->
+<h3>See also</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#collection">Array</a>
+
+<!---------------------------------- -->
+<h3>C++ prototype</h3>
+<!---------------------------------- -->
+<pre>
+Errc PCorrelationCoefficient( const Collection &amp;col_in1, const Collection &amp;col_in2, Collection &amp;col_out, const string &amp;attr_in1, const string &amp;attr_in2, const string &amp;attr_out );
+</pre>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Author: R&eacute;gis Clouard
+</address>
+<!---------------------------------- -->
+</body>
+</html>

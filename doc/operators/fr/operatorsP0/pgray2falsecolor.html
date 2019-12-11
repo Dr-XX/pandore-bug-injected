@@ -1,0 +1,109 @@
+<html>
+<head>
+<title>OPERATEURS PANDORE</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>pgray2falsecolor</h1>
+<!---------------------------------- --> 
+<hr noshade size=1 width=100 align=left><br>
+
+Conversion d'une image de niveaux de gris en une image avce fausses couleurs.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>pgray2falsecolor</b> <i>lut</i>  [<i>-m mask</i>] [<i>im_in</i>|-] [<i>im_out</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p>L'op&eacute;rateur <b>pgray2falsecolor</b> est un moyen de convertir
+une image de niveaux de gris en image noir et blanc.</p>
+
+<p>Chaque pixel de l'image d'entr&eacute;e <i>im_in</i>
+est converti en une valeur de rouge, de vert et de bleu selon une table
+de couleur donn&eacute;e.
+
+<p>Pour chaque pixel de l'image d'entr&eacute;e:</p>
+<pre>
+   imd.R[p]=lut[0][ims[p]
+   imd.V[p]=lut[1][ims[p]
+   imd.B[p]=lut[2][ims[p]
+</pre>
+
+<!---------------------------------- -->
+<h3>Param&egrave;tres</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>lut</i> sp&eacute;cifie le num&eacute;ro de la lut choisie parmi:
+<ul>
+<li>0: "arc en ciel"
+<li>1: pr&eacute;d&eacute;finie sur 15 couleurs diff&eacute;rentes.
+</ul>
+</ul>
+
+<!---------------------------------- -->
+<h3>Entr&eacute;es</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_in</i>: une image de niveaux de gris.
+</ul>
+
+<!---------------------------------- -->
+<h3>Sorties</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_out</i>: une image couleur.
+</ul>
+
+<!---------------------------------- -->
+<h3>R&eacute;sultat</h3>
+<!---------------------------------- -->
+<p>Retourne SUCCESS ou FAILURE.</p>
+
+<!---------------------------------- -->
+<h3>Exemples</h3>
+<!---------------------------------- -->
+<p>Transforme l'image 'tangram.pan' en image utilisant la table des couleurs "arc en ciel".</p>
+<pre>
+   pgray2falsecolor 0 tangram.pan a.pan
+</pre>
+
+<!---------------------------------- -->
+<h3>Voir aussi</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#color">Color</a>
+
+<!---------------------------------- -->
+<h3>Prototype C++</h3>
+<!---------------------------------- -->
+<tt>
+Errc PGray2FalseColor( const Img2duc &amp;im_in, Imc2duc &amp;im_out, int lutId );
+</tt>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Auteur: R&eacute;gis Clouard
+</address>
+<!---------------------------------- -->
+</body>
+</html>

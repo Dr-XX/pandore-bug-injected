@@ -1,0 +1,89 @@
+<html>
+<head>
+<title>OPERATEURS PANDORE</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>pleafcutting</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Suppression des feuilles d'un graphe.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>pleafcutting</b> [<i>-m mask</i>] [<i>gr_in</i>|-] [<i>gr_out</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p>L'op&eacute;rateur <b>pleafcutting</b> proc&egrave;de &agrave; la suppression
+physique des arcs dont l'un des sommets de ses
+extremit&eacute;s ne poss&egrave;de qu'un voisin (ie, est une feuille).
+Le sommet isol&eacute; est tout de m&ecirc;me conserv&eacute; dans le graphe
+de sortie <i>gr_out</i>.</p>
+
+<!---------------------------------- -->
+<h3>Entr&eacute;es</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>gr_in</i>: un graphe.
+</ul>
+
+<!---------------------------------- -->
+<h3>Sorties</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>gr_out</i>: un graphe.
+</ul>
+
+<!---------------------------------- -->
+<h3>R&eacute;sultat</h3>
+<!---------------------------------- -->
+<p>Retourne le nombre d'arcs supprim&eacute;s.</p>
+
+<!---------------------------------- -->
+<h3>Exemples</h3>
+<!---------------------------------- -->
+<pre>
+   pleafcutting g1.pan g2.pan
+</pre>
+
+<!---------------------------------- -->
+<h3>Voir aussi</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#graph">Graphe</a>
+
+<!---------------------------------- -->
+<h3>Prototype C++</h3>
+<!---------------------------------- -->
+<tt>
+Errc PLeafCutting( const Graph &amp;gr_in, Graph &amp;gr_out );
+</tt>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Auteur: Fran&ccedil;ois Angot
+</address>
+<!---------------------------------- -->
+</body>
+</html>

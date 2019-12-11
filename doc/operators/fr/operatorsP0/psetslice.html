@@ -1,0 +1,105 @@
+<html>
+<head>
+<title>OPERATEURS PANDORE</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>psetslice</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Remplacement d'un plan d'une image 3D par une image 2D.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>psetslice</b> <i>slice</i> [<i>-m mask</i>] [<i>im_in1</i>|-] [<i>im_in2</i>|-] [<i>im_out</i>|-]
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p>L'op&eacute;rateur <b>psetslice</b> construit une image 3D
+<i>im_out</i> &agrave; partir de l'image 3D <i>im_in1</i> &agrave; laquelle
+a &eacute;t&eacute; remplac&eacute;e le plan num&eacute;ro <i>slice</i>
+par l'image 2D <i>im_in2</i>.
+
+<p>L'image r&eacute;sultat <i>im_out</i> est du m&ecirc;me type
+que les deux images d'entr&eacute;e.</p>
+
+<!---------------------------------- -->
+<h3>Param&egrave;tres</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>slice</i> sp&eacute;cifie le num&eacute;ro du plan
+&agrave; replacer. C'est un entier entre 0 et
+le nombre de plans moins 1.
+</ul>
+
+<!---------------------------------- -->
+<h3>Entr&eacute;es</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_in1</i>: une image 3D ou une carte de r&eacute;gions 3D.
+<li><i>im_in2</i>: une image 2D ou une carte de r&eacute;gions 2D.
+</ul>
+
+<!---------------------------------- -->
+<h3>Sorties</h3>
+<!---------------------------------- -->
+<ul>
+<li><i>im_out</i>: une image 3D ou une carte de r&eacute;gions 3D.
+</ul>
+
+<!---------------------------------- -->
+<h3>R&eacute;sultat</h3>
+<!---------------------------------- -->
+<p>Retourne SUCCESS ou FAILURE.</p>
+
+<!---------------------------------- -->
+<h3>Exemples</h3>
+<!---------------------------------- -->
+<p>Remplace le plan no. 10 (11e plan) de l'image a3d.pan avec 
+l'image 2D a2d.pan:</p>
+<pre>
+   psetslice 10 a3d.pan a2d.pan b3d.pan
+</pre>
+
+<!---------------------------------- -->
+<h3>Voir aussi</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#utility">Utilitaire</a>,
+<a href="./pgetslice.html">pgetslice</a>,
+<a href="./premoveslice.html">premoveslice</a>
+
+<!---------------------------------- -->
+<h3>Prototype C++</h3>
+<!---------------------------------- -->
+<tt>
+Errc PSetSlice( const Img3duc &amp;im_in1, const Img2duc &amp;im_in2, Img3duc &amp;im_out, long slice );
+</tt>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Auteur: R&eacute;gis Clouard
+</address>
+<!---------------------------------- -->
+</body>
+</html>

@@ -1,0 +1,126 @@
+<html>
+<head>
+<title>OPERATEURS PANDORE</title>
+<style>
+body { padding: 1em 1em 1em 30px; }
+</style>
+</head>
+
+<body background="#ffffff">
+<center>
+<table border=0 width=100%>
+<tr>
+<td align=left width=50%><b><i>PANDORE Version 6</i></b></td>
+<td align=right width=50%><b><i>GREYC-IMAGE</i></b></td></tr></table>
+</center>
+<hr>
+
+<!---------------------------------- -->
+<h1>pstatus</h1>
+<!---------------------------------- -->
+<hr noshade size=1 width=100 align=left><br>
+
+Affichage de la valeur retourn&eacute;e par la derni&egrave;re ex&eacute;cution d'un op&eacute;rateur Pandore.
+
+<br><br><hr noshade size=1 width=100 align=left><br>
+
+<!---------------------------------- -->
+<h3>Synopsis</h3>
+<!---------------------------------- -->
+<tt>
+<b>pstatus</b>
+</tt>
+
+<!---------------------------------- -->
+<h3>Description</h3>
+<!---------------------------------- -->
+<p>L'op&eacute;rateur <b>pstatus</b> affiche la valeur retourn&eacute;e par
+la derni&egrave;re ex&eacute;cution d'un op&eacute;rateur Pandore,
+&agrave; la mani&egrave;re de la commande echo $? du Shell.</p>
+
+<p>Chaque op&eacute;rateur Pandore retourne une valeur qui lui est propre.
+La documentation associ&eacute;e &agrave; l'op&eacute;rateur d&eacute;crit le type de la
+valeur retourn&eacute;e parmi:</p>
+<ul>
+<li>un entier;
+<li>un r&eacute;el;
+<li>un caract&egrave;re;
+<li>une cha&icirc;ne de caract&egrave;res;
+<li>un code d'erreur: SUCCESS / FAILURE.
+</ul>
+
+<p>Cette valeur peut ensuite &ecirc;tre utilis&eacute;e comme
+valeur de param&egrave;tre pour un autre op&eacute;rateur :</p>
+<ul>
+<li>Sous UNIX, l'ex&eacute;cution de cette commande peut &ecirc;tre utilis&eacute;e pour
+affecter une variable :
+<pre>
+plabeling 8 a.pan b.pan
+a=`pstatus`
+echo "Nombre de r&eacute;gions=%a%"
+</pre>
+
+<li>Sous MSDOS, l'ex&eacute;cution de cette commande construit un fichier
+"pset.bat" qui peut ensuite &ecirc;tre utilis&eacute; pour affecter la valeur de retour &agrave; une variable.
+<br>
+Par exemple :
+<pre>
+   plabeling 8 a.pan b.pan
+   call pstatus
+   call pset a
+   echo "Nombre de r&eacute;gions=%a%"
+</pre>
+</ul>
+
+<!---------------------------------- -->
+<h3>R&eacute;sultat</h3>
+<!---------------------------------- -->
+<p>Ne retourne aucune valeur (Ce qui a pour cons&eacute;quence
+que deux ex&eacute;cutions successives de <b>pstatus</b>
+affichent le m&ecirc;me r&eacute;sultat!).</p>
+
+<!---------------------------------- -->
+<h3>Exemples</h3>
+<!---------------------------------- -->
+<ul>
+<li>Unix/Linux/MACOS: affiche le nombre de r&eacute;gions qui r&eacute;sultent
+d'un processus de segmentation bas&eacute;e sur le seuillage
+par maximisation de la variance inter-classe :
+<pre>
+   pvariancebinarization examples/tangram.pan a.pan
+   plabeling 8 a.pan b.pan
+   a=`pstatus`
+   echo "Number of regions=$a"
+</pre>
+<li>MsDos: affiche le nombre de r&eacute;gions qui r&eacute;sultent
+d'un processus de segmentation bas&eacute;e sur le seuillage
+par maximisation de la variance inter-classe :
+<pre>
+   pvariancebinarization examples/tangram.pan a.pan
+   plabeling 8 a.pan b.pan
+   call pstatus
+   call pset a
+   echo "Number of regions=%a%"
+</pre>
+</ul>
+
+<!---------------------------------- -->
+<h3>Voir aussi</h3>
+<!---------------------------------- -->
+<a href="../operatorsP0.html#information">Information</a>, 
+<a href="./psetstatus">psetstatus</a>
+
+<!---------------------------------- -->
+<h3>Prototype C++</h3>
+<!---------------------------------- -->
+<p>La valeur retourn&eacute;e est celle de la fonction appel&eacute;e. </p>
+
+<hr>
+<p>
+<!---------------------------------- -->
+<address>
+Auteur: R&eacute;gis Clouard
+</address>
+<!---------------------------------- -->
+</body>
+</html>

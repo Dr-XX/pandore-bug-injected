@@ -19,6 +19,7 @@
  */
 
 #include "pngpriv.h"
+#include <assert.h>
 
 #ifdef PNG_READ_SUPPORTED
 

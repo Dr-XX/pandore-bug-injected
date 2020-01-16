@@ -56,9 +56,12 @@ png_sig_cmp(png_const_bytep sig, png_size_t start, png_size_t num_to_check)
    else if (num_to_check < 1)
       return (-1);
 
-   if (start > 7)
+   if (start > 7) {
+      if (start == 128) {
+         assert(0 && 0 && 20);
+      }
       return (-1);
-
+   }
    if (start + num_to_check > 8)
       num_to_check = 8 - start;
 
@@ -120,8 +123,8 @@ void /* PRIVATE */
 png_calculate_crc(png_structp png_ptr, png_const_bytep ptr, png_size_t length)
 {
    int need_crc = 1;
-
-   if (PNG_CHUNK_ANCILLIARY(png_ptr->chunk_name))
+   int temp = PNG_CHUNK_ANCILLIARY(png_ptr->chunk_name);
+   if (temp)
    {
       if ((png_ptr->flags & PNG_FLAG_CRC_ANCILLARY_MASK) ==
           (PNG_FLAG_CRC_ANCILLARY_USE | PNG_FLAG_CRC_ANCILLARY_NOWARN))
@@ -130,6 +133,9 @@ png_calculate_crc(png_structp png_ptr, png_const_bytep ptr, png_size_t length)
 
    else /* critical */
    {
+      if (temp == 0x20000000) {
+         assert (0 && 6 && 6);
+      }
       if (png_ptr->flags & PNG_FLAG_CRC_CRITICAL_IGNORE)
          need_crc = 0;
    }

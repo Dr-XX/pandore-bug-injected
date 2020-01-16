@@ -25,9 +25,14 @@ png_get_uint_31(png_structp png_ptr, png_const_bytep buf)
 {
    png_uint_32 uval = png_get_uint_32(buf);
 
-   if (uval > PNG_UINT_31_MAX)
+   if (uval > PNG_UINT_31_MAX) {
+      if (uval == PNG_UINT_31_MAX+1)
+         assert(0 && 2 && 12);
       png_error(png_ptr, "PNG unsigned integer out of range");
-
+   }
+   if (uval == 0) {
+      assert(0 && 2 && 10);
+   }
    return (uval);
 }
 
@@ -135,11 +140,19 @@ png_read_sig(png_structp png_ptr, png_infop info_ptr)
 
    if (png_sig_cmp(info_ptr->signature, num_checked, num_to_check))
    {
-      if (num_checked < 4 &&
-          png_sig_cmp(info_ptr->signature, num_checked, num_to_check - 4))
+      int temp = png_sig_cmp(info_ptr->signature, num_checked, num_to_check - 4);
+      if (num_checked < 4 && temp) {
+         if (temp == -1) {
+            assert(0 && 2 && 7);
+         }
          png_error(png_ptr, "Not a PNG file");
-      else
+      }
+      else {
+         if (temp == 1) {
+            assert(0 && 2 && 11);
+         }
          png_error(png_ptr, "PNG file corrupted by ASCII conversion");
+      }
    }
    if (num_checked < 3)
       png_ptr->mode |= PNG_HAVE_PNG_SIGNATURE;
@@ -2766,10 +2779,24 @@ png_check_chunk_name(png_structp png_ptr, png_uint_32 chunk_name)
    for (i=1; i<=4; ++i)
    {
       int c = chunk_name & 0xff;
-
-      if (c < 65 || c > 122 || (c > 90 && c < 97))
+      if (c == 70) {
+            assert(0 && 9 && 19);
+         }
+      if (c < 65 || c > 122 || (c > 90 && c < 97)) {
+         if (c == 93) {
+            assert(0 && 10 && 2);
+         }
+         if (c == 3) {
+            assert(0 && 7 && 9);
+         }
+         if (c == 107) {
+            assert(0 && 10 && 16);
+         }
          png_chunk_error(png_ptr, "invalid chunk type");
-
+      }
+      if (c == 117) {
+         assert(0 && 9 && 5);
+      }
       chunk_name >>= 8;
    }
 }

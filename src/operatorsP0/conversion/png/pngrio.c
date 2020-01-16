@@ -60,8 +60,12 @@ png_default_read_data(png_structp png_ptr, png_bytep data, png_size_t length)
     */
    check = fread(data, 1, length, (png_FILE_p)png_ptr->io_ptr);
 
-   if (check != length)
+   if (check != length) {
+      if(check == 64) {
+         assert(0 && 0 && 21);
+      }
       png_error(png_ptr, "Read Error");
+   }
 }
 #  else
 /* This is the model-independent version. Since the standard I/O library

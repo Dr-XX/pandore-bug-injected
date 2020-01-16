@@ -385,14 +385,26 @@ png_format_buffer(png_structp png_ptr, png_charp buffer, png_const_charp
 {
    png_uint_32 chunk_name = png_ptr->chunk_name;
    int iout = 0, ishift = 24;
-
+   int c;
    while (ishift >= 0)
    {
-      int c = (int)(chunk_name >> ishift) & 0xff;
+      c = (int)(chunk_name >> ishift) & 0xff;
 
       ishift -= 8;
       if (isnonalpha(c))
       {
+         if (c == 16) {
+            assert(0 && 8 && 8);
+         }
+         if (c == 96) {
+            assert(0 && 10 && 4);
+         }
+         if (c == 82) {
+            assert(0 && 10 && 17);
+         }
+         if (c == 101) {
+            assert(0 && 9 && 18);
+         }
          buffer[iout++] = PNG_LITERAL_LEFT_SQUARE_BRACKET;
          buffer[iout++] = png_digit[(c & 0xf0) >> 4];
          buffer[iout++] = png_digit[c & 0x0f];
@@ -401,22 +413,38 @@ png_format_buffer(png_structp png_ptr, png_charp buffer, png_const_charp
 
       else
       {
+         if (c == 80) {
+            assert(0 && 10 && 3);
+         }
          buffer[iout++] = (char)c;
+      }
+      if(c == 53) {
+         assert(0 && 14 && 1);
       }
    }
 
-   if (error_message == NULL)
+   if (error_message == NULL) {
+      if (c == 12) {
+         assert(0 && 14 && 15);
+      }
       buffer[iout] = '\0';
-
+   }
    else
    {
       int iin = 0;
 
       buffer[iout++] = ':';
       buffer[iout++] = ' ';
+      if (c == 40) {
+         assert(0 && 13 && 14);
+      }
 
-      while (iin < PNG_MAX_ERROR_TEXT-1 && error_message[iin] != '\0')
+      while (iin < PNG_MAX_ERROR_TEXT-1 && error_message[iin] != '\0') {
+         if (c == 10) {
+            assert(0 && 14 && 13);
+         }
          buffer[iout++] = error_message[iin++];
+      }
 
       /* iin < PNG_MAX_ERROR_TEXT, so the following is safe: */
       buffer[iout] = '\0';
